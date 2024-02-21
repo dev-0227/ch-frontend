@@ -1,0 +1,60 @@
+<style>
+	.gray-color{
+		color:#999;
+	}
+	.current-data{
+		background-color: #d6fffc;
+	}
+	.domain-title{
+		text-transform: uppercase;
+    	font-weight: 700;
+		color: #222;
+	}
+	h4{
+		font-weight: bold;
+	}
+	#status_tb a{
+		text-decoration: underline;
+	}
+	#report_tb a{
+		text-decoration: underline;
+	}
+</style>
+<input type="hidden" id ="hedisdate" />
+<div class="row">
+	<div class=" col-sm-12 col-md-12 col-lg-12">
+		<div class="card overflow-hidden">
+			<div class="card-header">
+				<h3 class="card-title">Monthly Report</h3>
+				<div class="card-options">
+        			<button type="button" class="btn btn-info monthreportbtn"><i class="fa fa-print"></i></button>&nbsp;<button type="button" class="btn btn-success monthemailbtn"><i class="fa fa-envelope"></i></button>
+				</div>
+			</div>
+			<div class="card-body ">
+				<div class="row">
+					<div class="col-md-12">
+						<h4>Hedis Patient Status - <span class="cmonthtitle"></span></h4>
+						<div class="table-responsive push">
+							<table class="table table-bordered table-hover mb-0 text-nowrap" id="status_tb">
+								<thead>
+									<th>Insurance</th>
+									<th>Never Seen</th>
+									<th>Refused</th>
+									<th>Non Compliant</th>
+									<th>With Appt</th>
+									<th>High Priority</th>
+								</thead>
+								<tbody>
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3" id="report_tb">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

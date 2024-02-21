@@ -1,0 +1,86 @@
+<style>
+    .qitem:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .field_ul{
+        list-style: none;
+        font-size: .875rem;
+        padding:0!important;
+    }
+    .field_ul li{
+        padding: 10px;
+        border: 1px solid #eee;
+        padding-left: 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom:5px;
+        position: relative;
+    }
+    .response-item{
+        padding: 10px;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom:5px;
+    }
+    .response-item:hover{
+        background: #eee;
+    }
+    .deleteqbtn{
+		position: absolute;
+		top: 14px;
+		right: 20px;
+		color: #e23e3d;
+	}
+    .parent p{
+        max-width: 95%;
+    }
+</style>
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Generate Module</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="card-title">Questions</h6>
+                            </div>
+                            <div class="card-body p-6">
+                                <div id="q-area"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="card-title">Module</h6>
+                                <div class="card-options">
+                                    <button class="btn btn-sm btn-primary generatebtn">Save</button>
+                                </div>
+                            </div>
+                            <div class="card-body p-6">
+                                <div id="m-area" class = "field_ul"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="card-title">Responses</h6>
+                            </div>
+                            <div class="card-body p-6">
+                                <div id="r-area"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>

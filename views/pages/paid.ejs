@@ -1,0 +1,134 @@
+<style>
+    .select2{
+        width: 100%!important;
+    }
+</style>
+<div class="row">
+    <div class="col-12 col-sm-12">
+        <div class="card ">
+            <div class="card-header">
+                <h3 class="card-title mb-0">FFS Paid Panel</h3>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center">
+					<div class="col-md-10 col-sm-12 col-xs-12">
+						<p>FFS Date Range</p>
+						<input type="text" class="date_range" value="" name="range" />
+					</div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-12 text-center">
+                        <div class="btn-list">
+                            <button class="btn btn-outline-default viewbtn defaultview">Default View</button>
+                            <button class="btn btn-outline-primary viewbtn avgview">Averages and Percentages</button>
+                            <button class="btn btn-outline-secondary viewbtn areacptpaidview">Area CPT Ins Analysis</button>
+                            <button class="btn btn-outline-success viewbtn superview">Ins Superbill</button>
+                            <button class="btn btn-outline-info viewbtn pcpview">PCP Analysis</button>
+                            <button class="btn btn-outline-warning viewbtn cptview">CPT Paid Ins</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL END -->
+</div><!-- ROW-5 END -->
+<div class="modal fade" id="area-cpt-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Area CPT Ins Analysis</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Include Speciality</label>
+                            <select multiple="multiple" id="spec-area" class="form-control select2-show-search" data-placeholder="Nothing Selected">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Areas</label>
+                            <select id="group-area" class="form-control select2-show-search" data-placeholder="All">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input areareporttype" name="areareporttype" value="1" checked>
+							<span class="tag custom-control-label">Clinic Paid CPT</span>
+						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input areareporttype" name="areareporttype" value="2">
+							<span class="tag custom-control-label">CPT Compare Clinics</span>
+						</label>
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input areareporttype" name="areareporttype" value="3">
+							<span class="tag custom-control-label">Only CPT Paid By Others</span>
+						</label>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id = "viewcptbillbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="super-cpt-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Ins Superbill</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Include Speciality</label>
+                            <select multiple="multiple" id="super-spec-area" class="form-control select2-show-search" data-placeholder="Nothing Selected">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Areas</label>
+                            <select id="ins-area" class="form-control select2-show-search" data-placeholder="All">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input superbilltype" name="superbilltype" value="1" checked>
+							<span class="tag custom-control-label">Clinic Paid CPT</span>
+						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input superbilltype" name="superbilltype" value="2">
+							<span class="tag custom-control-label">CPT Compare Clinics</span>
+						</label>
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input superbilltype" name="superbilltype" value="3">
+							<span class="tag custom-control-label">Only CPT Paid By Others</span>
+						</label>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id = "viewsuperbillbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

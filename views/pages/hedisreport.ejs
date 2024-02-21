@@ -1,0 +1,640 @@
+<style>
+    .jexcel{
+        width:100%!important;
+    }
+	.jcalendar-content{
+		color:#25252a!important;
+	}
+	.notesbtn,.printletter,.sendemail,.sendsms,.statusbtn,.viewmlogbtn{
+		cursor: pointer;
+	}
+	.notesavailbtn {
+		font-weight: 700;
+    	color: #8CCB8D;
+	}
+	.settingicon i{
+		padding-right:20px;
+		font-size: 0.9rem;
+		cursor: pointer;
+	}
+	.blue-color{
+		color:blue;
+	}
+	#ui-datepicker-div{
+		z-index: 10000!important;
+	}
+	#notesform .nav.nav-tabs.step-anchor {
+		border-bottom: 0 !important;
+		padding: 30px;
+	}
+	#notesform  .nav-tabs {
+		border-top: 0 !important;
+	}
+	#notesform .nav-link {
+		padding: 8px 40px;
+		border-radius:5px !important;
+	}
+	@media only screen and (max-width: 490px){
+		#notesform .nav-link {
+			padding: 15px 21px;
+		}
+	}
+	#token_area{
+		min-height: 150px;
+		max-height: 150px;
+		border: 1px solid #d8dde4;
+		border-radius: 5px;
+		overflow: auto;
+		padding:5px;
+	}
+	.note-cal-area{
+		min-height: 100px;
+		max-height: 250px;
+		overflow: auto;
+	}
+	#allviewnotes{
+		position: absolute;
+		right:20px;
+		text-decoration: underline;
+	}
+	.completedbarlengthnote,.notcompletedbarlengthnote{
+		width: 80px;
+		height: 80px;
+	}
+	.cbp_tmtimeline>li .cbp_tmtime span:last-child {
+		font-size: 13px!important;
+	}
+	.sort-done-notdone{
+		position: relative;
+    	left: 10px;
+	}
+	.reviewdonebtn{
+		cursor: pointer;
+	}
+	.regeneratebtn{
+		cursor: pointer;
+		z-index:100;
+		position:relative;
+	}
+	.viewresultbtn{
+		cursor: pointer;
+	}
+</style>
+<input type="hidden" id ="hedisdate" />
+<input type="hidden" id ="chosen_item" />
+<div class="row ml-2 mr-2 mt-2">
+	<h2 class="hedis-title text-primary mr-4"></h2>&nbsp;&nbsp;
+	<h4 class="generatetitle mt-2 text-primary d-none"><span class="generatedfilename"></span> | Generated : <span class="generatedfiledate"></span><span class="reportedfile"></span></h4>
+</div>
+<div class="row ml-2 mr-2">
+    <div class="col-md-6 mt-2 settingicon">
+		<i class="fa fa-filter sortbtn text-primary" data-toggle="tooltip" title="" data-original-title="Sort"></i>
+		<i class="fa fa-file-excel-o exportexcelbtn text-primary" data-toggle="tooltip" title="" data-original-title="Excel"></i>
+		<i class="fa fa-paint-brush colormodalbtn text-primary" data-toggle="tooltip" title="" data-original-title="Color Key"></i>
+		<a href="../pages/hedisdaily" target="_blank"><i class="fa fa-clock-o text-primary" data-toggle="tooltip" title="" data-original-title="Daily List"></i></a>
+		<a href="../pages/hedisnoncompliant" target="_blank"><i class="fa fa-wpforms text-primary" data-toggle="tooltip" title="" data-original-title="Last Visit List"></i></a>
+		<i class="fa fa-refresh refreshbtn text-primary" data-toggle="tooltip" title="" data-original-title="Refresh"></i>
+		<span class="text-primary pr-5">PTs <span class="totalptcnt"></span> | Measures <span class="totalmeasurecnt"></span></span>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input donenotdoneoption" name="donenotdoneoption" value="1">
+            <span class="tag custom-control-label">All</span>
+		</label>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input donenotdoneoption" name="donenotdoneoption" value="3" checked>
+            <span class="tag custom-control-label">Non Compliant</span>
+		</label>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input donenotdoneoption" name="donenotdoneoption" value="2">
+            <span class="tag custom-control-label">Compliant</span>
+		</label>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input donenotdoneoption" name="donenotdoneoption" value="4">
+            <span class="tag custom-control-label">Generated-Reported</span>
+		</label>
+    </div>
+	<div class="col-md-6 mt-2 text-right outputbtnsection">
+       
+    </div>
+</div>
+<div class="progress progress-xs mt-3 mb-3 progress-load d-none">
+	<div class="progress-bar progress-bar-indeterminate bg-blue"></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="hedisreport" class="jexcel_modern"></div>
+    </div>
+</div>
+<div class="modal fade" id="color-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Color Definition</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 color-list">
+                        
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="status-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Set Status</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="custom-controls-stacked status-option">
+                            
+                        </div>
+                    </div>
+					<div class="col-lg-6 appt_date_area d-none">
+						<label class="form-control-label">Next Appt Date:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker apptdate" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6 appt_date_area d-none">
+						<label class="form-control-label">Appt Visit Type:</label>
+						<div class="input-group">
+							<input class="form-control apptvisittype" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6 appt_date_area d-none mt-2">
+						<label class="form-control-label">Appt PCP:</label>
+						<div class="input-group">
+							<select class="form-control apptpcpname"></select>
+						</div>
+					</div>
+					<div class="col-lg-6 visit_date_area d-none">
+						<label class="form-control-label">Last Visit:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker lastdate" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div>
+					<!-- <div class="col-lg-6 visit_date_area d-none">
+						<label class="form-control-label">Next Appt Date:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker nextdate" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div> -->
+					
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success setstatusbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="sort-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Sort By Options</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+						<div class="panel panel-primary">
+							<div class="tabs-menu1 ">
+								<!-- Tabs -->
+								<ul class="nav panel-tabs">
+									<li ><a optiontype="1" href="#allsorttab" class="active optiontype" data-toggle="tab">All</a></li>
+									<li><a optiontype="3" href="#outcomessorttab" class="optiontype" data-toggle="tab">Outcomes</a></li>
+									<li><a optiontype="4" href="#colorsorttab" class="optiontype" data-toggle="tab">Color Key</a></li>
+								</ul>
+							</div>
+							<div class="tab-content">
+								<div class="tab-pane active " id="allsorttab">
+									<div class="row">
+										<div class="col-md-12 mt-2 allcheckoption">
+											
+										</div>
+										<span class="sort-done-notdone">
+											<label class="custom-control custom-radio d-inline-flex">
+												<input type="radio" class="custom-control-input sortoption" name="sortoption" value="1" checked>
+												<span class="tag custom-control-label">All</span>
+											</label>
+											<label class="custom-control custom-radio d-inline-flex">
+												<input type="radio" class="custom-control-input sortoption" name="sortoption" value="2">
+												<span class="tag custom-control-label">Completed</span>
+											</label>
+											<label class="custom-control custom-radio d-inline-flex">
+												<input type="radio" class="custom-control-input sortoption" name="sortoption" value="3">
+												<span class="tag custom-control-label">Not Completed</span>
+											</label>
+										</span>
+									</div>
+								</div>
+								<div class="tab-pane " id="outcomessorttab">
+									<div class="row">
+										<div class="col-md-12 mt-2 outrangeoption">
+											
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane " id="colorsorttab">
+									<div class="row">
+										<div class="col-md-12 color-sort-list"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				
+				<button type="button" class="btn btn-success sortclearbtn" data-dismiss="modal">Clear</button>
+				<button type="button" class="btn btn-primary sortsearchbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="email-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "email-subject"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+                    <div class="col-lg-12 text-center">
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input emailoption" name="emailoption" value="1" checked>
+							<span class="tag custom-control-label">Default</span>
+						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input emailoption" name="emailoption" value="2">
+							<span class="tag custom-control-label">Custom</span>
+						</label>
+                    </div>
+                </div>
+				<div class="row customemailarea d-none">
+                    <div class="col-lg-12">
+                        <textarea id="customemailbody" class="form-control" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="row defaultemailarea">
+                    <div class="col-lg-12" id = "email-body">
+                        
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id = "emailsendbtn" data-dismiss="modal">Send</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="sms-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "sms-subject"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+                    <div class="col-lg-12 text-center">
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input smsoption" name="smsoption" value="1" checked>
+							<span class="tag custom-control-label">Default</span>
+						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input smsoption" name="smsoption" value="2">
+							<span class="tag custom-control-label">Custom</span>
+						</label>
+                    </div>
+					<div class="col-lg-12 text-center phonelist">
+                        
+                    </div>
+                </div>
+				<div class="row customsmsarea d-none">
+                    <div class="col-lg-12">
+                        <textarea id="customsmsbody" class="form-control" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="row defaultsmsarea">
+                    <div class="col-lg-12" id = "sms-body">
+                        
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer" style="position: relative;">
+				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
+					<b><span id="smscounts"></span>&nbsp;&nbsp;Available</b>
+					
+				</div>
+				<div class="text-primary" style="display: inline-block;position:absolute;left:120px;top:23px;">
+					<label class="custom-control custom-checkbox d-inline-flex">
+						<input type="checkbox" class="custom-control-input whatsappoption" name="whatsappoption" value="1">
+						<span class="custom-control-label" style="line-height:1.6rem;">Whatsapp&nbsp;<i class="fa fa-whatsapp"></i></span>
+					</label>
+				</div>
+				<a href="../pages/creditsms" target="_blank" class="btn btn-primary">Add Credit</a>
+				<button type="button" class="btn btn-success" id = "smssendbtn" data-dismiss="modal">Send</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="patient-chart-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "patient-modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id = "patient-modal-print-area">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 id = "patient-modal-insurance" class="text-center"></h3>
+					</div>
+					<div class="col-auto">
+						Name : <span id = "patient-modal-name" class="text-center"></span>
+					</div>
+					<div class="col-auto">
+						Ins ID : <span id = "patient-modal-mid" class="text-center"></span>
+					</div>
+					<div class="col-auto">
+						DOB : <span id = "patient-modal-dob" class="text-center"></span>
+					</div>
+					<div class="col">
+						Phone : <span id = "patient-modal-phone" class="text-center"></span>
+					</div>
+				</div>
+				<div class="row mt-5">
+					<div class="col-sm-12 col-lg-6 col-md-6 completed-area">
+						<h4 class="text-center">Completed</h4>
+						<div class="mt-3 text-center">
+							<div class="chart-circle mx-auto chart-dropshadow-success completedbarlength" data-value="" data-thickness="7" data-color="#33ce7b"><div class="chart-circle-value"><div class="font-weight-normal fs-20 completedper"></div></div></div>
+						</div>
+						<ul class="list-items mt-2 completedptmeasure text-center">
+							
+						</ul>
+					</div>
+					<div class="col-sm-12 col-lg-6 col-md-6 notcompleted-area">
+						<h4 class="text-center">Not Completed</h4>
+						<div class="mt-3 text-center">
+							<div class="chart-circle mx-auto chart-dropshadow-info notcompletedbarlength" data-value="" data-thickness="7" data-color="#f82649"><div class="chart-circle-value"><div class="font-weight-normal fs-20 notcompletedper"></div></div></div>
+						</div>
+						<ul class="list-items mt-2 notcompletedptmeasure text-center">
+							
+						</ul>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" id = "print-patient-modal-btn"><i class="ti-printer"></i></button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="notes-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "notes-modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-auto">
+								Name : <span id = "notes-modal-name" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								Ins ID : <span id = "notes-modal-mid" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								DOB : <span id = "notes-modal-dob" class="text-center"></span>
+							</div>
+							<div class="col">
+								Phone : <span id = "notes-modal-phone" class="text-center"></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 note-cal-area">
+						<div class="row justify-content-center">
+							<div class="col-xl-6 col-lg-6 col-sm-6 pr-0 pl-0">
+								<div class="card-body text-center">
+									<h6 class="text-center text-muted">Completed</h6>
+									<div class="text-center">
+										<div class="chart-circle mx-auto chart-dropshadow-success completedbarlengthnote" data-value="" data-thickness="7" data-color="#33ce7b"><div class="chart-circle-value"><div class="font-weight-normal fs-17 completedpernote"></div></div></div>
+									</div>
+									<ul class="list-items mt-2 completednotemeasure text-center">
+									
+									</ul>
+								</div>
+							</div>
+							<div class="col-xl-6 col-lg-6 col-sm-6 pr-0 pl-0">
+								<div class="card-body text-center">
+									<h6 class="text-center text-muted">Not Completed</h6>
+									<div class="text-center">
+										<div class="chart-circle mx-auto chart-dropshadow-info notcompletedbarlengthnote" data-value="" data-thickness="7" data-color="#f82649"><div class="chart-circle-value"><div class="font-weight-normal fs-17 notcompletedpernote"></div></div></div>
+									</div>
+									<ul class="list-items mt-2 notcompletednotemeasure text-center">
+									
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-md-12">
+						<label class="form-control-label">Action Token:</label><label id = "allviewnotes">See More</label>
+						<div id = "token_area"></div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-md-12">
+						<div>
+							<div class="form-group text-right">
+								<label for="notes-text" id="notes-created" class="form-control-label">Notes:</label>
+								<textarea id="notes-text" class="form-control" rows="5" placeholder="Notes"></textarea>
+							</div>		
+							<div class="form-group">
+								<label for="notes-assuser" class="form-control-label">Assigned to User:</label>
+								<select class="form-control" id="notes-assuser">
+									
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="custom-control custom-radio d-inline-flex">
+									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="1" checked>
+									<span class="tag custom-control-label">Open</span>
+								</label>
+								<label class="custom-control custom-radio d-inline-flex">
+									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="2">
+									<span class="tag custom-control-label">In progress</span>
+								</label>
+								<label class="custom-control custom-radio d-inline-flex">
+									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="3">
+									<span class="tag custom-control-label">Closed</span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="notes-submit" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="mlog-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >View Measure Updated Log</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+					<div class="col-md-12" style="max-height: 500px;overflow: auto;">
+						<ul class="cbp_tmtimeline" id = "log_list">
+							
+						</ul>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="output-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Track File Generation</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+					<div class="col-md-12">
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input trackoption" name="trackoption" value="1" checked>
+							<span class="tag custom-control-label">Yes</span>
+						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input trackoption" name="trackoption" value="2">
+							<span class="tag custom-control-label">No</span>
+						</label>
+					</div>
+					<input type="hidden" id = "fileid" />
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success viewrlogbtn" data-dismiss="modal">Log</button>
+				<button type="button" class="btn btn-primary generateoutfile" data-dismiss="modal">Create File</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="rlog-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Measure Route Tracking</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+					<div class="col-md-12" style="max-height: 500px;overflow: auto;">
+						<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+							
+						</div>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ROW CLOSE -->
+<div class="modal fade" id="update-note-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Update your Note</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="pwd" class="form-control-label">Note:</label>
+                            <textarea class="form-control" id="notetext" rows="5"></textarea>
+                            <input class="form-control" id="chosen_note" type="hidden" />
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="editnotebtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

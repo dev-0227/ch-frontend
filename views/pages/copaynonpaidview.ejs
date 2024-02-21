@@ -1,0 +1,260 @@
+<style>
+    .jexcel{
+        width:100%!important;
+    }
+    .printletter,.statusbtn{
+        cursor: pointer;
+    }
+    .select2{
+        width: 100%!important;
+    }
+    .addnewbtn{
+        margin-top: -12px;
+        margin-right: 10px;
+    }
+    .ribbon-done span {        
+        background: linear-gradient(#79A70A 0%, #79A70A 100%);
+    }
+    .ribbon-done span::before {
+        border-left: 3px solid #79A70A;
+        border-top: 3px solid #79A70A;
+    }
+    .ribbon-done span::after {
+        border-right: 3px solid #79A70A;
+        border-top: 3px solid #79A70A;
+    }
+</style>
+<input type="hidden" id="chosen_ptid">
+<input type="hidden" id="chosen_id">
+<div class="row ml-2 mr-2 mt-2">
+	<div class="col-md-12">
+		<h2 class="text-primary"><span class="clinic-name"></span> | PT Responsibility</h2>
+	</div>
+	<div class="col-auto">
+        <h6 class="text-primary"><span id="sdate"><%= sdate %></span> - <span id="edate"><%= edate %></span></h6>
+    </div>
+</div>
+<div class="row ml-2 mr-2 mt-2">
+    <div class="col-md-4">
+        <button class="btn btn-sm btn-outline-primary addnewbtn"><i class="fe fe-plus mr-2"></i>New</button>&nbsp;&nbsp;
+        <label class="custom-switch">
+            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" id="deductcheck">
+            <span class="custom-switch-indicator"></span>
+            <span class="custom-switch-description">Deductible</span>
+        </label>&nbsp;&nbsp;
+        <label class="custom-switch">
+            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" id="paidcheck">
+            <span class="custom-switch-indicator"></span>
+            <span class="custom-switch-description">Paid</span>
+        </label>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <select id="ins-area" class="form-control select2-show-search" data-placeholder="Nothing Selected"></select>
+        </div>
+    </div>
+</div>
+<div class="progress progress-xs mt-3 mb-3 progress-load d-none">
+	<div class="progress-bar progress-bar-indeterminate bg-blue"></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="nonpaidreport" class="jexcel_modern"></div>
+    </div>
+</div>
+<div class="modal fade" id="new-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">New Record</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fname" class="form-control-label">PT ID:</label>
+                            <input type="text" class="form-control" id="fname">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="lname" class="form-control-label">CPT:</label>
+                            <input type="text" class="form-control" id="lname">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email" class="form-control-label">Visit Type:</label>
+                            <input type="email" class="form-control" id="email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="phone" class="form-control-label">DOS:</label>
+                            <input type="text" class="form-control" id="phone">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="address" class="form-control-label">Copay:</label>
+                            <input type="text" class="form-control" id="address">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="address" class="form-control-label">Deductible:</label>
+                            <input type="text" class="form-control" id="address">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="address" class="form-control-label">Paid:</label>
+                            <input type="text" class="form-control" id="address">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="maddbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="invoice-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">PT Responsibility</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                
+                <h5>Select | Adjust Charges</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="mt-5">Copay: $<span id="copay_value"></span></h5>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="copay_adjust" class="form-control-label">Enter Adjustment:</label>
+                            <input type="text" class="form-control" id="copay_adjust">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="custom-control custom-checkbox mt-5">
+                            <input type="checkbox" class="custom-control-input" id="copayshowcheck">
+                            <span class="tag custom-control-label">Select Adjust</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="mt-5">Deductible: $<span id="deduct_value"></span></h5>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="deduct_adjust" class="form-control-label">Enter Adjustment:</label>
+                            <input type="text" class="form-control" id="deduct_adjust">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="custom-control custom-checkbox mt-5">
+                            <input type="checkbox" class="custom-control-input" id="deductshowcheck">
+                            <span class="tag custom-control-label">Select Adjust</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="text-primary text-bold">Total: $<span id="total_value"></span></h5>
+                    </div>
+                    <div class="col-md-8">
+                        <h5 class="text-primary text-bold">Discount Percentage: <span id="total_per">0</span>%</h5>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="invoicebtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="status-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">PT Responsibility Status</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="text-primary pb-2">Invoice Status</h5>
+                        <div class="row">
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card item-card">
+                                    <div class="ribbone">
+                                         <div class="ribbon markstatus markstatus1"><span>None</span></div>
+                                    </div>
+                                    <div class="product-grid6  card-body">
+                                        <div class="text-center">
+                                            <i class="ti ti-printer text-primary fa-3x text-primary-shadow"></i>
+                                            <p>Printed PDF</p>
+                                            <p class="datestatus1">-</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card item-card">
+                                    <div class="ribbone">
+                                         <div class="ribbon markstatus markstatus2"><span>None</span></div>
+                                    </div>
+                                    <div class="product-grid6 card-body">
+                                        <div class="text-center">
+                                            <i class="ti ti-email text-primary fa-3x text-primary-shadow"></i>
+                                            <p>Sent Email</p>
+                                            <p class="datestatus2">-</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card item-card">
+                                    <div class="ribbone">
+                                         <div class="ribbon markstatus markstatus3"><span>None</span></div>
+                                    </div>
+                                    <div class="product-grid6  card-body">
+                                        <div class="text-center">
+                                            <i class="ti ti-mobile text-primary fa-3x text-primary-shadow"></i>
+                                            <p>Sent SMS</p>
+                                            <p class="datestatus3">-</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5 class="text-primary pb-2">Patient Payment Status</h5>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="statusbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

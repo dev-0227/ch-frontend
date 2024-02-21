@@ -1,0 +1,257 @@
+<style>
+    .tab_area i {
+        color:#25252a;
+    }
+    .table-responsive{
+        padding:10px;
+    }
+    .reduce_text {
+        width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+    }
+    .reduce_text_2 {
+        width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+    }
+    .color-box{
+        display: inline-block;
+        width: 100%;
+        border-radius: 3px;
+        border: 1px solid #eaedf1;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+    }
+    #definemeasuretable tr{
+        cursor: pointer;
+    }
+</style>
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Communication Settings</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="panel panel-primary">
+                    <div class=" tab-menu-heading">
+                        <div class="tabs-menu1">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li class="superadmin-right"><a href="#phonesetting_tab" class="active" data-toggle="tab">Phone Number Settings</a></li>
+                                <li><a href="#hedisalert_tab" class="active tmpfirstclass" data-toggle="tab">Hedis Alerts</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body tabs-menu-body tab_area">
+                        <div class="tab-content">
+                            <div class="tab-pane superadmin-right active" id="phonesetting_tab">
+                                <div class="row">
+                                    <div class="col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <div class="form-label">Activate SMS</div>
+                                            <label class="custom-switch">
+                                                <input type="checkbox" id="activatecheck" class="custom-switch-input">
+                                                <span class="custom-switch-indicator"></span>
+                                                <span class="custom-switch-description">Activate SMS</span>
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-label">Activate Replenish When 150</div>
+                                            <label class="custom-switch">
+                                                <input type="checkbox" id="autopaycheck" class="custom-switch-input">
+                                                <span class="custom-switch-indicator"></span>
+                                                <span class="custom-switch-description">I agree with replenishing</span>
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Replenish Amount</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="" id="repamount">
+                                                </div>
+                                                <span class="col-auto">
+                                                    <button class="btn btn-primary" type="button" id="updaterepamountbtn">Update</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Replenish Counts</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="" id="repcounts">
+                                                </div>
+                                                <span class="col-auto">
+                                                    <button class="btn btn-primary" type="button" id="updaterepcountsbtn">Update</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Price Per SMS</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="" id="pricevalue">
+                                                </div>
+                                                <span class="col-auto">
+                                                    <button class="btn btn-primary" type="button" id="updatepricebtn">Update</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Phone number  -----  Monthly Cost</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="" id="phonenumber">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="" id="phoneprice">
+                                                </div>
+                                                <span class="col-auto">
+                                                    <button class="btn btn-primary" type="button" id="updatephonebtn">Update</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 col-lg-9">
+                                        <div class="card">
+                                            <div class="e-table pt-5 px-5 pb-5">
+                                                <div class="table-responsive table-lg pt-2">
+                                                    <table class="table table-striped table-bordered text-nowrap w-100" id="paymenthistorytable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date</th>
+                                                                <th>Reciept ID</th>
+                                                                <th>Name</th>
+                                                                <th>Email</th>
+                                                                <th>Amount</th>
+                                                                <th>Counts</th>
+                                                                <th>Type</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane active tmpfirstclass" id="hedisalert_tab">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="hedis_alert_type" class="form-control-label">Alert Types:</label>
+                                            <select class="form-control" id="hedis_alert_type">
+                                                <option value="1">Letter</option>
+                                                <option value="2">Email</option>
+                                                <option value="3">SMS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="hedis_alert_language" class="form-control-label">Language:</label>
+                                            <select class="form-control" id="hedis_alert_language">
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                               <!-- ROW-2 OPEN -->
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5  class="text-primary">Variable Definition</h5>
+                                        <div class="tags">
+                                            <div class="tag">
+                                                PT Name
+                                                <span class="tag-addon tag-info">$PT_NAME</span>
+                                            </div>
+                                            <div class="tag">
+                                                PT First Name
+                                                <span class="tag-addon tag-info">$FirstName</span>
+                                            </div>
+                                            <div class="tag">
+                                                PT Last Name
+                                                <span class="tag-addon tag-info">$LastName</span>
+                                            </div>
+                                            <div class="tag">
+                                                PT Middle Name
+                                                <span class="tag-addon tag-info">$MiddleInitial</span>
+                                            </div>
+                                            <div class="tag">
+                                                PT DOB
+                                                <span class="tag-addon tag-info">$DOB</span>
+                                            </div>
+                                            <div class="tag">
+                                                PT Address
+                                                <span class="tag-addon tag-info">$ADDRESS</span>
+                                            </div>
+                                        </div>
+                                        <div class="tags mt-5">
+                                            <div class="tag">
+                                                Clinic Name
+                                                <span class="tag-addon tag-success">$Clinic_name</span>
+                                            </div>
+                                            <div class="tag">
+                                                Clinic Portal
+                                                <span class="tag-addon tag-success">$portal</span>
+                                            </div>
+                                            <div class="tag">
+                                                Clinic Tel
+                                                <span class="tag-addon tag-success">$Clinic_tel</span>
+                                            </div>
+                                            <div class="tag">
+                                                Clinic Web
+                                                <span class="tag-addon tag-success">$Clinic_web</span>
+                                            </div>
+                                            <div class="tag">
+                                                Clinic Ex
+                                                <span class="tag-addon tag-success">$Clinic_ex</span>
+                                            </div>
+                                            <div class="tag">
+                                                Contact Name
+                                                <span class="tag-addon tag-success">$Contact_name</span>
+                                            </div>
+                                            <div class="tag">
+                                                Contact Tel
+                                                <span class="tag-addon tag-success">$Tel</span>
+                                            </div>
+                                        </div>
+                                        <div class="tags mt-5">
+                                            <div class="tag">
+                                                Missing Service
+                                                <span class="tag-addon tag-danger">$MissingService</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="hedis_alert_subject" class="form-control-label">Subject:</label>
+                                            <input type="text" class="form-control" id="hedis_alert_subject" />
+                                            <input type="hidden" class="form-control" id="hedis_alert_id" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hedis_alert_body" class="form-control-label">Body:</label>
+                                            <div id="hedis_alert_body"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary" id = "hedisalertbtn">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ROW-2 CLOSED -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>

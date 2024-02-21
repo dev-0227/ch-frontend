@@ -1,0 +1,110 @@
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    <div class="float-left">
+                        <h3 class="card-title mb-0 inv-key"></h3>
+                    </div>
+                    <div class="float-right">
+                        <h3 class="card-title">Date: <span  id="cdate"></span></h3>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p class="h3">Inv To: <span id = "inv-clinic"></span></p>
+                        <address>
+                            <p id = "inv-address"></p>
+                            <p id = "inv-phone"></p>
+                            <p id = "inv-email"></p>
+                            <p id = "inv-web"></p>
+                        </address>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <img src="../assets/images/logo.jpg" width="200" alt="logo">
+                        <div><span id = "logo-address" style="width:200px;display: inline-block;"></span></div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p>Invoice: <span class="inv-key"></span></p>
+                        <p>For <span class="inv-enddate"></span></p>
+                        <p>Phone Number: <span class="inv-phone"></span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive push">
+                            <table class="table table-bordered table-hover mb-0 text-nowrap">
+                                <tbody><tr class=" ">
+                                    <th>Service</th>
+                                    <th class="text-center">SMS sent</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p class="font-w600 mb-1">Phone Number</p>
+                                    </td>
+                                    <td class="text-center"></td>
+                                    <td class="text-right inv-phone-amount"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p class="font-w600 mb-1">Hedis Communication SMS</p>
+                                    </td>
+                                    <td class="text-center inv-hedis-cnt"></td>
+                                    <td class="text-right inv-hedis-amount"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p class="font-w600 mb-1">Appointment Alert SMS</p>
+                                    </td>
+                                    <td class="text-center inv-app-cnt"></td>
+                                    <td class="text-right inv-app-amount"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="font-weight-bold text-uppercase text-right">Total</td>
+                                    <td class="font-weight-bold text-right h4 inv-total-amount"></td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                        <p class="pt-3"><span class="inv-report-date"></span> Detail Report</p>
+                    </div>
+                    <div class="col-md-6 pr-0">
+                        <div class="table-responsive push">
+                            <table class="table table-bordered table-hover mb-0 text-nowrap">
+                                <thead>
+                                    <th>Appt Alerts</th>
+                                    <th class="text-center">SMS sent</th>
+                                </thead>
+                                <tbody class="appt-report">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-0">
+                        <div class="table-responsive push">
+                            <table class="table table-bordered table-hover mb-0 text-nowrap">
+                                <thead>
+                                    <th>Hedis Reminder</th>
+                                    <th class="text-center">SMS sent</th>
+                                </thead>
+                                <tbody class="hedis-report">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right no-print">
+                <button type="button" class="btn btn-info mb-1" onclick="javascript:window.print();"><i class="si si-printer"></i> Print Invoice</button>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW-1 CLOSED -->

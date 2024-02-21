@@ -1,0 +1,170 @@
+<!-- ROW OPEN -->
+<style>
+    #qrcode img{
+        margin:50px auto;
+    }
+    #wave {
+        position: relative;
+        height: 70px;
+        width: 100%;
+        background: #45aaf2;
+        transition: 0.5s;
+    }
+    #wave:before {
+        content: "";
+        display: block;
+        position: absolute;
+        border-radius: 100% 50%;
+        width: 52%;
+        height: 80px;
+        background-color: #fff;
+        right: 0px;
+        top: 40px;
+    }
+    #wave:after {
+        content: "";
+        display: block;
+        position: absolute;
+        border-radius: 100% 50%;
+        width: 56%;
+        height: 70px;
+        background-color: #45aaf2;
+        left: 0;
+        top: 24px;
+        transition: 0.5s;
+    }
+    .azure::after{
+        background-color: #45aaf2;
+    }
+    .indigo::after{
+        background-color: #6574cd!important;
+    }
+    .purple::after{
+        background-color: #8927ec!important;
+    }
+    .pink::after{
+        background-color: #fc5296!important;
+    }
+    .red::after{
+        background-color: #e73827!important;
+    }
+    .orange::after{
+        background-color: #fc7303!important;
+    }
+    .yellow::after{
+        background-color: #FBB034!important;
+    }
+    .lime::after{
+        background-color: #7bd235!important;
+    }
+    .green::after{
+        background-color: #4ecc48!important;
+    }
+    .teal::after{
+        background-color: #1caf9f!important;
+    }
+    .postheader{
+        background-color: #45aaf2;
+        transition: 0.5s;
+    }
+    #post-main{
+        border:5px solid #45aaf2;
+        width:100%;
+        margin:0 auto;
+        background-color: #fff;
+        border-radius: 6px;
+        transition: 0.5s;
+    }
+</style>
+<div class="row row-cards justify-content-center">
+    <div class="col-lg-6 col-xl-6">
+        <div id="post-main">
+            <div class="text-center postheader text-white">
+                <h1 class="mb-0 pt-5 number-font clinic-name"></h1>
+                <h5 class="mb-0 pt-3 clinic-address"></h5>
+                <h5 class="mb-0 pt-3 clinic-phone"></h5>
+                <h3 class="mb-0 pt-5 number-font">Scan the code below to visit our clinic site</h3>
+            </div>
+            <div id="wave"></div>
+            <div class="text-center" id="qrcode"></div>
+        </div>
+    </div>
+    <div class="col-md-6 no-print">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Clinic Settings</h3>
+            </div>
+            <div class="card-body">
+                <label class="form-label">Select Color</label>
+                <div class="row gutters-xs">
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#45aaf2" key="azure" class="colorinput-input colorbtn" checked />
+                            <span class="colorinput-color bg-azure"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#6574cd" key="indigo" class="colorinput-input colorbtn"  />
+                            <span class="colorinput-color bg-indigo"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#8927ec" key="purple" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-purple"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#fc5296" key="pink" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-pink"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#e73827" key="red" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-red"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#fc7303" key="orange" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-orange"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#FBB034" key="yellow" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-yellow"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#7bd235" key="lime" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-lime"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#4ecc48" key="green" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-green"></span>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#1caf9f" key="teal" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-teal"></span>
+                        </label>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-info mb-1 mt-3" onclick="javascript:window.print();"><i class="ti ti-printer">&nbsp;</i>Print</button>
+                <button type="button" class="btn btn-success mb-1 mt-3 downloadqrbtn"><i class="ti ti-download">&nbsp;</i>Download QR Code</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="no-print mt-5">
+    <div class="text-center col-lg-12 col-xl-12">
+    </div>
+</div>

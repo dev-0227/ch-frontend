@@ -1,0 +1,334 @@
+<style>
+    .jexcel{
+        width:100%!important;
+    }
+	.jcalendar-content{
+		color:#25252a!important;
+	}
+	.notesbtn,.printletter,.sendemail,.sendsms,.statusbtn,.viewmlogbtn{
+		cursor: pointer;
+	}
+	.settingicon i{
+		padding:10px;
+		font-size: 0.9rem;
+		cursor: pointer;
+	}
+	.datechangebtn{
+		cursor: pointer;
+		font-size: 0.9rem;
+	}
+	.blue-color{
+		color:blue;
+	}
+	#ui-datepicker-div{
+		z-index: 10000!important;
+	}
+	#currentdate{
+		font-weight: 500;
+		font-size: 0.9rem;
+	}
+	.cbp_tmtimeline>li .cbp_tmtime span:last-child {
+		font-size: 13px!important;
+	}
+</style>
+<input type="hidden" id ="hedisdate" />
+<input type="hidden" id ="chosen_item" />
+<div class="row ml-2 mr-2 mt-2">
+	<h2 class="hedis-title text-primary"></h2>
+</div>
+<div class="row ml-2 mr-2">
+    <div class="col-md-12 mt-2 settingicon">
+		<i class="fa fa-file-excel-o exportexcelbtn text-primary" data-toggle="tooltip" title="" data-original-title="Excel"></i>
+		<i class="fa fa-print printbtn text-primary" data-toggle="tooltip" title="" data-original-title="Print"></i>
+		<i class="fa fa-envelope emailbtn text-primary" data-toggle="tooltip" title="" data-original-title="Email"></i>
+		<i class="fa fa-refresh refreshbtn text-primary border-right" data-toggle="tooltip" title="" data-original-title="Refresh"></i> 
+		<i class="fa fa-angle-double-left datechangebtn prevmonthdate blue-color"></i><i class="fa fa-angle-left datechangebtn prevdate blue-color"></i><span id="currentdate" class="blue-color"></span><i class="fa fa-angle-right datechangebtn nextdate blue-color"></i><i class="fa fa-angle-double-right datechangebtn nextmonthdate blue-color border-right"></i>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input nextweekoption" name="nextweekoption" value="0" checked>
+            <span class="tag custom-control-label">Only One Day</span>
+		</label>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input nextweekoption" name="nextweekoption" value="1">
+            <span class="tag custom-control-label">Next 7 Days</span>
+		</label>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input nextweekoption" name="nextweekoption" value="2">
+            <span class="tag custom-control-label">Next 15 Days</span>
+		</label>
+		<label class="custom-control custom-radio d-inline-flex pl-3">
+            <input type="radio" class="custom-control-input nextweekoption" name="nextweekoption" value="3">
+            <span class="tag custom-control-label">Next 30 Days</span>
+		</label>
+	</div>
+</div>
+<div class="progress progress-xs mt-3 mb-3 progress-load d-none">
+	<div class="progress-bar progress-bar-indeterminate bg-blue"></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="hedisreport" class="jexcel_modern"></div>
+    </div>
+</div>
+<div class="modal fade" id="color-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Color Definition</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 color-list">
+                        
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="status-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Set Status</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="custom-controls-stacked status-option">
+                            
+                        </div>
+                    </div>
+					<div class="col-lg-6 appt_date_area d-none">
+						<label class="form-control-label">Next Appt Date:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker apptdate" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6 appt_date_area d-none">
+						<label class="form-control-label">Appt Visit Type:</label>
+						<div class="input-group">
+							<input class="form-control apptvisittype" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6 appt_date_area d-none mt-2">
+						<label class="form-control-label">Appt PCP:</label>
+						<div class="input-group">
+							<select class="form-control apptpcpname"></select>
+						</div>
+					</div>
+					<div class="col-lg-6 visit_date_area d-none">
+						<label class="form-control-label">Last Visit:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker last-date" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div>
+					<!-- <div class="col-lg-6 visit_date_area d-none">
+						<label class="form-control-label">Next Appt Date:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker next-date" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div> -->
+					
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success setstatusbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="sort-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Sort By Options</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+						<div class="panel panel-primary">
+							<div class="tabs-menu1 ">
+								<!-- Tabs -->
+								<ul class="nav panel-tabs">
+									<li ><a optiontype="1" href="#allsorttab" class="active optiontype" data-toggle="tab">All</a></li>
+									<li><a optiontype="2" href="#notcomsrottab" class="optiontype" data-toggle="tab">Not Completed</a></li>
+									<li><a optiontype="3" href="#outcomessorttab" class="optiontype" data-toggle="tab">Outcomes</a></li>
+									<li><a optiontype="4" href="#colorsorttab" class="optiontype" data-toggle="tab">Color Key</a></li>
+								</ul>
+							</div>
+							<div class="tab-content">
+								<div class="tab-pane active " id="allsorttab">
+									<div class="row">
+										<div class="col-md-12 mt-2 allcheckoption">
+											
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane " id="notcomsrottab">
+									<div class="row">
+										<div class="col-md-12 mt-2 notcompletedoption">
+										
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane " id="outcomessorttab">
+									<div class="row">
+										<div class="col-md-12 mt-2 outrangeoption">
+											
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane " id="colorsorttab">
+									<div class="row">
+										<div class="col-md-12 color-sort-list"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success sortclearbtn" data-dismiss="modal">Clear</button>
+				<button type="button" class="btn btn-primary sortsearchbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="email-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "email-subject"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+                    <div class="col-lg-12 text-center">
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input emailoption" name="emailoption" value="1" checked>
+							<span class="tag custom-control-label">Default</span>
+						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input emailoption" name="emailoption" value="2">
+							<span class="tag custom-control-label">Custom</span>
+						</label>
+                    </div>
+                </div>
+				<div class="row customemailarea d-none">
+                    <div class="col-lg-12">
+                        <textarea id="custombody" class="form-control" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="row defaultemailarea">
+                    <div class="col-lg-12" id = "email-body">
+                        
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id = "emailsendbtn" data-dismiss="modal">Send</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="sms-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "sms-subject"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+                    <div class="col-lg-12 text-center">
+                        <label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input smsoption" name="smsoption" value="1" checked>
+							<span class="tag custom-control-label">Default</span>
+						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input smsoption" name="smsoption" value="2">
+							<span class="tag custom-control-label">Custom</span>
+						</label>
+                    </div>
+					<div class="col-lg-12 text-center phonelist">
+                        
+                    </div>
+                </div>
+				<div class="row customsmsarea d-none">
+                    <div class="col-lg-12">
+                        <textarea id="customsmsbody" class="form-control" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="row defaultsmsarea">
+                    <div class="col-lg-12" id = "sms-body">
+                        
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
+					<b><span id="smscounts"></span>&nbsp;&nbsp;Available</b>
+				</div>
+				<a href="../pages/creditsms" target="_blank" class="btn btn-primary">Add Credit</a>
+				<button type="button" class="btn btn-success" id = "smssendbtn" data-dismiss="modal">Send</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="mlog-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >View Measure Updated Log</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+					<div class="col-md-12" style="max-height: 500px;overflow: auto;">
+						<ul class="cbp_tmtimeline" id = "log_list">
+							
+						</ul>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

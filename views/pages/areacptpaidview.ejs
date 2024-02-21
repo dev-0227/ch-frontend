@@ -1,0 +1,42 @@
+<style>
+    .blue-color{
+        color: #0774f8!important;
+    }
+    .tag{
+        margin:3px;
+    }
+    .card-title{
+        font-size: 22px;
+        text-transform: uppercase;
+    }
+    .card-subtitle{
+        text-transform: uppercase;
+        font-weight: 500;
+        color: #4ecc48!important;
+        font-size: 18px;
+        margin:3px;
+    }
+    .cpt-desc{
+        font-size: 14px;
+        text-decoration: underline;
+        padding-left: 3px;
+        padding-top: 5px;
+    }
+</style>
+<input type="hidden" id="group" value="<%= group %>" />
+<input type="hidden" id="spec" value="<%= spec %>" />
+<input type="hidden" id="type" value="<%= type %>" />
+<div class="row ml-2 mr-2 mt-2">
+    <div class="col-md-10">
+        <h2 class="clinic-title text-primary"></h2>
+	    <h4 class="text-primary clinic-addr"></h4>
+	    <h5 class="text-primary paid-date"><span id="sdate"><%= sdate %></span> - <span id="edate"><%= edate %></span></h5>
+	    <h5 class="text-primary paid-desc"></h5>
+    </div>
+    <div class="col-md-2 text-right no-print">
+        <button class="btn btn-info printbtn"><i class="fa fa-print"></i></button>
+    </div>
+</div>
+<div class="row ml-2 mr-2 mt-2" id="main_area">
+    
+</div>

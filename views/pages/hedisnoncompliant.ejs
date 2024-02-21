@@ -1,0 +1,196 @@
+<style>
+	.settingicon i{
+		padding-right:20px;
+		font-size: 0.9rem;
+		cursor: pointer;
+	}
+	#token_area{
+		min-height: 150px;
+		max-height: 150px;
+		border: 1px solid #d8dde4;
+		border-radius: 5px;
+		overflow: auto;
+		padding:5px;
+	}
+	#allviewnotes{
+		position: absolute;
+		right:20px;
+		text-decoration: underline;
+	}
+	#ui-datepicker-div{
+		z-index: 10000!important;
+	}
+	.notesavailbtn{
+		background-color: #8CCB8D;
+		color: #fff;
+	}
+</style>
+<input type="hidden" id ="hedisdate" />
+<input type="hidden" id ="chosen_item" />
+<div class="row main-area">
+    <div class="col-12 col-sm-12">
+        <div class="card ">
+            <div class="card-header">
+                <h3 class="hedis-title card-title mb-0">Hedis Quality Tracking | Non Utilizers List</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 settingicon">
+						<i class="fa fa-file-excel-o exportexcelbtn text-primary" data-toggle="tooltip" title="" data-original-title="Excel"></i>
+						<i class="fa fa-print printbtn text-primary" data-toggle="tooltip" title="" data-original-title="Print"></i>
+						<i class="fa fa-envelope emailbtn text-primary" data-toggle="tooltip" title="" data-original-title="Email"></i>
+						<i class="fa fa-refresh refreshbtn text-primary" data-toggle="tooltip" title="" data-original-title="Refresh"></i>
+					</div>
+					<div class="table-responsive table-lg pt-2">
+						<table class="table table-striped table-bordered text-nowrap w-100" id="visittable">
+							<thead>
+								<tr>
+									<th>Ins Name</th>
+									<th>Ins ID</th>
+									<th>Name</th>
+									<th>DOB</th>
+									<th>Last Visit</th>
+									<th>Measure</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								
+							</tbody>
+						</table>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL END -->
+</div>
+<div class="modal fade" id="notes-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "notes-modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-auto">
+								Name : <span id = "notes-modal-name" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								Ins ID : <span id = "notes-modal-mid" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								DOB : <span id = "notes-modal-dob" class="text-center"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-md-12">
+						<label class="form-control-label">Action Token:</label><label id = "allviewnotes">See More</label>
+						<div id = "token_area"></div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-md-12">
+						<div>
+							<div class="form-group text-right">
+								<label for="notes-text" id="notes-created" class="form-control-label">Notes:</label>
+								<textarea id="notes-text" class="form-control" rows="5" placeholder="Notes"></textarea>
+							</div>		
+							<div class="form-group">
+								<label for="notes-assuser" class="form-control-label">Assigned to User:</label>
+								<select class="form-control" id="notes-assuser">
+									
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="custom-control custom-radio d-inline-flex">
+									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="1" checked>
+									<span class="tag custom-control-label">Open</span>
+								</label>
+								<label class="custom-control custom-radio d-inline-flex">
+									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="2">
+									<span class="tag custom-control-label">In progress</span>
+								</label>
+								<label class="custom-control custom-radio d-inline-flex">
+									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="3">
+									<span class="tag custom-control-label">Closed</span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="notes-submit" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="view-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id = "view-modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-auto">
+								Name : <span id = "view-modal-name" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								Ins ID : <span id = "view-modal-mid" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								DOB : <span id = "view-modal-dob" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								Insurance : <span id = "view-modal-ins" class="text-center"></span>
+							</div>
+							<div class="col-auto">
+								Measure : <span id = "view-modal-measure" class="text-center"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-5">
+					<div class="col-lg-6 visit_date_area">
+						<label class="form-control-label">Last Visit:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker last-date" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6 visit_date_area">
+						<label class="form-control-label">Next Visit:</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
+								</div>
+							</div><input class="form-control fc-datepicker next-date" placeholder="MM/DD/YYYY" type="text">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="dateupdatebtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

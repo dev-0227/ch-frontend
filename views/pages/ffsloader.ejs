@@ -1,0 +1,116 @@
+<style>
+	.payment-loader{
+		position: fixed;
+		z-index: 50000;
+		background: rgba(255, 255, 255);
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 100%;
+		width: 100%;
+		margin: 0 auto;
+		text-align: center;
+	}
+</style>
+<div class="payment-loader d-none">
+	<div class="row justify-content-center align-items-center d-flex h-100">
+		<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+			<div class="card bg-primary img-card box-primary-shadow">
+				<div class="card-body">
+					<div class="text-white text-center">
+						<h2 class="mb-2 number-font clinic-name"></h2>
+						<h4 class="text-white mb-2"><span class="loadfilename">Payment File</span></h4>
+						<p class="text-white mb-2">Loading By :  <span class="managername"></span></p>
+						<p class="text-white mb-2 ">Started at <span class="cdate"></span></p>
+						<div class="progress progress-xs progress-md mt-3 mb-3">
+							<div class="progress-bar progress-bar-indeterminate bg-pink"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Payment Data</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="col-lg-6">
+					<div class="card shadow">
+						<div class="card-header">
+							<h3 class="mb-0 card-title">Payment File</h3>
+						</div>
+						<div class="card-body">
+							<h6>
+								<span class='tag tag-purple mt-1'>ENC_CL</span>
+								<span class='tag tag-purple mt-1'>ENC_ID</span>
+								<span class='tag tag-purple mt-1'>PT_ID</span>
+								<span class='tag tag-purple mt-1'>PCP_ID</span>
+								<span class='tag tag-purple mt-1'>VTYPE</span>
+								<span class='tag tag-purple mt-1'>VID</span>
+								<span class='tag tag-purple mt-1'>VCODE</span>
+								<span class='tag tag-purple mt-1'>STATUS</span>
+								<span class='tag tag-purple mt-1'>date</span>
+								<span class='tag tag-purple mt-1'>CLStatus</span>
+								<span class='tag tag-purple mt-1'>CLDate</span>
+								<span class='tag tag-purple mt-1'>PTCopay</span>
+								<span class='tag tag-purple mt-1'>deduct</span>
+								<span class='tag tag-purple mt-1'>PayID</span>
+								<span class='tag tag-purple mt-1'>payorId</span>
+								<span class='tag tag-purple mt-1'>PayorT</span>
+								<span class='tag tag-purple mt-1'>type</span>
+								<span class='tag tag-purple mt-1'>T_date</span>
+								<span class='tag tag-purple mt-1'>T_mss</span>
+								<span class='tag tag-purple mt-1'>T_id</span>
+								<span class='tag tag-purple mt-1'>CPT</span>
+								<span class='tag tag-purple mt-1'>CPT_DESC</span>
+								<span class='tag tag-purple mt-1'>Mod1</span>
+								<span class='tag tag-purple mt-1'>ICD</span>
+								<span class='tag tag-purple mt-1'>ICD_DESC</span>
+								<span class='tag tag-purple mt-1'>CPT_PAY</span>
+								<span class='tag tag-purple mt-1'>MsgCode</span>
+								<span class='tag tag-purple mt-1'>InsName</span>
+							</h6>
+							<input id="ffsfile" type="file" class="dropify" data-height="150" />
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="btn-list text-center">
+						<button type="button" class="btn btn-success" id="ffsloadbtn"><i class="fe fe-upload mr-2 white-color"></i>Upload</button>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW CLOSED -->
+<div class="modal fade" id="load-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Loaded Successfully</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <ul class="countdown">
+							<li><span class="number newentries">0</span><br><span class="time">New entries</span></li>
+						</ul>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

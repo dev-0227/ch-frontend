@@ -1,0 +1,109 @@
+
+<style>
+	.pt-loader{
+		position: fixed;
+		z-index: 50000;
+		background: rgba(255, 255, 255);
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 100%;
+		width: 100%;
+		margin: 0 auto;
+		text-align: center;
+	}
+</style>
+<div class="pt-loader d-none">
+	<div class="row justify-content-center align-items-center d-flex h-100">
+		<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+			<div class="card bg-primary img-card box-primary-shadow">
+				<div class="card-body">
+					<div class="text-white text-center">
+						<h2 class="mb-2 number-font clinic-name"></h2>
+						<h4 class="text-white mb-2">Current Patients :  <span class="totalcount"></span></h4>
+						<p class="text-white mb-2">Loading By :  <span class="managername"></span></p>
+						<p class="text-white mb-2 ">Loading New Patients: Started at <span class="cdate"></span></p>
+						<div class="progress progress-xs progress-md mt-3 mb-3">
+							<div class="progress-bar progress-bar-indeterminate bg-pink"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Patient Data</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="col-lg-6">
+					<div class="card shadow">
+						<div class="card-header">
+							<h3 class="mb-0 card-title">Patient File</h3>
+						</div>
+						<div class="card-body">
+							<h6>
+								<span class='tag tag-purple mt-1'>uid</span>
+								<span class='tag tag-purple mt-1'>ufname</span>
+								<span class='tag tag-purple mt-1'>uminitial</span>
+								<span class='tag tag-purple mt-1'>ulname</span>
+								<span class='tag tag-purple mt-1'>DOB</span>
+								<span class='tag tag-purple mt-1'>upPhone</span>
+								<span class='tag tag-purple mt-1'>umobileno</span>
+								<span class='tag tag-purple mt-1'>uemail</span>
+								<span class='tag tag-purple mt-1'>upaddress</span>
+								<span class='tag tag-purple mt-1'>upcity</span>
+								<span class='tag tag-purple mt-1'>zipcode</span>
+								<span class='tag tag-purple mt-1'>upstate</span>
+								<span class='tag tag-purple mt-1'>sex</span>
+								<span class='tag tag-purple mt-1'>Age</span>
+								<span class='tag tag-purple mt-1'>language</span>
+								<span class='tag tag-purple mt-1'>ethnicity</span>
+								<span class='tag tag-purple mt-1'>race</span>
+								<span class='tag tag-purple mt-1'>deceased</span>
+								<span class='tag tag-purple mt-1'>deceasedDate</span>
+							</h6>
+							<input id="ptfile" type="file" class="dropify" data-height="150" />
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="btn-list text-center">
+						<button type="button" class="btn btn-success" id="ptloadbtn"><i class="fe fe-upload mr-2 white-color"></i>Upload</button>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW CLOSED -->
+<div class="modal fade" id="load-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Loaded Successfully</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <ul class="countdown">
+							<li><a href="../pages/ptlist?s=1" target="_blank"><span class="number newptcnt">0</span></a><br><span class="time">New Patients</span></li>
+						</ul>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

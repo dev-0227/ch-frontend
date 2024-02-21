@@ -1,0 +1,119 @@
+<!-- ROW OPEN -->
+<style>
+	.allnotes-table{
+		min-height: 100px;
+		max-height: 800px;
+		overflow: auto;
+	}
+</style>
+<input type="hidden" id ="hedisdate" />
+<div class="row row-cards">
+	<div class="col-lg-12 col-xl-5">
+		<div class="row">
+			<div class="col-md-12 col-lg-6 col-xl-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 id = "notes-modal-name" class="card-title">General Settings</h3>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-auto">
+										Ins ID : <span id = "notes-modal-mid" class="text-center"></span>
+									</div>
+									<div class="col-auto">
+										DOB : <span id = "notes-modal-dob" class="text-center"></span>
+									</div>
+									<div class="col">
+										Phone : <span id = "notes-modal-phone" class="text-center"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-xl-6 col-lg-6 col-sm-6 pr-0 pl-0">
+								<div class="card-body text-center">
+									<h2 class="mb-1 mt-2 number-font text-primary"><span class="counter completedpernote"></span>%</h2>
+									<p class="mb-0 text-muted"> Completed Measures</p>
+									<ul class="list-items mt-2 completednotemeasure text-center">
+									
+									</ul>
+								</div>
+							</div>
+							<div class="col-xl-6 col-lg-6 col-sm-6 pr-0 pl-0">
+								<div class="card-body text-center">
+									<h2 class="mb-1 mt-2 number-font text-secondary"><span class="counter notcompletedpernote"></span>%</h2>
+									<p class="mb-0 text-muted"> Missing Measures</p>
+									<ul class="list-items mt-2 notcompletednotemeasure text-center">
+									
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="form-group text-right">
+							<label for="notes-text" id="notes-created" class="form-control-label">Notes:</label>
+							<textarea id="notes-text" class="form-control" rows="5" placeholder="Notes"></textarea>
+						</div>		
+						<div class="form-group">
+							<label for="notes-assuser" class="form-control-label">Assigned to User:</label>
+							<select class="form-control" id="notes-assuser">
+								
+							</select>
+						</div>
+						<div class="form-group">
+							<label class="custom-control custom-radio d-inline-flex">
+								<input type="radio" class="custom-control-input notes-status" name="notes-status" value="1" checked>
+								<span class="tag custom-control-label">Open</span>
+							</label>
+							<label class="custom-control custom-radio d-inline-flex">
+								<input type="radio" class="custom-control-input notes-status" name="notes-status" value="2">
+								<span class="tag custom-control-label">In progress</span>
+							</label>
+							<label class="custom-control custom-radio d-inline-flex">
+								<input type="radio" class="custom-control-input notes-status" name="notes-status" value="3">
+								<span class="tag custom-control-label">Closed</span>
+							</label>
+						</div>
+						<a id="notes-submit" class="btn btn-primary btn-block mt-5">Submit</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-12 col-xl-7">
+		<div class="card users store">
+			<ul class="list-unstyled list-separated allnotes-table">
+				
+			</ul>
+		</div>
+	</div>
+</div>
+<!-- ROW CLOSE -->
+<div class="modal fade" id="update-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Update your Note</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="pwd" class="form-control-label">Note:</label>
+                            <textarea class="form-control" id="notetext" rows="5"></textarea>
+                            <input class="form-control" id="chosen_note" type="hidden" />
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="updatebtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

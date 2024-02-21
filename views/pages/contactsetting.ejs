@@ -1,0 +1,347 @@
+<style>
+    .tab-content i {
+        color:#fff;
+    }
+    .table-responsive{
+        padding:10px;
+    }
+    .bootstrap-tagsinput{
+        width: 100%;
+    }
+</style>
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">QR Settings</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="panel panel-primary">
+                    <div class=" tab-menu-heading">
+                        <div class="tabs-menu1 ">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li ><a href="#gtab" class="active" data-toggle="tab">General</a></li>
+                                <li ><a href="#qtab" data-toggle="tab">Questions</a></li>
+                                <li><a href="#rtab" data-toggle="tab">Response Options</a></li>
+                                <li><a href="#mtab" data-toggle="tab">Modules</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="gtab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Global Description</label>
+                                            <textarea rows="5" class="form-control" id="gdesc" name="gdesc"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Specific Description</label>
+                                            <textarea rows="5" class="form-control" id="sdesc" name="sdesc"></textarea>
+                                        </div>
+                                        <button class="btn btn-primary updateconnectiondesc">Update</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Clinic Settings</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">
+                                                        Use specific description
+                                                        <div class="material-switch pull-right">
+                                                            <input id="desctype" type="checkbox" name="custom-switch-checkbox" class="custom-switch-input connectiondesctype">
+                                                            <label for="desctype" class="label-info"></label>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Use Conector Form instead of Clinic Website
+                                                        <div class="material-switch pull-right">
+                                                            <input id="sitetype" name="someSwitchOption001 sitetype" type="checkbox"/>
+                                                            <label for="sitetype" class="label-primary"></label>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        <label for="reskey" class="form-control-label">Clinic Manager Emails</label>
+                                                        <input type="text" class="form-control" id="manageremails">
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="qtab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Questions</h3>
+                                                <div class="card-options">
+                                                    <button id="questionaddbtn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fe fe-plus mr-2"></i>Add a new Question</button>
+                                                        <input type="hidden" id="chosen_q" />
+                                                    </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="questiontable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Questions</th>
+                                                            <th scope="col">Active</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="rtab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Response Options</h3>
+                                                <div class="card-options">
+                                                    <button id="resaddbtn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fe fe-plus mr-2"></i>Add a Response</button>
+                                                        <input type="hidden" id="chosen_r" />
+                                                    </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="restable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Options</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="mtab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Modules</h3>
+                                                <div class="card-options">
+                                                    <button id="maddbtn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fe fe-plus mr-2"></i>Add a new Module</button>
+                                                        <input type="hidden" id="chosen_m" />
+                                                    </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="mtable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Module</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW-1 CLOSED -->
+<div class="modal fade" id="question-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add Question</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Question:</label>
+                            <input type="text" class="form-control" id="question">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="qstatus" class="form-control-label">Status:</label>
+                            <select id="qstatus" class="form-control custom-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="qaddbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="question-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit Question</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="squestion" class="form-control-label">Question:</label>
+                            <input type="text" class="form-control" id="squestion">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="eqstatus" class="form-control-label">Status:</label>
+                            <select id="eqstatus" class="form-control custom-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal" id="qeditbtn">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="res-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add Response</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="reskey" class="form-control-label">Key: ( SEPARATE WITH COMMA. )</label>
+                            <input type="text" class="form-control" id="reskey">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="reskeystatus" class="form-control-label">Status:</label>
+                            <select id="reskeystatus" class="form-control custom-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="reskeyaddbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="module-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add Module</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="module" class="form-control-label">Module:</label>
+                            <input type="text" class="form-control" id="module">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="modulestatus" class="form-control-label">Status:</label>
+                            <select id="modulestatus" class="form-control custom-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="moduleaddbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="module-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit Module</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="emodule" class="form-control-label">Module:</label>
+                            <input type="text" class="form-control" id="emodule">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="emodulestatus" class="form-control-label">Status:</label>
+                            <select id="emodulestatus" class="form-control custom-select">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal" id="moduleeditbtn">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

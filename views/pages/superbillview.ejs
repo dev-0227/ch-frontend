@@ -1,0 +1,56 @@
+<style>
+    .blue-color{
+        color: #0774f8!important;
+    }
+    .red-color{
+        color: #c53882!important;
+    }
+    .text-green{
+        color: #13bfa6!important;
+    }
+    .card{
+        min-height: 200px;
+    }
+    .item{
+        border-bottom: 1px solid #eee;
+        border-right: 1px solid #eee;
+        padding: 8px;
+    }
+    .grid-container{
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        border-top: 1px solid #eee;
+        border-left: 1px solid #eee;
+    }
+    .cpt-desc{
+        margin-bottom: 0.5rem!important;
+    }
+    .card-subtitle{
+        margin-top: 8px;
+    }
+    .card-title {
+        margin-bottom: .75rem!important;
+    }
+</style>
+<input type="hidden" id="ins" value="<%= ins %>" />
+<input type="hidden" id="spec" value="<%= spec %>" />
+<input type="hidden" id="type" value="<%= type %>" />
+<div class="row ml-2 mr-2 mt-2">
+    <div class="col-xl-12 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h5 class="card-title"><span class="clinic-title"></span> | <%= ins %></h5>
+                        <h6 class="card-subtitle mb-2 text-muted clinic-addr"></h6>
+                        <p class="card-text paid-date"><span id="sdate"><%= sdate %></span> - <span id="edate"><%= edate %></span></p>
+                    </div>
+                    <div class="col-md-2 text-right no-print">
+                        <button class="btn btn-info printbtn"><i class="fa fa-print"></i></button>
+                    </div>
+                </div>
+                <div id="main_area" class="grid-container mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>

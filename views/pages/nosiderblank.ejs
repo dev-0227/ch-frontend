@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+
+		<!-- META DATA -->
+		<meta charset="UTF-8">
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="facebook-domain-verification" content="6v32x9dad6bw53fmf3qrykpnrzttxb" />
+		<!-- FAVICON -->
+		<link rel="shortcut icon" type="image/x-icon" href="../assets/favicon.ico" />
+
+		<!-- TITLE -->
+		<title>ConectorHealth</title>
+
+		<!-- BOOTSTRAP CSS -->
+		<link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+		<!-- STYLE CSS -->
+		<link href="../assets/css/style.css" rel="stylesheet"/>
+		<link href="../assets/css/skin-modes.css" rel="stylesheet"/>
+		<!-- CUSTOM SCROLL BAR CSS-->
+		<link href="../assets/plugins/scroll-bar/jquery.mCustomScrollbar.css" rel="stylesheet"/>
+		
+
+		<!-- NOTIFICATION CSS -->
+		<link href="../assets/plugins/notify/css/jquery.growl.css" rel="stylesheet"/>
+
+		<!--SWEET ALERT CSS-->
+		<link href="../assets/plugins/sweet-alert/sweetalert.css" rel="stylesheet" />
+
+		<!--- FONT-ICONS CSS -->
+		<link href="../assets/css/icons.css" rel="stylesheet"/>
+
+		<!-- COLOR SKIN CSS -->
+		<link id="theme" rel="stylesheet" type="text/css" media="all" href="../assets/colors/color4.css" />
+		<link href="../assets/css/custom.css" rel="stylesheet"/>
+	</head>
+
+	<body class="app sidebar-mini">
+
+
+		<!-- GLOABAL LOADER -->
+		<div id="global-loader">
+			<img src="../assets/images/loader.svg" class="loader-img" alt="Loader">
+		</div>
+		<!-- /GLOABAL LOADER -->
+		<!-- PAGE -->
+		<div class="page">
+			<div class="page-main">
+				<!--app-content open-->
+				<div class="app-content">
+					<div class="side-app">
+						<%- include(pageKey); %>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- BACK-TO-TOP -->
+		<a href="#top" id="back-to-top" class="no-print"><i class="fa fa-angle-up"></i></a>
+
+		<!-- JQUERY JS -->
+		<script src="../assets/js/jquery-3.4.1.min.js"></script>
+
+		<!-- BOOTSTRAP JS -->
+		<script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="../assets/plugins/bootstrap/js/popper.min.js"></script>
+
+		
+		<script src="../assets/js/qrcode.min.js"></script>
+
+		<!-- RATING STARJS -->
+		<script src="../assets/plugins/rating/jquery.rating-stars.js"></script>
+
+		
+
+		<!-- SIDE-MENU JS-->
+		<script src="../assets/plugins/sidemenu/sidemenu.js"></script>
+
+		<!-- NOTIFICATIONS JS -->
+		<script src="../assets/plugins/notify/js/jquery.growl.js"></script>
+
+		<!-- SWEET-ALERT JS -->
+		<script src="../assets/plugins/sweet-alert/sweetalert.min.js"></script>
+		<script src="../assets/js/sweet-alert.js"></script>
+
+		<!-- CHART-CIRCLE JS -->
+		<script src="../assets/js/circle-progress.min.js"></script>
+
+		<!-- RATING STAR JS-->
+		<script src="../assets/plugins/rating/jquery.rating-stars.js"></script>
+		
+		<!-- CUSTOM SCROLLBAR JS-->
+		<script src="../assets/plugins/scroll-bar/jquery.mCustomScrollbar.concat.min.js"></script>
+
+		<!-- DATA TABLE JS-->
+		<script src="../assets/plugins/datatable/jquery.dataTables.min.js"></script>
+		<script src="../assets/plugins/datatable/dataTables.bootstrap4.min.js"></script>
+		<script src="../assets/plugins/datatable/datatable.js"></script>
+		<script src="../assets/plugins/datatable/datatable-2.js"></script>
+		<script src="../assets/plugins/datatable/dataTables.responsive.min.js"></script>
+
+		<!-- SIDEBAR JS -->
+		<script src="../assets/plugins/sidebar/sidebar.js"></script>
+
+		<!-- Echarts Js-->
+		<script src="../assets/plugins/echarts/echarts.js"></script>
+
+		<!-- INPUT MASK JS-->
+		<script src="../assets/plugins/input-mask/jquery.mask.min.js"></script>
+		
+		<!-- FILE UPLOADES JS -->
+        <script src="../assets/plugins/fileuploads/js/fileupload.js"></script>
+        <script src="../assets/plugins/fileuploads/js/file-upload.js"></script>
+
+		<!-- SELECT2 JS -->
+		<script src="../assets/plugins/select2/select2.full.min.js"></script>
+
+		<!-- BOOTSTRAP-DATERANGEPICKER JS -->
+		<script src="../assets/plugins/bootstrap-daterangepicker/moment.min.js"></script>
+		<script src="../assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+		<!-- TIMEPICKER JS -->
+		<script src="../assets/plugins/time-picker/jquery.timepicker.js"></script>
+		<script src="../assets/plugins/time-picker/toggles.min.js"></script>
+
+		<!-- DATEPICKER JS -->
+		<script src="../assets/plugins/date-picker/spectrum.js"></script>
+		<script src="../assets/plugins/date-picker/jquery-ui.js"></script>
+		<script src="../assets/plugins/input-mask/jquery.maskedinput.js"></script>
+
+		<!-- MULTI SELECT JS-->
+		<script src="../assets/plugins/multipleselect/multiple-select.js"></script>
+		<script src="../assets/plugins/multipleselect/multi-select.js"></script>
+
+		<!-- FORMELEMENTS JS -->
+		<script src="../assets/js/form-elements.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.2.0/js/bootstrap-colorpicker.min.js"></script>
+		
+		<!-- SUMMERNOTE JS -->
+		<script src="../assets/plugins/summernote/summernote-bs4.js"></script>
+
+		<script src="../assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+		
+		<!-- CUSTOM JS -->
+		<script src="../assets/js/custom.js"></script>
+
+		<script src="../assets/js/api.js"></script>
+		<script src="../assets/js/pages/<%- pageKey -%>.js"></script>
+		<script src="https://js.stripe.com/v3/"></script>
+		<script>
+			async function inactivitylogout() {
+				let currentTime = new Date();
+				currentTime = currentTime.getTime() / 1000;
+				if (currentTime - localStorage.getItem('lastActivity') > 1800) {
+					await sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:localStorage.getItem("loginid")}, "login/updateloginouttime", (xhr, err) => {
+						if (!err) {
+						} else {
+							return $.growl.error({
+							message: "Action Failed"
+							});
+						}
+					});
+					localStorage.removeItem("userid");
+          			localStorage.removeItem("usertype");
+          			localStorage.removeItem("username");
+          			localStorage.removeItem("userclinic");
+          			localStorage.removeItem("lastActivity");
+          			localStorage.removeItem("loginid");
+					window.close();
+				}
+			}
+
+			$(document.body).click(function (e) {
+				var lastActivity = new Date();
+				lastActivity = lastActivity.getTime() / 1000;
+				localStorage.setItem('lastActivity', lastActivity);
+			});
+
+			$(document).ready(function () {
+				"use strict";
+				if (localStorage.getItem('userid') == '' || localStorage.getItem('userid') == undefined) {
+					window.location.replace("../");
+				} 
+				
+				var lastActivity = new Date();
+				lastActivity = lastActivity.getTime() / 1000;
+				localStorage.setItem('lastActivity', lastActivity);
+				var checkActivity = setInterval(inactivitylogout, 5000);
+			});
+		</script>
+	</body>
+</html>
