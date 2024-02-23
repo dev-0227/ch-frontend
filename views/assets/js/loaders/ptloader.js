@@ -3,16 +3,15 @@ $(document).ready(async function () {
   let entry = {
     clinicid:localStorage.getItem('chosen_clinic')
   }
-  await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/getTotal", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/getTotal", (xhr, err) => {
     if (!err) {
       let data = JSON.parse(xhr.responseText)['data'];
       $(".totalcount").html(data[0]['total'])
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      toastr.error('Credential is invalid');
     }
   });
+
   $("#ptloadbtn").click(function(){
     var formData = new FormData();
     formData.append("clinicid", localStorage.getItem('chosen_clinic'));
@@ -31,15 +30,11 @@ $(document).ready(async function () {
             $(".pt-loader").addClass("d-none");
             $("#load-result-modal").modal("show");
           } else {
-            return $.growl.warning({
-              message: "Action Failed"
-            });
+            return toastr.error('Action Failed');
           }
       });
     } else {
-      return $.growl.warning({
-        message: "Please load file"
-      });
+      return toastr.info('Please load file');
     }
   });
 });

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+	<meta charset="utf-8" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="ConectorHealth" />
+	<meta property="og:site_name" content="ConectorHealth" />
+	<title>ConectorHealth</title>
+	<link rel="shortcut icon" href="/assets/media/logos/favicon.ico" />
+	<link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/plugins/jexcel/jexcel.css" rel="stylesheet">
+	<link href="/assets/plugins/jexcel/jsuites.css" rel="stylesheet">
+	</head>
+
+	<body class="app sidebar-mini">
+		<!-- /GLOABAL LOADER -->
+		<!-- PAGE -->
+		<div class="page">
+			<div class="page-main">
+				<!--app-content open-->
+				<div class="app-content">
+					<div class="side-app">
+						<%- include(pageKey); %>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>var hostUrl = "assets/";</script>
+		<!--begin::Global Javascript Bundle(mandatory for all pages)-->
+		<script src="/assets/plugins/global/plugins.bundle.js"></script>
+		<script src="/assets/js/scripts.bundle.js"></script>
+
+		<script src="/assets/plugins/jexcel/jexcel.js"></script>
+		<script src="/assets/plugins/jexcel/jsuites.js"></script>
+
+		<script src="/assets/js/api.js"></script>
+		<script src="/assets/js/pages/<%- pageKey -%>.js"></script>
+		<script>
+			async function inactivitylogout() {
+				let currentTime = new Date();
+				currentTime = currentTime.getTime() / 1000;
+				if (currentTime - localStorage.getItem('lastActivity') > 1800) {
+					await sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:localStorage.getItem("loginid")}, "login/updateloginouttime", (xhr, err) => {
+						if (!err) {
+						} else {
+							return $.growl.error({
+							message: "Action Failed"
+							});
+						}
+					});
+					localStorage.removeItem("userid");
+          			localStorage.removeItem("usertype");
+          			localStorage.removeItem("username");
+          			localStorage.removeItem("email");
+          			localStorage.removeItem("userclinic");
+          			localStorage.removeItem("lastActivity");
+          			localStorage.removeItem("loginid");
+					window.close();
+				}
+			}
+
+			$(document.body).click(function (e) {
+				var lastActivity = new Date();
+				lastActivity = lastActivity.getTime() / 1000;
+				localStorage.setItem('lastActivity', lastActivity);
+			});
+			$(document).ready(function () {
+				"use strict";
+				
+				if (localStorage.getItem('userid') == '' || localStorage.getItem('userid') == undefined) {
+					window.location.replace("../");
+				} 
+
+				var lastActivity = new Date();
+				lastActivity = lastActivity.getTime() / 1000;
+				localStorage.setItem('lastActivity', lastActivity);
+				var checkActivity = setInterval(inactivitylogout, 5000);
+
+			});
+		</script>
+	</body>
+</html>

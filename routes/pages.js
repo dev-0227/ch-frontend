@@ -29,12 +29,7 @@ router.get("/hedis", (req, res, next) => {
 });
 
 
-router.get("/ptlist", (req, res, next) => {
-    res.render("jexcelblank", {
-        pageTitle: "Patient List",
-        pageKey: "../pages/ptlist"
-    });
-});
+
 router.get("/hedisreport", (req, res, next) => {
     res.render("jexcelblank", {
         pageTitle: "Hedis Report",
@@ -47,6 +42,7 @@ router.get("/hedisdaily", (req, res, next) => {
         pageKey: "../pages/hedisdaily"
     });
 });
+
 router.get("/hedisnoncompliant", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Hedis Non Utilizers",

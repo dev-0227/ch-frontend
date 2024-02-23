@@ -37,6 +37,7 @@ $(document).ready(function () {
           localStorage.setItem('usertype', result.type);
           localStorage.setItem('userclinic', result.clinic);
           localStorage.setItem('username', result.fname+" "+result.lname);
+          localStorage.setItem('email', result.email);
           localStorage.setItem('authToken', result.token);
           localStorage.setItem('redirectkey', $("#redirectkey").val());
           window.location.replace("./security");

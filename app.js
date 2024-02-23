@@ -7,6 +7,7 @@ const login = require('./routes/login');
 const pages = require('./routes/pages');
 const settings = require('./routes/settings');
 const loaders = require('./routes/loaders');
+const patients = require('./routes/patients');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -22,6 +23,7 @@ app.use('/', login);
 app.use('/pages', pages);
 app.use('/settings', settings);
 app.use('/loaders', loaders);
+app.use('/patients', patients);
 
 
 

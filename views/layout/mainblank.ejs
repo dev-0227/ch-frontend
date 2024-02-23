@@ -1,16 +1,10 @@
 <!doctype html>
 <html lang="en" dir="ltr">
   <head>
-
 	<meta charset="utf-8" />
-	<meta name="description" content="Craft admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
-	<meta name="keywords" content="Craft, bootstrap, bootstrap 5, admin themes, dark mode, free admin themes, bootstrap admin, bootstrap dashboard" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta property="og:locale" content="en_US" />
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content="ConectorHealth" />
-	<meta property="og:url" content="https://themes.getbootstrap.com/product/craft-bootstrap-5-admin-dashboard-theme" />
-	<meta property="og:site_name" content="Craft by Keenthemes" />
+	<meta property="og:site_name" content="ConectorHealth" />
 	<title>ConectorHealth</title>
 	<link rel="shortcut icon" href="/assets/media/logos/favicon.ico" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
@@ -18,6 +12,7 @@
 	<link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 	<link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 	<link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/plugins/fileuploads/css/fileupload.css" rel="stylesheet" type="text/css"/>
 	</head>
 
 	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled aside-fixed aside-default-enabled">
@@ -52,22 +47,9 @@
 		<script src="/assets/plugins/custom/leaflet/leaflet.bundle.js"></script>
 		<script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 		<!--end::Vendors Javascript-->
-		<!--begin::Custom Javascript(used for this page only)-->
-		<script src="/assets/js/widgets.bundle.js"></script>
-		<script src="/assets/js/custom/widgets.js"></script>
-		<script src="/assets/js/custom/apps/chat/chat.js"></script>
-		<script src="/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/type.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/budget.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/settings.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/team.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/targets.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/files.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/complete.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-project/main.js"></script>
-		<script src="/assets/js/custom/utilities/modals/select-location.js"></script>
-		<script src="/assets/js/custom/utilities/modals/create-app.js"></script>
-		<script src="/assets/js/custom/utilities/modals/users-search.js"></script>
+
+		<script src="/assets/plugins/fileuploads/js/fileupload.js"></script>
+        <script src="/assets/plugins/fileuploads/js/file-upload.js"></script>
 
 		<script src="/assets/js/api.js"></script>
 		<script src="/assets/js/pages/<%- pageKey -%>.js"></script>
@@ -85,6 +67,7 @@
 					localStorage.removeItem("chosen_clinic");
           			localStorage.removeItem("usertype");
           			localStorage.removeItem("username");
+          			localStorage.removeItem("email");
           			localStorage.removeItem("userclinic");
           			localStorage.removeItem("lastActivity");
           			localStorage.removeItem("loginid");
@@ -154,17 +137,10 @@
 					localStorage.setItem('chosen_clinic', $(this).val());
 					location.reload();
 				});
-				$(".managername").html(localStorage.getItem('username'));
+				$(".app_user_name").html(localStorage.getItem('username'));
+				$(".app_user_email").html(localStorage.getItem('email'));
 				$(".managertype").html((localStorage.getItem('usertype')==0?"Superadmin":(localStorage.getItem('usertype')==1?"Administrator":(localStorage.getItem('usertype')==2?"Manager":(localStorage.getItem('usertype')==3?"Specialist":(localStorage.getItem('usertype')==4?"Staff":"Doctor"))))));
 				$(".logoutbtn").click(async function(){
-					// await sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:localStorage.getItem("loginid")}, "login/updateloginouttime", (xhr, err) => {
-					// 	if (!err) {
-					// 	} else {
-					// 		return $.growl.error({
-					// 		message: "Action Failed"
-					// 		});
-					// 	}
-					// });
 					await sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid:localStorage.getItem('userid')}, "login/logout", (xhr, err) => {
 						if(!err){
 							
@@ -174,6 +150,7 @@
 					localStorage.removeItem("chosen_clinic");
           			localStorage.removeItem("usertype");
           			localStorage.removeItem("username");
+          			localStorage.removeItem("email");
           			localStorage.removeItem("userclinic");
           			localStorage.removeItem("redirectkey");
           			localStorage.removeItem("loginid");
