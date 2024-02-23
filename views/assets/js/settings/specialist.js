@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
   "use strict";
   var managertable = $('#specialisttable').DataTable({
@@ -29,7 +30,11 @@ $(document).ready(function () {
           render: function (data, type, row) {
             return `
               <div class="btn-group align-top" idkey="`+row.id+`">
-                <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success badge managerclinicbtn" type="button"><i class="fa fa-hospital-o"></i></button><button class="btn btn-sm btn-primary badge managereditbtn" type="button"><i class="fa fa-edit"></i></button><button class="btn btn-sm btn-info badge managerpwdbtn" type="button"><i class="fa fa-key"></i></button><button class="btn btn-sm btn-warning badge managerquestionbtn" type="button"><i class="fa fa-question-circle"></i></button> <button class="btn btn-sm btn-danger badge managerdeletebtn" type="button"><i class="fa fa-trash"></i></button>
+                <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
+                <button class="btn btn-sm btn-primary managereditbtn" type="button"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-sm btn-info managerpwdbtn" type="button"><i class="fa fa-key"></i></button>
+                <button class="btn btn-sm btn-warning managerquestionbtn" type="button"><i class="fa fa-question-circle"></i></button>
+                <button class="btn btn-sm btn-danger managerdeletebtn" type="button"><i class="fa fa-trash"></i></button>
               </div>
             `
           } 

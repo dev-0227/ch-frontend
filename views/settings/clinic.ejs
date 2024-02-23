@@ -3,36 +3,44 @@
         width: 100%!important;
     }
 </style>
-<!-- ROW OPEN -->
-<div class="row row-cards">
-    <div class="col-lg-12 col-xl-12">
-        <div class="card">
-            
-            <div class="e-table pt-5 px-5 pb-5">
-                <a class="btn btn-primary clinicaddbtn"><i class="fe fe-plus mr-2"></i>Add</a>
-                <input type="hidden" id="chosen_clinic" />
-                <div class="table-responsive table-lg pt-2">
-                    <table class="table table-striped table-bordered text-nowrap w-100" id="clinictable">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <th>City</th>
-                                <th>Phone</th>
-                                <th>A/P</th>
-                                <th>Status</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div><!-- COL-END -->
+<div class="card">
+	<div class="card-header border-0 pt-6">
+	  <div class="card-title">
+		<!--begin::Search-->
+		<div class="d-flex align-items-center position-relative my-1">
+		  <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+			<span class="path1"></span>
+			<span class="path2"></span>
+		  </i>
+		  <input id="table_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"  placeholder="Search Clinic" />
+		</div>
+		<!--end::Search-->
+	  </div>
+	  <div class="card-toolbar">
+		<a class="btn btn-primary clinicaddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>Add</a>
+	  </div>
+	</div>
+	<div class="card-body py-4">
+	  <input type="hidden" id="chosen_clinic" />
+  
+	  <table class="table table-striped table-bordered text-nowrap w-100"  id="clinictable" >
+		<thead>
+		  <tr>
+			<th>Name</th>
+			<th>Address</th>
+			<th>City</th>
+			<th>Phone</th>
+			<th>A/P</th>
+			<th>Status</th>
+			<th class="text-center">Actions</th>
+		  </tr>
+		</thead>
+		<tbody></tbody>
+	  </table>
+	</div>
 </div>
+
+
 <!-- ROW CLOSED -->
 <div class="modal fade" id="clinic-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -45,39 +53,39 @@
 			</div>
 			<div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_name" class="form-control-label">Name:</label>
-                            <input type="text" class="form-control" id="eclinic_name">
+                            <label for="eclinic_name" class="fw-semibold fs-6 mb-2">Name:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_name">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_acronym" class="form-control-label">Acronym:</label>
-                            <input type="text" class="form-control" id="eclinic_acronym">
+                            <label for="eclinic_acronym" class="fw-semibold fs-6 mb-2">Acronym:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_acronym">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_address1" class="form-control-label">Address1:</label>
-                            <input type="text" class="form-control" id="eclinic_address1">
+                            <label for="eclinic_address1" class="fw-semibold fs-6 mb-2">Address1:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_address1">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_address2" class="form-control-label">Address2:</label>
-                            <input type="text" class="form-control" id="eclinic_address2">
+                            <label for="eclinic_address2" class="fw-semibold fs-6 mb-2">Address2:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_address2">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_city" class="form-control-label">City:</label>
-                            <input type="text" class="form-control" id="eclinic_city">
+                            <label for="eclinic_city" class="fw-semibold fs-6 mb-2">City:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_city">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_state" class="form-control-label">State:</label>
+                            <label for="eclinic_state" class="fw-semibold fs-6 mb-2">State:</label>
                             <select id="eclinic_state" class="form-control custom-select">
                                 <optgroup label="Alaskan/Hawaiian Time Zone">
                                     <option value="AK">Alaska</option>
@@ -142,16 +150,16 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_zip" class="form-control-label">Zip:</label>
-                            <input type="text" class="form-control" id="eclinic_zip">
+                            <label for="eclinic_zip" class="fw-semibold fs-6 mb-2">Zip:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_zip">
                         </div>
                     </div>
-					<div class = "col-md-6">
+					<div class = "col-md-6 fv-row mb-7">
 						<div class="form-group">
-							<label for="eclinic_country" class="form-control-label">Country:</label>
-							<select id="eclinic_country" class="form-control">
+							<label for="eclinic_country" class="fw-semibold fs-6 mb-2">Country:</label>
+							<select id="eclinic_country" class="form-control form-control-solid mb-3 mb-lg-0">
 								<option value="AF">Afghanistan</option>
 								<option value="AL">Albania</option>
 								<option value="DZ">Algeria</option>
@@ -390,51 +398,51 @@
 							</select>
 						</div>
 					</div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_tel" class="form-control-label">Tel:</label>
-                            <input type="text" class="form-control" id="eclinic_tel">
+                            <label for="eclinic_tel" class="fw-semibold fs-6 mb-2">Tel:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_tel">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_fax" class="form-control-label">Fax:</label>
-                            <input type="text" class="form-control" id="eclinic_fax">
+                            <label for="eclinic_fax" class="fw-semibold fs-6 mb-2">Fax:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_fax">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_email" class="form-control-label">Email:</label>
-                            <input type="email" class="form-control" id="eclinic_email">
+                            <label for="eclinic_email" class="fw-semibold fs-6 mb-2">Email:</label>
+                            <input type="email" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_email">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
 							<label class="custom-control custom-checkbox">
 								<input type="checkbox" class="custom-control-input" id="webcheck">
 								<span class="custom-control-label">Web:</span>
 							</label>
-                            <input type="text" class="form-control" id="eclinic_web">
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_web">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
                             <label class="custom-control custom-checkbox">
 								<input type="checkbox" class="custom-control-input" id="portalcheck">
 								<span class="custom-control-label">Clinic Portal:</span>
 							</label>
-                            <input type="text" class="form-control" id="eclinic_portal">
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_portal">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_pos" class="form-control-label">Place Of Service:</label>
-                            <input type="text" class="form-control" id="eclinic_pos">
+                            <label for="eclinic_pos" class="fw-semibold fs-6 mb-2">Place Of Service:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_pos">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_status" class="form-control-label">Status:</label>
+                            <label for="eclinic_status" class="fw-semibold fs-6 mb-2">Status:</label>
                             <select id="eclinic_status" class="form-control custom-select">
                                 <option value="1">Active</option>
                                 <option value="2">Inactive</option>
@@ -447,40 +455,40 @@
 					<span class="custom-control-label">Point Of Contact:</span>
 				</label>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_c_name" class="form-control-label">Name:</label>
-                            <input type="text" class="form-control" id="eclinic_c_name">
+                            <label for="eclinic_c_name" class="fw-semibold fs-6 mb-2">Name:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_c_name">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_c_email" class="form-control-label">Email:</label>
-                            <input type="text" class="form-control" id="eclinic_c_email">
+                            <label for="eclinic_c_email" class="fw-semibold fs-6 mb-2">Email:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_c_email">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_c_tel" class="form-control-label">Tel:</label>
-                            <input type="text" class="form-control" id="eclinic_c_tel">
+                            <label for="eclinic_c_tel" class="fw-semibold fs-6 mb-2">Tel:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_c_tel">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_c_cel" class="form-control-label">Cel:</label>
-                            <input type="text" class="form-control" id="eclinic_c_cel">
+                            <label for="eclinic_c_cel" class="fw-semibold fs-6 mb-2">Cel:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_c_cel">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_c_ex" class="form-control-label">Ex:</label>
-                            <input type="text" class="form-control" id="eclinic_c_ex">
+                            <label for="eclinic_c_ex" class="fw-semibold fs-6 mb-2">Ex:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_c_ex">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="eclinic_c_web" class="form-control-label">Web:</label>
-                            <input type="text" class="form-control" id="eclinic_c_web">
+                            <label for="eclinic_c_web" class="fw-semibold fs-6 mb-2">Web:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eclinic_c_web">
                         </div>
                     </div>
 				</div>
@@ -492,50 +500,52 @@
 		</div>
 	</div>
 </div>
+
+
 <div class="modal fade" id="clinic-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered mw-650px" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Clinic Add</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
+				<h2 class="fw-bold">Add Clinic</h2>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			  </div>
 			<div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_name" class="form-control-label">Name:</label>
-                            <input type="text" class="form-control" id="clinic_name">
+                            <label for="clinic_name" class="fw-semibold fs-6 mb-2">Name:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_name">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_acronym" class="form-control-label">Acronym:</label>
-                            <input type="text" class="form-control" id="clinic_acronym">
+                            <label for="clinic_acronym" class="fw-semibold fs-6 mb-2">Acronym:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_acronym">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_address1" class="form-control-label">Address1:</label>
-                            <input type="text" class="form-control" id="clinic_address1">
+                            <label for="clinic_address1" class="fw-semibold fs-6 mb-2">Address1:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_address1">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_address2" class="form-control-label">Address2:</label>
-                            <input type="text" class="form-control" id="clinic_address2">
+                            <label for="clinic_address2" class="fw-semibold fs-6 mb-2">Address2:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_address2">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_city" class="form-control-label">City:</label>
-                            <input type="text" class="form-control" id="clinic_city">
+                            <label for="clinic_city" class="fw-semibold fs-6 mb-2">City:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_city">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_state" class="form-control-label">State:</label>
+                            <label for="clinic_state" class="fw-semibold fs-6 mb-2">State:</label>
                             <select id="clinic_state" class="form-control custom-select">
                                 <optgroup label="Alaskan/Hawaiian Time Zone">
                                     <option value="AK">Alaska</option>
@@ -600,16 +610,16 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_zip" class="form-control-label">Zip:</label>
-                            <input type="text" class="form-control" id="clinic_zip">
+                            <label for="clinic_zip" class="fw-semibold fs-6 mb-2">Zip:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_zip">
                         </div>
                     </div>
-					<div class = "col-md-6">
+					<div class = "col-md-6 fv-row mb-7">
 						<div class="form-group">
-							<label for="clinic_country" class="form-control-label">Country:</label>
-							<select id="clinic_country" class="form-control">
+							<label for="clinic_country" class="fw-semibold fs-6 mb-2">Country:</label>
+							<select id="clinic_country" class="form-control form-control-solid mb-3 mb-lg-0">
 								<option value="AF">Afghanistan</option>
 								<option value="AL">Albania</option>
 								<option value="DZ">Algeria</option>
@@ -848,45 +858,45 @@
 							</select>
 						</div>
 					</div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_tel" class="form-control-label">Tel:</label>
-                            <input type="text" class="form-control" id="clinic_tel">
+                            <label for="clinic_tel" class="fw-semibold fs-6 mb-2">Tel:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_tel">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_fax" class="form-control-label">Fax:</label>
-                            <input type="text" class="form-control" id="clinic_fax">
+                            <label for="clinic_fax" class="fw-semibold fs-6 mb-2">Fax:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_fax">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_email" class="form-control-label">Email:</label>
-                            <input type="email" class="form-control" id="clinic_email">
+                            <label for="clinic_email" class="fw-semibold fs-6 mb-2">Email:</label>
+                            <input type="email" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_email">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_web" class="form-control-label">Web:</label>
-                            <input type="text" class="form-control" id="clinic_web">
+                            <label for="clinic_web" class="fw-semibold fs-6 mb-2">Web:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_web">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_portal" class="form-control-label">Portal:</label>
-                            <input type="text" class="form-control" id="clinic_portal">
+                            <label for="clinic_portal" class="fw-semibold fs-6 mb-2">Portal:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_portal">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_pos" class="form-control-label">Place Of Service:</label>
-                            <input type="text" class="form-control" id="clinic_pos">
+                            <label for="clinic_pos" class="fw-semibold fs-6 mb-2">Place Of Service:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="clinic_pos">
                         </div>
                     </div>
-					<div class="col-md-6">
+					<div class="col-md-6 fv-row mb-7">
                         <div class="form-group">
-                            <label for="clinic_status" class="form-control-label">Status:</label>
+                            <label for="clinic_status" class="fw-semibold fs-6 mb-2">Status:</label>
                             <select id="clinic_status" class="form-control custom-select">
                                 <option value="1">Active</option>
                                 <option value="2">Inactive</option>
@@ -896,9 +906,9 @@
                 </div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="clinic-addbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+				<button type="button" class="btn btn-primary" id="clinic-addbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+			 </div>
 		</div>
 	</div>
 </div>

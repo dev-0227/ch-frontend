@@ -42,4 +42,11 @@ router.post("/logger", (req, res, next) => {
     });
 });
 
+router.get("/clinic", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Clinics",
+        pageKey: "../settings/clinic"
+    });
+});
+
 module.exports = router;

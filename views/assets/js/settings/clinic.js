@@ -43,6 +43,12 @@ $(document).ready(function () {
         }
     ]
   });
+
+  $('#table_search_input').on('keyup', function () {
+    clinictable.search(this.value).draw();
+  });
+
+
   $(document).on("click",".cliniceditbtn",function(){
     $("#chosen_clinic").val($(this).parent().attr("idkey"));
     let entry = {

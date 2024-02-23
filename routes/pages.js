@@ -15,12 +15,7 @@ router.get("/qrcode", (req, res, next) => {
 });
 
 
-router.get("/clinic", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Clinics",
-        pageKey: "../pages/clinic"
-    });
-});
+
 router.get("/profile", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Profile",
