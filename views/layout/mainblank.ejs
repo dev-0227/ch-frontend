@@ -31,7 +31,10 @@
 						<%- include("header"); %>
 					</div>
 					<div class="content fs-6 d-flex flex-column flex-column-fluid" id="kt_content">
+						<%- include("toolbar"); %>
+						<div class="container-xxl">
 						<%- include(pageKey); %>
+						</div>
 					</div>
 					<div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
 						<%- include("footer"); %>
@@ -73,14 +76,6 @@
 				let currentTime = new Date();
 				currentTime = currentTime.getTime() / 1000;
 				if (currentTime - localStorage.getItem('lastActivity') > 1800) {
-					// await sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:localStorage.getItem("loginid")}, "login/updateloginouttime", (xhr, err) => {
-					// 	if (!err) {
-					// 	} else {
-					// 		return $.growl.error({
-					// 		message: "Action Failed"
-					// 		});
-					// 	}
-					// });
 					await sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid:localStorage.getItem('userid')}, "login/logout", (xhr, err) => {
 						if(!err){
 							

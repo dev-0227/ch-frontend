@@ -8,10 +8,16 @@ router.get("/", (req, res, next) => {
         redirect:req.query.page
     });
 });
+router.get("/signup", (req, res, next) => {
+    res.render("layout/blank", {
+        pageTitle: "Sign Up",
+        pageKey: "../auth/signup"
+    });
+});
 router.get("/forgot", (req, res, next) => {
     res.render("layout/blank", {
         pageTitle: "Forgot Password",
-        pageKey: "../auth/forgot-pwd"
+        pageKey: "../auth/forgot_password"
     });
 });
 router.get("/resetpwd", (req, res, next) => {

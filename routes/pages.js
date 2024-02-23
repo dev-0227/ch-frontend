@@ -13,44 +13,8 @@ router.get("/qrcode", (req, res, next) => {
         pageKey: "../pages/qrcode"
     });
 });
-router.get("/specialist", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Specialist List",
-        pageKey: "../pages/specialist"
-    });
-});
-router.get("/manager", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "User List",
-        pageKey: "../pages/manager"
-    });
-});
-router.get("/users", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "User List",
-        pageKey: "../pages/user"
-    });
-});
-router.get("/role", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Role List",
-        pageKey: "../pages/role"
-    });
-});
-router.get("/permission", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Permission List",
-        pageKey: "../pages/permission"
-    });
-});
-router.post("/logger", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Audit Event",
-        pageKey: "../pages/logger",
-        sdate: req.body.sdate,
-        edate: req.body.edate,
-    });
-});
+
+
 router.get("/clinic", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Clinics",

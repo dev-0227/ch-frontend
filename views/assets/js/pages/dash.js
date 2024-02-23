@@ -3,6 +3,7 @@ $(document).ready(function () {
   sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/gethedisyear", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
+      if(result.length==0)return;
       $("#hedisdate").val(new Date(result[0]['idate']).getFullYear());
       let getinsentry = {
         clinicid:localStorage.getItem('chosen_clinic'),

@@ -18,21 +18,25 @@ $(document).ready(function () {
       
     }
     else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      toastr.error('Credential is invalid');
     }
   });
-  $("#submit").click(function(){
+  $('#answer').keypress(function(e){
+    if (e.which === 13) {
+      $("#security_submit").trigger("click");
+    }
+  })
+  $('#answer').focus();
+  $("#security_submit").click(function(){
     let entry = {
       userid: localStorage.getItem('userid'),
       qid: document.getElementById('qid').value,
       answer: document.getElementById('answer').value
     }
     if(entry.answer == ""){
-      return $.growl.notice({
-        message: "Please enter answer"
-      });
+      toastr.info('Please enter answer');
+      $("#answer").focus();
+      return;
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "login/checksecurity", (xhr, err) => {
       let result = JSON.parse(xhr.responseText);

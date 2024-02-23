@@ -1,27 +1,31 @@
-<!-- PAGE -->
-<div class="page">
-    <div class="">
-        <div class="container-login100">
-            <div class="wrap-login100 p-6">
-                <span class="login100-form-title" id="qdesc">
-                    Security Question
-                </span>
-                <input type="hidden" id="qid" />
-                <div class="wrap-input100 validate-input" data-validate = "Answer is required">
-                    <input class="input100" type="password" name="pass" placeholder="Answer" id="answer">
-                    <span class="focus-input100"></span>
-                    <span class="symbol-input100">
-                        <i class="zmdi zmdi-edit" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <div class="container-login100-form-btn">
-                    <button class="login100-form-btn btn-primary" id="submit">
-                        Submit
-                    </button>
+<div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+        <%- include("welcome"); %>
+        <div class="d-flex flex-column flex-lg-row-fluid py-10">
+            <div class="d-flex flex-center flex-column flex-column-fluid">
+                <div class="w-lg-500px p-10 p-lg-15 mx-auto">
+                        <div class="text-center mb-10">
+                            <h1 class="text-gray-900 mb-3">Security Question</h1>
+                            <div class="text-gray-500 fw-semibold fs-4"></div>
+                        </div>
+                        <input type="hidden" id="qid" />
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bold text-gray-900">
+                                <span class="login100-form-title" id="qdesc">
+                                    Security Question
+                                </span>
+                            </label>
+                            <input class="form-control form-control-lg form-control-solid" type="password" id="answer" autocomplete="off" />
+                        </div>
+                        <div class="text-center">
+                            <button type="button"  class="btn btn-lg btn-primary w-100 mb-5" id="security_submit">
+                                <span class="indicator-label">Continue</span>
+                                <span class="indicator-progress">Please wait... 
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                            </button>
+                        </div>
                 </div>
             </div>
         </div>
-        <!-- CONTAINER CLOSED -->
     </div>
 </div>
-<!-- End PAGE -->
