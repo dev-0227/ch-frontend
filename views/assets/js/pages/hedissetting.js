@@ -1,3 +1,10 @@
+let globalsmsarr;
+let educationlink = ''
+let genderlink = ''
+let agelink = ''
+let langlink ='lang=en'
+let glang = 'en'
+let glangname = 'English'
 function isFloat(n){
   if(Number(n) === n && n % 1 !== 0)
     return true;
@@ -8,6 +15,31 @@ function changeSeparator(tmpname,separator){
   tmpname = tmpname.replace(/[-|_/[\]\\]/g, separator);
   return tmpname;
 }
+
+function editeducationfunc (id){
+  let entry = {
+    id: id
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/geteducationcontentbyid", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      console.log(result)
+      $("#education_tit1").val(result[0]['subname']);
+      $("#education_tit2").val(result[0]['title']);
+      $("#education_content").val(result[0]['content']);
+      $("#education_link").val(result[0]['link']);
+      $("#mtid").val(result[0]['id'])
+      $("#edu-category").val(result[0]['category'])
+
+      $("#education-edit-modal").modal("show");
+    } else {
+      return $.growl.error({
+        message: "Action Failed"
+      });
+    }
+  });
+}
+
 function inputType(type){
   if(type == 1){
       return "<span style = 'color:#4caf50'>General</span>";
@@ -20,6 +52,92 @@ function inputType(type){
   }
   else{
 
+  }
+}
+function updateEducationField (id,value){
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), { id: id, value: value }, "hedissetting/updateeducationfield", (xhr, err) => {
+    if (!err) {
+      return $.growl.notice({
+        message: "Action Successfully"
+      });
+    } else {
+      return $.growl.error({
+        message: "Action Failed"
+      });
+    }
+});
+}
+function changestatusedumsg(check,id) {
+  if (check) {
+    updateEducationField(id,  0);
+  } else {
+    updateEducationField(id,  1);
+  }
+}
+function changeformitems(linkurl){
+  let mainurl = linkurl.split("?")
+  let paramarr = mainurl[1].split("&")
+  educationlink = mainurl[0]+'?lang/gender/age/'
+  genderlink = ''
+  agelink = ''
+
+  let gendertype = 0
+  let addedlang = ''
+  let agetype = 0
+  let addedminage = 0
+  let addedmaxage = 0
+  for(let i = 0 ; i < paramarr.length ; i++ ){
+    let tmparr = paramarr[i].split('=')
+    switch(tmparr[0]) {
+      case 'lang':
+        addedlang = tmparr[1]
+        break;
+      case 'sex':{
+        if(tmparr[1] == 'f'){
+          gendertype = 1
+          genderlink = '&sex=f'
+        }else{
+          gendertype = 2
+          genderlink = '&sex=m'
+        }
+        break;
+      }
+       
+      case 'min_age':{
+        agetype = 1
+        addedminage = tmparr[1]
+        break;
+      }
+        
+      case 'max_age':{
+        agetype = 1
+        addedmaxage = tmparr[1]
+        break;
+      }
+        
+      // default:
+    }
+  }
+  
+  $('.gendertype[value="'+gendertype+'"]').prop('checked', true);
+  if(agetype == 0){
+    $('.agerange[value="0"]').prop('checked', true);
+    $('.agerange[value="1"]').prop('checked', false);
+    $("#link-min-age").attr('disabled', 'disabled');
+    $("#link-max-age").attr('disabled', 'disabled');
+    $('#link-min-age').val(0)
+    $('#link-max-age').val(0)
+    agelink = ''
+    
+  }else{
+    $('.agerange[value="1"]').prop('checked', true);
+    $('.agerange[value="0"]').prop('checked', false);
+    $("#link-min-age").removeAttr('disabled');
+    $("#link-max-age").removeAttr('disabled');
+    $('#link-min-age').val(addedminage)
+    $('#link-max-age').val(addedmaxage)
+    agelink = '&min_age='+addedminage+'&max_age='+addedmaxage
+   
   }
 }
 changeAlias = (id) => {
@@ -86,6 +204,53 @@ $(document).ready(async function () {
       });
     }
   });
+
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/languagelist", (xhr, err) => {
+  
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      
+      // $("#link-dg-lang").empty();
+      for(var i = 0;i < result.length;i++){
+        if(result[i]['code'] != 'en'){
+          $("#link-dg-lang").append(`<option value="`+result[i]['code']+`" >`+result[i]['English']+`</option>`)
+        }
+        
+      }
+    } else {
+      return $.growl.error({
+        message: "Action Failed"
+      });
+    }
+  });
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getcomcategorycode", (xhr, err) => {
+  
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      console.log(result)
+      // $("#link-dg-lang").empty();
+      for(var i = 0;i < result.length;i++){
+          $("#link-dg-cate").append(`<option value="`+result[i]['code']+`" >`+result[i]['display']+`</option>`)
+          $("#edu-category").append(`<option value="`+result[i]['code']+`" >`+result[i]['display']+`</option>`)
+      }
+    } else {
+      return $.growl.error({
+        message: "Action Failed"
+      });
+    }
+  });
+
+//   await sendRequestWithToken('post', localStorage.getItem('authToken'), {stoken:'baresinother-F-6l1ZiHHCbbFwCtxmwlcTUfhT1yEazFIy4HDhsmNwDXOiOkSPYgxXukKw'}, "setting/getconectorcliniclist", (xhr, err) => {
+//     if (!err) { let result = JSON.parse(xhr.responseText);
+//     console.log("result")
+//     console.log(result)
+//     } else {
+//       return $.growl.error({
+//         message: "Action Failed"
+//       });
+//     }
+// });
+
   $(document).on("click","#hdomainaddbtn",function(){
     $("#hdomain-add-modal").modal("show");
   });
@@ -111,6 +276,15 @@ $(document).ready(async function () {
     }, 1000 );
     
   });
+
+  
+  $(document).on("click",".editeducationbtn",function(){
+    $("#chosen_hdomain").val($(this).parent().attr("idkey"));
+    
+  });
+
+ 
+
   $(document).on("click",".edithdomainbtn",function(){
     $("#chosen_hdomain").val($(this).parent().attr("idkey"));
     let entry = {
@@ -152,6 +326,33 @@ $(document).ready(async function () {
       hdomaintable.ajax.reload();
     }, 1000 );
   });
+
+  $("#educ_editbtn").click(function (e) {
+    let entry = {
+      id: document.getElementById('mtid').value,
+      tit1: document.getElementById('education_tit1').value,
+      tit2: document.getElementById('education_tit2').value,
+      content: document.getElementById('education_content').value,
+      link: document.getElementById('education_link').value,
+      category : $("#edu-category").val()
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/updateeducationbyid", (xhr, err) => {
+        if (!err) {
+          return $.growl.notice({
+            message: "Action successfully"
+          });
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+    });
+    setTimeout( function () {
+      educationtable.ajax.reload();
+    }, 1000 );
+  });
+
+
   $(document).on("click",".deletehdomainbtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -244,6 +445,7 @@ $(document).ready(async function () {
               <button class="btn btn-sm btn-info editoutcomebtn" `+(row.outcomecheck != 1?"disabled":"")+`><i class="fa fa-edit"></i> Outcome</button>
               <button class="btn btn-sm btn-primary editmeasurebtn"><i class="fa fa-edit"></i> Edit</button>
               <button class="btn btn-sm btn-danger deletemeasurebtn"><i class="fa fa-trash"></i> Delete</button>
+              <button class="btn btn-sm btn-success linkmeasurebtn"><i class="fa fa-link" aria-hidden="true"></i> Link</button>
               </div>
             `
           } 
@@ -379,6 +581,56 @@ $(document).ready(async function () {
       measuretable.ajax.reload();
     }, 1000 );
   });
+  
+  $(document).on("click",".linkmeasurebtn",function(){
+    let entry = {
+      measureid: $(this).parent().attr("idkey"),
+      name:$(this).parent().parent().parent().children().eq(2).text(),
+      langid : 'en'
+    }
+    $('#ms-dg-id').text(entry.measureid)
+    $('#ms-dg-name').text(entry.name)
+    
+    $('#sameiddiv').hide()
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/getsmslinklang", (xhr, err) => {
+        if (!err) {
+          globalsmsarr = JSON.parse(xhr.responseText)['data'];
+      
+          console.log("globalsmsarr")
+          console.log(globalsmsarr)
+          if(globalsmsarr.length > 0 ){
+            $("#link-dg-sublist").empty();
+            for(var i = 0;i < globalsmsarr.length;i++){
+              $("#link-dg-sublist").append(`<option value="`+globalsmsarr[i]['id']+`">`+globalsmsarr[i]['subname']+`</option>`)
+              if(i==0){
+                $("#edu_sms_desc").val(globalsmsarr[i].content);
+                $("#link-url").val(globalsmsarr[i].link);
+                $("#link-dg-title").val(globalsmsarr[i].title)
+                $("#link-dg-mid").val(globalsmsarr[i].subname)
+                $(".addlinkbtn").val(globalsmsarr[i].id)
+                changeformitems(globalsmsarr[i].link)
+              }
+            }
+          }else{
+              $("#edu_sms_desc").val("");
+              $("#link-url").val("");
+              $("#link-dg-title").val("")
+              $("#link-dg-mid").val("")
+          }
+         
+          $("#link-set-modal").modal("show");
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+    });
+    
+
+   
+  });
+
+
   $(document).on("click",".deletemeasurebtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -1839,6 +2091,56 @@ $(document).ready(async function () {
         }
     ]
   });
+
+  var educationtable = $('#educationtable').DataTable({
+    "ajax": {
+        "url": serviceUrl + "hedissetting/geteducation",
+        "type": "GET"
+    },
+    "columns": [
+        { data: 'id',
+          render: function (data, type, row) {
+            if(row.active == 0){
+              return `
+              <div idkey="`+row.id+`">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="educheck`+row.id+`" onclick="changestatusedumsg(this.checked,`+row.id+`) " checked>
+                  <span class="custom-control-label"></span>
+                </label>
+              </div>
+            `
+            }else{
+              return `
+              <div idkey="`+row.id+`">
+                <label class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="educheck`+row.id+`" onclick="changestatusedumsg(this.checked,`+row.id+`)">
+                  <span class="custom-control-label"></span>
+                </label>
+              </div>
+            `
+            }
+            
+          } 
+        },
+        { data: 'Measure'},
+        { data: 'lang_name'},
+        { data: 'subname'},
+        { data: 'title'},
+        { data: 'content'},
+        { data: 'link'},
+        { data: 'id',
+          render: function (data, type, row) {
+            return `
+              <div idkey="`+row.id+`">
+              <button class="btn btn-sm btn-primary editeducationbtn" onclick="editeducationfunc(`+row.id+`)"><i class="fa fa-edit"></i> Edit</button>
+              <button class="btn btn-sm btn-danger deleteeducationbtn"><i class="fa fa-trash"></i> Delete</button>
+              </div>
+            `
+          } 
+        }
+    ]
+  });
+
   $(document).on("click","#idomainaddbtn",function(){
     $("#idomain-add-modal").modal("show");
   });
@@ -1884,6 +2186,187 @@ $(document).ready(async function () {
       }
     });
   });
+
+  $(".gendertype").click(function(){
+    
+    if($(this).val() == 0){
+      genderlink = ''
+    }
+    if($(this).val() == 1){
+      genderlink = '&sex=f'
+
+    }
+    if($(this).val() == 2){
+      genderlink = '&sex=m'
+    }
+    let tlink = educationlink.replace('gender/',genderlink)
+    tlink = tlink.replace('lang/',langlink)
+    tlink = tlink.replace('age/',agelink)
+    // $('#education-link').html(tlink)
+    $('#link-url').val(tlink)
+  });
+  $(".agerange").click(function(){
+    if($(this).val() == 0){
+      agelink = ''
+      $('#link-min-age').val("0")
+      $('#link-max-age').val("0")
+      $("#link-min-age").attr('disabled', 'disabled');
+      $("#link-max-age").attr('disabled', 'disabled');
+      let tlink = educationlink.replace('gender/',genderlink)
+      tlink = tlink.replace('lang/',langlink)
+      tlink = tlink.replace('age/',agelink)
+      // $('#education-link').html(tlink)
+      $('#link-url').val(tlink)
+    }
+    if($(this).val() == 1){
+      $("#link-min-age").removeAttr('disabled');
+      $("#link-max-age").removeAttr('disabled');
+      let tlink = educationlink.replace('gender/',genderlink)
+      tlink = tlink.replace('lang/',langlink)
+      agelink = '&min_age=1&max_age=10'
+      tlink = tlink.replace('age/',agelink)
+      // $('#education-link').html(tlink)
+      $('#link-url').val(tlink)
+    }
+   
+    
+  });
+  $("#link-min-age").change(function(){
+    let maxage = $('#link-max-age').val()
+    agelink = '&min_age='+$(this).val()+'&max_age='+maxage
+    let tlink = educationlink.replace('gender/',genderlink)
+    tlink = tlink.replace('lang/',langlink)
+    tlink = tlink.replace('age/',agelink)
+    // $('#education-link').html(tlink)
+    $('#link-url').val(tlink)
+
+  });
+  $("#link-max-age").change(function(){
+    let minage = $('#link-min-age').val()
+    agelink = '&min_age='+minage+'&max_age='+$(this).val()
+    let tlink = educationlink.replace('gender/',genderlink)
+    tlink = tlink.replace('lang/',langlink)
+    tlink = tlink.replace('age/',agelink)
+    // $('#education-link').html(tlink)
+    $('#link-url').val(tlink)
+  });
+
+
+  $("#edu-link-save").click(function (e) {
+    let tmpids = $("#same-id-input").val()
+    let idarr = []
+    if(tmpids != ''){
+      idarr = tmpids.split(",")
+    }
+    idarr.push($('#ms-dg-id').text())
+    let entry = {
+      measureid: idarr,
+      langid: glang,
+      langname : glangname,
+      content: document.getElementById('edu_sms_desc').value,
+      subname:$("#link-dg-mid").val(),
+      subid:$(".addlinkbtn").val(),
+      title:$("#link-dg-title").val(),
+      link: $("#link-url").val(),
+      category : $("#link-dg-cate").val()
+
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/savesmslinklang", (xhr, err) => {
+        if (!err) {
+          return $.growl.notice({
+            message: "Action successfully"
+          });
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+    });
+  
+  });
+
+  $("#link-url").change(function(){
+    let linkurl = $(this).val()
+    changeformitems(linkurl)
+  })
+  $("#link-dg-sublist").change(function(){
+    let selectedid = $(this).val()
+    for(let i=0 ; i < globalsmsarr.length ; i++){
+      if(globalsmsarr[i].id == selectedid){
+        $("#edu_sms_desc").val(globalsmsarr[i].content);
+        $("#link-url").val(globalsmsarr[i].link);
+        $("#link-dg-title").val(globalsmsarr[i].title)
+        $("#link-dg-mid").val(globalsmsarr[i].subname)
+        $(".addlinkbtn").val(selectedid)
+
+        changeformitems(globalsmsarr[i].link)
+        break
+      }
+    }
+   
+  })
+  $("#link-dg-lang").change(function(){
+    
+    glang = $("#link-dg-lang option:selected").val()
+    glangname = $("#link-dg-lang option:selected").text()
+    langlink = 'lang='+glang
+    let entry = {
+      measureid :$('#ms-dg-id').text(),
+      langid:$("#link-dg-lang option:selected").val()
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/getsmslinklang", (xhr, err) => {
+        if (!err) {
+          globalsmsarr = JSON.parse(xhr.responseText)['data'];
+          $("#link-dg-sublist").empty();
+          if(globalsmsarr.length > 0 ){
+            
+            for(var i = 0;i < globalsmsarr.length;i++){
+              $("#link-dg-sublist").append(`<option value="`+globalsmsarr[i]['id']+`">`+globalsmsarr[i]['subname']+`</option>`)
+              if(i==0){
+                $("#edu_sms_desc").val(globalsmsarr[i].content);
+                $("#link-url").val(globalsmsarr[i].link);
+                $("#link-dg-title").val(globalsmsarr[i].title)
+                $("#link-dg-mid").val(globalsmsarr[i].subname)
+                $(".addlinkbtn").val(globalsmsarr[i].id)
+                changeformitems(globalsmsarr[i].link)
+              }
+            }
+          }else{
+            
+            
+              $("#edu_sms_desc").val("");
+              $("#link-url").val("");
+              $("#link-dg-title").val("")
+              $("#link-dg-mid").val("")
+              $(".addlinkbtn").val(0)
+          }
+        
+         
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+    });
+  });
+
+  
+  $(".addlinkbtn").click(function (e) {
+    let linkcount = $(this).val(0) 
+    $("#edu_sms_desc").val("");
+    $("#link-url").val("");
+    $("#link-dg-title").val("")
+    $("#link-dg-mid").val("")
+    
+  })
+
+  $(".addsamelinkbtn").click(function (e) {
+    let linkcount = $(this).val(0) 
+    $("#same-id-input").val("");
+    $("#sameiddiv").toggle()
+  })
+  
+
   $("#idomain_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_idomain').value,
@@ -1932,4 +2415,34 @@ $(document).ready(async function () {
 			}
 		});
   });
+
+  $(document).on("click",".deleteeducationbtn",function(){
+    let entry = {
+      id: $(this).parent().attr("idkey"),
+    }
+    console.log(entry.id)
+    var tmp = $(this).parent().parent().parent();
+    swal({
+			title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+		}, function(inputValue) {
+			if (inputValue) {
+				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/deleteducation", (xhr, err) => {
+          if (!err) {
+            tmp.remove();
+          } else {
+            return $.growl.error({
+              message: "Action Failed"
+            });
+          }
+        });
+			}
+		});
+  });
+
+  
 });

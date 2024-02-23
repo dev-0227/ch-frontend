@@ -1,0 +1,154 @@
+<div class="row row-cards">
+    
+    <div class="col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="p-5">
+                <div class="text-center pb-3">
+                    <h3>Create Problem List</h3>
+                    <h4>Please follow the steps below.</h4>
+                </div>
+                
+                <form id="example-form" action="#" class="tab-wizard wizard-circle wizard clearfix">
+                    <h6>Load Data</h6>
+                    <section>
+                      <br/>
+                      <br/>
+                      <div class="form-group clearfix text-center">
+                          <h4>Please load a file or you can skip this step.</h4>
+                          <p>ENCOUNTERID | PATIENTID | SEX | AGE | UPADDRESS | UPCITY | UPSTATE | ZIPCODE | PT_LANG | PT_RACE | PT_ETHN | DATE</p>
+                          <p style="color: red;">CVS FILE DOES NOT ALLOW TO LOAD DATA WITH COMMA.</p>
+                      </div>
+                      <div class="form-group clearfix">
+                          <div class="row d-flex justify-content-center" id="csv-area" style="margin:auto">
+                              <div class=" col-md-6">
+                                  <label class="control-label " for="insuranceList"></label>
+                                  <input type="file" class="form-control dropify" id="diver-files" accept=".xls" data-height="100" >
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="form-group clearfix">
+                          <div class="row d-flex justify-content-center" id="csv-area" style="margin:auto">
+                              <button class="btn btn-primary waves-effect waves-light" type="button" id="uploadivercsvfilebtn" >
+                                  Show File
+                              </button>
+                          </div>
+                      </div>
+                      <div class="form-group clearfix text-center">
+                          <h4 style="color: green;" id = "range-text"> </h4>
+                      </div>
+                      <div class="form-group clearfix text-center">
+                          <h4> You can delete some data you want.</h4>
+                      </div>
+                      <div class="row d-flex justify-content-center ">
+                          <div class="row d-flex justify-content-center ">
+                              <div class="col-md-4">
+                                  <input class="form-control fc-datepicker start-date" placeholder="MM/DD/YYYY" type="text">
+                              </div>
+                              
+                              <div class="col-md-4">
+                                  <input class="form-control fc-datepicker last-date" placeholder="MM/DD/YYYY" type="text">
+                              </div>
+                              <div class="col-md-2">
+                                  <button class="btn btn-danger waves-effect waves-light" type="button" id="deldatabasebtn" >
+                                      Delete
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                     
+                    </section>
+                 
+                    <h6>Report setting</h6>
+                    <section>
+                        <div class="form-group">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="webcheck">
+                                <span class="custom-control-label"> Include Logo and Address</span>
+                            </label>
+                        </div>
+                        <div class="form-group clearfix text-center">
+                            <div class="row col-md-8 d-flex justify-content-around pt-3 m-auto">   
+                                <label class="custom-control custom-radio d-inline-flex">
+                                    <input type="radio" class="custom-control-input repstyle" name="repstyle" value="sex" >
+                                    <span class="tag custom-control-label">Gender</span>
+                                </label>
+                                <label class="custom-control custom-radio d-inline-flex">
+                                    <input type="radio" class="custom-control-input repstyle" name="repstyle" value="Age" >
+                                    <span class="tag custom-control-label">Age</span>
+                                </label>
+                                <label class="custom-control custom-radio d-inline-flex">
+                                    <input type="radio" class="custom-control-input repstyle" name="repstyle" value="zipcode" checked>
+                                    <span class="tag custom-control-label">Geo Zip</span>
+                                </label>
+                                <label class="custom-control custom-radio d-inline-flex">
+                                    <input type="radio" class="custom-control-input repstyle" name="repstyle" value="PT_Race" >
+                                    <span class="tag custom-control-label">Race</span>
+                                </label>
+                                <label class="custom-control custom-radio d-inline-flex">
+                                    <input type="radio" class="custom-control-input repstyle" name="repstyle" value="PT_Ethn" >
+                                    <span class="tag custom-control-label">Ethn</span>
+                                </label>
+
+                                
+                                
+                            </div>
+                            <br>
+                            <h4> Please choose date range for creating a report</h4>
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-md-4">
+                                    <input class="form-control fc-datepicker from-date" placeholder="MM/DD/YYYY" type="text">
+                                </div>
+                                <div class="col-md-4">
+                                    <input class="form-control fc-datepicker to-date" placeholder="MM/DD/YYYY" type="text">
+                                </div>
+                            </div>
+                          
+                        </div>
+                        <div class="form-group clearfix text-center">
+                            <h4>Please enter description for creating a report</h4>
+                            <div class="row d-flex justify-content-center">
+                                <label class="col-12">Write report description here.</label>
+                                <textarea rows="5" class="form-control col-md-8" id="gdesc" name="gdesc"></textarea>
+                            </div>
+                        </div>
+                    </section>
+                 
+                    <h6>Generate Report</h6>
+                    <section>
+                        <div class="row" id="fin-report">
+                            <div class="col-md-7">
+                                <h3 id="rep-cli-name">JOSE GORIS MD PC</h3>
+                                <p id="rep-cli-address">435 Fort Washington Ave New York NY US (212) 923-4032</p>
+                                <p id="rep-range-date">From 12/01/2022 To 12/31/2022</p>
+                            </div>
+                            <div class="col-md-5">
+                                <img src="../assets/images/logo.jpg" width = '200px' class="logo-img">
+                                <p id = "rep-cli-address1"></p>
+                            </div>
+                            <div class="col-md-12">
+                                <p id="f-reportdesc"></p>
+                            </div>
+                        </div>
+                        <div class="row" id="table-div">
+                            <table class="table table-striped table-bordered text-nowrap w-100" id="maintable">
+                                <thead>
+                                    <tr>
+                                        <th class="" id="fieldname"></th>
+                                        <th class="">Total</th>
+                                        <th class="">Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="diver-tb-body">
+                                    
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </section>
+                </form>
+            </div>
+            
+        </div>
+    </div><!-- COL-END -->
+</div>

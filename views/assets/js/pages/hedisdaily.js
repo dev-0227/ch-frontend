@@ -54,11 +54,6 @@ $(document).ready(function () {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       $(".color-list").empty();
-      $(".status-option").html(`
-          <label class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input statusoption" name="statusoption" value="0">
-            <span class="tag custom-control-label">None</span>
-          </label>`);
       $(".color-sort-list").html(`
           <label class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="0">
@@ -72,17 +67,48 @@ $(document).ready(function () {
         $(".color-list").append(`<p style='padding: 5px;border-radius: 5px;color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`'>`+result[i]['description']+`</p>`);
         tmpcolor.push({"tcolor":result[i]['tcolor'],"bcolor":result[i]['bcolor']});
         if(![1,2,3].includes(result[i]['scheck'])){
-          $(".status-option").append(`
-          <label class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
-            <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
-          </label>`);
+          if([4,10,7,15].includes(result[i]['scheck'])){
+            $(".status-measure").append(`
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+              <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+            </label>`);
+          }
+          else if([5,6,12,14,16].includes(result[i]['scheck'])){
+            $(".status-patient").append(`
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+              <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+            </label>`);
+          }
+          else {
+            $(".status-meas-rep").append(`
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+              <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+            </label>`);
+          }
           $(".color-sort-list").append(`
           <label class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="`+result[i]['scheck']+`">
             <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
           </label>`);
         }
+
+        // $(".color-list").append(`<p style='padding: 5px;border-radius: 5px;color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`'>`+result[i]['description']+`</p>`);
+        // tmpcolor.push({"tcolor":result[i]['tcolor'],"bcolor":result[i]['bcolor']});
+        // if(![1,2,3].includes(result[i]['scheck'])){
+        //   $(".status-option").append(`
+        //   <label class="custom-control custom-radio">
+        //     <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+        //     <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+        //   </label>`);
+        //   $(".color-sort-list").append(`
+        //   <label class="custom-control custom-checkbox">
+        //     <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="`+result[i]['scheck']+`">
+        //     <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+        //   </label>`);
+        // }
         
       }
     } else {
@@ -352,26 +378,27 @@ $(document).ready(function () {
   });
   $(".setstatusbtn").click(function(){
     var status = $(".statusoption:checked").val();
-    if(status == 6){
-      var apptdate = $(".apptdate").val();
-      var apptpcp = $(".apptpcpname").val()==0?null:$(".apptpcpname").val();
-      var apptvisittype = $(".apptvisittype").val()==""?null:$(".apptvisittype").val();
-      var lastdate = null;
-      var nextdate = null;
-    }
-    else if(status == 4){
-      var lastdate = $(".last-date").val();
-      var nextdate = $(".next-date").val();
-      var apptdate = null;
-      var apptpcp = null;
-      var apptvisittype = null;
-    }
-    else{
-      var apptdate = null;
-      var lastdate = null;
-      var nextdate = null;
-      var apptpcp = null;
-      var apptvisittype = null;
+    switch(status) {
+      case 6:
+        var apptdate = $(".apptdate").val();
+        var apptpcp = $(".apptpcpname").val()==0?null:$(".apptpcpname").val();
+        var apptvisittype = $(".apptvisittype").val()==""?null:$(".apptvisittype").val();
+        var lastdate = null;
+        var nextdate = null;
+        break;
+      case 4:
+        var lastdate = $(".lastdate").val();
+        var nextdate = $(".nextdate").val();
+        var apptdate = null;
+        var apptpcp = null;
+        var apptvisittype = null;
+        break;
+      default:
+        var apptdate = null;
+        var lastdate = null;
+        var nextdate = null;
+        var apptpcp = null;
+        var apptvisittype = null;
     }
     let entry = {
       clinicid:localStorage.getItem('chosen_clinic'),
@@ -582,6 +609,7 @@ async function loadData(){
       $(".allcheckoption").empty()
       $(".notcompletedoption").empty()
       $(".outrangeoption").empty()
+      console.log(data)
       for(var i=0;i<data.length;i++){
         if(tmpmid != data[i]['mid']){
           tmpclass = "";
@@ -597,6 +625,7 @@ async function loadData(){
           tmpdate = deDateFormat(new Date(data[i]['dos']));
         }
         var dob = DateFormat(new Date(data[i]['dob']));
+        
         var tmpdata = [
           data[i]['id'],
           data[i]['insName'],
@@ -611,12 +640,13 @@ async function loadData(){
           data[i]['measure'], 
           data[i]['fullname']==null?null:data[i]['fullname'].trim(), 
           DateFormat(new Date(data[i]['apptdate'])),
-          tmpdate, 
-          (data[i]['value1']==""||data[i]['value1']==null)?"":(data[i]['dos']==null?"":data[i]['value1']), 
-          (data[i]['value2']==""||data[i]['value2']==null)?"":(data[i]['dos']==null?"":data[i]['value2']), 
-          (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['cpt1'], 
-          (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['cpt2'],
-          (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['icd1'], 
+          (data[i]["status"] == 4 ? tmpdate : null), 
+          (data[i]["status"] == 4 ? (data[i]['value1']==""||data[i]['value1']==null)?"":(data[i]['dos']==null?"":data[i]['value1']) : null), 
+          (data[i]["status"] == 4 ? (data[i]['value2']==""||data[i]['value2']==null)?"":(data[i]['dos']==null?"":data[i]['value2']) : null), 
+          (data[i]["status"] == 4 ? (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['cpt1'] : null), 
+          (data[i]["status"] == 4 ? (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['cpt2'] : null), 
+          (data[i]["status"] == 4 ? (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['icd1'] : null), 
+         
           ((data[i]['dos']!=null&&data[i]['dos']!="")&&(data[i]['value1']!=null&&data[i]['value1']!=""))?"done":"notdone",
           (data[i]['status'] == 4?"NONC":(data[i]['status'] == 5?"NEVER":(data[i]['status'] == 6?"IAPPT":(data[i]['status'] == 7?"PTR":(data[i]['status'] == 8?"MR":(data[i]['status'] == 9?"INSA":(data[i]['status'] == 10?"MHIGH":(data[i]['status'] == 11?"CNINS":data[i]['status'] == 12?"DEC":(data[i]['status'] == 13?"FileG":(data[i]['status'] == 14?"PCPC":"")))))))))),
           (data[i]['notesflag']!=null)?"notesflag":"",
@@ -794,63 +824,63 @@ async function loadData(){
           if (cell.innerHTML == 'notesflag') {
               cell.parentNode.childNodes[8].classList.add("notesflag");
           }
-          if (cell.innerHTML == 'done') {
-            cell.parentNode.style.color = tmpcolor[0]["tcolor"];
-            cell.parentNode.childNodes[11].childNodes[0].style.display = 'none';
-            cell.parentNode.childNodes[11].childNodes[0].disabled = true;
-          }
+          // if (cell.innerHTML == 'done') {
+          //   cell.parentNode.style.color = tmpcolor[0]["tcolor"];
+          //   cell.parentNode.childNodes[11].childNodes[0].style.display = 'none';
+          //   cell.parentNode.childNodes[11].childNodes[0].disabled = true;
+          // }
           if (cell.innerHTML == 'NONC') {
               cell.parentNode.style.color = tmpcolor[3]["tcolor"];
               cell.parentNode.style.backgroundColor = tmpcolor[3]["bcolor"];
           }
-          if (cell.innerHTML == 'NEVER') {
-              cell.parentNode.style.color = tmpcolor[4]["tcolor"];
-              cell.parentNode.style.backgroundColor = tmpcolor[4]["bcolor"];
-          }
+          // if (cell.innerHTML == 'NEVER') {
+          //     cell.parentNode.style.color = tmpcolor[4]["tcolor"];
+          //     cell.parentNode.style.backgroundColor = tmpcolor[4]["bcolor"];
+          // }
           if (cell.innerHTML == 'IAPPT') {
               cell.parentNode.style.color = tmpcolor[5]["tcolor"];
               cell.parentNode.style.backgroundColor = tmpcolor[5]["bcolor"];
           }
-          if (cell.innerHTML == 'PTR') {
-            cell.parentNode.style.color = tmpcolor[6]["tcolor"];
-            cell.parentNode.style.backgroundColor = tmpcolor[6]["bcolor"];
-          }
-          if (cell.innerHTML == 'MR') {
-              cell.parentNode.style.color = tmpcolor[7]["tcolor"];
-              cell.parentNode.style.backgroundColor = tmpcolor[7]["bcolor"];
-          }
-          if (cell.innerHTML == 'INSA') {
-            cell.parentNode.style.color = tmpcolor[8]["tcolor"];
-            cell.parentNode.style.backgroundColor = tmpcolor[8]["bcolor"];
-          }
-          if (cell.innerHTML == 'MHIGH') {
-              cell.parentNode.style.color = tmpcolor[9]["tcolor"];
-              cell.parentNode.style.backgroundColor = tmpcolor[9]["bcolor"];
-          }
-          if (cell.innerHTML == 'CNINS') {
-              cell.parentNode.style.color = tmpcolor[10]["tcolor"];
-              cell.parentNode.style.backgroundColor = tmpcolor[10]["bcolor"];
-          }
-          if (cell.innerHTML == 'DEC') {
-              cell.parentNode.style.color = tmpcolor[11]["tcolor"];
-              cell.parentNode.style.backgroundColor = tmpcolor[11]["bcolor"];
-          }
-          if (cell.innerHTML == 'FileG') {
-            cell.parentNode.style.color = tmpcolor[12]["tcolor"];
-            cell.parentNode.style.backgroundColor = tmpcolor[12]["bcolor"];
-          }
-          if (cell.innerHTML == 'PCPC') {
-            cell.parentNode.style.color = tmpcolor[13]["tcolor"];
-            cell.parentNode.style.backgroundColor = tmpcolor[13]["bcolor"];
-          }
-          if (cell.innerHTML == 'Generated') {
-            cell.parentNode.style.color = tmpcolor[12]["tcolor"];
-            cell.parentNode.style.backgroundColor = tmpcolor[12]["bcolor"];
-          }
-          if (cell.innerHTML == 'Reported') {
-            cell.parentNode.style.color = tmpcolor[7]["tcolor"];
-            cell.parentNode.style.backgroundColor = tmpcolor[7]["bcolor"];
-          }
+          // if (cell.innerHTML == 'PTR') {
+          //   cell.parentNode.style.color = tmpcolor[6]["tcolor"];
+          //   cell.parentNode.style.backgroundColor = tmpcolor[6]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'MR') {
+          //     cell.parentNode.style.color = tmpcolor[7]["tcolor"];
+          //     cell.parentNode.style.backgroundColor = tmpcolor[7]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'INSA') {
+          //   cell.parentNode.style.color = tmpcolor[8]["tcolor"];
+          //   cell.parentNode.style.backgroundColor = tmpcolor[8]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'MHIGH') {
+          //     cell.parentNode.style.color = tmpcolor[9]["tcolor"];
+          //     cell.parentNode.style.backgroundColor = tmpcolor[9]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'CNINS') {
+          //     cell.parentNode.style.color = tmpcolor[10]["tcolor"];
+          //     cell.parentNode.style.backgroundColor = tmpcolor[10]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'DEC') {
+          //     cell.parentNode.style.color = tmpcolor[11]["tcolor"];
+          //     cell.parentNode.style.backgroundColor = tmpcolor[11]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'FileG') {
+          //   cell.parentNode.style.color = tmpcolor[12]["tcolor"];
+          //   cell.parentNode.style.backgroundColor = tmpcolor[12]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'PCPC') {
+          //   cell.parentNode.style.color = tmpcolor[13]["tcolor"];
+          //   cell.parentNode.style.backgroundColor = tmpcolor[13]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'Generated') {
+          //   cell.parentNode.style.color = tmpcolor[12]["tcolor"];
+          //   cell.parentNode.style.backgroundColor = tmpcolor[12]["bcolor"];
+          // }
+          // if (cell.innerHTML == 'Reported') {
+          //   cell.parentNode.style.color = tmpcolor[7]["tcolor"];
+          //   cell.parentNode.style.backgroundColor = tmpcolor[7]["bcolor"];
+          // }
         },
         onchange: changed
       });

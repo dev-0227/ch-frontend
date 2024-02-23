@@ -24,7 +24,8 @@ $(document).ready(function () {
           render: function (data, type, row) {
             return `
               <div class="btn-group align-top " idkey="`+row.id+`">
-                <button class="btn  btn-primary badge edit_btn" data-target="#user-form-modal" data-toggle="modal" type="button"><i class="fa fa-edit"></i></button><button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i></button>
+                <button class="btn  btn-primary badge edit_btn" data-target="#user-form-modal" data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+                <button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
               </div>
             `
           } 
@@ -46,36 +47,37 @@ $(document).ready(function () {
         permissions[names[0]].push(result[i]);
 
       }
-      var html = '';
+      var i=0;
+      var html = '<div class="accordion" id="kt_accordion_1">';
       for (const key in permissions) {
         var collapse = "";
-        if(html=="")collapse = "show";
-        html += '<div class="panel panel-default" style="border-bottom:1pt solid #cccccc;">';
-        html += '<div class="panel-heading">';
-        html += '<h4 class="panel-title" >';
-        html += '<a data-toggle="collapse" data-parent="#accordion" href="#collapse'+key+'"  style="padding: 12px; color: black;" >';
-        html += ' <span class="glyphicon glyphicon-chevron-right"></span> ';
+        if(i==0)collapse = "show";
+        html += '<div class="accordion-item">';
+        html += '<h2 class="accordion-header" id="kt_accordion_1_header_'+i+'">';
+        html += '<button class="accordion-button fs-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_'+i+'" aria-expanded="true" aria-controls="kt_accordion_1_body_'+i+'">';
         html += key;
-        html += '</a></h4></div>';
-        html += '<div id="collapse'+key+'" class="panel-collapse collapse '+collapse+'" ">';
-        html += '<div class="panel-body p-1" ><table style="width: 100%">';
-        for(var i=0; i<permissions[key].length; i++){
-          var row = permissions[key][i];
-          html += '<div class="row mx-2" style="border-bottom:1pt dashed #cccccc;">';
-          html += '<div class="col-md-4 d-flex mr-2 " style="justify-content: right;">'+row['name']+':</div>';
-          html += '<div class="col-md-2 d-flex align-self-center">';
-          html += '<input type="checkbox" class="ch_permission" id="ch_'+row['id']+'_1" data-id="'+row['id']+'" data-type="1"><span class="pl-1">Read</span>';
+        html += '</button></h2>';
+        html += '<div id="kt_accordion_1_body_'+i+'" class="accordion-collapse collapse '+collapse+'" aria-labelledby="kt_accordion_1_header_'+i+'" data-bs-parent="#kt_accordion_1">';
+        html += '<div class="accordion-body">';
+        for(var j=0; j<permissions[key].length; j++){
+          var row = permissions[key][j];
+          html += '<div class="row p-2" style="border-bottom:1pt dashed #cccccc;">';
+          html += '<div class="col-md-3 d-flex mr-2 " style="justify-content: right;">'+row['name']+':</div>';
+          html += '<div class="col-md-3 d-flex align-items-center">';
+          html += '<div><input type="checkbox" class="form-check-input ch_permission" id="ch_'+row['id']+'_1" data-id="'+row['id']+'" data-type="1"></div><div class="px-3">Read</div>';
           html += '</div>';
-          html += '<div class="col-md-2 d-flex align-self-center">';
-          html += '<input type="checkbox" class="ch_permission" id="ch_'+row['id']+'_2" data-id="'+row['id']+'" data-type="2"><span class="pl-1">Write</span>';
+          html += '<div class="col-md-3 d-flex align-items-center">';
+          html += '<div><input type="checkbox" class="form-check-input ch_permission" id="ch_'+row['id']+'_2" data-id="'+row['id']+'" data-type="2"></div><div class="px-3">Write</div>';
           html += '</div>';
-          html += '<div class="col-md-2 d-flex align-self-center">';
-          html += '<input type="checkbox" class="ch_permission" id="ch_'+row['id']+'_3" data-id="'+row['id']+'" data-type="3"><span class="pl-1">Create</span>';
+          html += '<div class="col-md-3 d-flex align-items-center">';
+          html += '<div><input type="checkbox" class="form-check-input ch_permission" id="ch_'+row['id']+'_3" data-id="'+row['id']+'" data-type="3"></div><div class="px-3">Create</div>';
           html += '</div></div>';
           
         }
-        html += '</table></div></div></div>';
+        html += '</div></div></div>';
+        i++;
       }
+      html += '</div>';
       $("#accordion").html(html);
       
     }
@@ -85,26 +87,33 @@ $(document).ready(function () {
     $('.ch_permission').prop('checked', $(this).prop('checked'));
   });
 
-  $(document).on("click",".add_btn",function(){
+  $(document).on("click","#add_btn",function(){
     $("#aname").val('');
     $("#adescription").val('');
     $("#role-add-modal").modal("show");
   });
 
   $("#create_btn").click(function (e) {
+    if($("#aname").val() == ""){
+      toastr.info('Please enter Role Name');
+      $("#aname").focus();
+      return;
+    }
+    if($("#adescription").val() == ""){
+      toastr.info('Please enter Description');
+      $("#adescription").focus();
+      return;
+    }
     let entry = {
       name: document.getElementById('aname').value,
       description: document.getElementById('adescription').value
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/add", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "role is added successfully"
-          });
+          $("#role-add-modal").modal("hide");
+          toastr.success("role is added successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -128,9 +137,7 @@ $(document).ready(function () {
         $("#udescription").val(result[0]['description']);
         $("#role-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error("Action Failed");
       }
     });
 
@@ -144,14 +151,22 @@ $(document).ready(function () {
         }
         $("#role-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error("Action Failed");;
       }
     });
   });
 
   $("#update_btn").click(function (e) {
+    if($("#uname").val() == ""){
+      toastr.info('Please enter Role Name');
+      $("#uname").focus();
+      return;
+    }
+    if($("#udescription").val() == ""){
+      toastr.info('Please enter Description');
+      $("#udescription").focus();
+      return;
+    }
     var p = '';
     $(".ch_permission").each(function() {
       if(p!="")p += ',';
@@ -166,13 +181,10 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/update", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "role is updated successfully"
-          });
+          $("#role-edit-modal").modal("hide");
+          toastr.success("role is updated successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -184,28 +196,31 @@ $(document).ready(function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/delete", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/delete", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               role_table.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error("Action Failed");
           }
         });
-			}
+      }
 		});
+
   });
 
 });

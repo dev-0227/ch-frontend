@@ -96,6 +96,7 @@
                                 <li><a href="#measuretime_tab" data-toggle="tab">Measure Time Frames</a></li>
                                 <li><a href="#hedisaliases_tab" data-toggle="tab">Hedis File Aliases</a></li>
                                 <li><a href="#inscat_tab" data-toggle="tab">Ins Domain</a></li>
+                                <li><a href="#education_tab" data-toggle="tab">Education Map</a></li>
                             </ul>
                         </div>
                     </div>
@@ -591,6 +592,40 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane " id="education_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Measure Education List</h3>
+                                                <div class="card-options">
+                                                    <!-- <button id="idomainaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add a Domain</button>
+                                                    <input type="hidden" id="chosen_idomain" /> -->
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="educationtable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">ACTIVE</th>
+                                                            <th scope="col">Measure</th>
+                                                            <th scope="col">Lang</th>
+                                                            <th scope="col">User title</th>
+                                                            <th scope="col">Title</th>
+                                                            <th scope="col">content</th>
+                                                            <th scope="col">link</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -637,44 +672,63 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="hdomain-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="education-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Edit Health Care Domain</h5>
+				<h5 class="modal-title" id = "dg-edu-title">Edit Education Content</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
                 <div class="row">
+                    <input type="hidden" id="mtid" value="0">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="ehdomain_org" class="form-control-label">Organization:</label>
-                            <input type="text" class="form-control" id="ehdomain_org">
+                            <label for="education_tit1" class="form-control-label">SUB_NAME:</label>
+                            <input type="text" class="form-control" id="education_tit1">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="ehdomain_type" class="form-control-label">MEASURE TYPE:</label>
-                            <input type="text" class="form-control" id="ehdomain_type">
+                            <label for="edu-category" class="form-control-label">Category :</label>
+								<select class="form-control" id="edu-category">
+									
+								</select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="education_tit2" class="form-control-label">TITLE:</label>
+                            <input type="text" class="form-control" id="education_tit2">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="ehdomain_domain" class="form-control-label">HEALTH CARE DOMAIN:</label>
-                            <input type="text" class="form-control" id="ehdomain_domain">
+                            <label for="education_content" class="form-control-label">CONTENT:</label>
+                            <!-- <input type="text" class="form-control" id="education_content"> -->
+                            <textarea id="education_content" class="form-control" rows="5"></textarea>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="education_link" class="form-control-label">LINK:</label>
+                            <input type="text" class="form-control" id="education_link">
+                        </div>
+                    </div>
+                    
                 </div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal" id="hdomain_editbtn">Done</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" id="educ_editbtn">Done</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
+
 <div class="modal fade" id = "measure-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -1899,6 +1953,124 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" data-dismiss="modal" id="idomain_editbtn">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="link-set-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Measure ID <span id="ms-dg-id" style="color: blue;">asdf</span> | Name <span id="ms-dg-name" style="color: blue;">123</span> <button class="btn btn-light addsamelinkbtn" value="0"><i class="fa fa-plus" aria-hidden="true"></i> ADD ID</button></h5>
+               
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="sameiddiv">
+                        <label for="link-dg-lang" class="form-control-label">Add Same ids:</label>
+                        <input type="text" class="form-control  same-id-input" id="same-id-input" >
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="link-dg-lang" class="form-control-label">Languages:</label>
+                            <select class="form-control select2-show-search" id="link-dg-lang">
+                                <option value="en" selected>English</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="link-dg-lang" class="form-control-label">Category:</label>
+                            <select class="form-control select2-show-search" id="link-dg-cate">
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="" class="form-control-label">Add New Message:</label>
+                            <button class="btn btn-info addlinkbtn" value="0"><i class="fa fa-plus" aria-hidden="true"></i> New</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="link-dg-sublist" class="form-control-label">Select Message resource:</label>
+                            <select class="form-control select2-show-search" id="link-dg-sublist"></select>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="link-dg-mid" class="form-control-label">Sub Message Name :</label>
+                            <input type="text" class="form-control " id="link-dg-mid">
+                        </div>
+                        <div class="form-group">
+                            <label for="link-dg-title" class="form-control-label">Title :</label>
+                            <input type="text" class="form-control " id="link-dg-title">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eidomain_desc" class="form-control-label">SMS Messge:</label>
+                            <textarea rows="5" class="form-control" id="edu_sms_desc"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                       
+                        <label class="selectgroup-item">
+                            <input type="radio" name="gendertype" value="0" class="selectgroup-input gendertype" checked>
+                            <span class="selectgroup-button">ALL</span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="gendertype" value="1" class="selectgroup-input gendertype">
+                            <span class="selectgroup-button">Female</span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="gendertype" value="2" class="selectgroup-input gendertype">
+                            <span class="selectgroup-button">Male</span>
+                        </label>
+                            
+                    </div>
+                    <div class="col-md-6">
+                        <label class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input agerange" name="agerange" value="0" checked>
+                            <span class="tag custom-control-label">All</span>
+                        </label>
+                        <label class="custom-control custom-radio ">
+                            <input type="radio" class="custom-control-input agerange" name="agerange" value="1">
+                            <span class="tag custom-control-label">Range</span>
+                        </label>
+                    </div>
+                   
+                    <div class="col-md-6"></div>
+                    <div class="col-md-3">
+                        <label for="link-min-age" class="form-control-label">Min Age: ~</label>
+                        <input type="text" placeholder="Min age " class="form-control " id="link-min-age" value = '1' disabled>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="link-max-age" class="form-control-label">Max Age:</label>
+                        <input type="text" placeholder="Max age" class="form-control " id="link-max-age" value="10" disabled>
+                    </div>
+                   
+                    
+                     <p id="education-link" class="form-control-label mt-4"></p>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="please add link " class="form-control mt-4" id="link-url">
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal" id="edu-link-save">Save</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>

@@ -45,6 +45,15 @@
                             <ul class="nav panel-tabs">
                                 <li class="superadmin-right"><a href="#phonesetting_tab" class="active" data-toggle="tab">Phone Number Settings</a></li>
                                 <li><a href="#hedisalert_tab" class="active tmpfirstclass" data-toggle="tab">Hedis Alerts</a></li>
+                                <li><a href="#statusreason_tab" class="active tmpfirstclass" data-toggle="tab">Status Reason </a></li>
+                                <li><a href="#status_tab" class="active tmpfirstclass" data-toggle="tab">Status Codes </a></li>
+                                <li><a href="#category_tab" class="active tmpfirstclass" data-toggle="tab">Measure_Category </a></li>
+                                <li><a href="#topic_tab" class="active tmpfirstclass" data-toggle="tab">Topic Codes </a></li>
+                                <li><a href="#medium_tab" class="active tmpfirstclass" data-toggle="tab">Medium Codes </a></li>
+                                <li><a href="#priority_tab" class="active tmpfirstclass" data-toggle="tab">Priority Codes </a></li>
+                                <li><a href="#edu_cat_tab" class="active tmpfirstclass" data-toggle="tab">Education_category </a></li>
+                                <li><a href="#com_cat_tab" class="active tmpfirstclass" data-toggle="tab">Communication_category </a></li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -61,6 +70,15 @@
                                                 <span class="custom-switch-description">Activate SMS</span>
                                             </label>
                                         </div>
+                                        <div class="form-group">
+                                            <div class="form-label">Activate Call</div>
+                                            <label class="custom-switch">
+                                                <input type="checkbox" id="activatecallcheck" class="custom-switch-input">
+                                                <span class="custom-switch-indicator"></span>
+                                                <span class="custom-switch-description">Activate Call</span>
+                                            </label>
+                                        </div>
+                                        
                                         <div class="form-group">
                                             <div class="form-label">Activate Replenish When 150</div>
                                             <label class="custom-switch">
@@ -103,6 +121,17 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label class="form-label">Price Per Call</label>
+                                            <div class="row gutters-xs">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="" id="pricecallvalue">
+                                                </div>
+                                                <span class="col-auto">
+                                                    <button class="btn btn-primary" type="button" id="updatecallpricebtn">Update</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="form-label">Phone number  -----  Monthly Cost</label>
                                             <div class="row gutters-xs">
                                                 <div class="col">
@@ -115,6 +144,11 @@
                                                     <button class="btn btn-primary" type="button" id="updatephonebtn">Update</button>
                                                 </span>
                                             </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <button class="btn btn-success" type="button" id="twiliophonebtn">Twilio Setting </button>
+
+                                           
                                         </div>
                                     </div>
                                     <div class="col-md-9 col-lg-9">
@@ -164,6 +198,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                
                                <!-- ROW-2 OPEN -->
                                 <div class="row">
                                     <div class="col-6">
@@ -248,10 +284,398 @@
                                 </div>
                                 <!-- ROW-2 CLOSED -->
                             </div>
+
+                            <div class="tab-pane " id="statusreason_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Status Reason List</h3>
+                                                <div class="card-options">
+                                                    <button id="streasonaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="statusreasontable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane " id="status_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Status Code List</h3>
+                                                <div class="card-options">
+                                                        <button id="statusaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="statuscodetable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="category_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Category Code List</h3>
+                                                <div class="card-options">
+                                                        <button id="categoryaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="categorycodetable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane " id="topic_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Topic Code List</h3>
+                                                <div class="card-options">
+                                                    <button id="topicaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="topiccodetable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane " id="medium_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Medium Code List</h3>
+                                                <div class="card-options">
+                                                    <button id="mediumaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="mediumcodetable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane " id="priority_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Priority Code List</h3>
+                                                <div class="card-options">
+                                                    <button id="priorityaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="priorutycodetable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="edu_cat_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Education Category Code List</h3>
+                                                <div class="card-options">
+                                                    <button id="edcateaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="edcategprycodetable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="com_cat_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header ">
+                                                <h3 class="card-title ">Communication Category Code List</h3>
+                                                <div class="card-options">
+                                                    <button id="comcateaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add </button>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="comcategprycodetable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">DISPLAY</th>
+                                                            <th scope="col">DEFINITION</th>
+                                                            <th scope="col">ACTIONS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div><!-- COL-END -->
+</div>
+
+
+<div class="modal fade" id="twilio-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Twilio SubAccount Setting </h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Clinic Phone number:</label>
+                            <input type="text" class="form-control" id="clisubphone">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Verified CallerId:</label>
+                            <input type="text" class="form-control" id="twidentity">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Sub Account SID:</label>
+                            <input type="text" class="form-control" id="clisubsid">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Sub Account Token:</label>
+                            <input type="text" class="form-control" id="clisubtoken">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Twilio Api key:</label>
+                            <input type="text" class="form-control" id="twilioapiKey">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Twilio Api Secret</label>
+                            <input type="text" class="form-control" id="twilioapisecret">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">TwiML App Sid:</label>
+                            <input type="text" class="form-control" id="applicationsid">
+                        </div>
+                    </div>
+                   
+                   
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="subtokenaddbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id = "commvalue-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add </h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="com_code" class="form-control-label">Code:</label>
+                            <input type="text" class="form-control" id="com_code">
+                        </div>
+                    </div>
+                    <input type="hidden" id="com-tb" value="">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="com_disp" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="com_disp">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="com_desc" class="form-control-label">Description:</label>
+                            <textarea rows="3" class="form-control" id="com_desc"></textarea>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="com_addbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id = "commvalue-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Edit </h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="com_e_code" class="form-control-label">Code:</label>
+                            <input type="text" class="form-control" id="com_e_code">
+                        </div>
+                    </div>
+                    <input type="hidden" id="com_e_tb" value="">
+                    <input type="hidden" id="com_e_id" value="">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="com_e_disp" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="com_e_disp">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="com_e_desc" class="form-control-label">Description:</label>
+                            <textarea rows="3" class="form-control" id="com_e_desc"></textarea>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="com_editbtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
 </div>

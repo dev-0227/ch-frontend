@@ -22,12 +22,7 @@ router.get("/profile", (req, res, next) => {
         pageKey: "../pages/profile"
     });
 });
-router.get("/setting", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Settings",
-        pageKey: "../pages/setting"
-    });
-});
+
 router.get("/hedis", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Hedis",

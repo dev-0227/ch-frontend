@@ -2,6 +2,13 @@ const express = require("express");
 
 const router = express.Router();
 
+router.get("/setting", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Settings",
+        pageKey: "../settings/setting"
+    });
+});
+
 router.get("/specialist", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Specialist List",

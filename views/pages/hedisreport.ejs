@@ -1,4 +1,85 @@
 <style>
+	.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  border: 2px dashed white;
+  padding: 5px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 400px;
+  font-size: 20px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+	/* ////////////////////// */
+	 div#pop-up {
+   display: none;
+   position: absolute;
+   width: 280px;
+   padding: 10px;
+   background: #eeeeee;
+   color: #000000;
+   border: 1px solid #1a1a1a;
+   font-size: 90%;
+ }
+ 
+	.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
+}
+	.bclicked{
+		background-color:rgb(247, 213, 63);
+	}
     .jexcel{
         width:100%!important;
     }
@@ -88,6 +169,9 @@
 </div>
 <div class="row ml-2 mr-2">
     <div class="col-md-6 mt-2 settingicon">
+		<i class="fa fa-plus-circle addnewpathbtn text-primary" data-toggle="tooltip" title="" data-original-title="Add New Patient"></i>
+		<i class="fa fa-id-badge getinsidbtn text-primary" data-toggle="tooltip" title="" data-original-title="Get insurance id list"></i>
+		<i class="fa fa-get-pocket getemrdbtn text-primary" data-toggle="tooltip" title="" data-original-title="Get Emr id list"></i>
 		<i class="fa fa-filter sortbtn text-primary" data-toggle="tooltip" title="" data-original-title="Sort"></i>
 		<i class="fa fa-file-excel-o exportexcelbtn text-primary" data-toggle="tooltip" title="" data-original-title="Excel"></i>
 		<i class="fa fa-paint-brush colormodalbtn text-primary" data-toggle="tooltip" title="" data-original-title="Color Key"></i>
@@ -95,6 +179,7 @@
 		<a href="../pages/hedisnoncompliant" target="_blank"><i class="fa fa-wpforms text-primary" data-toggle="tooltip" title="" data-original-title="Last Visit List"></i></a>
 		<i class="fa fa-refresh refreshbtn text-primary" data-toggle="tooltip" title="" data-original-title="Refresh"></i>
 		<span class="text-primary pr-5">PTs <span class="totalptcnt"></span> | Measures <span class="totalmeasurecnt"></span></span>
+		
 		<label class="custom-control custom-radio d-inline-flex pl-3">
             <input type="radio" class="custom-control-input donenotdoneoption" name="donenotdoneoption" value="1">
             <span class="tag custom-control-label">All</span>
@@ -146,6 +231,28 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="ins-list-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="query-count" ></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 ins-id-list">
+                        
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade" id="status-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -159,7 +266,24 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="custom-controls-stacked status-option">
-                            
+                            <div class=" status-none">
+								<label class="custom-control custom-radio">
+									<input type="radio" class="custom-control-input statusoption" name="statusoption" value="0">
+									<span class="tag custom-control-label">None</span>
+								</label>
+							</div>
+                            <div class="status-measure">
+								<h5 style="padding-top: 1rem">Measure Status</h5>
+								<hr style="margin-bottom: 1rem;margin-top: 0rem;">
+							</div>
+                            <div class="status-patient">
+								<h5 style="padding-top: 1rem">Patient Status</h5>
+								<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
+							</div>
+                            <div class="status-meas-rep">
+								<h5 style="padding-top: 1rem">Measure Report Status</h5>
+								<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
+							</div>
                         </div>
                     </div>
 					<div class="col-lg-6 appt_date_area d-none">
@@ -266,7 +390,30 @@
 								</div>
 								<div class="tab-pane " id="colorsorttab">
 									<div class="row">
-										<div class="col-md-12 color-sort-list"></div>
+										<div class="col-md-12 color-sort-list">
+											<div class=" status-none">
+												<label class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="0">
+													<span class="tag custom-control-label">None</span>
+												</label>
+												<label class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="-1">
+													<span class="tag custom-control-label" style="color:blue">Measure Complaint</span>
+												</label>
+											</div>
+											<div class="cstatus-measure">
+												<h5 style="padding-top: 1rem">Measure Status</h5>
+												<hr style="margin-bottom: 1rem;margin-top: 0rem;">
+											</div>
+											<div class="cstatus-patient">
+												<h5 style="padding-top: 1rem">Patient Status</h5>
+												<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
+											</div>
+											<div class="cstatus-meas-rep">
+												<h5 style="padding-top: 1rem">Measure Report Status</h5>
+												<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -288,6 +435,8 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id = "email-subject"></h5>
+				&nbsp;<h5 class="modal-title"> | </h5>&nbsp;
+				<h5 class="modal-title" id="email-other" style="color: blue; cursor: pointer;"> <i class="fa fa-envelope-o" aria-hidden="true" style="font-size: 25px;"></i> Another Email </h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -303,8 +452,29 @@
 							<input type="radio" class="custom-control-input emailoption" name="emailoption" value="2">
 							<span class="tag custom-control-label">Custom</span>
 						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input emailoption"   name="emailoption" value="3">
+							<span class="tag custom-control-label">Education</span>
+						</label>
+						<input type="hidden" id="ecliname" value="">
+						<input type="hidden" id="eptfname" value="">
+						<input type="hidden" id="eptinsid" value="">
+						<input type="hidden" id="eptemrid" value="">
                     </div>
                 </div>
+				<div class="row ptemaildiv d-flex justify-content-center mt-3 mb-1">
+					
+                    <div class="col-lg-6">
+                        <h5 id="ptemailtag"></h5>
+                    </div>
+                </div>
+				<div class="row otheremailaddr d-flex justify-content-center">
+					
+                    <div class="col-lg-6">
+                        <input type="email" class="form-control other-email" style="display: none;" id="otheremail" placeholder="please add email">
+                    </div>
+                </div>
+				
 				<div class="row customemailarea d-none">
                     <div class="col-lg-12">
                         <textarea id="customemailbody" class="form-control" rows="10"></textarea>
@@ -315,6 +485,22 @@
                         
                     </div>
                 </div>
+				<div class="row eduemailarea d-none">
+					
+					<div class="col-lg-12 " >
+                        <label class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="eshowalleducation">
+							<span class="custom-control-label">Show All Education list</span>
+						</label>
+                    </div>
+                    <div class="col-lg-12 " id = "edu-email-body">
+                        
+                    </div>
+					<div class="col-lg-12 d-none edu-email-link" id = "edu-email-link">
+                        
+                    </div>
+                </div>
+
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success" id = "emailsendbtn" data-dismiss="modal">Send</button>
@@ -326,12 +512,17 @@
 <div class="modal fade" id="sms-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
+		
+			
 			<div class="modal-header">
-				<h5 class="modal-title" id = "sms-subject"></h5>
+				<h5 class="modal-title" id = "sms-subject" style="display: none;"></h5>&nbsp; <h5 class="modal-title"> | </h5>&nbsp;
+				<h5 class="modal-title" id="sms-patient-name" style="cursor: pointer;"> </h5> &nbsp;<h5 class="modal-title"> | </h5>&nbsp;
+				<h5 class="modal-title" id="sms-othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-commenting" aria-hidden="true" style="font-size: 25px;"></i> Text number </h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+			
 			<div class="modal-body">
 				<div class="row">
                     <div class="col-lg-12 text-center">
@@ -343,11 +534,34 @@
 							<input type="radio" class="custom-control-input smsoption" name="smsoption" value="2">
 							<span class="tag custom-control-label">Custom</span>
 						</label>
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input smsoption"   name="smsoption" value="3">
+							<span class="tag custom-control-label">Education</span>
+						</label>
                     </div>
-					<div class="col-lg-12 text-center phonelist">
+					<input type="hidden" id="cliname" value="">
+					<input type="hidden" id="ptfname" value="">
+					<input type="hidden" id="ptinsid" value="">
+					<input type="hidden" id="ptemrid" value="">
+					
+                </div>
+				<div class="row d-flex justify-content-center">
+					<div class="col-lg-5 text-center phonelist" >
                         
                     </div>
-                </div>
+					<!-- <div class="col-lg-5 text-center ">
+						<label class="custom-control custom-radio d-inline-flex">
+							<input type="radio" class="custom-control-input phoneitem" name="phoneitem" value="c2">
+							<span class="tag1 custom-control-label"></span>
+							<input type="text" class="form-control" id="othsmsnumber" placeholder="123456789">
+						</label>
+						
+                    </div> -->
+				</div>
+				<div class="row d-flex justify-content-center" >
+					<input type="text" class=" col-md-4 mb-3 form-control" id="othsmsnumber" style = "display: none;" placeholder="123456789">
+					<br>
+				</div>
 				<div class="row customsmsarea d-none">
                     <div class="col-lg-12">
                         <textarea id="customsmsbody" class="form-control" rows="10"></textarea>
@@ -355,6 +569,21 @@
                 </div>
                 <div class="row defaultsmsarea">
                     <div class="col-lg-12" id = "sms-body">
+                        
+                    </div>
+                </div>
+				<div class="row edusmsarea d-none">
+				
+					<div class="col-lg-12 " >
+                        <label class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="showalleducation">
+							<span class="custom-control-label">Show All Education list</span>
+						</label>
+                    </div>
+                    <div class="col-lg-12 " id = "edu-sms-body">
+                        
+                    </div>
+					<div class="col-lg-12 d-none edu-sms-link" id = "edu-sms-link">
                         
                     </div>
                 </div>
@@ -633,6 +862,148 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" id="editnotebtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ROW CLOSE -->
+<div class="modal fade" id="reset-del-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Reset / Delete </h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="row d-flex justify-content-around ">
+
+                    <div class="col-md-3">
+						<button type="button" class="btn btn-outline-primary" id="resetmeasure">Reset Measure</button>
+                    </div>
+					<div class="col-md-3">
+						<button type="button" class="btn btn-outline-info"  id="delmeasure"> Delete Measure</button>
+					</div>
+					<div class="col-md-3">
+						<button type="button" class="btn btn-outline-danger"  id="delpatient">Delete Patient</button>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<!-- <button type="button" class="btn btn-primary" id="editnotebtn" data-dismiss="modal">Done</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+				<input type="hidden" id="drowid" value="">
+				<input type="hidden" id="dtableid" value="">
+				<input type="hidden" id="ddos" value="">
+				<input type="hidden" id="dmeasureid" value="">
+				<input type="hidden" id="dmid" value="">
+				<input type="hidden" id="dinsmid" value="">
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="call-patient-modal" tabindex="-1" role="dialog"  aria-hidden="true" >
+	<div class="modal-dialog" role="document" >
+		<div class="modal-content" >
+			<div class="modal-header">
+				<h5 class="modal-title" id="patient-name" style="cursor: pointer;"> </h5> &nbsp;<h5 class="modal-title"> | </h5>&nbsp;
+				<h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="callmid" value="">
+				<div class="row d-flex justify-content-center">
+					<div >
+						<h3 id = "patient-num" > </h3>
+						<input type="text" class="form-control" id="customphone" placeholder="+1123456789" style="display: none;">
+					</div>
+				</div>
+				<br />
+				<div class="row d-flex justify-content-center">
+					<h4 id="duration-demo">00:00:00</h4>
+				</div>
+				<div class="row d-flex justify-content-center">
+					<label> Caller  Voice</label>
+				</div>
+				<div class="row d-flex justify-content-center">
+					<div id="input-volume"></div>
+				</div>
+				<div class="row d-flex justify-content-center">
+					<label>Recipient (PT) Voice</label>
+				</div>
+				<div class="row d-flex justify-content-center">
+					<div id="output-volume"></div>
+				</div>
+                <div class="row d-flex justify-content-around ">
+                    <div class="col-md-2">
+						<button type="button" class="btn btn-success btn-circle btn-xl callringbtn" id="callringbtn">
+							<i class="fa fa-phone" style="font-size: 1.9rem;"></i>
+						</button>
+                    </div>
+					<div class="col-md-2">
+						<button type="button" class="btn btn-danger btn-circle btn-xl" id="closeringbtn">
+							<i class="fa fa-times" style="font-size: 1.9rem;"></i>
+						</button>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
+					<b><span id="callcounts"></span>&nbsp;&nbsp;(min) Available</b>
+					
+				</div>
+				
+				<a href="../pages/creditcall" target="_blank" class="btn btn-primary">Add Credit</a>
+				
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="education-sms-modal" tabindex="-1" role="dialog"  aria-hidden="true" >
+	<div class="modal-dialog" role="document" >
+		<div class="modal-content" >
+			<div class="modal-header">
+				<h5 class="modal-title" id="edu-pat-name" style="cursor: pointer;"> </h5> 
+				<!-- &nbsp;<h5 class="modal-title"> | </h5>&nbsp;
+				<h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5> -->
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="row d-flex justify-content-center">
+					<div >
+						<h3 id = "edu-pat-num" > </h3>
+						<!-- <input type="text" class="form-control" id="customphone" placeholder="+1123456789" style="display: none;"> -->
+					</div>
+				</div>
+				<br />
+				<div class="row d-flex justify-content-center">
+					<textarea class="form-control" rows="10" id="edu-sms-content"></textarea>
+				</div>
+				
+			</div>
+			<div class="modal-footer" style="position: relative;">
+				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
+					<b><span id="edusmscounts"></span>&nbsp;&nbsp;Available</b>
+					
+				</div>
+				<div class="text-primary" style="display: inline-block;position:absolute;left:120px;top:23px;">
+					<label class="custom-control custom-checkbox d-inline-flex">
+						<input type="checkbox" class="custom-control-input whatsappoption" name="whatsappoption" value="1">
+						<span class="custom-control-label" style="line-height:1.6rem;">Whatsapp&nbsp;<i class="fa fa-whatsapp"></i></span>
+					</label>
+				</div>
+				<a href="../pages/creditsms" target="_blank" class="btn btn-primary">Add Credit</a>
+				<button type="button" class="btn btn-success" id = "edusmssendbtn" data-dismiss="modal">Send</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>

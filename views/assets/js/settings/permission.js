@@ -1,56 +1,6 @@
 $(document).ready(function () {
   "use strict";
-  // var permission_table = $('#permission_table').DataTable({
-  //   "ajax": {
-  //       "url": serviceUrl + "permission/",
-  //       "type": "GET",
-  //       "headers": { 'Authorization': localStorage.getItem('authToken') }
-  //   },
-  //   "pageLength": 100,
-  //   "order": [],
-  //   "columns": [
-  //       { data: "name",
-  //         render: function (data, type, row) {
-  //           return '<span title="'+row.description+'">'+row.name+'</span>';
-  //         } 
-  //       },
-  //       { data: 'assigned',
-  //         render: function (data, type, row) {
-  //           var str = row.assigned+'';
-  //           var assign = str.split(",");
-  //           var vstr = row.v+'';
-  //           var values = vstr.split(",");
-  //           var returnStr = "";
-  //           for(var i=0; i<assign.length; i++){
-  //             if(assign[i] != "null"){
-  //               if(values[i] != '000')
-  //               returnStr += '<span class="ml-2 tag tag-blue" >'+assign[i]+'</span>'
-  //             }
-              
-  //           }
-  //           return returnStr;
-  //         } 
-  //       },
-  //       { data: 'createdAt',
-  //           render: function (data, type, row) {
-  //             return row.createdAt.replace('T', ' ').substr(0, 19);
-  //           }  
-  //       },
-  //       { data: 'id',
-  //         render: function (data, type, row) {
-  //           return `
-  //             <div class="btn-group align-top " idkey="`+row.id+`">
-  //               <button class="btn  btn-primary badge edit_btn" data-target="#user-form-modal" data-toggle="modal" type="button"><i class="fa fa-edit"></i></button><button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i></button>
-  //             </div>
-  //           `
-  //         } 
-  //       }
-  //   ]
-  // });
-
   load_data();
-
-
   function load_data(){
     
     sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "permission", (xhr, err) => {
@@ -67,21 +17,22 @@ $(document).ready(function () {
             permissions[names[0]].push(result[i]);
 
           }
-          var html = '';
+
+
+          var html = '<div class="accordion" id="kt_accordion_1">';
+          var i = 0;
           for (const key in permissions) {
             var collapse = "";
-            if(html=="")collapse = "show";
-            html += '<div class="panel panel-default" style="border-bottom:1pt solid #cccccc;">';
-            html += '<div class="panel-heading">';
-            html += '<h4 class="panel-title">';
-            html += '<a data-toggle="collapse" data-parent="#accordion" href="#collapse'+key+'" aria-expanded="true" style="color: black;" >';
-            html += ' <span class="glyphicon glyphicon-chevron-right"></span> ';
+            if(i==0)collapse = "show";
+            html += '<div class="accordion-item">';
+            html += '<h2 class="accordion-header" id="kt_accordion_1_header_'+i+'">';
+            html += '<button class="accordion-button fs-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_'+i+'" aria-expanded="true" aria-controls="kt_accordion_1_body_'+i+'">';
             html += key;
-            html += '</a></h4></div>';
-            html += '<div id="collapse'+key+'" class="panel-collapse collapse '+collapse+'">';
-            html += '<div class="panel-body p-1" ><table style="width: 100%">';
-            for(var i=0; i<permissions[key].length; i++){
-              var row = permissions[key][i];
+            html += '</button></h2>';
+            html += '<div id="kt_accordion_1_body_'+i+'" class="accordion-collapse collapse '+collapse+'" aria-labelledby="kt_accordion_1_header_'+i+'" data-bs-parent="#kt_accordion_1">';
+            html += '<div class="accordion-body">';
+            for(var n=0; n<permissions[key].length; n++){
+              var row = permissions[key][n];
               var str = row.assigned+'';
               var assign = str.split(",");
               var vstr = row.v+'';
@@ -90,35 +41,30 @@ $(document).ready(function () {
               for(var j=0; j<assign.length; j++){
                 if(assign[j] != "null"){
                   if(values[j] != '000')
-                  assignRoles += '<span class="ml-2 tag tag-blue" >'+assign[j]+'</span>'
+                  assignRoles += '<span class="mx-2 px-2 badge badge-primary badge-square badge-lg" >'+assign[j]+'</span>'
                 }
                 
               }
-              html += '<tr class="row m-1" style="border-bottom:1pt dashed #cccccc;">';
-              html += '<td class="col-md-2">';
+              html += '<div class="row p-1 mt-3" style="border-bottom: solid 1px #eeeccc; ">';
+              html += '<div class="col-md-3 cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-inverse" data-bs-placement="top"  title="'+row.description+'">';
               html += row.name;
-              html += '</td>';
-              html += '<td class="col-md-4">';
-              html += row.description;
-              html += '</td>';
-              html += '<td class="col-md-5">';
+              html += '</div>';
+              html += '<di class="col-md-7">';
               html += assignRoles;
-              html += '</td>';
-              html += '<td class="col-md-1">';
+              html += '</di>';
+              html += '<div class="col-md-2">';
               html += '<div class="btn-group align-top " idkey="'+row.id+'`">';
-              html += '<button class="btn  btn-primary badge edit_btn" data-target="#user-form-modal" data-toggle="modal" type="button"><i class="fa fa-edit"></i></button>';
-              html += '<button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i></button>';
+              html += '<button class="btn btn-sm  btn-primary badge edit_btn" data-target="#user-form-modal" data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>';
+              html += '<button class="btn btn-sm  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>';
               html += '</div>'
-              html += '</td>';
-              html += '</tr>';
+              html += '</div>';
+              html += '</div>';
             }
-            html += '</table></div></div></div>';
-
+            html += '</div></div></div>';
+            i++;
           }
-
+          html += '</div>';
           $('#accordion').html(html);
-          
-          
         }
     });
   }
@@ -130,19 +76,26 @@ $(document).ready(function () {
   });
 
   $("#create_btn").click(function (e) {
+    if($("#aname").val() == ""){
+      toastr.info('Please enter Permission Name');
+      $("#aname").focus();
+      return;
+    }
+    if($("#adescription").val() == ""){
+      toastr.info('Please enter Description');
+      $("#adescription").focus();
+      return;
+    }
     let entry = {
       name: document.getElementById('aname').value,
       description: document.getElementById('adescription').value
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "permission/add", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "permission is added successfully"
-          });
+          toastr.success("permission is added successfully");
+          $("#permission-add-modal").modal("hide");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -162,9 +115,7 @@ $(document).ready(function () {
         $("#udescription").val(result[0]['description']);
         $("#permission-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error("Action Failed");
       }
     });
   });
@@ -175,15 +126,22 @@ $(document).ready(function () {
       name: document.getElementById('uname').value,
       description: document.getElementById('udescription').value
     }
+    if($("#uname").val() == ""){
+      toastr.info('Please enter Permission Name');
+      $("#uname").focus();
+      return;
+    }
+    if($("#udescription").val() == ""){
+      toastr.info('Please enter Description');
+      $("#udescription").focus();
+      return;
+    }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "permission/update", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "permission is updated successfully"
-          });
+          toastr.success("permission is updated successfully");
+          $("#permission-edit-modal").modal("hide");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -195,28 +153,32 @@ $(document).ready(function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "permission/delete", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "permission/delete", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               load_data()
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error("Action Failed");
           }
         });
-			}
+      }
 		});
+
+    
   });
 
 });

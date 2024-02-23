@@ -34,6 +34,9 @@ function getUrlVars() {
 function countOccurences(string, word) {
   return string.split(word).length - 1;
 }
+let odevice
+
+
 let tmpupdatenote;
 var hedisdata = [];
 var tmpcolor = [];
@@ -44,9 +47,36 @@ var tmpall = [];
 var tmpoutrange = [];
 var checkview = 3;
 let mySpreadsheet = null;
+let bResetCheck = false;
+
+let globalsmsarr;
+let globalemailarr;
+let calltimer ;
+let startcalltime ;
+let customnumber = false;
+let customsmsnumber = false;
+let otheremailnumber = false;
+
+let  outputVolumeBar;
+let  inputVolumeBar ;
+let outgoingCallHangupButton;
+
+let patientinsid =''
+let patientemrid =''
+let gcallnumber = ''
+
+let insidlist = []
+let inemrlist = []
+
 $(document).ready(function () {
   "use strict";
+
+  var moveLeft = 40;
+  var moveDown = -10;
+
+ 
   let insid = getUrlVars();
+  console.log(insid)
   if(insid['status'] != null){
     optioncheck = 4;
     options.push(insid['status']);
@@ -91,34 +121,50 @@ $(document).ready(function () {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       $(".color-list").empty();
-      $(".status-option").html(`
-          <label class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input statusoption" name="statusoption" value="0">
-            <span class="tag custom-control-label">None</span>
-          </label>`);
-      $(".color-sort-list").html(`
-          <label class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="0">
-            <span class="tag custom-control-label">None</span>
-          </label>
-          <label class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="-1">
-            <span class="tag custom-control-label" style="color:blue">Measure Complaint</span>
-          </label>`);
+
+     
       for(var i = 0; i < result.length; i++){
         $(".color-list").append(`<p style='padding: 5px;border-radius: 5px;color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`'>`+result[i]['description']+`</p>`);
         tmpcolor.push({"tcolor":result[i]['tcolor'],"bcolor":result[i]['bcolor']});
         if(![1,2,3].includes(result[i]['scheck'])){
-          $(".status-option").append(`
-          <label class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+          if([4,10,7,15].includes(result[i]['scheck'])){
+            $(".status-measure").append(`
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+              <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+            </label>`);
+
+            $(".cstatus-measure").append(`
+            <label class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="`+result[i]['scheck']+`">
             <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
-          </label>`);
-          $(".color-sort-list").append(`
-          <label class="custom-control custom-checkbox">
+            </label>`);
+            
+          }
+          else if([5,6,12,14,16].includes(result[i]['scheck'])){
+            $(".status-patient").append(`
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+              <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+            </label>`);
+            $(".cstatus-patient").append(`
+            <label class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="`+result[i]['scheck']+`">
+            <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+            </label>`);
+          }
+          else {
+            $(".status-meas-rep").append(`
+            <label class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input statusoption" name="statusoption" value="`+result[i]['scheck']+`">
+              <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
+            </label>`);
+            $(".cstatus-meas-rep").append(`
+            <label class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="`+result[i]['scheck']+`">
             <span class="tag custom-control-label" style="color:`+result[i]['tcolor']+`;background:`+result[i]['bcolor']+`">`+result[i]['name']+`</span>
           </label>`);
+          }
         }
         
       }
@@ -188,12 +234,61 @@ $(document).ready(function () {
     $("#chosen_item").val($(this).parent().parent().children().eq(1).html());
     $(".customemailarea").addClass("d-none");
     $(".defaultemailarea").removeClass("d-none");
+    $(".eduemailarea").addClass('d-none')
     $(".emailoption[value='1']").prop("checked",true);
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),qid:$("#chosen_item").val()}, "hedis/checkemail", (xhr, err) => {
+    let measureid = $(this).parent().parent().children().eq(24).html()
+    let ptemail = $(this).parent().parent().children().eq(32).html()
+
+    
+   
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),qid:$("#chosen_item").val(),meauserid:measureid}, "hedis/checkemail", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText);
+        console.log("email result")
+        console.log(result)
+
+        let ptfname = $(this).parent().parent().children().eq(4).html()
+
+        let eptinsid = $(this).parent().parent().children().eq(2).html()
+        let eptemrid = $(this).parent().parent().children().eq(3).html()
+
+        globalemailarr = result['edbody']
+
+        $("#edu-email-body").empty()
+          $("#edu-email-link").empty()
+          
+          $("#eptfname").val(ptfname)
+          $("#ecliname").val(result['clinicname'])
+
+          $("#eptinsid").val(eptinsid)
+          $("#eptemrid").val(eptemrid)
+
+          
+        let bchecked = false
+          if(globalemailarr.length > 0){
+            let checkval = ''
+            for(let i=0; i<globalemailarr.length ; i++){
+              if(globalemailarr[i].active == 1) continue
+              if(globalemailarr[i].langid == result['langcode']){
+                if(bchecked == false){
+                  checkval = 'checked'
+                  bchecked = true
+                }else{
+                  checkval = ''
+                }
+                $("#edu-email-body").append('<div class="form-check form-check-radio form-check-inline"> <label class="custom-control custom-radio d-inline-flex"> <input type="radio" class="custom-control-input emailnamelist" name="emailnamelist" value="'+globalemailarr[i].id+'" '+checkval+'> <span class="tag custom-control-label">'+globalemailarr[i].subname+'</span> <i class="fa fa-eye showemailcontent popup" aria-hidden="true" ><input type="hidden" id="edemcategory'+globalemailarr[i].id+'" value="'+globalemailarr[i].category+'"><div class="popuptext" id="myePopup'+globalemailarr[i].id+'">'+result['clinicname'] +'<br>'+ globalemailarr[i].title +'<br><br>'+ ptfname +','+globalemailarr[i].content+'<br>'+globalemailarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'</div></i><a href="'+globalemailarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'" target="_blank" ><i class="fa fa-book mt-2"  aria-hidden="true"></i></a> </label> </div><br>')
+              }else{
+                $("#edu-email-link").append('<div class="form-check form-check-radio form-check-inline "> <label class="custom-control custom-radio d-inline-flex"> <input type="radio" class="custom-control-input emailnamelist" name="emailnamelist" value="'+globalemailarr[i].id+'"> <span class="tag custom-control-label">'+globalemailarr[i].subname+'</span> <i class="fa fa-eye showemailcontent popup" aria-hidden="true" ><input type="hidden" id="edemcategory'+globalemailarr[i].id+'" value="'+globalemailarr[i].category+'"><div class="popuptext" id="myePopup'+globalemailarr[i].id+'">'+result['clinicname'] +'<br>'+ globalemailarr[i].title +'<br><br>'+ ptfname +','+globalemailarr[i].content+'<br>'+globalemailarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'</div></i><a href="'+globalemailarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'" target="_blank" ><i class="fa fa-book mt-2"  aria-hidden="true"></i></a> </label> </div><br>')
+              }
+            }
+
+          }else{
+            $("#edu-email-body").html("")
+          }
+
         $("#email-subject").html(result['subject']);    
-        $("#email-body").html(result['body']);    
+        $("#email-body").html(result['body']);  
+        $("#ptemailtag").html(ptemail)  
         $("#email-modal").modal("show");
       } else {
         return $.growl.error({
@@ -202,19 +297,116 @@ $(document).ready(function () {
       }
     });
   });
+
+  $('#showalleducation').click(function(){
+    if($(this).prop("checked") == true){
+        $("#edu-sms-link").removeClass("d-none");
+    }else if($(this).prop("checked") == false){
+      $("#edu-sms-link").addClass("d-none");
+
+    }
+});
+$('#eshowalleducation').click(function(){
+  if($(this).prop("checked") == true){
+      $("#edu-email-link").removeClass("d-none");
+  }else if($(this).prop("checked") == false){
+    $("#edu-email-link").addClass("d-none");
+
+  }
+});
+
+
+
+  $(document).on("click",".showsmscontent",function(){
+    let seid = $(this).parent().children().eq(0).val()
+   let index = ''
+    for(let i=0 ; i< globalsmsarr.length ; i++){
+      if(globalsmsarr[i].id == seid){
+        
+        document.getElementById("myPopup"+globalsmsarr[i].id).innerHTML =$("#cliname").val() +'<br>'+$("#ptfname").val() +','+globalsmsarr[i].content+'<br>'+globalsmsarr[i].link+'&id='+localStorage.getItem('chosen_clinic')
+        index = i
+        break
+      }
+    }
+    var popup = document.getElementById("myPopup"+globalsmsarr[index].id);
+    popup.classList.toggle("show");
+  })
+
+  $(document).on("click",".showemailcontent",function(){
+    let seid = $(this).parent().children().eq(0).val()
+   let index = ''
+    for(let i=0 ; i< globalemailarr.length ; i++){
+      if(globalemailarr[i].id == seid){
+        
+        document.getElementById("myePopup"+globalemailarr[i].id).innerHTML =$("#ecliname").val() +'<br>'+globalemailarr[i].title +'<br>'+$("#eptfname").val() +','+globalemailarr[i].content+'<br>'+globalemailarr[i].link+'&id='+localStorage.getItem('chosen_clinic')
+        index = i
+        break
+      }
+    }
+    var popup = document.getElementById("myePopup"+globalemailarr[index].id);
+    popup.classList.toggle("show");
+  })
+
+  
+
   $(document).on("click",".sendsms",function(){
     $("#chosen_item").val($(this).parent().parent().children().eq(1).html());
     $(".customsmsarea").addClass("d-none");
     $(".defaultsmsarea").removeClass("d-none");
     $(".smsoption[value='1']").prop("checked",true);
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),qid:$("#chosen_item").val()}, "hedis/checksms", (xhr, err) => {
+    let measureid = $(this).parent().parent().children().eq(24).html()
+    
+    let ptname = $(this).parent().parent().children().eq(4).html() + " " +$(this).parent().parent().children().eq(5).html()
+    let ptfname = $(this).parent().parent().children().eq(4).html()
+    let ptinsid = $(this).parent().parent().children().eq(2).html()
+    let ptemrid = $(this).parent().parent().children().eq(3).html()
+
+    document.getElementById('sms-patient-name').innerHTML = ptname
+    console.log("ptinsid")
+    console.log(ptinsid)
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),qid:$("#chosen_item").val(),measureid:measureid}, "hedis/checksms", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText);
+       
+        console.log("resultjjjjjjjjjj")
+        console.log(result)
+        let bchecked= false
         if(result['status'] == "success"){
           $("#smscounts").html(result['counts']);    
           $("#sms-subject").html(result['subject']);    
           $("#sms-body").html(result['body']);
+          $(".edusmsarea").addClass('d-none')
+          globalsmsarr = result['edusms']
+          $("#edu-sms-body").empty()
+          $("#edu-sms-link").empty()
+          
+          $("#ptfname").val(ptfname)
+          $("#cliname").val(result['clinicname'])
+          $("#ptinsid").val(ptinsid)
+          $("#ptemrid").val(ptemrid)
+          if(globalsmsarr.length > 0){
+            let checkval = ''
+            for(let i=0; i<globalsmsarr.length ; i++){
+              if(globalsmsarr[i].active == 1) continue
+              if(globalsmsarr[i].langid == result['langcode']){
+                if(bchecked == false){
+                  checkval = 'checked'
+                  bchecked = true
+                }else{
+                  checkval = ''
+                }
+                $("#edu-sms-body").append('<div class="form-check form-check-radio form-check-inline"> <label class="custom-control custom-radio d-inline-flex"> <input type="radio" class="custom-control-input smsnamelist" name="smsnamelist" value="'+globalsmsarr[i].id+'" '+checkval+'> <span class="tag custom-control-label">'+globalsmsarr[i].subname+'</span> <i class="fa fa-eye showsmscontent popup" aria-hidden="true" ><input type="hidden" id="edcategory'+globalsmsarr[i].id+'" value = "'+globalsmsarr[i].category+'"><div class="popuptext" id="myPopup'+globalsmsarr[i].id+'">'+result['clinicname'] +'<br>'+ ptfname +','+globalsmsarr[i].content+'<br>'+globalsmsarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'</div></i><a href="'+globalsmsarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'" target="_blank" ><i class="fa fa-book mt-2"  aria-hidden="true"></i></a> </label> </div><br>')
+              }else{
+                $("#edu-sms-link").append('<div class="form-check form-check-radio form-check-inline "> <label class="custom-control custom-radio d-inline-flex"> <input type="radio" class="custom-control-input smsnamelist" name="smsnamelist" value="'+globalsmsarr[i].id+'"> <span class="tag custom-control-label">'+globalsmsarr[i].subname+'</span> <i class="fa fa-eye showsmscontent popup" aria-hidden="true" ><input type="hidden" id="edcategory'+globalsmsarr[i].id+'" value = "'+globalsmsarr[i].category+'"><div class="popuptext" id="myPopup'+globalsmsarr[i].id+'">'+result['clinicname'] +'<br>'+ ptfname +','+globalsmsarr[i].content+'<br>'+globalsmsarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'</div></i><a href="'+globalsmsarr[i].link+'&id='+localStorage.getItem('chosen_clinic')+'" target="_blank" ><i class="fa fa-book mt-2"  aria-hidden="true"></i></a> </label> </div><br>')
+              }
+            }
+
+          }else{
+            $("#edu-sms-body").html("")
+          }
           $(".phonelist").empty();
+
+         
           var pcheck = "";
           var mcheck = "";
           if(result['pflag']&&result['mflag']) pcheck = "checked";
@@ -232,6 +424,12 @@ $(document).ready(function () {
               <span class="tag custom-control-label">`+result['mobile']+`</span>
             </label>`)
           );  
+          // $(".phonelist").append(
+          //   `<label class="custom-control custom-radio d-inline-flex">
+          //     <input type="radio" class="custom-control-input phoneitem" name="phoneitem" value="othersmsnum" >
+          //     <input type="text" class = "form-control otsmsnumber" id ="othersmsnum" >
+          //   </label>`
+          // ); 
           $("#sms-modal").modal("show");
         }
         else if(result['status'] == "pending"){
@@ -260,25 +458,74 @@ $(document).ready(function () {
     if($(this).val() == 1){
       $(".customemailarea").addClass("d-none");
       $(".defaultemailarea").removeClass("d-none");
+      $(".eduemailarea").addClass("d-none");
+      
     }
-    else{
+    if($(this).val() == 2){
       $(".customemailarea").removeClass("d-none");
       $(".defaultemailarea").addClass("d-none");
+      $(".eduemailarea").addClass("d-none");
+    }
+    if($(this).val() == 3){
+      $(".customemailarea").addClass("d-none");
+      $(".defaultemailarea").addClass("d-none");
+      $(".eduemailarea").removeClass("d-none");
     }
   });
   $(".smsoption").click(function(){
     if($(this).val() == 1){
       $(".customsmsarea").addClass("d-none");
       $(".defaultsmsarea").removeClass("d-none");
+      $(".edusmsarea").addClass("d-none");
+      $("#edu-sms-body").addClass("d-none");
+      
+      
     }
-    else{
+    if($(this).val() == 2){
       $(".customsmsarea").removeClass("d-none");
       $(".defaultsmsarea").addClass("d-none");
+      $(".edusmsarea").addClass("d-none");
+      $("#edu-sms-body").addClass("d-none");
+
     }
+    if($(this).val() == 3){
+      $(".customsmsarea").addClass("d-none");
+      $(".defaultsmsarea").addClass("d-none");
+      $(".edusmsarea").removeClass("d-none");
+      $("#edu-sms-body").removeClass("d-none");
+
+    }
+    
   });
   
   $("#emailsendbtn").click(function(){
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),qid:$("#chosen_item").val(),emailtype:$(".emailoption:checked").val(),custombody:$("#customemailbody").val()}, "hedis/sendemail", (xhr, err) => {
+    let slink = $(".emailnamelist:checked").val();
+    
+   
+
+    let entry = {
+      clinicid:localStorage.getItem('chosen_clinic'),
+      qid:$("#chosen_item").val(),
+      emailtype:$(".emailoption:checked").val(),
+      custombody:$("#customemailbody").val(),
+      edubody:$("#myePopup"+slink).html(),
+      educategory:$("#edemcategory"+slink).val(),
+      ptemrid : $("#eptemrid").val(),
+      ptinsid : $("#eptinsid").val(),
+      userid : localStorage.getItem('userid'),
+      edtitle : $("input[name='emailnamelist']:checked").parent('label').children('span').text(),
+      otheremail : $("#otheremail").val(),
+      bemailtype : otheremailnumber
+    }
+    for(let i = 0; i <  globalemailarr.length ; i++){
+      if(globalemailarr[i].id == slink){
+        entry.edubody = globalemailarr[i].content
+        entry.link = globalemailarr[i].link
+        entry.rtitle = globalemailarr[i].title
+      }
+    }
+    console.log(entry)
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/sendemail", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText);
         if(result['message'] == "success")
@@ -292,10 +539,37 @@ $(document).ready(function () {
       }
     });
   });
+
+  
+
   $("#smssendbtn").click(function(){
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),userid:localStorage.getItem('userid'),qid:$("#chosen_item").val(),smstype:$(".smsoption:checked").val(),custombody:$("#customsmsbody").val(),number:$(".phoneitem:checked").val(),whatsapp:$(".whatsappoption:checked").val()}, "hedis/sendsms", (xhr, err) => {
+
+    let slink = $(".smsnamelist:checked").val();
+
+    let entry =  {
+      clinicid:localStorage.getItem('chosen_clinic'),
+      userid:localStorage.getItem('userid'),
+      qid:$("#chosen_item").val(),
+      smstype:$(".smsoption:checked").val(),
+      custombody:$("#customsmsbody").val(),
+      edusmsbody:$("#myPopup"+slink).html(),
+      educategory : $("#edcategory"+slink).val(),
+      number:$(".phoneitem:checked").val(),
+      whatsapp:$(".whatsappoption:checked").val(),
+      ptinsid:$("#ptinsid").val(),
+      ptemrid:$("#ptemrid").val(),
+      edtitle : $("input[name='smsnamelist']:checked").parent('label').children('span').text()
+    }
+
+   
+    if(customsmsnumber == true){
+      entry.number = $('#othsmsnumber').val()
+    }
+   
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/sendsms", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText);
+        console.log(result)
         if(result['message'] == "pending")
           return $.growl.notice({
             message: "Need to purchase Phone number"
@@ -315,6 +589,7 @@ $(document).ready(function () {
         });
       }
     });
+
   });
   
   $(".colormodalbtn").click(function(){
@@ -323,6 +598,42 @@ $(document).ready(function () {
   $(".refreshbtn").click(function(){
     loadData();
   });
+  $(".addnewpathbtn").click(function(){
+    alert("now making code")
+  })
+  $(".getinsidbtn").click(function(){
+    let tquery = ""
+    for(let i=0; i<insidlist.length; i++){
+       tquery += "'"+insidlist[i]+"', "
+    }
+    console.log(insidlist.length)
+    let tmpname = ''
+    for (let j=0; j < options.length; j++){
+      tmpname += options[j]+" | "
+    }
+    $('#query-count').empty();
+    $('#query-count').append("Insurance Ids for " + tmpname)
+    $('.ins-id-list').empty();
+    $('.ins-id-list').append(tquery.slice(0, -2))
+    $("#ins-list-modal").modal("show");
+  })
+  $(".getemrdbtn").click(function(){
+    let tquery = ""
+    for(let i=0; i<inemrlist.length; i++){
+      if(inemrlist[i] == null) continue
+       tquery += "'"+inemrlist[i]+"', "
+    }
+    let tmpname = ''
+    for (let j=0; j < options.length; j++){
+      tmpname += options[j]+" | "
+    }
+    
+    $('#query-count').empty();
+    $('#query-count').append("Insurance Ids for " + tmpname)
+    $('.ins-id-list').empty();
+    $('.ins-id-list').append(tquery.slice(0, -2))
+    $("#ins-list-modal").modal("show");
+  })
   $(".sortbtn").click(function(){
     $(".sortoption[value='1']").prop("checked",true);
     $(".searchoption").prop("checked",false);
@@ -382,6 +693,8 @@ $(document).ready(function () {
   });
   $(".exportexcelbtn").click(function(){
     var gettingData = mySpreadsheet.getData();
+    console.log("gettingData")
+    console.log(gettingData)
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "INS ID,EMR ID,First Name,Last Name,DOB,Phone,LOB,Measure,DOS,Value1,Value2,CPT1,CPT2,ICD" + "\r\n";
     gettingData.forEach(function(rowArray) {
@@ -404,27 +717,60 @@ $(document).ready(function () {
   });
   $(".setstatusbtn").click(function(){
     var status = $(".statusoption:checked").val();
-    if(status == 6){
-      var apptdate = $(".apptdate").val();
-      var apptpcp = $(".apptpcpname").val()==0?null:$(".apptpcpname").val();
-      var apptvisittype = $(".apptvisittype").val()==""?null:$(".apptvisittype").val();
-      var lastdate = null;
-      var nextdate = null;
+    console.log("statussss")
+    console.log(status)
+
+     var apptdate
+     var apptpcp
+     var apptvisittype
+     var lastdate
+     var nextdate
+    switch(status) {
+      case '6':
+        apptdate = $(".apptdate").val();
+        apptpcp = $(".apptpcpname").val()==0?null:$(".apptpcpname").val();
+        apptvisittype = $(".apptvisittype").val()==""?null:$(".apptvisittype").val();
+        lastdate = null;
+        nextdate = null;
+        break;
+      case '4':
+        lastdate = $(".lastdate").val();
+        nextdate = $(".nextdate").val();
+        apptdate = null;
+        apptpcp = null;
+        apptvisittype = null;
+
+        break;
+      default:
+        apptdate = null;
+        lastdate = null;
+        nextdate = null;
+        apptpcp = null;
+        apptvisittype = null;
+
     }
-    else if(status == 4){
-      var lastdate = $(".lastdate").val();
-      var nextdate = $(".nextdate").val();
-      var apptdate = null;
-      var apptpcp = null;
-      var apptvisittype = null;
-    }
-    else{
-      var apptdate = null;
-      var lastdate = null;
-      var nextdate = null;
-      var apptpcp = null;
-      var apptvisittype = null;
-    }
+
+    // if(status == 6){
+    //   var apptdate = $(".apptdate").val();
+    //   var apptpcp = $(".apptpcpname").val()==0?null:$(".apptpcpname").val();
+    //   var apptvisittype = $(".apptvisittype").val()==""?null:$(".apptvisittype").val();
+    //   var lastdate = null;
+    //   var nextdate = null;
+    // }
+    // else if(status == 4){
+    //   var lastdate = $(".lastdate").val();
+    //   var nextdate = $(".nextdate").val();
+    //   var apptdate = null;
+    //   var apptpcp = null;
+    //   var apptvisittype = null;
+    // }
+    // else{
+    //   var apptdate = null;
+    //   var lastdate = null;
+    //   var nextdate = null;
+    //   var apptpcp = null;
+    //   var apptvisittype = null;
+    // }
     let entry = {
       clinicid:localStorage.getItem('chosen_clinic'),
       userid:localStorage.getItem('userid'),
@@ -437,12 +783,14 @@ $(document).ready(function () {
       lastdate:lastdate,
       nextdate:nextdate,
     }
+    
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/updateStatus", (xhr, err) => {
       if (!err) {
         if(parseInt(status) > 1)
           tmpchosenitem.css({"color":tmpcolor[parseInt(status)-1]["tcolor"],"background":tmpcolor[parseInt(status)-1]["bcolor"]});
         else
           tmpchosenitem.css({"color":"#3c4858","background":"#FFF"});
+          
         tmpchosenitem.children().eq(23).html(status);
       } else {
         return $.growl.error({
@@ -600,6 +948,93 @@ $(document).ready(function () {
     $("#chosen_note").val($(this).attr("key"));
     $("#update-note-modal").modal("show");
   });
+
+  function resetdelfunc (entry) {
+    console.log(entry)
+    swal({
+			title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+		}, function(inputValue) {
+			if (inputValue) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/deleterowbyid", (xhr, err) => {
+          if (!err) {
+            bResetCheck = true
+            if(entry.type == 0){
+              $('#hedisreport').jexcel('setValueFromCoords',12, entry.tableid, '')
+              $('#hedisreport').jexcel('setValueFromCoords',13, entry.tableid, '')
+              $('#hedisreport').jexcel('setValueFromCoords',14, entry.tableid, '')
+              $('#hedisreport').jexcel('setValueFromCoords',15, entry.tableid, '')
+              $('#hedisreport').jexcel('setValueFromCoords',16, entry.tableid, '')
+              $('#hedisreport').jexcel('setValueFromCoords',17, entry.tableid, '')
+              $("#reset-del-modal").modal("hide");
+              bResetCheck = false
+            }
+            if(entry.type == 1 ){
+              $('#hedisreport').jexcel('deleteRow',entry.tableid)
+              $("#reset-del-modal").modal("hide");
+            }
+            if(entry.type == 2 ){
+              // $('#hedisreport').jexcel('deleteRow',entry.tableid)
+              $("#reset-del-modal").modal("hide");
+              loadData();
+
+            }
+          }
+        })
+			}
+		});
+  }
+  $("#resetmeasure").click(function(){
+    let entry = {
+      rowid : $('#drowid').val(),
+      tableid : $('#dtableid').val(),
+      dos : $('#ddos').val(),
+      measureid : $('#dmeasureid').val(),
+      mid:$('#dmid').val(),
+      clid:localStorage.getItem('chosen_clinic'),
+      insid: insid['insid'],
+      memid:$('#dinsmid').val(),
+      type:0
+    }
+    
+    resetdelfunc(entry)
+  })
+  $("#delmeasure").click(function(){
+    let entry = {
+      rowid : $('#drowid').val(),
+      tableid : $('#dtableid').val(),
+      dos : $('#ddos').val(),
+      measureid : $('#dmeasureid').val(),
+      mid:$('#dmid').val(),
+      clid:localStorage.getItem('chosen_clinic'),
+      insid: insid['insid'],
+      memid:$('#dinsmid').val(),
+      type:1
+    }
+    resetdelfunc(entry)
+    
+
+  })
+  $("#delpatient").click(function(){
+    let entry = {
+      rowid : $('#drowid').val(),
+      tableid : $('#dtableid').val(),
+      dos : $('#ddos').val(),
+      measureid : $('#dmeasureid').val(),
+      mid:$('#dmid').val(),
+      clid:localStorage.getItem('chosen_clinic'),
+      insid: insid['insid'],
+      memid:$('#dinsmid').val(),
+      type:2
+    }
+    resetdelfunc(entry)
+
+  })
+
   $("#editnotebtn").click(function(){
     let entry={
       id:$("#chosen_note").val(),
@@ -641,6 +1076,357 @@ $(document).ready(function () {
 			}
 		});
   });
+
+  function addDeviceListeners(device) {
+    device.on("registered", function () {
+      console.log("Twilio.Device Ready to make and receive calls!");
+      // callControlsDiv.classList.remove("hide");
+    });
+
+    device.on("error", function (error) {
+      console.log("Twilio.Device Error: " + error.message);
+    });
+
+    // device.on("incoming", handleIncomingCall);
+
+    device.audio.on("deviceChange", updateAllAudioDevices.bind(device));
+
+    // Show audio selection UI if it is supported by the browser.
+    if (device.audio.isOutputSelectionSupported) {
+      // audioSelectionDiv.classList.remove("hide");
+      console.log("isOutputSelectionSupported")
+    }
+  }
+  function updateUIAcceptedOutgoingCall(call) {
+    console.log("Call in progress ...");
+    console.log(call)
+    // callButton.disabled = true;
+    // outgoingCallHangupButton.classList.remove("hide");
+    // volumeIndicators.classList.remove("hide");
+
+    let starttime = new Date().getTime();
+    startcalltime = new Date().getTime();
+    calltimer = setInterval(function() {
+
+      // Get today's date and time
+      var now = new Date().getTime();
+    
+      // Find the distance between now and the count down date
+      var distance =  now - starttime;
+    
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      if(hours < 10) hours = '0'+hours
+      if(minutes < 10) minutes = '0'+minutes
+      if(seconds < 10) seconds = '0'+seconds
+      // Display the result in the element with id="demo"
+      document.getElementById("duration-demo").innerHTML =  hours + " : "
+      + minutes + " : " + seconds + " s ";
+    }, 1000);
+
+
+    bindVolumeIndicators(call);
+  }
+
+  function bindVolumeIndicators(call) {
+    call.on("volume", function (inputVolume, outputVolume) {
+      var inputColor = "red";
+      if (inputVolume < 0.5) {
+        inputColor = "green";
+      } else if (inputVolume < 0.75) {
+        inputColor = "yellow";
+      }
+
+      inputVolumeBar.style.width = Math.floor(inputVolume * 300) + "px";
+      inputVolumeBar.style.height = "5px";
+      inputVolumeBar.style.background = inputColor;
+
+      var outputColor = "red";
+      if (outputVolume < 0.5) {
+        outputColor = "green";
+      } else if (outputVolume < 0.75) {
+        outputColor = "yellow";
+      }
+
+      outputVolumeBar.style.width = Math.floor(outputVolume * 300) + "px";
+      outputVolumeBar.style.height = "5px";
+      outputVolumeBar.style.background = outputColor;
+    });
+  }
+  function updateUIDisconnectedOutgoingCall() {
+    console.log("Call disconnected.");
+    $('.callringbtn').prop('disabled', false);
+    $('.callringbtn').addClass('btn-success');
+    $('.callringbtn').removeClass('bclicked');
+    clearInterval(calltimer);
+    let endcalltime = new Date().getTime();
+    let gduration =  Math.floor((endcalltime - startcalltime ) / 1000);
+    
+    console.log("gduration")
+    console.log(gduration)
+
+    let entry ={
+      ptinsid : patientinsid,
+      ptemrid : patientemrid,
+      clinicid : localStorage.getItem('chosen_clinic'),
+      userid : localStorage.getItem('userid'),
+      ptnum : gcallnumber,
+      cmid : $("#callmid").val(),
+      durat: gduration
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/gettingtwiliologlist", (xhr, err) => {
+      if (!err) {
+        console.log("clicked")
+      } else {
+        return $.growl.error({
+          message: "Action Failed"
+        });
+      }
+    });
+    
+  }
+  function updateDevices(selectEl, selectedDevices) {
+    selectEl.innerHTML = "";
+
+    odevice.audio.availableOutputDevices.forEach(function (odevice, id) {
+      var isActive = selectedDevices.size === 0 && id === "default";
+      selectedDevices.forEach(function (odevice) {
+        if (odevice.deviceId === id) {
+          isActive = true;
+        }
+      });
+
+      // var option = document.createElement("option");
+      // option.label = odevice.label;
+      // option.setAttribute("data-id", id);
+      // if (isActive) {
+      //   option.setAttribute("selected", "selected");
+      // }
+      selectEl.appendChild(option);
+    });
+  }
+  async function getAudioDevices() {
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+    updateAllAudioDevices.bind(odevice);
+  }
+
+  function updateAllAudioDevices() {
+    if (odevice) {
+      // updateDevices(speakerDevices, odevice.audio.speakerDevices.get());
+      // updateDevices(ringtoneDevices, odevice.audio.ringtoneDevices.get());
+    }
+  }
+  
+
+  
+  $('#othernumber').on('click',function(){
+    if($(this).attr('data-click-state') == 1) {
+        $(this).attr('data-click-state', 0);
+        customnumber = true
+        $("#patient-num").css("display", "none");
+        $("#customphone").css("display", "block");
+        $(this).html('<i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Patient Number ')
+      }
+    else {
+      $(this).attr('data-click-state', 1);
+
+      customnumber = false
+      $("#patient-num").css("display", "block");
+      $("#customphone").css("display", "none");
+      $(this).html('<i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call Number ')
+    }
+  });
+
+  
+  $('#sms-othernumber').on('click',function(){
+    if($(this).attr('data-click-state') == 1) {
+        $(this).attr('data-click-state', 0);
+        customsmsnumber = true
+        $(".phonelist").css("display", "none");
+        $("#othsmsnumber").css("display", "block");
+        $(this).html('<i class="fa fa-commenting" aria-hidden="true" style="font-size: 25px;"></i> Patient Number ')
+      }
+    else {
+      $(this).attr('data-click-state', 1);
+
+      customsmsnumber = false
+      $(".phonelist").css("display", "block");
+      $("#othsmsnumber").css("display", "none");
+      $(this).html('<i class="fa fa-commenting" aria-hidden="true" style="font-size: 25px;"></i> Text Number ')
+    }
+  });
+  $('#email-other').on('click',function(){
+    if($(this).attr('data-click-state') == 1) {
+        $(this).attr('data-click-state', 0);
+        otheremailnumber = true
+        $(".other-email").css("display", "block");
+        $("#ptemailtag").css("display", "none");
+        
+      $(this).html('<i class="fa fa-envelope-o" aria-hidden="true" style="font-size: 25px;"></i> Patient Email ')
+      }
+    else {
+      $(this).attr('data-click-state', 1);
+
+      otheremailnumber = false
+      $("#otheremail").val("")
+      $(".other-email").css("display", "none");
+      $("#ptemailtag").css("display", "block");
+
+        $(this).html('<i class="fa fa-envelope-o" aria-hidden="true" style="font-size: 25px;"></i> Another  Email ')
+      
+    }
+  });
+
+  
+  $(document).on("click",".callringbtn",function(){
+    
+  
+    $('.callringbtn').prop('disabled', true);
+    $('.callringbtn').addClass('bclicked');
+    $('.callringbtn').removeClass('btn-success');
+
+    if(customnumber == true){
+      gcallnumber = document.getElementById('customphone').value 
+    }else{
+      let tmpnum = $("#patient-num").text();
+      gcallnumber = '+1'+tmpnum.replaceAll('-','')
+    }
+
+    // let entry ={
+    //   ptinsid : patientinsid,
+    //   ptemrid : patientemrid,
+    //   clinicid : localStorage.getItem('chosen_clinic'),
+    //   userid : localStorage.getItem('userid'),
+    //   ptnum : gcallnumber
+    // }
+    // sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/gettingtwiliologlist", (xhr, err) => {
+    //   if (!err) {
+    //     console.log("clicked")
+    //   } else {
+    //     return $.growl.error({
+    //       message: "Action Failed"
+    //     });
+    //   }
+    // });
+  
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/getcalltoken", async (xhr, err) => {
+          if (!err) {
+            let token = JSON.parse(xhr.responseText)['token'];
+            console.log(token)
+            try {
+              odevice = new Twilio.Device(token)
+            } catch (error) {
+              console.log(err);
+              console.log("An error occurred. See your browser console for more information.");
+            }
+            addDeviceListeners(odevice);
+            
+            var params = {
+              // get the phone number to call from the DOM
+              // To: '+16464680123',
+              To:gcallnumber
+            };
+        
+            if (odevice) {
+              console.log(`Attempting to call ${params.To} ...`);
+              const call = await odevice.connect({ params });
+        
+              call.on('error', (error) => {
+                console.log('An error has occurred: ', error);
+              });
+              
+              call.on("accept", updateUIAcceptedOutgoingCall);
+              call.on("disconnect", updateUIDisconnectedOutgoingCall);
+              call.on("cancel", updateUIDisconnectedOutgoingCall);
+
+             
+              outgoingCallHangupButton.onclick = () => {
+                console.log("Hanging up ...");
+                $('.callringbtn').prop('disabled', false);
+                $('.callringbtn').addClass('btn-success');
+                $('.callringbtn').removeClass('bclicked');
+                    clearInterval(calltimer);
+                    call.disconnect();
+              };
+        
+            } else {
+              console.log("Unable to make call.");
+            }
+          }
+          
+
+    })
+  })
+ 
+  
+ 
+  $(document).on("click",".phonecallbtn",function(){
+
+    let ptname = $(this).parent().parent().children().eq(4).html() + " " +$(this).parent().parent().children().eq(5).html()
+    let ptnum = $(this).parent().parent().children().eq(7).html()
+    document.getElementById('patient-name').innerHTML = ptname
+    document.getElementById('patient-num').innerHTML = ptnum
+
+    let measureid = $(this).parent().parent().children().eq(24).html()
+    $("#callmid").val( measureid) 
+
+    outputVolumeBar = document.getElementById("output-volume");
+    inputVolumeBar = document.getElementById("input-volume");
+    outgoingCallHangupButton = document.getElementById("closeringbtn");
+
+    patientemrid = $(this).parent().parent().children().eq(3).html()
+    patientinsid = $(this).parent().parent().children().eq(2).html()
+
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/checkcalltime", (xhr, err) => {
+      if (!err) {
+
+        let result = JSON.parse(xhr.responseText);
+        if(result['status'] == "success"){
+          $("#callcounts").html(result['counts']);  
+          
+          if(result['counts'] < 5){
+            $('.callringbtn').prop('disabled', true);
+            $('.callringbtn').addClass('bclicked');
+            $('.callringbtn').removeClass('btn-success');
+            alert("you have to charge call time")
+          }else{
+         
+            $('.callringbtn').prop('disabled', false);
+            $('.callringbtn').addClass('btn-success');
+            $('.callringbtn').removeClass('bclicked');
+          }
+        }  
+        $("#call-patient-modal").modal({backdrop: 'static', keyboard: false},"show");
+
+
+      } else {
+        return $.growl.error({
+          message: "Getting Available call time error"
+        });
+      }
+    });
+   
+  })
+  $(document).on("click",".delrowbtn",function(){
+    
+    let rowid = $(this).parent().parent().children().eq(1).html()
+    let tableid = $(this).parent().parent().children().eq(1).attr("data-y")
+    let dos = $(this).parent().parent().children().eq(13).html()
+    let measureid = $(this).parent().parent().children().eq(24).html()
+    let insmemid = $(this).parent().parent().children().eq(2).html()
+    let clinicid = localStorage.getItem('chosen_clinic')
+    let dinsid = insid['insid']
+    let mid = $(this).parent().parent().children().eq(3).html()
+    $('#drowid').val(rowid)
+    $('#dtableid').val(tableid)
+    $('#ddos').val(dos)
+    $('#dmeasureid').val(measureid)
+    $('#dmid').val(mid)
+    $('#dinsmid').val(insmemid)
+    console.log(rowid, tableid,dos,measureid,clinicid,mid,dinsid,insmemid)
+    $("#reset-del-modal").modal("show");
+  })
   $(document).on("click",".viewresultbtn",function(){
     $("#patient-modal-title").html($(this).parent().parent().children().eq(4).html()+" "+$(this).parent().parent().children().eq(5).html());
     $("#patient-modal-name").html($(this).parent().parent().children().eq(4).html()+" "+$(this).parent().parent().children().eq(5).html());
@@ -888,6 +1674,10 @@ $(document).ready(function () {
   });
 });
 let changed = function(instance, cell, x, y, value) {
+  if(bResetCheck) {
+    return false;
+  }
+  
   var cellName = jexcel.getColumnNameFromId([0,y]);
   var cellName1 = jexcel.getColumnNameFromId([1,y]);
   var cellName2 = jexcel.getColumnNameFromId([23,y]);
@@ -1008,6 +1798,8 @@ async function loadData(){
     if (!err) {
       $(".progress-load").addClass("d-none");
       let data = JSON.parse(xhr.responseText)['data'];
+      console.log("data")
+      console.log(data)
       let ptcnt = JSON.parse(xhr.responseText)['ptcnt'];
       let measurecnt = JSON.parse(xhr.responseText)['measurecnt'];
       $(".totalptcnt").html(ptcnt)
@@ -1017,7 +1809,17 @@ async function loadData(){
       let tmpnoteclass = "";
       let tmpemrid = "";
       let tmpptfname = "";
+      insidlist=[]
+      inemrlist=[]
       for(var i=0;i<data.length;i++){
+
+        if(!insidlist.includes(data[i]['mid'])){
+          insidlist.push(data[i]['mid'])
+        }
+        if(!inemrlist.includes(data[i]['emr_id'])){
+          inemrlist.push(data[i]['emr_id'])
+        }
+        
         if(data[i]['multicheck'] == 1){
           if(data[i]['emr_id'] == tmpemrid&&data[i]['ptfname'] == tmpptfname){
             if(data[i]['Rates'] == tmprate){
@@ -1041,6 +1843,9 @@ async function loadData(){
         }
         else{
           var tmpmeasure = data[i]['measure'];
+          if(data[i]['measureid'] == null){
+            tmpmeasure = data[i]['measure']+"( X )";
+          }
         }
         if(tmpmid != data[i]['mid']){
           tmpclass = "";
@@ -1070,8 +1875,8 @@ async function loadData(){
           data[i]['ptlname'], 
           dob, 
           data[i]['phone'], 
-          "<i class='fa fa-file-text-o viewresultbtn "+tmpclass+"'>&nbsp;</i><i class='fa fa-sticky-note"+(data[i]['notecheck'] != null?"":"-o")+" notesbtn "+tmpclass+" "+tmpnoteclass+"'></i>", 
-          "<i class='ti-printer printletter "+tmpclass+"'></i>&nbsp;"+((data[i]['email']!=null&&data[i]['email']!="")?"<i class='ti-email sendemail "+tmpclass+"'></i>":"")+"&nbsp;<i class='ti-mobile sendsms "+tmpclass+"'></i>", 
+          "<i class='fa fa-file-text-o viewresultbtn "+tmpclass+"'>&nbsp;</i><i class='fa fa-sticky-note"+(data[i]['notecheck'] != null?"":"-o")+" notesbtn "+tmpclass+" "+tmpnoteclass+"'></i> <i class='fa fa-trash-o delrowbtn' ></i>", 
+          "<i class='ti-printer printletter "+tmpclass+"'></i>&nbsp;"+((data[i]['email']!=null&&data[i]['email']!="")?"<i class='ti-email sendemail "+tmpclass+"'></i>":"")+"&nbsp;<i class='ti-mobile sendsms "+tmpclass+"'></i>&nbsp; <i class='fa fa-phone phonecallbtn' aria-hidden='true' value = 'dragon' style='cursor: pointer;'></i>", 
           data[i]['mlob'], 
           "<i class='ti-eye statusbtn'></i>&nbsp;<i class='mdi mdi-apps viewmlogbtn'></i>", 
           tmpmeasure, 
@@ -1082,7 +1887,7 @@ async function loadData(){
           (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['cpt2'],
           (data[i]['dos']==null||(data[i]['value1']==null&&data[i]['value2']==null))?"":data[i]['icd1'], 
           ((data[i]['dos']!=null&&data[i]['dos']!="")&&(data[i]['value1']!=null&&data[i]['value1']!=""))?"done":"notdone",
-          (data[i]['status'] == 4?"NONC":(data[i]['status'] == 5?"NEVER":(data[i]['status'] == 6?"IAPPT":(data[i]['status'] == 7?"PTR":(data[i]['status'] == 8?"MR":(data[i]['status'] == 9?"INSA":(data[i]['status'] == 10?"MHIGH":(data[i]['status'] == 11?"CNINS":data[i]['status'] == 12?"DEC":(data[i]['status'] == 13?"FileG":(data[i]['status'] == 14?"PCPC":"")))))))))),
+          (data[i]['status'] == 4?"NONC":(data[i]['status'] == 5?"NEVER":(data[i]['status'] == 6?"IAPPT":(data[i]['status'] == 7?"PTR":(data[i]['status'] == 8?"MR":(data[i]['status'] == 9?"INSA":(data[i]['status'] == 10?"MHIGH":(data[i]['status'] == 11?"CNINS":data[i]['status'] == 12?"DEC":(data[i]['status'] == 13?"FileG":(data[i]['status'] == 14?"PCPC":(data[i]['status'] == 15?"EXCL":(data[i]['status'] == 16?"AWAY":"")))))))))))),
           (data[i]['notesflag']!=null)?"notesflag":"",
           (data[i]['flag']==1)?"marked":"notmarked",
           data[i]['status'],
@@ -1094,14 +1899,19 @@ async function loadData(){
           data[i]['apptpcp'],
           data[i]['apptvisit'],
           data[i]['rstatus']==1?"Reported":"",
+          data[i]['email']
         ];
         if(checkview == 1)
           hedisdata.push(tmpdata);
         else if(checkview == 2){
-          if((data[i]['status'] == 1 || data[i]['status'] == 2 || data[i]['status'] == 3 || data[i]['status'] == 8 || data[i]['status'] == 9 || data[i]['status'] == 13) && data[i]['gstatus'] != 1) hedisdata.push(tmpdata);
+          if((data[i]['status'] == 1 || data[i]['status'] == 2 || data[i]['status'] == 3 || data[i]['status'] == 8 || data[i]['status'] == 9 || data[i]['status'] == 13 || data[i]['status'] == 11) && data[i]['gstatus'] != 1) hedisdata.push(tmpdata);
         }
         else if(checkview == 3){
-          if((data[i]['status'] == 0 || data[i]['status'] == 4 || data[i]['status'] == 5 || data[i]['status'] == 6 || data[i]['status'] == 7 || data[i]['status'] == 10 || data[i]['status'] == 12 || data[i]['status'] == 14) && data[i]['gstatus'] != 1) hedisdata.push(tmpdata);
+          if((data[i]['status'] == 0 || data[i]['status'] == 4 || data[i]['status'] == 5 || data[i]['status'] == 6 || data[i]['status'] == 7 || data[i]['status'] == 10 || data[i]['status'] == 12 || data[i]['status'] == 14 || data[i]['status'] == 15 || data[i]['status'] == 16) && data[i]['gstatus'] != 1) 
+          {
+            hedisdata.push(tmpdata);
+            
+          }
         }
         else if(checkview == 4){
           if(data[i]['hstatus'] == 3) hedisdata.push(tmpdata);
@@ -1182,6 +1992,7 @@ async function loadData(){
               title:'Phone',
               width:100
           },
+        
           {
               type: 'html',
               title:'View & Notes',
@@ -1307,6 +2118,12 @@ async function loadData(){
               type: 'hidden',
               title:'Reported',
               width:50
+          },
+          {
+            type: 'hidden',
+            title:'email',
+            readOnly:true,
+            width:0
           }
         ],
         filters: true,
@@ -1317,8 +2134,8 @@ async function loadData(){
           }
           if (cell.innerHTML == 'done') {
               cell.parentNode.style.color = tmpcolor[0]["tcolor"];
-              cell.parentNode.childNodes[11].childNodes[0].style.display = 'none';
-              cell.parentNode.childNodes[11].childNodes[0].disabled = true;
+              // cell.parentNode.childNodes[11].childNodes[0].style.display = 'none';
+              // cell.parentNode.childNodes[11].childNodes[0].disabled = true;
           }
           if (cell.innerHTML == 'NONC') {
               cell.parentNode.style.color = tmpcolor[3]["tcolor"];
@@ -1372,6 +2189,16 @@ async function loadData(){
             cell.parentNode.style.color = tmpcolor[7]["tcolor"];
             cell.parentNode.style.backgroundColor = tmpcolor[7]["bcolor"];
           }
+          if (cell.innerHTML == 'EXCL') {
+            cell.parentNode.style.color = tmpcolor[14]["tcolor"];
+            cell.parentNode.style.backgroundColor = tmpcolor[14]["bcolor"];
+          }
+          if (cell.innerHTML == 'AWAY') {
+            cell.parentNode.style.color = tmpcolor[15]["tcolor"];
+            cell.parentNode.style.backgroundColor = tmpcolor[15]["bcolor"];
+          }
+          
+          
         },
         onchange: changed,
         onselection: selectionActive
