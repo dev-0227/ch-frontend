@@ -82,23 +82,20 @@
             <div class="card-body p-6">
                 <div class="panel panel-primary">
                     <div class=" tab-menu-heading">
-                        <div class="tabs-menu1">
-                            <!-- Tabs -->
-                            <ul class="nav panel-tabs">
-                                <li><a href="#hdomain_tab" class="active" data-toggle="tab">Healthcare Domain</a></li>
-                                <li><a href="#measure_tab" data-toggle="tab">Measure</a></li>
-                                <li><a href="#cpticd_tab" data-toggle="tab">CPT ICD MAP</a></li>
-                                <li><a href="#constructor_tab" data-toggle="tab">Constructor</a></li>
-                                <li><a href="#hdate_tab" data-toggle="tab">Hedis Date</a></li>
-                                <li><a href="#color_tab" data-toggle="tab">Color Theme</a></li>
-                                <li><a href="#nmeasure_tab" data-toggle="tab">Measure Not Identified</a></li>
-                                <li><a href="#imeasure_tab" data-toggle="tab">Ignore Measure</a></li>
-                                <li><a href="#measuretime_tab" data-toggle="tab">Measure Time Frames</a></li>
-                                <li><a href="#hedisaliases_tab" data-toggle="tab">Hedis File Aliases</a></li>
-                                <li><a href="#inscat_tab" data-toggle="tab">Ins Domain</a></li>
-                                <li><a href="#education_tab" data-toggle="tab">Education Map</a></li>
-                            </ul>
-                        </div>
+                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                            <li class="nav-item"><a href="#hdomain_tab" class="nav-link active" data-bs-toggle="tab">Healthcare Domain</a></li>
+                            <li class="nav-item"><a href="#measure_tab" class="nav-link" data-bs-toggle="tab">Measure</a></li>
+                            <li class="nav-item"><a href="#cpticd_tab" class="nav-link" data-bs-toggle="tab">CPT ICD MAP</a></li>
+                            <li class="nav-item"><a href="#constructor_tab" class="nav-link" data-bs-toggle="tab">Constructor</a></li>
+                            <li class="nav-item"><a href="#hdate_tab" class="nav-link" data-bs-toggle="tab">Hedis Date</a></li>
+                            <li class="nav-item"><a href="#color_tab" class="nav-link" data-bs-toggle="tab">Color Theme</a></li>
+                            <li class="nav-item"><a href="#nmeasure_tab" class="nav-link" data-bs-toggle="tab">Measure Not Identified</a></li>
+                            <li class="nav-item"><a href="#imeasure_tab" class="nav-link" data-bs-toggle="tab">Ignore Measure</a></li>
+                            <li class="nav-item"><a href="#measuretime_tab" class="nav-link" data-bs-toggle="tab">Measure Time Frames</a></li>
+                            <li class="nav-item"><a href="#hedisaliases_tab" class="nav-link" data-bs-toggle="tab">Hedis File Aliases</a></li>
+                            <li class="nav-item"><a href="#inscat_tab" class="nav-link" data-bs-toggle="tab">Ins Domain</a></li>
+                            <li class="nav-item"><a href="#education_tab" class="nav-link" data-bs-toggle="tab">Education Map</a></li>
+                        </ul>
                     </div>
                     <div class="panel-body tabs-menu-body tab_area">
                         <div class="tab-content">
@@ -106,8 +103,10 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
-                                                <h3 class="card-title ">Healthcare Domain</h3>
+                                            <div class="card-header border-0 pt-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Healthcare Domain</h3>
+                                                </div>
                                                 <div class="card-options">
                                                     <button id="hdomainaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add a Domain</button>
                                                     <input type="hidden" id="chosen_hdomain" />
@@ -136,7 +135,8 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
+                                                <div class="card-title"></div>
                                                 <h3 class="card-title ">Measures</h3>
                                                 <div class="card-options">
                                                     <button id="measureaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add a Measure</button>
@@ -172,8 +172,9 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
-                                                <h3 class="card-title ">CPT ICD MAP</h3>
+                                            <div class="card-header border-0 pt-6">
+                                                <div class="card-title">
+                                                <h3 class="card-title ">CPT ICD MAP</h3></div>
                                                 <div class="card-options">
                                                     <button id="cimaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add CPT ICD</button>
                                                     <input type="hidden" id="chosen_cim" />
@@ -208,8 +209,8 @@
                             <div class="tab-pane " id="constructor_tab">
                                 <div class="tabs-menu1">
                                     <ul class="nav panel-tabs">
-                                        <li><a href="#confile_tab" class="active" data-toggle="tab">File Name</a></li>
-                                        <li><a href="#confield_tab" data-toggle="tab">Field Type</a></li>
+                                        <li class="nav-item"><a href="#confile_tab"  class="nav-link active" data-bs-toggle="tab">File Name</a></li>
+                                        <li class="nav-item"><a href="#confield_tab" class="nav-link" data-bs-toggle="tab">Field Type</a></li>
                                     </ul>
                                 </div>
                                 <div class="tab-content">
@@ -218,7 +219,7 @@
                                         <div class="row row-cards mt-5">
                                             <div class="col-lg-12 col-xl-3">
                                                 <div class="card">
-                                                    <div class="card-header">
+                                                    <div class="card-header border-0 pt-6">
                                                         <div class="card-title">Params</div>
                                                     </div>
                                                     <div class="card-body">
@@ -421,7 +422,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">Color Theme</h3>
                                                 <div class="card-options">
                                                     <button id="coloraddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add Color</button>
@@ -456,7 +457,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">Ignore Measures</h3>
                                                 <div class="card-options">
                                                     <button id="imeasureaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add a Measure</button>
@@ -485,7 +486,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">Measures Not Identified</h3>
                                                 <div class="card-options">
                                                     <input type="hidden" id="chosen_nmeasure" />
@@ -512,7 +513,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">Time Frames</h3>
                                                 <div class="card-options">
                                                     <button id="mtimeaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add a Time Frame</button>
@@ -543,7 +544,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">File Aliases</h3>
                                             </div>
                                             <div class="table-responsive">
@@ -567,7 +568,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">Domain By Insurance</h3>
                                                 <div class="card-options">
                                                     <button id="idomainaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add a Domain</button>
@@ -596,7 +597,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
-                                            <div class="card-header ">
+                                            <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">Measure Education List</h3>
                                                 <div class="card-options">
                                                     <!-- <button id="idomainaddbtn" type="button" class="btn btn-md btn-primary"><i class="fe fe-plus mr-2"></i>Add a Domain</button>
@@ -634,7 +635,7 @@
     </div><!-- COL-END -->
 </div>
 <!-- ROW-1 CLOSED -->
-<div class="modal fade" id = "hdomain-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="hdomain-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">

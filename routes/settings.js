@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 
 router.get("/setting", (req, res, next) => {
@@ -53,6 +52,38 @@ router.get("/clinic", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Clinics",
         pageKey: "../settings/clinic"
+    });
+});
+
+router.get("/hedissetting", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Hedis Settings",
+        pageKey: "../settings/hedissetting"
+    });
+});
+
+router.get("/paymentsetting", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Payment Settings",
+        pageKey: "../settings/paymentsetting"
+    });
+});
+router.get("/communicationsetting", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Communication Settings",
+        pageKey: "../settings/communicationsetting"
+    });
+});
+router.get("/contactsetting", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Contact Settings",
+        pageKey: "../settings/contactsetting"
+    });
+});
+router.get("/diagnosisgroup", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Diagnosis Group",
+        pageKey: "../settings/diagnosisgroup"
     });
 });
 

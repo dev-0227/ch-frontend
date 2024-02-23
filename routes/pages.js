@@ -14,8 +14,6 @@ router.get("/qrcode", (req, res, next) => {
     });
 });
 
-
-
 router.get("/profile", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Profile",
@@ -29,30 +27,8 @@ router.get("/hedis", (req, res, next) => {
         pageKey: "../pages/hedis"
     });
 });
-router.get("/hedisloader", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Loader",
-        pageKey: "../pages/hedisloader"
-    });
-});
-router.get("/clinicdataloader", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Data Management",
-        pageKey: "../pages/clinicdataloader"
-    });
-});
-router.get("/ptloader", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Patient Loader",
-        pageKey: "../pages/ptloader"
-    });
-});
-router.get("/ffsloader", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "FFS Loader",
-        pageKey: "../pages/ffsloader"
-    });
-});
+
+
 router.get("/ptlist", (req, res, next) => {
     res.render("jexcelblank", {
         pageTitle: "Patient List",
@@ -95,36 +71,14 @@ router.get("/invoice", (req, res, next) => {
         pageKey: "../pages/invoice"
     });
 });
-router.get("/hedissetting", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Settings",
-        pageKey: "../pages/hedissetting"
-    });
-});
-router.get("/paymentsetting", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Payment Settings",
-        pageKey: "../pages/paymentsetting"
-    });
-});
-router.get("/communicationsetting", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Communication Settings",
-        pageKey: "../pages/communicationsetting"
-    });
-});
+
 router.get("/generatemodule", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Generate Module",
         pageKey: "../pages/generatemodule"
     });
 });
-router.get("/contactsetting", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Contact Settings",
-        pageKey: "../pages/contactsetting"
-    });
-});
+
 router.get("/notesview", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "All Notes",
@@ -314,10 +268,5 @@ router.get("/hedisquery", (req, res, next) => {
         pageKey: "../pages/hedisquerybuilder"
     });
 });
-router.get("/diagnosisgroup", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Diagnosis Group",
-        pageKey: "../pages/diagnosisgroup"
-    });
-});
+
 module.exports = router;

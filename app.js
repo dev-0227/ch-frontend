@@ -6,6 +6,7 @@ const app = express();
 const login = require('./routes/login');
 const pages = require('./routes/pages');
 const settings = require('./routes/settings');
+const loaders = require('./routes/loaders');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -20,6 +21,7 @@ app.use('/assets', express.static(path.join(__dirname, 'views/assets')));
 app.use('/', login);
 app.use('/pages', pages);
 app.use('/settings', settings);
+app.use('/loaders', loaders);
 
 
 

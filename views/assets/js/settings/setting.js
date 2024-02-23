@@ -103,22 +103,25 @@ $(document).ready(async function () {
     ]
   });
   $(document).on("click","#questionaddbtn",function(){
+    $("#question").val('');
     $("#question-add-modal").modal("show");
   });
   $("#sqaddbtn").click(function (e) {
+    if($("#question").val() == ""){
+      toastr.info('Please enter Question');
+      $("#question").focus();
+      return;
+    }
     let entry = {
       question: document.getElementById('question').value,
       status: document.getElementById('sqstatus').value
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/addsq", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          $("#question-add-modal").modal("hide");
+          return toastr.success("Action successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -127,6 +130,7 @@ $(document).ready(async function () {
     
   });
   $(document).on("click",".editsqbtn",function(){
+    $("#squestion").val('');
     $("#chosen_sq").val($(this).parent().attr("idkey"));
     let entry = {
       id: $("#chosen_sq").val(),
@@ -138,13 +142,16 @@ $(document).ready(async function () {
         $("#esqstatus").val(result[0]['status']);
         $("#question-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error("Action Failed");
       }
     });
   });
   $("#sqeditbtn").click(function (e) {
+    if($("#squestion").val() == ""){
+      toastr.info('Please enter Question');
+      $("#squestion").focus();
+      return;
+    }
     let entry = {
       id: document.getElementById('chosen_sq').value,
       question: document.getElementById('squestion').value,
@@ -152,13 +159,10 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/updatesq", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          $("#question-edit-modal").modal("hide");
+          return toastr.success("Action successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -169,35 +173,44 @@ $(document).ready(async function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deletesq", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deletesq", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               squestiontable.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error("Action Failed");
           }
         });
-			}
+      }
 		});
   });
 
   //Validation Key Area
   $(document).on("click","#vkeyadd-btn",function(){
+    $("#vkey").val('');
     $("#vkey-add-modal").modal("show");
   });
-  $("#vkeyaddbtn").click(function (e) {
+  $("#vkeyaddbtn").click(function (e) 
+  {
+    if($("#vkey").val() == ""){
+      toastr.info('Please enter Key');
+      $("#vkey").focus();
+      return;
+    }
     let entry = {
       clinicid: localStorage.getItem('chosen_clinic'),
       name: document.getElementById('vkey').value,
@@ -205,13 +218,10 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/addvkey", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          $("#vkey-add-modal").modal("hide");
+          return toastr.success("Action successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -220,6 +230,7 @@ $(document).ready(async function () {
     
   });
   $(document).on("click",".editvkeybtn",function(){
+    $("#evkey").val('');
     $("#chosen_vkey").val($(this).parent().attr("idkey"));
     let entry = {
       id: $("#chosen_vkey").val(),
@@ -231,13 +242,17 @@ $(document).ready(async function () {
         $("#evkeystatus").val(result[0]['status']);
         $("#vkey-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error("Action Failed");
       }
     });
   });
-  $("#vkeyeditbtn").click(function (e) {
+  $("#vkeyeditbtn").click(function (e) 
+  {
+    if($("#evkey").val() == ""){
+      toastr.info('Please enter Key');
+      $("#evkey").focus();
+      return;
+    }
     let entry = {
       id: document.getElementById('chosen_vkey').value,
       name: document.getElementById('evkey').value,
@@ -245,13 +260,10 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/updatevkey", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          $("#vkey-edit-modal").modal("hide");
+          return toastr.success("Action successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -262,35 +274,43 @@ $(document).ready(async function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deletevkey", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deletevkey", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               vkeytable.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error("Action Failed");
           }
         });
-			}
+      }
 		});
   });
 
   //Role Area
   $(document).on("click","#roleadd-btn",function(){
+    $("#role").val('');
     $("#role-add-modal").modal("show");
   });
   $("#roleaddbtn").click(function (e) {
+    if($("#role").val() == ""){
+      toastr.info('Please enter Role');
+      $("#role").focus();
+      return;
+    }
     let entry = {
       clinicid: localStorage.getItem('chosen_clinic'),
       name: document.getElementById('role').value,
@@ -298,13 +318,10 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/addrole", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          $("#role-add-modal").modal("hide");
+          return toastr.success("Action successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -313,6 +330,7 @@ $(document).ready(async function () {
     
   });
   $(document).on("click",".editrolebtn",function(){
+    $("#erole").val('');
     $("#chosen_role").val($(this).parent().attr("idkey"));
     let entry = {
       id: $("#chosen_role").val(),
@@ -324,13 +342,16 @@ $(document).ready(async function () {
         $("#erolestatus").val(result[0]['status']);
         $("#role-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error("Action Failed");
       }
     });
   });
   $("#roleeditbtn").click(function (e) {
+    if($("#erole").val() == ""){
+      toastr.info('Please enter Role');
+      $("#erole").focus();
+      return;
+    }
     let entry = {
       id: document.getElementById('chosen_role').value,
       name: document.getElementById('erole').value,
@@ -338,13 +359,10 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/updaterole", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          $("#role-edit-modal").modal("hide");
+          return toastr.success("Action successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -355,48 +373,54 @@ $(document).ready(async function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deleterole", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deleterole", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               roletable.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error("Action Failed");
           }
         });
-			}
+      }
 		});
   });
 
   //Work PC Area
   $(document).on("click","#workpcadd-btn",function(){
+    $("#workpc").val('');
     $("#workpc-add-modal").modal("show");
   });
   $("#workpcaddbtn").click(function (e) {
+    if($("#workpc").val() == ""){
+      toastr.info('Please enter Computer');
+      $("#workpc").focus();
+      return;
+    }
     let entry = {
       clinicid: localStorage.getItem('chosen_clinic'),
       name: document.getElementById('workpc').value,
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/addworkpc", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          $("#workpc-add-modal").modal("hide");
+          return toastr.success("Action successfully");
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error("Action Failed");
         }
     });
     setTimeout( function () {
@@ -408,27 +432,31 @@ $(document).ready(async function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+    
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deleteworkpc", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/deleteworkpc", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               workpc.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error("Action Failed");
           }
         });
-			}
+      }
 		});
   });
+  
 });
