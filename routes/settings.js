@@ -86,5 +86,11 @@ router.get("/diagnosisgroup", (req, res, next) => {
         pageKey: "../settings/diagnosisgroup"
     });
 });
+router.get("/vital", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Vitals",
+        pageKey: "../settings/vital"
+    });
+});
 
 module.exports = router;
