@@ -57,7 +57,6 @@ function setClinicTotalPatients() {
 }
 $(document).ready(async function () {
   "use strict";
-
   
   $(".patient_add_btn").hide();
   $("[data-toggle='tooltip']").tooltip();
@@ -69,9 +68,6 @@ $(document).ready(async function () {
   else{
     newflag = 0;
   }
-
-  
-  
 
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/getLanguages", (xhr, err) => {
     if (!err) {
@@ -114,7 +110,7 @@ $(document).ready(async function () {
         $(".patient_add_btn").hide();
       }
 
-      if(read)loadData(1)
+      if(read)loadData()
      
     } else {
       return $.growl.error({
@@ -188,8 +184,8 @@ $(document).ready(async function () {
           sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/add", (xhr, err) => {
             if (!err) {
               $("#patient-add-modal").modal("toggle");
-              
-              loadData(1);
+              setClinicTotalPatients();
+              loadData();
               return $.growl.notice({
                 message: "patient is added successfully"
               });
@@ -230,29 +226,20 @@ let changed = function(instance, cell, x, y, value) {
   
 }
 
-var total = 1;
-var size = 50;
-var page = 1;
-var pageSize = 0;
 
-async function loadData(page){
+async function loadData(){
   ptdata = [];
   let entry = {
     clinicid:localStorage.getItem('chosen_clinic'),
     flag:newflag,
-    page: page,
-    size: size,
-    searchText: $("#search_jexcel").val()
   }
   let tmpdate = null;
   $(".progress-load").removeClass("d-none");
   setClinicTotalPatients();
 
-  await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/getDataByPage", (xhr, err) => {
+  await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/getData", (xhr, err) => {
     if (!err) {
-      let data = JSON.parse(xhr.responseText)['data']['data'];
-      total = JSON.parse(xhr.responseText)['data']['total'];
-      pageSize = parseInt(total/size)+1;
+      let data = JSON.parse(xhr.responseText)['data'];
       for(var i=0;i<data.length;i++){
         if(data[i]['DOB']==""||data[i]['DOB']==null){
           tmpdate = null;
@@ -288,7 +275,12 @@ async function loadData(page){
       $("#ptreport").empty();
       jexcel(document.getElementById('ptreport'), {
         data:ptdata,
-        // search: true,
+        search:true,
+        pagination: 50,
+        paginationOptions: [10,25,50,100],
+        onchangepage: function(el, pageNumber, oldPage) {
+          console.log('New page: ' + pageNumber);
+        },
         columns: [
           {
             type: 'hidden',
@@ -394,13 +386,11 @@ async function loadData(page){
       $(".progress-load").addClass("d-none");
       
       Pagination.Init(document.getElementById('pagination'), {
-          size: pageSize, // pages size
-          page: page,  // selected page
+          size: 30, // pages size
+          page: 1,  // selected page
           step: 3   // pages before and after current
       });
-      var end = (page-1)*size+50;
-      if(end > total ) end = total;
-      $("#jexcel_details").html("Showing "+((page-1)*size+1)+" to "+end+"  of "+total+" records");
+      $("#jexcel_details").html("Showing page 1 of 576 entries");
     
     } else {
       return $.growl.error({
@@ -409,42 +399,6 @@ async function loadData(page){
     }
   });
 }
-
-
-$(document).on("click",".page-link",function(){
-  if($(this).data('page')=='prev'){
-    page = parseInt(page)-1;
-    if(page<1)page=1;
-    loadData(page)
-  }else if($(this).data('page')=='next'){
-    page = parseInt(page)+1;
-    if(page>pageSize)page=pageSize;
-    loadData(page)
-  }else{
-    page = $(this).data('page');
-    loadData(page)
-  }
-  
-});
-
-var last_time = new Date().getTime();
-function debounce(func, timeout = 1000){
-  var timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => { func.apply(this, args); }, timeout);
-  };
-}
-
-$(document).on("keyup","#search_jexcel",function(){
-  var now = new Date().getTime();
-  if(now>last_time+1000){
-    last_time = new Date().getTime();
-    debounce(loadData(1));
-  }
-  
-});
-
 
 $(document).on("click",".patient_add_btn",function(){
 

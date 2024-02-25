@@ -23,6 +23,7 @@ $(document).ready(async function () {
       for (let i = 0; i < qualityentry; i++) {
           formData.append("ptfile", document.getElementById('ptfile').files[i]);
       }
+      $(".progress-load").removeClass("d-none");
       sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "patientlist/ptloader", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
