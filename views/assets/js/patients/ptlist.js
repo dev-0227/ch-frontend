@@ -49,9 +49,7 @@ function setClinicTotalPatients() {
       let data = JSON.parse(xhr.responseText)['data'];
       $(".totalcount").html(data[0]['total'])
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 }
@@ -85,9 +83,7 @@ $(document).ready(async function () {
         }
       
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getClinic", (xhr, err) => {
@@ -95,9 +91,7 @@ $(document).ready(async function () {
       let result = JSON.parse(xhr.responseText);
       $(".pt-title").html(result['clinic']);
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 
@@ -108,6 +102,8 @@ $(document).ready(async function () {
       write = result.data.charAt(1)=="1"?true:false;
       create = result.data.charAt(2)=="1"?true:false;
 
+      console.log(result);
+
       if(create){
         $(".patient_add_btn").show();
       }else{
@@ -117,9 +113,8 @@ $(document).ready(async function () {
       if(read)loadData(1)
      
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
+      
     }
   });
 
@@ -127,27 +122,18 @@ $(document).ready(async function () {
   
     if($("#fname").val() == ""){
       $("#fname").focus();
-      return $.growl.error({
-        message: "Please enter First Name"
-      });
+      return toastr.info('Please enter First Name');
     }
     if($("#lname").val() == ""){
       $("#lname").focus();
-      return $.growl.error({
-        message: "Please enter Last Name"
-      });
+      return toastr.info('Please enter Last Name');
     }
     if($("#emr_id").val() == ""){
       $("#emr_id").focus();
-      return $.growl.error({
-        message: "Please enter EMR ID"
-      });
+      return toastr.info('Please enter EMR ID');
     }
     if($("#dob").val() == ""){
-      $("#dob").focus();
-      return $.growl.error({
-        message: "Please enter DOB"
-      });
+      return toastr.info('Please enter DOB');
     }
 
   
@@ -181,22 +167,16 @@ $(document).ready(async function () {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         if(result.length>0){
-          return $.growl.warning({
-            message: "Patient exist"
-          });
+          return toastr.info('Patient exist');
         }else{
           sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/add", (xhr, err) => {
             if (!err) {
               $("#patient-add-modal").modal("toggle");
               
               loadData(1);
-              return $.growl.notice({
-                message: "patient is added successfully"
-              });
+              return toastr.success('patient is added successfully');
             } else {
-              return $.growl.error({
-                message: "Action Failed"
-              });
+              return toastr.error('Action Failed');
             }
         });
         }
@@ -222,9 +202,8 @@ let changed = function(instance, cell, x, y, value) {
     if (!err) {
       
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
+      
     }
   });
   
@@ -403,9 +382,7 @@ async function loadData(page){
       $("#jexcel_details").html("Showing "+((page-1)*size+1)+" to "+end+"  of "+total+" records");
     
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 }
@@ -500,9 +477,7 @@ $(document).on("click",".deletebtn",function(){
           console.log(index);
           $('#ptreport').jexcel('deleteRow', index);
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
       });
 
