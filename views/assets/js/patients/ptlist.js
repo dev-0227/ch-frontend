@@ -86,6 +86,51 @@ $(document).ready(async function () {
       return toastr.error('Action Failed');
     }
   });
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/getRace", (xhr, err) => {
+    if (!err) {
+      let data = JSON.parse(xhr.responseText)['data'];
+      $("#race").empty();
+      $("#race").append(`<option value=""></option>`);
+      for(var i = 0; i < data.length; i++){
+        $("#race").append(`
+            <option value = "`+data[i]['display']+`" >`+data[i]['display']+`</option>
+        `);
+      }
+      
+    } else {
+      return toastr.error('Action Failed');
+    }
+  });
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/getEthnicity", (xhr, err) => {
+    if (!err) {
+      let data = JSON.parse(xhr.responseText)['data'];
+      $("#ethnicity").empty();
+      $("#ethnicity").append(`<option value=""></option>`);
+      for(var i = 0; i < data.length; i++){
+        $("#ethnicity").append(`
+            <option value = "`+data[i]['code'].replace(/\&nbsp;/g, '')+`" >`+data[i]['display']+`</option>
+        `);
+      }
+      
+    } else {
+      return toastr.error('Action Failed');
+    }
+  });
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/getMarital", (xhr, err) => {
+    if (!err) {
+      let data = JSON.parse(xhr.responseText)['data'];
+      $("#marital").empty();
+      for(var i = 0; i < data.length; i++){
+        var selected = (data[i]['code']=='A')?`selected`:``
+          $("#marital").append(`
+              <option value = "`+data[i]['id']+`" `+selected+` >`+data[i]['display']+`</option>
+          `);
+      }
+      
+    } else {
+      return toastr.error('Action Failed');
+    }
+  });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getClinic", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText);
@@ -136,10 +181,6 @@ $(document).ready(async function () {
       return toastr.info('Please enter DOB');
     }
 
-  
-
-     
-  
     let entry = {
       user_id:localStorage.getItem('userid'),
       clinicid:localStorage.getItem('chosen_clinic'),
@@ -154,10 +195,11 @@ $(document).ready(async function () {
       mobile: document.getElementById('mobile').value,
       language: document.getElementById('language').value,
       address: document.getElementById('address').value,
-      city: $("#city option:selected").text(),
+      city: document.getElementById('city').value,
       zip: document.getElementById('zip').value,
       state: document.getElementById('state').value,
       race: document.getElementById('race').value,
+      ethnicity: document.getElementById('ethnicity').value,
       marital: document.getElementById('marital').value,
       deceased: $('#deceased').is(":checked")?"1":"0",
       deceased_at: document.getElementById('deceased_at').value,
@@ -429,14 +471,18 @@ $(document).on("click",".patient_add_btn",function(){
     $("#mname").val('');
     $("#lname").val('');
     $("#emr_id").val('');
+    $("#email").val('');
     $("#dob").val('');
     $("#phone").val('');
     $("#mobile").val('');
     $("#address").val('');
     $("#zip").val('');
-    $("#state").val('');
+    $("#city").val('');
+    $("#state").val('NY');
     $("#race").val('');
-    $("#marital").val('');
+    $("#ethnicity").val('');
+    $("#marital").val('1');
+    $("#deceased_at").val('');
     $('#deceased').prop('checked', false);
     $("#deceased_at").prop("disabled", true);
     $("#patient-add-modal").modal("show");
