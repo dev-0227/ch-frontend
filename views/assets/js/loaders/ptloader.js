@@ -6,7 +6,8 @@ $(document).ready(async function () {
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/getTotal", (xhr, err) => {
     if (!err) {
       let data = JSON.parse(xhr.responseText)['data'];
-      $(".totalcount").html(data[0]['total'])
+      $(".totalcount").html(data[0]['total']);
+      $('.managername').html(localStorage.getItem('username'));
     } else {
       toastr.error('Credential is invalid');
     }
@@ -26,8 +27,9 @@ $(document).ready(async function () {
       $(".progress-load").removeClass("d-none");
       sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "patientlist/ptloader", (xhr, err) => {
           if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];
-            $(".newptcnt").html(result[0]['total']);
+            let data = JSON.parse(xhr.responseText)['data'];
+            $(".totalcount").html(data[0]['total']);
+            $(".newptcnt").html(data[0]['updated']);
             $(".pt-loader").addClass("d-none");
             $("#load-result-modal").modal("show");
           } else {

@@ -88,7 +88,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="emr_id" class="required fw-semibold fs-6 mt-4 mb-2">EMR ID:</label>
+                            <label for="emr_id" class="fw-semibold fs-6 mt-4 mb-2">EMR ID:</label>
                             <input id="emr_id" class="form-control form-control-solid mb-3 mb-lg-0" type="number">
                         </div>
                     </div>
@@ -130,6 +130,12 @@
                             <input id="address" class="form-control form-control-solid mb-3 mb-lg-0" type="text">
                         </div>
                     </div>
+					<div class="col-md-6">
+                        <div class="form-group">
+                            <label for="address2" class="fw-semibold fs-6 mt-4 mb-2">Address2:</label>
+                            <input id="address2" class="form-control form-control-solid mb-3 mb-lg-0" type="text">
+                        </div>
+                    </div>
 					<div class="col-md-4">
                         <div class="form-group">
                             <label for="city" class="fw-semibold fs-6 mt-4 mb-2">City:</label>
@@ -148,38 +154,39 @@
                             <input id="state" class="form-control form-control-solid mb-3 mb-lg-0" type="text" value="NY">
                         </div>
                     </div>
-					<div class="col-md-5">
-                        <div class="form-group">
-                            <label for="race" class="fw-semibold fs-6 mt-4 mb-2">Race:</label>
-                            <select id="race" class="form-control form-control-solid mb-3 mb-lg-0 custom-select">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="ethnicity" class="fw-semibold fs-6 mt-4 mb-2">Ethnicity CDC:</label>
                             <select id="ethnicity" class="form-control form-control-solid mb-3 mb-lg-0 custom-select">
                             </select>
                         </div>
                     </div>
+					
 					<div class="col-md-4">
+                        <div class="form-group">
+                            <label for="race" class="fw-semibold fs-6 mt-4 mb-2">Race:</label>
+                            <select id="race" class="form-control form-control-solid mb-3 mb-lg-0 custom-select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="marital" class="fw-semibold fs-6 mt-4 mb-2">Marital Status:</label>
                             <select id="marital" class="form-control form-control-solid mb-3 mb-lg-0 custom-select">
                             </select>
                         </div>
                     </div>
-					<div class="col-md-2">
-                        <div class="form-group d-flex">
-                            <label for="deceased" class="fw-semibold fs-6 mt-4 mb-2">deceased:</label>
-							<div style="text-align: right; justify-content: right; align-items: end; margin-top: 30px;">
-                            	<input id="deceased" class="form-check-input mt-7" type="checkbox" style="width: 20px;">
+					<div class="col-md-1">
+                        <div class="form-group">
+                            <label for="deceased" class="fw-semibold fs-6 mt-4 mb-2">deceased</label>
+							<div class="d-flex justify-content-center pt-4">
+                            	<input id="deceased" class="form-check-input " type="checkbox" style="width: 20px;">
 							</div>
                         </div>
                     </div>
-					<div class="col-md-4">
+					<div class="col-md-3">
                         <div class="form-group">
-                            <label for="deceased_at" class="fw-semibold fs-6 mt-4 mb-2">deceased Date:</label>
+                            <label for="deceased_at" class="fw-semibold fs-6 mt-4 mb-2">Date:</label>
                             <input id="deceased_at" class="form-control form-control-solid mb-3 mb-lg-0" type="date" disabled>
                         </div>
                     </div>

@@ -173,10 +173,6 @@ $(document).ready(async function () {
       $("#lname").focus();
       return toastr.info('Please enter Last Name');
     }
-    if($("#emr_id").val() == ""){
-      $("#emr_id").focus();
-      return toastr.info('Please enter EMR ID');
-    }
     if($("#dob").val() == ""){
       return toastr.info('Please enter DOB');
     }
@@ -195,6 +191,7 @@ $(document).ready(async function () {
       mobile: document.getElementById('mobile').value,
       language: document.getElementById('language').value,
       address: document.getElementById('address').value,
+      address2: document.getElementById('address2').value,
       city: document.getElementById('city').value,
       zip: document.getElementById('zip').value,
       state: document.getElementById('state').value,
@@ -205,26 +202,27 @@ $(document).ready(async function () {
       deceased_at: document.getElementById('deceased_at').value,
     }
 
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), { emr_id: document.getElementById('emr_id').value }, "patientlist/get", (xhr, err) => {
-      if (!err) {
-        let result = JSON.parse(xhr.responseText)['data'];
-        if(result.length>0){
-          return toastr.info('Patient exist');
-        }else{
-          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/add", (xhr, err) => {
-            if (!err) {
-              $("#patient-add-modal").modal("toggle");
-              
-              loadData(1);
-              return toastr.success('patient is added successfully');
-            } else {
-              return toastr.error('Action Failed');
-            }
-        });
-        }
+    // sendRequestWithToken('POST', localStorage.getItem('authToken'), { emr_id: document.getElementById('emr_id').value }, "patientlist/get", (xhr, err) => {
+    //   if (!err) {
+    //     let result = JSON.parse(xhr.responseText)['data'];
+    //     if(result.length>0){
+    //       return toastr.info('Patient exist');
+    //     }else{
+          
+    //     }
        
+    //   }
+    // });
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/add", (xhr, err) => {
+      if (!err) {
+        $("#patient-add-modal").modal("toggle");
+        
+        loadData(1);
+        return toastr.success('patient is added successfully');
+      } else {
+        return toastr.error('Action Failed');
       }
-    });
+  });
 
   });
   
@@ -298,6 +296,7 @@ async function loadData(page){
           data[i]['MOBILE'], 
           data[i]['EMAIL'], 
           data[i]['ADDRESS'], 
+          data[i]['ADDRESS2'], 
           data[i]['CITY'], 
           data[i]['ZIP'], 
           data[i]['Language'], 
@@ -371,10 +370,16 @@ async function loadData(page){
           },
           
           {
-              type: 'text',
-              title:'ADDRESS',
-              readOnly:write?false:true,
-              width:150
+            type: 'text',
+            title:'ADDRESS',
+            readOnly:write?false:true,
+            width:150
+          },
+          {
+            type: 'text',
+            title:'ADDRESS2',
+            readOnly:write?false:true,
+            width:150
           },
           {
               type: 'text',
@@ -476,6 +481,7 @@ $(document).on("click",".patient_add_btn",function(){
     $("#phone").val('');
     $("#mobile").val('');
     $("#address").val('');
+    $("#address2").val('');
     $("#zip").val('');
     $("#city").val('');
     $("#state").val('NY');
