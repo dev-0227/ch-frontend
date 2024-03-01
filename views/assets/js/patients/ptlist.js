@@ -92,8 +92,9 @@ $(document).ready(async function () {
       $("#race").empty();
       $("#race").append(`<option value=""></option>`);
       for(var i = 0; i < data.length; i++){
+        var selected = (data[i]['code']=='en')?`selected`:``
         $("#race").append(`
-            <option value = "`+data[i]['display']+`" >`+data[i]['display']+`</option>
+            <option value = "`+data[i]['display']+`" `+selected+` >`+data[i]['display']+`</option>
         `);
       }
       

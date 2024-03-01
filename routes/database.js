@@ -63,6 +63,20 @@ router.get("/import/ethnicity", (req, res, next) => {
     });
 });
 
+router.get("/import/fhir_types", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Database Import fhir Types",
+        pageKey: "../database/import/fhir_types"
+    });
+});
+
+router.get("/import/jurisdiction", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Database Import Jurisdiction",
+        pageKey: "../database/import/jurisdiction"
+    });
+});
+
 module.exports = router;
 
 
