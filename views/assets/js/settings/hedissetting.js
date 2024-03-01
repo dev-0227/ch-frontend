@@ -161,6 +161,24 @@ $( function() {
   $( "#sortable" ).sortable();
   $( "#sortable" ).disableSelection();
 } );
+
+var qppmeasuretable = $('#qppmeasuretable').DataTable({
+  "ajax": {
+      "url": serviceUrl + "hedissetting/qppMeasuresData",
+      "type": "GET"
+  },
+  "columns": [
+      { data: 'measureId'},
+      { data: 'title'},
+      { data: 'description'}
+  ]
+});
+
+$('#qpp_measure_table_search_input').on('keyup', function () {
+  qppmeasuretable.search(this.value).draw();
+});
+
+
 $(document).ready(async function () {
   "use strict";
   $('#colortcolor').colorpicker();
@@ -2051,6 +2069,8 @@ $(document).ready(async function () {
     }
   );
 
+  
+
   //ins domain
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/getchoseninsurances", (xhr, err) => {
     if (!err) {
@@ -2140,6 +2160,8 @@ $(document).ready(async function () {
         }
     ]
   });
+
+  
 
   $(document).on("click","#idomainaddbtn",function(){
     $("#idomain-add-modal").modal("show");
