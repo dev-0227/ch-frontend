@@ -77,6 +77,13 @@ router.get("/import/jurisdiction", (req, res, next) => {
     });
 });
 
+router.get("/import/qppMeasuresData", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Database Import Qpp Measures Data",
+        pageKey: "../database/import/qppMeasuresData"
+    });
+});
+
 module.exports = router;
 
 

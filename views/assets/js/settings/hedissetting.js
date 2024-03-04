@@ -158,33 +158,99 @@ changeAlias = (id) => {
   }
 }
 $( function() {
-  $( "#sortable" ).sortable();
-  $( "#sortable" ).disableSelection();
+  // $( "#sortable" ).sortable();
+  // $( "#sortable" ).disableSelection();
 } );
 
-var qppmeasuretable = $('#qppmeasuretable').DataTable({
-  "ajax": {
-      "url": serviceUrl + "hedissetting/qppMeasuresData",
-      "type": "GET"
-  },
-  "columns": [
-      { data: 'measureId'},
-      { data: 'title'},
-      { data: 'description'}
-  ]
-});
-
-$('#qpp_measure_table_search_input').on('keyup', function () {
-  qppmeasuretable.search(this.value).draw();
-});
+function jsonToString(data){
+  var str = JSON.stringify(data, undefined, 6).replace(/\n( *)/g, function (match, p1) {
+    return '<br>' + '&nbsp;'.repeat(p1.length);
+  });
+  return str;
+}
 
 
 $(document).ready(async function () {
   "use strict";
-  $('#colortcolor').colorpicker();
-  $('#colorbcolor').colorpicker();
-  $('#ecolortcolor').colorpicker();
-  $('#ecolorbcolor').colorpicker();
+  // $('#colortcolor').colorpicker();
+  // $('#colorbcolor').colorpicker();
+  // $('#ecolortcolor').colorpicker();
+  // $('#ecolorbcolor').colorpicker();
+
+  var qppmeasuretable = $('#qppmeasuretable').DataTable({
+    "ajax": {
+        "url": serviceUrl + "hedissetting/qppMeasuresData",
+        "type": "GET"
+    },
+    "columns": [
+        { data: 'measureId',
+        render: function (data, type, row) {
+          var title='category:\t'+row.category+'\n';
+          title+='eMeasureId:\t'+row.eMeasureId+'\n';
+          title+='isHighPriority:\t'+row.isHighPriority+'\n';
+          title+='measureId:\t'+row.measureId+'\n';
+          title+='measureType:\t'+row.measureType+'\n';
+          title+='metricType:\t'+row.metricType+'\n';
+          title+='nationalQualityCode:\t'+row.nationalQualityCode+'\n';
+          title+='nqfId:\t'+row.nqfId+'\n';
+          title+='primarySteward:\t'+row.primarySteward+'\n';
+          title+='qualityId:\t'+row.qualityId+'\n';
+  
+          return '<div >'+row.measureId+'</div>';
+        } 
+       },
+        { data: 'title'},
+        { data: 'description'},
+        { data: 'id',
+            render: function (data, type, row) {
+              return `
+                <div idkey="`+row.id+`">
+                <button class="btn btn-sm btn-primary showQppModal"><i class="fa fa-eye"></i> More</button>
+                </div>
+              `
+            } 
+          }
+    ]
+  });
+  
+  $('#qpp_measure_table_search_input').on('keyup', function () {
+    qppmeasuretable.search(this.value).draw();
+  });
+  
+
+  $(document).on("click",".showQppModal",function(){
+    $('#qpp_data').html('');
+    let entry = {
+      id: $(this).parent().attr("idkey")
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/qppMeasuresDataById", (xhr, err) => {
+      if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];
+        if(result.length>0){
+          var data = '';
+          var a = result[0];
+          for (const [key, value] of Object.entries(result[0])) {
+            if (data !== '') {
+              data += '<br>';
+            }
+            var str = value.toString().replaceAll('\"','"');
+            try{
+              var obj = JSON.parse(str);
+              data += '<div><b>'+key+'</b><span>: '+jsonToString(obj)+'</span></div>';
+            }catch(e){
+              data += '<div><b>'+key+'</b><span>: '+jsonToString(str)+'</span></div>';
+            }
+          }
+          
+          $('#qpp_data').html(data);
+        }
+
+      }
+    });
+  
+    $("#qpp-measure-modal").modal("show");
+  });
+  
 
   var hdomaintable = $('#hdomaintable').DataTable({
     "ajax": {
@@ -221,6 +287,122 @@ $(document).ready(async function () {
         message: "Action Failed"
       });
     }
+  });
+
+  $(document).on("click","#hdomainaddbtn",function(){
+    $("#hdomain_id").val('');
+    $("#hdomain_org").val('');
+    $("#hdomain_type").val('');
+    $("#hdomain_domain").val('');
+    $("#hdomain-modal").modal("show");
+  });
+  $("#hdomain_addbtn").click(function (e) {
+    if($("#hdomain_org").val() == ""){
+      toastr.info('Please enter Organization');
+      $("#hdomain_org").focus();
+      return;
+    }
+    if($("#hdomain_type").val() == ""){
+      toastr.info('Please enter MEASURE TYPE');
+      $("#hdomain_type").focus();
+      return;
+    }
+    if($("#hdomain_domain").val() == ""){
+      toastr.info('Please enter HEALTH CARE DOMAIN');
+      $("#hdomain_domain").focus();
+      return;
+    }
+    let entry = {
+      id: document.getElementById('hdomain_id').value,
+      org: document.getElementById('hdomain_org').value,
+      type: document.getElementById('hdomain_type').value,
+      domain: document.getElementById('hdomain_domain').value
+    }
+    if($("#hdomain_id").val() == ""){
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/addhdomain", (xhr, err) => {
+        if (!err) {
+          $("#hdomain-modal").modal("hide");
+          return $.growl.notice({
+            message: "Action successfully"
+          });
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+      });
+    }else{
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/updatehdomain", (xhr, err) => {
+        if (!err) {
+          $("#hdomain-modal").modal("hide");
+          return $.growl.notice({
+            message: "Action successfully"
+          });
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+      });
+    }
+    
+    setTimeout( function () {
+      hdomaintable.ajax.reload();
+    }, 1000 );
+    
+  });
+
+  $(document).on("click",".edithdomainbtn",function(){
+    $("#chosen_hdomain").val($(this).parent().attr("idkey"));
+    let entry = {
+      id: $("#chosen_hdomain").val(),
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/chosenhdomain", (xhr, err) => {
+      if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];
+        $("#hdomain_id").val(result[0]['id']);
+        $("#hdomain_org").val(result[0]['Organization']);
+        $("#hdomain_type").val(result[0]['Measure_Type']);
+        $("#hdomain_domain").val(result[0]['Health_Care_Domain']);
+        $("#hdomain-modal").modal("show");
+      } else {
+        return $.growl.error({
+          message: "Action Failed"
+        });
+      }
+    });
+  });
+
+  $(document).on("click",".deletehdomainbtn",function(){
+    let entry = {
+      id: $(this).parent().attr("idkey"),
+    }
+
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/deletehdomain", (xhr, err) => {
+          if (!err) {
+            setTimeout( function () {
+              hdomaintable.ajax.reload();
+            }, 1000 );
+          } else {
+            toastr.error('Credential is invalid');
+          }
+        });	
+      }
+		});
+
   });
 
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/languagelist", (xhr, err) => {
@@ -269,31 +451,7 @@ $(document).ready(async function () {
 //     }
 // });
 
-  $(document).on("click","#hdomainaddbtn",function(){
-    $("#hdomain-add-modal").modal("show");
-  });
-  $("#hdomain_addbtn").click(function (e) {
-    let entry = {
-      org: document.getElementById('hdomain_org').value,
-      type: document.getElementById('hdomain_type').value,
-      domain: document.getElementById('hdomain_domain').value
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/addhdomain", (xhr, err) => {
-        if (!err) {
-          return $.growl.notice({
-            message: "Action successfully"
-          });
-        } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
-        }
-    });
-    setTimeout( function () {
-      hdomaintable.ajax.reload();
-    }, 1000 );
-    
-  });
+  
 
   
   $(document).on("click",".editeducationbtn",function(){
@@ -303,25 +461,7 @@ $(document).ready(async function () {
 
  
 
-  $(document).on("click",".edithdomainbtn",function(){
-    $("#chosen_hdomain").val($(this).parent().attr("idkey"));
-    let entry = {
-      id: $("#chosen_hdomain").val(),
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/chosenhdomain", (xhr, err) => {
-      if (!err) {
-        let result = JSON.parse(xhr.responseText)['data'];
-        $("#ehdomain_org").val(result[0]['Organization']);
-        $("#ehdomain_type").val(result[0]['Measure_Type']);
-        $("#ehdomain_domain").val(result[0]['Health_Care_Domain']);
-        $("#hdomain-edit-modal").modal("show");
-      } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
-      }
-    });
-  });
+  
   $("#hdomain_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_hdomain').value,
@@ -371,32 +511,7 @@ $(document).ready(async function () {
   });
 
 
-  $(document).on("click",".deletehdomainbtn",function(){
-    let entry = {
-      id: $(this).parent().attr("idkey"),
-    }
-    var tmp = $(this).parent().parent().parent();
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/deletehdomain", (xhr, err) => {
-          if (!err) {
-            tmp.remove();
-          } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
-          }
-        });
-			}
-		});
-  });
+  
 
   //measure area
   var measuretable = $('#measuretable').DataTable({

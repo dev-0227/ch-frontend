@@ -23,7 +23,7 @@ router.get("/manager", (req, res, next) => {
 router.get("/users", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "User List",
-        pageKey: "../settings/user"
+        pageKey: "../settings/user",
     });
 });
 
@@ -58,7 +58,7 @@ router.get("/clinic", (req, res, next) => {
 router.get("/hedissetting", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Hedis Settings",
-        pageKey: "../settings/hedissetting"
+        pageKey: "../settings/hedissetting",
     });
 });
 
