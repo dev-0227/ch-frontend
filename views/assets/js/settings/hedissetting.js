@@ -268,10 +268,10 @@ $(document).ready(async function () {
           formData.append("qppfile", document.getElementById('qppfile').files[i]);
       }
       $(".progress-load").removeClass("d-none");
-      qppmeasuretable.clear().draw();
       sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedissetting/importQppMeasuresData", (xhr, err) => {
           if (!err) {
             $("#qpp-import-modal").modal("hide");
+            $(".progress-load").addClass("d-none");
             load_qpp_table(1);
             return toastr.success('Action successfully');
           } else {
