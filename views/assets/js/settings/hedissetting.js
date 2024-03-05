@@ -185,17 +185,6 @@ $(document).ready(async function () {
     "columns": [
         { data: 'measureId',
         render: function (data, type, row) {
-          // var title='category:\t'+row.category+'\n';
-          // title+='eMeasureId:\t'+row.eMeasureId+'\n';
-          // title+='isHighPriority:\t'+row.isHighPriority+'\n';
-          // title+='measureId:\t'+row.measureId+'\n';
-          // title+='measureType:\t'+row.measureType+'\n';
-          // title+='metricType:\t'+row.metricType+'\n';
-          // title+='nationalQualityCode:\t'+row.nationalQualityCode+'\n';
-          // title+='nqfId:\t'+row.nqfId+'\n';
-          // title+='primarySteward:\t'+row.primarySteward+'\n';
-          // title+='qualityId:\t'+row.qualityId+'\n';
-  
           return '<div >'+row.measureId+'</div>';
         } 
        },
