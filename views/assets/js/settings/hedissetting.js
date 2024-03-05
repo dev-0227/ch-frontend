@@ -405,40 +405,40 @@ $(document).ready(async function () {
 
   });
 
-  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/languagelist", (xhr, err) => {
+  // await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/languagelist", (xhr, err) => {
   
-    if (!err) {
-      let result = JSON.parse(xhr.responseText)['data'];
+  //   if (!err) {
+  //     let result = JSON.parse(xhr.responseText)['data'];
       
-      // $("#link-dg-lang").empty();
-      for(var i = 0;i < result.length;i++){
-        if(result[i]['code'] != 'en'){
-          $("#link-dg-lang").append(`<option value="`+result[i]['code']+`" >`+result[i]['English']+`</option>`)
-        }
+  //     // $("#link-dg-lang").empty();
+  //     for(var i = 0;i < result.length;i++){
+  //       if(result[i]['code'] != 'en'){
+  //         $("#link-dg-lang").append(`<option value="`+result[i]['code']+`" >`+result[i]['English']+`</option>`)
+  //       }
         
-      }
-    } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
-    }
-  });
-  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getcomcategorycode", (xhr, err) => {
+  //     }
+  //   } else {
+  //     return $.growl.error({
+  //       message: "Action Failed"
+  //     });
+  //   }
+  // });
+  // await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getcomcategorycode", (xhr, err) => {
   
-    if (!err) {
-      let result = JSON.parse(xhr.responseText)['data'];
-      console.log(result)
-      // $("#link-dg-lang").empty();
-      for(var i = 0;i < result.length;i++){
-          $("#link-dg-cate").append(`<option value="`+result[i]['code']+`" >`+result[i]['display']+`</option>`)
-          $("#edu-category").append(`<option value="`+result[i]['code']+`" >`+result[i]['display']+`</option>`)
-      }
-    } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
-    }
-  });
+  //   if (!err) {
+  //     let result = JSON.parse(xhr.responseText)['data'];
+  //     console.log(result)
+  //     // $("#link-dg-lang").empty();
+  //     for(var i = 0;i < result.length;i++){
+  //         $("#link-dg-cate").append(`<option value="`+result[i]['code']+`" >`+result[i]['display']+`</option>`)
+  //         $("#edu-category").append(`<option value="`+result[i]['code']+`" >`+result[i]['display']+`</option>`)
+  //     }
+  //   } else {
+  //     return $.growl.error({
+  //       message: "Action Failed"
+  //     });
+  //   }
+  // });
 
 //   await sendRequestWithToken('post', localStorage.getItem('authToken'), {stoken:'baresinother-F-6l1ZiHHCbbFwCtxmwlcTUfhT1yEazFIy4HDhsmNwDXOiOkSPYgxXukKw'}, "setting/getconectorcliniclist", (xhr, err) => {
 //     if (!err) { let result = JSON.parse(xhr.responseText);
@@ -2227,54 +2227,54 @@ $(document).ready(async function () {
     ]
   });
 
-  var educationtable = $('#educationtable').DataTable({
-    "ajax": {
-        "url": serviceUrl + "hedissetting/geteducation",
-        "type": "GET"
-    },
-    "columns": [
-        { data: 'id',
-          render: function (data, type, row) {
-            if(row.active == 0){
-              return `
-              <div idkey="`+row.id+`">
-                <label class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="educheck`+row.id+`" onclick="changestatusedumsg(this.checked,`+row.id+`) " checked>
-                  <span class="custom-control-label"></span>
-                </label>
-              </div>
-            `
-            }else{
-              return `
-              <div idkey="`+row.id+`">
-                <label class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="educheck`+row.id+`" onclick="changestatusedumsg(this.checked,`+row.id+`)">
-                  <span class="custom-control-label"></span>
-                </label>
-              </div>
-            `
-            }
+  // var educationtable = $('#educationtable').DataTable({
+  //   "ajax": {
+  //       "url": serviceUrl + "hedissetting/geteducation",
+  //       "type": "GET"
+  //   },
+  //   "columns": [
+  //       { data: 'id',
+  //         render: function (data, type, row) {
+  //           if(row.active == 0){
+  //             return `
+  //             <div idkey="`+row.id+`">
+  //               <label class="custom-control custom-checkbox">
+  //                 <input type="checkbox" class="custom-control-input" id="educheck`+row.id+`" onclick="changestatusedumsg(this.checked,`+row.id+`) " checked>
+  //                 <span class="custom-control-label"></span>
+  //               </label>
+  //             </div>
+  //           `
+  //           }else{
+  //             return `
+  //             <div idkey="`+row.id+`">
+  //               <label class="custom-control custom-checkbox">
+  //                 <input type="checkbox" class="custom-control-input" id="educheck`+row.id+`" onclick="changestatusedumsg(this.checked,`+row.id+`)">
+  //                 <span class="custom-control-label"></span>
+  //               </label>
+  //             </div>
+  //           `
+  //           }
             
-          } 
-        },
-        { data: 'Measure'},
-        { data: 'lang_name'},
-        { data: 'subname'},
-        { data: 'title'},
-        { data: 'content'},
-        { data: 'link'},
-        { data: 'id',
-          render: function (data, type, row) {
-            return `
-              <div idkey="`+row.id+`">
-              <button class="btn btn-sm btn-primary editeducationbtn" onclick="editeducationfunc(`+row.id+`)"><i class="fa fa-edit"></i> Edit</button>
-              <button class="btn btn-sm btn-danger deleteeducationbtn"><i class="fa fa-trash"></i> Delete</button>
-              </div>
-            `
-          } 
-        }
-    ]
-  });
+  //         } 
+  //       },
+  //       { data: 'Measure'},
+  //       { data: 'lang_name'},
+  //       { data: 'subname'},
+  //       { data: 'title'},
+  //       { data: 'content'},
+  //       { data: 'link'},
+  //       { data: 'id',
+  //         render: function (data, type, row) {
+  //           return `
+  //             <div idkey="`+row.id+`">
+  //             <button class="btn btn-sm btn-primary editeducationbtn" onclick="editeducationfunc(`+row.id+`)"><i class="fa fa-edit"></i> Edit</button>
+  //             <button class="btn btn-sm btn-danger deleteeducationbtn"><i class="fa fa-trash"></i> Delete</button>
+  //             </div>
+  //           `
+  //         } 
+  //       }
+  //   ]
+  // });
 
   
 
