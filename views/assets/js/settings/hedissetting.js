@@ -183,14 +183,11 @@ $(document).ready(async function () {
         "type": "GET"
     },
     "columns": [
-        { data: 'measureId',
-        render: function (data, type, row) {
-          return '<div >'+row.measureId+'</div>';
-        } 
-       },
-        { data: 'title'},
-        { data: 'description'},
-        { data: 'id',
+       { data: 'measureId'},
+       { data: 'nqfId'},
+       { data: 'title'},
+       { data: 'description'},
+       { data: 'id',
             render: function (data, type, row) {
               return `
                 <div idkey="`+row.id+`">
