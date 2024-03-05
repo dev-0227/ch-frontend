@@ -214,7 +214,8 @@ $(document).ready(async function () {
             qppmeasuretable = $('#qppmeasuretable').DataTable({
               "ajax": {
                   "url": serviceUrl + "hedissetting/qppMeasuresData?eyear="+$('#selected_year').val(),
-                  "type": "GET"
+                  "type": "GET",
+                  "headers": { 'Authorization': localStorage.getItem('authToken') }
               },
               "processing": true,
               "columns": [
@@ -277,7 +278,7 @@ $(document).ready(async function () {
             return toastr.success('Action successfully');
           } else {
             $(".progress-load").addClass("d-none");
-            return toastr.error('Action Failed');
+            return toastr.error(err);
           }
       });
     } else {
@@ -1271,7 +1272,10 @@ $(document).ready(async function () {
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/gethdate", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
-      $("#hedisdate").val(new Date(result[0]['idate']).getFullYear());
+      if(result.length>0){
+        $("#hedisdate").val(new Date(result[0]['idate']).getFullYear());
+      }
+      
     } else {
       return $.growl.error({
         message: "Action Failed"
@@ -2243,30 +2247,30 @@ $(document).ready(async function () {
   
 
   // Datatables   
-  var filealiastable = $('#filealiastable').on('init.dt', function () {
-      $("input[id^=a]").tagsinput();
-  }).DataTable(
-    {
-      "ajax": {
-          "url": serviceUrl + "hedissetting/getfilealiases",
-          "type": "GET",
-      },
-      "columns": [
-          { "data": "fields", "width": "20%" },
-          { "data": "variables"},
+  // var filealiastable = $('#filealiastable').on('init.dt', function () {
+  //     $("input[id^=a]").tagsinput();
+  // }).DataTable(
+  //   {
+  //     "ajax": {
+  //         "url": serviceUrl + "hedissetting/getfilealiases",
+  //         "type": "GET",
+  //     },
+  //     "columns": [
+  //         { "data": "fields", "width": "20%" },
+  //         { "data": "variables"},
 
-      ],
-      "aoColumnDefs": [
-          {
-              "aTargets": [1],
-              "mData": "headers",
-              "mRender": function (data, type, full) {
-                  return '<input class="form-control" type="text" data-role="tagsinput"  id="a' + full.id + '" onchange="changeAlias(' + full.id + ')" value="' + data + '">';
-              }
-          }
-      ]
-    }
-  );
+  //     ],
+  //     "aoColumnDefs": [
+  //         {
+  //             "aTargets": [1],
+  //             "mData": "headers",
+  //             "mRender": function (data, type, full) {
+  //                 return '<input class="form-control" type="text" data-role="tagsinput"  id="a' + full.id + '" onchange="changeAlias(' + full.id + ')" value="' + data + '">';
+  //             }
+  //         }
+  //     ]
+  //   }
+  // );
 
   
 
