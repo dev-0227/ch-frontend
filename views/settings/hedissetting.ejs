@@ -71,7 +71,47 @@
         border-top: 1px solid #eee;
         padding-top: 10px;
     }
+    .file-loader{
+		position: fixed;
+		z-index: 50000;
+		background: rgba(255, 255, 255);
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 100%;
+		width: 100%;
+		margin: 0 auto;
+		text-align: center;
+	}
 </style>
+
+
+<div class="modal fade" id="upload-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Loaded Successfully</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="../pages/ptlist?s=1" target="_blank">
+                            <span class="number uploadCount">0</span></a>
+                        <br><span class="time">Qpp Measures Data</span>
+						
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+			 </div>
+		</div>
+	</div>
+</div>
 <!-- ROW-1 OPEN -->
 <div class="row">
     <div class="col-xl-12">
@@ -95,7 +135,8 @@
                             <li class="nav-item"><a href="#hedisaliases_tab" class="nav-link" data-bs-toggle="tab">Hedis File Aliases</a></li>
                             <li class="nav-item"><a href="#inscat_tab" class="nav-link" data-bs-toggle="tab">Ins Domain</a></li>
                             <li class="nav-item"><a href="#education_tab" class="nav-link" data-bs-toggle="tab">Education Map</a></li>
-                            <li class="nav-item"><a href="#qpp_measure_tab" class="nav-link" data-bs-toggle="tab">QPP Measures Data</a></li>
+                            <li class="nav-item"><a href="#import_qpp_measure_tab" class="nav-link" data-bs-toggle="tab">QPP Measures Data</a></li>
+                            
                         </ul>
                     </div>
                     <div class="panel-body tabs-menu-body tab_area">
@@ -628,13 +669,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane " id="qpp_measure_tab">
+                            <div class="tab-pane " id="import_qpp_measure_tab">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header border-0 pt-6">
                                                 <h3 class="card-title ">QPP Measure List</h3>
                                                 <div class="card-title">
+                                                    <button id="qppimportbtn" type="button" class="btn btn-md btn-primary" style="margin-right: 10px;">
+                                                        <i class="fa fa-upload mr-2"></i> Import</button>
+                                                    <div class="w-300" style="width: 100px; margin-right: 15px;">    
+                                                        <select class="form-control " id="qpp_years">
+                                                        </select>
+                                                        <input type="hidden" id="selected_year">
+                                                    </div>
                                                     <div class="d-flex align-items-center position-relative my-1">
                                                       <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
                                                         <span class="path1"></span>
@@ -665,6 +713,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -673,6 +722,38 @@
     </div><!-- COL-END -->
 </div>
 <!-- ROW-1 CLOSED -->
+<div class="modal fade" id="qpp-import-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Import QPP Measure Data</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+            <div class="progress-bar progress-load d-none">
+                <div class="progress-bar-value "></div>
+            </div>
+			<div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="qpp_import_year" class="form-control-label">Year:</label>
+                        <input type="number" class="form-control" id="qpp_import_year">
+                    </div>
+                </div>
+                <div class="my-4">
+                    <input id="qppfile" type="file" class="dropify" accept=".json" data-height="150" />
+                </div>
+                
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="qpp_import_btn"><i class="fa fa-upload">&nbsp;</i> Import</button>
+            </div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="qpp-measure-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">

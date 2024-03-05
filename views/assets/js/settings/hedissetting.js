@@ -177,30 +177,116 @@ $(document).ready(async function () {
   // $('#ecolortcolor').colorpicker();
   // $('#ecolorbcolor').colorpicker();
 
-  var qppmeasuretable = $('#qppmeasuretable').DataTable({
-    "ajax": {
-        "url": serviceUrl + "hedissetting/qppMeasuresData",
-        "type": "GET"
-    },
-    "columns": [
-       { data: 'measureId'},
-       { data: 'nqfId'},
-       { data: 'title'},
-       { data: 'description'},
-       { data: 'id',
-            render: function (data, type, row) {
-              return `
-                <div idkey="`+row.id+`">
-                <button class="btn btn-sm btn-primary showQppModal"><i class="fa fa-eye"></i> More</button>
-                </div>
-              `
-            } 
+  var qppmeasuretable;
+
+  load_qpp_table(0);
+
+  function load_qpp_table(type){
+    sendFormWithToken('POST', localStorage.getItem('authToken'), {}, "hedissetting/getYearsQppMeasuresData", (xhr, err) => {
+      if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];
+        var html = '';
+        var selected = '';
+        
+        for(var i=0; i<result.length; i++){
+          selected = '';
+          if(type==0){
+            if(i == result.length-1){
+              selected = ' selected ';
+              $('#selected_year').val(result[i]['eyear']);
+            }
+          }else{
+            if($('#selected_year').val()==""){
+              selected = ' selected ';
+              $('#selected_year').val(result[0]['eyear']);
+            }else{
+              if($('#selected_year').val()==result[i]['eyear']){
+                selected = ' selected ';
+              }
+            }
           }
-    ]
-  });
+          
+          html += '<option value="'+result[i]['eyear']+'" '+selected+'>'+result[i]['eyear']+'</option>';
+        }
+        $("#qpp_years").html(html);
+        if(selected_year != ''){
+          if(type==0){
+            qppmeasuretable = $('#qppmeasuretable').DataTable({
+              "ajax": {
+                  "url": serviceUrl + "hedissetting/qppMeasuresData?eyear="+$('#selected_year').val(),
+                  "type": "GET"
+              },
+              "columns": [
+                 { data: 'measureId'},
+                 { data: 'nqfId'},
+                 { data: 'title'},
+                 { data: 'description'},
+                 { data: 'id',
+                      render: function (data, type, row) {
+                        return `
+                          <div idkey="`+row.id+`">
+                          <button class="btn btn-sm btn-primary showQppModal"><i class="fa fa-eye"></i> More</button>
+                          </div>
+                        `
+                      } 
+                    }
+              ]
+            });
+          }else{
+            qppmeasuretable.ajax.url(serviceUrl + "hedissetting/qppMeasuresData?eyear="+$('#selected_year').val()).load()
+          }
+          
+        }
+      } else {
+        $(".progress-load").addClass("d-none");
+        return toastr.error('Action Failed');
+      }
+    });
+  }
+  
+
+  
   
   $('#qpp_measure_table_search_input').on('keyup', function () {
     qppmeasuretable.search(this.value).draw();
+  });
+
+  $(document).on("click","#qppimportbtn",function(){
+    const d = new Date();
+    $("#qpp_import_year").val(d.getFullYear());
+    $("#qpp-import-modal").modal("show");
+  });
+
+  $("#qpp_import_btn").click(function(){
+    var formData = new FormData();
+    var qppfile = document.getElementById('qppfile').files.length;
+    if (qppfile != 0) {
+      $('.username').html(localStorage.getItem('username'));
+      $(".cdate").html(new Date().toDateString()+" "+new Date().toLocaleTimeString())
+      formData.append("year", $("#qpp_import_year").val());
+      for (let i = 0; i < qppfile; i++) {
+          formData.append("qppfile", document.getElementById('qppfile').files[i]);
+      }
+      $(".progress-load").removeClass("d-none");
+      sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedissetting/importQppMeasuresData", (xhr, err) => {
+          if (!err) {
+            $("#qpp-import-modal").modal("hide");
+            load_qpp_table(1);
+            return toastr.success('Action successfully');
+          } else {
+            $(".progress-load").addClass("d-none");
+            return toastr.error('Action Failed');
+          }
+      });
+    } else {
+      return toastr.info('Please load file');
+    }
+  });
+
+ 
+  $(document).on("change","#qpp_years",function(){
+    $('#selected_year').val($(this).val());
+    qppmeasuretable.ajax.url(serviceUrl + "hedissetting/qppMeasuresData?eyear="+$('#selected_year').val()).load()
   });
   
 
@@ -216,16 +302,25 @@ $(document).ready(async function () {
           var data = '';
           var a = result[0];
           for (const [key, value] of Object.entries(result[0])) {
-            if (data !== '') {
-              data += '<br>';
+            
+            var str = value?value:null;
+            if(str){
+              if (data !== '') {
+                data += '<br>';
+              }
+              try{
+                var obj = JSON.parse(str);
+                if(typeof obj==='object' || Array.isArray(obj)){
+                  data += '<div><b>'+key+'</b><span>: '+jsonToString(obj)+'</span></div>';
+                }else{
+                  data += '<div><b>'+key+'</b><span>: '+str+'</span></div>';
+                }
+                
+              }catch(e){
+                data += '<div><b>'+key+'</b><span>: '+jsonToString(str)+'</span></div>';
+              }
             }
-            var str = value.toString().replaceAll('\"','"');
-            try{
-              var obj = JSON.parse(str);
-              data += '<div><b>'+key+'</b><span>: '+jsonToString(obj)+'</span></div>';
-            }catch(e){
-              data += '<div><b>'+key+'</b><span>: '+jsonToString(str)+'</span></div>';
-            }
+            
           }
           
           $('#qpp_data').html(data);
