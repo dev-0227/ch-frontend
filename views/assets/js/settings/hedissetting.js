@@ -219,8 +219,8 @@ $(document).ready(async function () {
               "columns": [
                  { data: 'measureId'},
                  { data: 'nqfId'},
+                 { data: 'eMeasureId'},
                  { data: 'title'},
-                 { data: 'description'},
                  { data: 'id',
                       render: function (data, type, row) {
                         return `
