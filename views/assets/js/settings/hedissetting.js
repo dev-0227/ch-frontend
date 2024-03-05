@@ -268,6 +268,7 @@ $(document).ready(async function () {
           formData.append("qppfile", document.getElementById('qppfile').files[i]);
       }
       $(".progress-load").removeClass("d-none");
+      qppmeasuretable.clear().draw();
       sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedissetting/importQppMeasuresData", (xhr, err) => {
           if (!err) {
             $("#qpp-import-modal").modal("hide");
@@ -286,6 +287,7 @@ $(document).ready(async function () {
  
   $(document).on("change","#qpp_years",function(){
     $('#selected_year').val($(this).val());
+    qppmeasuretable.clear().draw();
     qppmeasuretable.ajax.url(serviceUrl + "hedissetting/qppMeasuresData?eyear="+$('#selected_year').val()).load()
   });
   
