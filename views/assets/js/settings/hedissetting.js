@@ -216,6 +216,7 @@ $(document).ready(async function () {
                   "url": serviceUrl + "hedissetting/qppMeasuresData?eyear="+$('#selected_year').val(),
                   "type": "GET"
               },
+              "processing": true,
               "columns": [
                  { data: 'measureId'},
                  { data: 'nqfId'},
