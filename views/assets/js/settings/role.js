@@ -62,14 +62,14 @@ $(document).ready(function () {
         for(var j=0; j<permissions[key].length; j++){
           var row = permissions[key][j];
           html += '<div class="row p-2" style="border-bottom:1pt dashed #cccccc;">';
-          html += '<div class="col-md-3 d-flex mr-2 " style="justify-content: right;">'+row['name']+':</div>';
-          html += '<div class="col-md-3 d-flex align-items-center">';
+          html += '<div class="col-md-6 d-flex mr-2 " style="justify-content: right;">'+row['name']+':</div>';
+          html += '<div class="col-md-2 d-flex align-items-center">';
           html += '<div><input type="checkbox" class="form-check-input ch_permission" id="ch_'+row['id']+'_1" data-id="'+row['id']+'" data-type="1"></div><div class="px-3">Read</div>';
           html += '</div>';
-          html += '<div class="col-md-3 d-flex align-items-center">';
+          html += '<div class="col-md-2 d-flex align-items-center">';
           html += '<div><input type="checkbox" class="form-check-input ch_permission" id="ch_'+row['id']+'_2" data-id="'+row['id']+'" data-type="2"></div><div class="px-3">Write</div>';
           html += '</div>';
-          html += '<div class="col-md-3 d-flex align-items-center">';
+          html += '<div class="col-md-2 d-flex align-items-center">';
           html += '<div><input type="checkbox" class="form-check-input ch_permission" id="ch_'+row['id']+'_3" data-id="'+row['id']+'" data-type="3"></div><div class="px-3">Create</div>';
           html += '</div></div>';
           

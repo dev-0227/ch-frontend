@@ -299,6 +299,7 @@ $(document).ready(async function () {
     let entry = {
       id: $(this).parent().attr("idkey")
     }
+
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/qppMeasuresDataById", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
@@ -313,7 +314,7 @@ $(document).ready(async function () {
                 data += '<br>';
               }
               try{
-                var obj = JSON.parse(str);
+                var obj = JSON.parse(str.replace(/\n/g,"<br>"));
                 if(typeof obj==='object' || Array.isArray(obj)){
                   data += '<div><b>'+key+'</b><span>: '+jsonToString(obj)+'</span></div>';
                 }else{
