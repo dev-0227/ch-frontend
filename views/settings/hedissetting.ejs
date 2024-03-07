@@ -85,8 +85,6 @@
 		text-align: center;
 	}
 </style>
-
-
 <div class="modal fade" id="upload-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
@@ -136,7 +134,7 @@
                             <li class="nav-item"><a href="#inscat_tab" class="nav-link" data-bs-toggle="tab">Ins Domain</a></li>
                             <li class="nav-item"><a href="#education_tab" class="nav-link" data-bs-toggle="tab">Education Map</a></li>
                             <li class="nav-item"><a href="#import_qpp_measure_tab" class="nav-link" data-bs-toggle="tab">QPP Measures Data</a></li>
-                            
+                            <li class="nav-item"><a href="#measure_observation_tab" class="nav-link" data-bs-toggle="tab">Measure Observation</a></li>
                         </ul>
                     </div>
                     <div class="panel-body tabs-menu-body tab_area">
@@ -713,6 +711,48 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane " id="measure_observation_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6">
+                                                <h3 class="card-title ">Measure Observation</h3>
+                                                <div class="card-title">
+                                                    <button id="measure_observation_add_btn" type="button" class="btn btn-md btn-primary" style="margin-right: 10px;">
+                                                        <i class="fa fa-plus mr-2"></i> Add</button>
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                      <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                      </i>
+                                                      <input id="measure_observation_table_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"  placeholder="Search.." />
+                                                    </div>
+                                                    <!--end::Search-->
+                                                  </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered  w-100" id="measure_observation_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th >mID</th>
+                                                            <th >Name</th>
+                                                            <th >ICD</th>
+                                                            <th >CPT</th>
+                                                            <th >HCPCS</th>
+                                                            <th >LOINC</th>
+                                                            <th >SNOMED</th>
+                                                            <th ></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             
                         </div>
                     </div>
@@ -749,6 +789,185 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
                 <button type="button" class="btn btn-primary" id="qpp_import_btn"><i class="fa fa-upload">&nbsp;</i> Import</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="measure_observation_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Measure Observation</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+            <div class="progress-bar progress-load d-none">
+                <div class="progress-bar-value "></div>
+            </div>
+            <input type="hidden" id="m_observ_id">
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_mid" class="required fw-semibold fs-6 mb-2">Measure ID:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_mid">
+                        </div>
+                    </div>
+                    <div class="col-md-9 mb-2 ">
+                        <div class="form-group row d-none" id="m_observ_measure">
+                            <div class="col-md-12 "><label class="fw-semibold fs-6 mb-1">Measure:</label></div>
+                            <div class="col-md-12 " id="m_observ_measure_name" ></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_name" class="required fw-semibold fs-6 mb-2">Name:</label>
+                            <input type="text" class=" form-control form-control-solid mb-3 mb-lg-0 typeahead" id="m_observ_name" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="..." data-bs-original-title="strata">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_report_name" class="fw-semibold fs-6 mb-2">preferredReportName:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_report_name">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_title" class="fw-semibold fs-6 mb-2">Title:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_title">
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_descrition" class="required fw-semibold fs-6 mb-2">Description:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_descrition">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_status" class="fw-semibold fs-6 mb-2">Status:</label>
+                            <select class="form-control" id="m_observ_status"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_ldate" class="fw-semibold fs-6 mb-2">Last Date:</label>
+                            <input type="date" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_ldate">
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_publisher" class="fw-semibold fs-6 mb-2">Publisher:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_publisher">
+                        </div>
+                    </div>
+                    <div class="col-md-7 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_url" class="fw-semibold fs-6 mb-2">URL:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_url">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-5 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_jurisdiction" class="fw-semibold fs-6 mb-2">Jurisdiction:</label>
+                            <select class="form-control" id="m_observ_jurisdiction"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_purpose" class="fw-semibold fs-6 mb-2">Purpose:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_purpose">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_category" class="fw-semibold fs-6 mb-2">Category:</label>
+                            <select class="form-control" id="m_observ_category"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_specimen_type" class="fw-semibold fs-6 mb-2">Specimen Type:</label>
+                            <select class="form-control" id="m_observ_specimen_type"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_permitted_data_type" class="fw-semibold fs-6 mb-2">Permitted Data Type:</label>
+                            <select class="form-control" id="m_observ_permitted_data_type"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_calendar_cycle" class="fw-semibold fs-6 mb-2">Calendar Cycle:</label>
+                            <select class="form-control" id="m_observ_calendar_cycle"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_calendar_length" class="fw-semibold fs-6 mb-2">Calendar Length:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_calendar_length">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_qualified" class="fw-semibold fs-6 mb-2">Qualified Value:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_qualified">
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_unit" class="fw-semibold fs-6 mb-2">Unit:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_unit">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_icd" class="fw-semibold fs-6 mb-2">ICD:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_icd">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_cpt" class="fw-semibold fs-6 mb-2">CPT:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_cpt">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group ">
+                            <label for="m_observ_hcpcs" class="fw-semibold fs-6 mb-2">HCPCS:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_hcpcs">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_loinc" class="fw-semibold fs-6 mb-2">LOINC:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_loinc">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_snomed" class="fw-semibold fs-6 mb-2">SNOMED:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_snomed">
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_map" class="fw-semibold fs-6 mb-2">Name Map:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_map">
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="m_observ_save_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
             </div>
 		</div>
 	</div>

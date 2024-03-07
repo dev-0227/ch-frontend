@@ -336,7 +336,371 @@ $(document).ready(async function () {
   
     $("#qpp-measure-modal").modal("show");
   });
+
+  let qpp_mesures = []
+  sendFormWithToken('GET', localStorage.getItem('authToken'), [], "hedissetting/qppMeasuresData?eyear=2023", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      for(var i=0; i<result.length; i++){
+        qpp_mesures[result[i]['measureId']] = result[i];
+      }
+    }
+  });
+
+  var measure_observation_table = $('#measure_observation_table').DataTable({
+    "ajax": {
+        "url": serviceUrl + "hedissetting/getMeasureObservation",
+        "type": "GET",
+        "headers": { 'Authorization': localStorage.getItem('authToken') }
+    },
+    "bAutoWidth": false, 
+    "aoColumns" : [
+      { sWidth: '8%' },
+      { sWidth: '40%' },
+      { sWidth: '8%' },
+      { sWidth: '8%' },
+      { sWidth: '8%' },
+      { sWidth: '8%' },
+      { sWidth: '8%' }
+    ],
+    "columns": [
+        { data: "m_id" },
+        { data: 'name' },
+        { data: 'ICD' },
+        { data: 'CPT' },
+        { data: 'HCPCS' },
+        { data: 'LOINC' },
+        { data: 'SNOMED' },
+        { data: 'id',
+          render: function (data, type, row) {
+            return `
+              <div idkey="`+row.id+`">
+              <button class="btn btn-sm btn-primary m_observ_edit_btn pr-1 pl-3"><i class="fa fa-edit"></i></button>
+              <button class="btn btn-sm btn-danger m_observ_delete_btn pr-1 pl-3"><i class="fa fa-trash"></i></button>
+              </div>
+            `
+          } 
+        }
+    ],
+  });
+
+  $('#measure_observation_table_search_input').on('keyup', function () {
+    measure_observation_table.search(this.value).draw();
+  });
+
+  $(document).on("click","#measure_observation_add_btn",function(){
+    $("#m_observ_id").val('');
+    $("#m_observ_mid").val('');
+    $("#m_observ_name").val('');
+    $("#m_observ_report_name").val('');
+    $("#m_observ_title").val('');
+    $("#m_observ_descrition").val('');
+    $("#m_observ_ldate").val(new Date().toISOString().split('T')[0]);
+    $("#m_observ_publisher").val('');
+    $("#m_observ_url").val('');
+    $("#m_observ_purpose").val('');
+    $("#m_observ_calendar_length").val('');
+    $("#m_observ_qualified").val('');
+    $("#m_observ_unit").val('');
+    $("#m_observ_icd").val('');
+    $("#m_observ_cpt").val('');
+    $("#m_observ_hcpcs").val('');
+    $("#m_observ_loinc").val('');
+    $("#m_observ_snomed").val('');
+    $("#m_observ_map").val('');
+    $('#m_observ_measure').addClass('d-none');
+    $("#measure_observation_modal").modal("show");
+
+  });
   
+
+  $(document).on("click",".m_observ_edit_btn",function(){
+    $('#m_observ_measure').addClass('d-none');
+    let entry = {
+      id: $(this).parent().attr("idkey")
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/getMeasureObservationById", (xhr, err) => {
+      if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];
+        if(result.length>0){
+          if(qpp_mesures[result[0]['m_id']]){
+            qpp_measure_data = qpp_mesures[result[0]['m_id']];
+       
+            $('#m_observ_measure_name').html(qpp_measure_data['title']);
+            $('#m_observ_measure').removeClass('d-none');
+          }
+          
+          $("#m_observ_id").val(result[0]['id']);
+          $("#m_observ_mid").val(result[0]['m_id']);
+          $("#m_observ_name").val(result[0]['name']);
+          $("#m_observ_report_name").val(result[0]['preferredReportName']);
+          $("#m_observ_title").val(result[0]['title']);
+          $("#m_observ_descrition").val(result[0]['description']);
+          $("#m_observ_status").val(result[0]['p_status']);
+          $("#m_observ_ldate").val(new Date(result[0]['lastdate']).toISOString().split('T')[0]);
+          $("#m_observ_publisher").val(result[0]['publisher']);
+          $("#m_observ_url").val(result[0]['url']);
+          $("#m_observ_jurisdiction").val(result[0]['jurisdiction']);
+          $("#m_observ_purpose").val(result[0]['purpose']);
+          $("#m_observ_category").val(result[0]['category']);
+          $("#m_observ_specimen_type").val(result[0]['specimen_type']);
+          $("#m_observ_permitted_data_type").val(result[0]['permitted_data_type']);
+          $("#m_observ_calendar_cycle").val(result[0]['calendar_cycle']);
+          $("#m_observ_calendar_length").val(result[0]['calendar_length']);
+          $("#m_observ_qualified").val(result[0]['qualified_value']);
+          $("#m_observ_unit").val(result[0]['unit']);
+          $("#m_observ_icd").val(result[0]['ICD']);
+          $("#m_observ_cpt").val(result[0]['CPT']);
+          $("#m_observ_hcpcs").val(result[0]['HCPCS']);
+          $("#m_observ_loinc").val(result[0]['LOINC']);
+          $("#m_observ_snomed").val(result[0]['SNOMED']);
+          $("#m_observ_map").val(result[0]['observ_name_map']);
+          $("#measure_observation_modal").modal("show");
+        }
+        
+      }
+    });
+    
+  });
+
+  $(document).on("click",".m_observ_delete_btn",function(){
+    let entry = {
+      id: $(this).parent().attr("idkey")
+    }
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/deleteMeasureObservation", (xhr, err) => {
+          if (!err) {
+            setTimeout( function () {
+              measure_observation_table.ajax.reload();
+            }, 1000 );
+          } else {
+            toastr.error('Credential is invalid');
+          }
+        });	
+      }
+		});
+  });
+
+  
+  var qpp_measure_data = {}
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsPublicationState", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<result.length; i++){
+        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      }
+      $("#m_observ_status").html(options);
+    }
+  });
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsJurisdiction", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<result.length; i++){
+        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      }
+      $("#m_observ_jurisdiction").html(options);
+    }
+  });
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsObservationCategory", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<result.length; i++){
+        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      }
+      $("#m_observ_category").html(options);
+    }
+  });
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsSpecimenType", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<result.length; i++){
+        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      }
+      $("#m_observ_specimen_type").html(options);
+    }
+  });
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsPermittedDataType", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<result.length; i++){
+        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      }
+      $("#m_observ_permitted_data_type").html(options);
+    }
+  });
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/csCalendarCycle", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<result.length; i++){
+        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      }
+      $("#m_observ_calendar_cycle").html(options);
+    }
+  });
+
+  function measureid_change(value){
+    $('#m_observ_measure').addClass('d-none');
+    qpp_measure_data = {}
+    datasrc = []
+    if(qpp_mesures[value]){
+      qpp_measure_data = qpp_mesures[value];
+      $('#m_observ_measure_name').html(qpp_measure_data['title']);
+      $('#m_observ_measure').removeClass('d-none');
+      $('#m_observ_name').attr('data-bs-original-title', "strata");
+      $('#m_observ_name').attr('data-bs-content', "...");
+      let entry = {
+        id: qpp_measure_data['id']
+      }
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/qppMeasuresDataById", (xhr, err) => {
+        if (!err) {
+          let result = JSON.parse(xhr.responseText)['data'];
+          if(result.length>0){
+            var strata = result[0]['strata'];
+            if(strata){
+              var obj = JSON.parse(strata.replace(/\n/g,"<br>"));
+              if(typeof obj==='object' || Array.isArray(obj)){
+                $('#m_observ_name').attr('data-bs-content', obj[0]['description'].replace(/<br>/g, '\n'));
+              }
+            }
+            
+            var eligibilityOptions = result[0]['eligibilityOptions'];
+            if(eligibilityOptions){
+              var obj = JSON.parse(eligibilityOptions);
+              if(typeof obj==='object' || Array.isArray(obj)){
+                var diagnosisCodes = obj[0]['diagnosisCodes'];
+                if(diagnosisCodes)
+                  for(var i=0; i<diagnosisCodes.length; i++){
+                    datasrc[i] = {label: diagnosisCodes[i], value: diagnosisCodes[i]};
+                  }
+              }
+            }
+          }
+        }
+      });
+
+    }
+    ac_icd.setData(datasrc);
+  }
+
+
+  $(document).on("keyup","#m_observ_mid",function(e){
+    measureid_change($(this).val())
+  });
+
+  $(document).on("change","#m_observ_mid",function(e){
+    measureid_change($(this).val())
+  });
+  var datasrc = []
+  const ac_icd = new Autocomplete(document.getElementById('m_observ_icd'), {
+    data: datasrc,
+    treshold: 1,
+    maximumItems: 8,
+    onSelectItem: ({label, value}) => {
+        console.log("user selected:", label, value);
+    }
+  });
+
+  $("#m_observ_save_btn").click(function (e) {
+    if($("#m_observ_mid").val() == ""){
+      toastr.info('Please enter Measure ID');
+      $("#m_observ_mid").focus();
+      return;
+    }
+    if($("#m_observ_name").val() == ""){
+      toastr.info('Please enter Name');
+      $("#m_observ_name").focus();
+      return;
+    }
+    if($("#m_observ_descrition").val() == ""){
+      toastr.info('Please enter Description');
+      $("#m_observ_descrition").focus();
+      return;
+    }
+    let entry = {
+      id: document.getElementById('m_observ_id').value,
+      mid: document.getElementById('m_observ_mid').value,
+      name: document.getElementById('m_observ_name').value,
+      report_name: document.getElementById('m_observ_report_name').value,
+      title: document.getElementById('m_observ_title').value,
+      description: document.getElementById('m_observ_descrition').value,
+      status: document.getElementById('m_observ_status').value,
+      ldate: document.getElementById('m_observ_ldate').value,
+      publisher: document.getElementById('m_observ_publisher').value,
+      url: document.getElementById('m_observ_url').value,
+      jurisdiction: document.getElementById('m_observ_jurisdiction').value,
+      purpose: document.getElementById('m_observ_purpose').value,
+      category: document.getElementById('m_observ_category').value,
+      specimen_type: document.getElementById('m_observ_specimen_type').value,
+      permitted_data_type: document.getElementById('m_observ_permitted_data_type').value,
+      calendar_cycle: document.getElementById('m_observ_calendar_cycle').value,
+      calendar_length: document.getElementById('m_observ_calendar_length').value,
+      qualified: document.getElementById('m_observ_qualified').value,
+      unit: document.getElementById('m_observ_unit').value,
+      icd: document.getElementById('m_observ_icd').value,
+      cpt: document.getElementById('m_observ_cpt').value,
+      hcpcs: document.getElementById('m_observ_hcpcs').value,
+      loinc: document.getElementById('m_observ_loinc').value,
+      snomed: document.getElementById('m_observ_snomed').value,
+      map: document.getElementById('m_observ_map').value,
+      
+    }
+    if($("#m_observ_id").val() == ""){
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/addMeasureObservation", (xhr, err) => {
+        if (!err) {
+          $("#measure_observation_modal").modal("hide");
+          return $.growl.notice({
+            message: "Action successfully"
+          });
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+      });
+    }else{
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/updateMeasureObservation", (xhr, err) => {
+        if (!err) {
+          $("#measure_observation_modal").modal("hide");
+          return $.growl.notice({
+            message: "Action successfully"
+          });
+        } else {
+          return $.growl.error({
+            message: "Action Failed"
+          });
+        }
+      });
+    }
+    
+    setTimeout( function () {
+      measure_observation_table.ajax.reload();
+    }, 1000 );
+    
+  });
+
+
 
   var hdomaintable = $('#hdomaintable').DataTable({
     "ajax": {
@@ -433,7 +797,7 @@ $(document).ready(async function () {
     }
     
     setTimeout( function () {
-      hdomaintable.ajax.reload();
+      measure_observation_table.ajax.reload();
     }, 1000 );
     
   });
