@@ -824,7 +824,7 @@
                     <div class="col-md-4 mb-2">
                         <div class="form-group">
                             <label for="m_observ_name" class="required fw-semibold fs-6 mb-2">Name:</label>
-                            <input type="text" class=" form-control form-control-solid mb-3 mb-lg-0 typeahead" id="m_observ_name" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="..." data-bs-original-title="strata">
+                            <input type="text" class=" form-control form-control-solid mb-3 mb-lg-0 typeahead" id="m_observ_name" >
                         </div>
                     </div>
                     <div class="col-md-4 mb-2">
@@ -839,7 +839,13 @@
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_title">
                         </div>
                     </div>
-                    <div class="col-md-12 mb-2">
+                    <div class="col-md-2 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_acronym" class="fw-semibold fs-6 mb-2">Acronym:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_acronym">
+                        </div>
+                    </div>
+                    <div class="col-md-10 mb-2">
                         <div class="form-group">
                             <label for="m_observ_descrition" class="required fw-semibold fs-6 mb-2">Description:</label>
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_descrition">
@@ -918,50 +924,32 @@
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_qualified">
                         </div>
                     </div>
-                    <div class="col-md-2 mb-2">
-                        <div class="form-group">
-                            <label for="m_observ_unit" class="fw-semibold fs-6 mb-2">Unit:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_unit">
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="form-group">
-                            <label for="m_observ_icd" class="fw-semibold fs-6 mb-2">ICD:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_icd">
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="form-group">
-                            <label for="m_observ_cpt" class="fw-semibold fs-6 mb-2">CPT:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_cpt">
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="form-group ">
-                            <label for="m_observ_hcpcs" class="fw-semibold fs-6 mb-2">HCPCS:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_hcpcs">
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="form-group">
-                            <label for="m_observ_loinc" class="fw-semibold fs-6 mb-2">LOINC:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_loinc">
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="form-group">
-                            <label for="m_observ_snomed" class="fw-semibold fs-6 mb-2">SNOMED:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_snomed">
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-2">
+                    <div class="col-md-5 mb-2">
                         <div class="form-group">
                             <label for="m_observ_map" class="fw-semibold fs-6 mb-2">Name Map:</label>
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_map">
                         </div>
                     </div>
-                    
-                    
+                    <div class="col-md-12 mt-2" id="m_observ_icd_code_list">
+                        <div id="m_observ_icd_code_list_header"></div>
+                        <div id="m_observ_icd_code_list_body"></div>
+                    </div>
+                    <div class="col-md-12 mt-2" id="m_observ_cpt_code_list">
+                        <div id="m_observ_cpt_code_list_header"></div>
+                        <div id="m_observ_cpt_code_list_body"></div>
+                    </div>
+                    <div class="col-md-12 mt-2" id="m_observ_hcpcs_code_list">
+                        <div id="m_observ_hcpcs_code_list_header"></div>
+                        <div id="m_observ_hcpcs_code_list_body"></div>
+                    </div>
+                    <div class="col-md-12 mt-2" id="m_observ_loinc_code_list">
+                        <div id="m_observ_loinc_code_list_header"></div>
+                        <div id="m_observ_loinc_code_list_body"></div>
+                    </div>
+                    <div class="col-md-12 mt-2" id="m_observ_snomed_code_list">
+                        <div id="m_observ_snomed_code_list_header"></div>
+                        <div id="m_observ_snomed_code_list_body"></div>
+                    </div>
                 </div>
                 
 			</div>

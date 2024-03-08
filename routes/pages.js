@@ -195,12 +195,7 @@ router.get("/hedismonthreport", (req, res, next) => {
         pageKey: "../pages/hedismonthreport"
     });
 });
-router.get("/insurance", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Insurance List",
-        pageKey: "../pages/insurance"
-    });
-});
+
 router.get("/inslob", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Insurance LOB",

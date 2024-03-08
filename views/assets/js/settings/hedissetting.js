@@ -366,11 +366,66 @@ $(document).ready(async function () {
     "columns": [
         { data: "m_id" },
         { data: 'name' },
-        { data: 'ICD' },
-        { data: 'CPT' },
-        { data: 'HCPCS' },
-        { data: 'LOINC' },
-        { data: 'SNOMED' },
+        { data: 'ICD',
+          render: function (data, type, row) {
+            if(!row.ICD) return '';
+            var data = JSON.parse(row.ICD);
+            var code = ''
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              if(code!="")code += ", ";  code += data[i]['code'];
+            }
+            return code;
+          } 
+        },
+        { data: 'CPT',
+          render: function (data, type, row) {
+            if(!row.CPT) return '';
+            var data = JSON.parse(row.CPT);
+            var code = ''
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              if(code!="")code += ", ";  code += data[i]['code'];
+            }
+            return code;
+          } 
+        },
+          { data: 'HCPCS',
+            render: function (data, type, row) {
+              if(!row.HCPCS) return '';
+              var data = JSON.parse(row.HCPCS);
+              var code = ''
+              if(typeof data === 'object')
+              for(var i=0; i<data.length; i++){
+                if(code!="")code += ", ";  code += data[i]['code'];
+              }
+              return code;
+            } 
+          },
+        { data: 'LOINC',
+          render: function (data, type, row) {
+            if(!row.LOINC) return '';
+            var data = JSON.parse(row.LOINC);
+            var code = ''
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              if(code!="")code += ", ";  code += data[i]['code'];
+            }
+            return code;
+          } 
+        },
+        { data: 'SNOMED',
+          render: function (data, type, row) {
+            if(!row.SNOMED) return '';
+            var data = JSON.parse(row.SNOMED);
+            var code = ''
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              if(code!="")code += ", ";  code += data[i]['code'];
+            }
+            return code;
+          } 
+        },
         { data: 'id',
           render: function (data, type, row) {
             return `
@@ -401,13 +456,13 @@ $(document).ready(async function () {
     $("#m_observ_purpose").val('');
     $("#m_observ_calendar_length").val('');
     $("#m_observ_qualified").val('');
-    $("#m_observ_unit").val('');
+    $("#m_observ_acronym").val('');
     $("#m_observ_icd").val('');
-    $("#m_observ_cpt").val('');
-    $("#m_observ_hcpcs").val('');
-    $("#m_observ_loinc").val('');
-    $("#m_observ_snomed").val('');
-    $("#m_observ_map").val('');
+    $("#m_observ_icd_code_list_body").html('');
+    $("#m_observ_cpt_code_list_body").html('');
+    $("#m_observ_hcpcs_code_list_body").html('');
+    $("#m_observ_loinc_code_list_body").html('');
+    $("#m_observ_snomed_code_list_body").html('');
     $('#m_observ_measure').addClass('d-none');
     $("#measure_observation_modal").modal("show");
 
@@ -416,6 +471,9 @@ $(document).ready(async function () {
 
   $(document).on("click",".m_observ_edit_btn",function(){
     $('#m_observ_measure').addClass('d-none');
+    $('.m_observ_code').each(function() {
+      $(this).html('');
+    });
     let entry = {
       id: $(this).parent().attr("idkey")
     }
@@ -448,13 +506,50 @@ $(document).ready(async function () {
           $("#m_observ_calendar_cycle").val(result[0]['calendar_cycle']);
           $("#m_observ_calendar_length").val(result[0]['calendar_length']);
           $("#m_observ_qualified").val(result[0]['qualified_value']);
-          $("#m_observ_unit").val(result[0]['unit']);
-          $("#m_observ_icd").val(result[0]['ICD']);
-          $("#m_observ_cpt").val(result[0]['CPT']);
-          $("#m_observ_hcpcs").val(result[0]['HCPCS']);
-          $("#m_observ_loinc").val(result[0]['LOINC']);
-          $("#m_observ_snomed").val(result[0]['SNOMED']);
+          $("#m_observ_acronym").val(result[0]['acronym']);
           $("#m_observ_map").val(result[0]['observ_name_map']);
+          $("#m_observ_icd_code_list_body").html('');
+          $("#m_observ_cpt_code_list_body").html('');
+          $("#m_observ_hcpcs_code_list_body").html('');
+          $("#m_observ_loinc_code_list_body").html('');
+          $("#m_observ_snomed_code_list_body").html('');
+          if(result[0]['ICD']){
+            var data = JSON.parse(result[0]['ICD']);
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              $("#m_observ_icd_code_list_body").append(add_observ_codeset_row('icd', data[i]));
+            }
+          }
+          if(result[0]['CPT']){
+            var data = JSON.parse(result[0]['CPT']);
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              $("#m_observ_cpt_code_list_body").append(add_observ_codeset_row('cpt', data[i]));
+            }
+          }
+          if(result[0]['HCPCS']){
+            var data = JSON.parse(result[0]['HCPCS']);
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              $("#m_observ_hcpcs_code_list_body").append(add_observ_codeset_row('hcpcs', data[i]));
+            }
+          }
+          if(result[0]['LOINC']){
+            var data = JSON.parse(result[0]['LOINC']);
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              $("#m_observ_loinc_code_list_body").append(add_observ_codeset_row('loinc', data[i]));
+            }
+          }
+          if(result[0]['SNOMED']){
+            var data = JSON.parse(result[0]['SNOMED']);
+            if(typeof data === 'object')
+            for(var i=0; i<data.length; i++){
+              $("#m_observ_snomed_code_list_body").append(add_observ_codeset_row('snomed', data[i]));
+            }
+          }
+         
+
           $("#measure_observation_modal").modal("show");
         }
         
@@ -486,7 +581,7 @@ $(document).ready(async function () {
               measure_observation_table.ajax.reload();
             }, 1000 );
           } else {
-            toastr.error('Credential is invalid');
+            toastr.error('Action Failed');
           }
         });	
       }
@@ -548,6 +643,7 @@ $(document).ready(async function () {
       $("#m_observ_permitted_data_type").html(options);
     }
   });
+  var insurance_hedis = [];
 
   sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/csCalendarCycle", (xhr, err) => {
     if (!err) {
@@ -557,13 +653,105 @@ $(document).ready(async function () {
         options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
       }
       $("#m_observ_calendar_cycle").html(options);
+      
     }
   });
+
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "insurance/getHedisList", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      insurance_hedis = result;
+      $("#m_observ_icd_code_list_header").html(add_observ_codeset_header('icd'));
+      $("#m_observ_cpt_code_list_header").html(add_observ_codeset_header('cpt'));
+      $("#m_observ_hcpcs_code_list_header").html(add_observ_codeset_header('hcpcs'));
+      $("#m_observ_loinc_code_list_header").html(add_observ_codeset_header('loinc'));
+      $("#m_observ_snomed_code_list_header").html(add_observ_codeset_header('snomed'));
+    }
+  });
+
+  function add_observ_codeset_header(item){
+    var data = '<div class="form-group row d-flex align-items-end " style="border-bottom: solid 1px #888888;">';
+    data += '<div class="col-md-2">';
+    data += '<label class="fw-semibold fs-6 mb-2">'+item.toUpperCase()+'</label></div>';
+    data += '<div class="col-md-1">';
+    data += '<label  class="fw-semibold fs-6 mb-2">ALL</label></div>';
+    data += '<div class="col-md-8 d-flex align-items-center"><div class="row w-100  m-0 p-0">';
+    for(var i=0; i<insurance_hedis.length; i++){
+      data += '<div class="col-md-2 ">';
+      data += '<label class="fw-semibold fs-6 mb-2 dt-center">'+insurance_hedis[i]['abbrName']+'</label></div>';
+    }
+    data += '</div></div>';
+    data += '<div class="col-md-1 d-flex justify-content-end">';
+    data += '<a href="#" class="btn btn-icon btn-primary btn-sm add_observ_code_row" data-item="'+item+'"><i class="fa fa-plus"></i></a></div>';
+    data += '</div>';
+
+    return data;
+  }
+  function add_observ_codeset_row(item, v){
+    var data = '<div class="form-group row m_observ_code" style="border-bottom: dotted 1px #cccccc;">';
+    data += '<div class="col-md-2 py-2">';
+    data += '<input type="text" class="form-control form-control-solid m_observ_code_value" data-item="'+item+'" data-insurance="';
+    data += v['value']?v['value']:'';
+    data += '" value="';
+    data += v['code']?v['code']:'';
+    data += '"></div>';
+    data += '<div class="col-md-1 py-1 pl-6 d-flex align-items-center">';
+    data += '<input class="form-check-input m_observ_code_check_all" type="checkbox"  ></div>';
+    data += '<div class="col-md-8 d-flex align-items-center"><div class="row w-100  m-0 p-0">';
+    for(var i=0; i<insurance_hedis.length; i++){
+      data += '<div class="col-md-2 py-1 pl-6">';
+      data += '<input class="form-check-input m_observ_code_check" type="checkbox" ';
+      if(typeof v['value'] === 'string'){
+        console.log(v['value']);
+        var insurances = v['value'].split(",");
+        for(var j=0; j<insurances.length; j++){
+          if(insurances[j] == insurance_hedis[i]['id'])data += 'checked="checked" ';
+        }
+      }
+      data += 'data-insurance="'+insurance_hedis[i]['id']+'" ></div>';
+    }
+    data += '</div></div>';
+    data += '<div class="col-md-1 d-flex justify-content-end align-items-center">';
+    data += '<a href="#" class="btn btn-icon btn-danger btn-sm remove_observ_code_row" data-item="'+item+'"><i class="fa fa-trash"></i></a></div>';
+    data += '</div>';
+
+    return data;
+  }
+
+  $(document).on("click",".add_observ_code_row",function(e){
+    var item = $(this).data('item');
+    $("#m_observ_"+item+"_code_list_body").append(add_observ_codeset_row(item, {}))
+  });
+
+  $(document).on("click",".remove_observ_code_row",function(e){
+    $(this).parent().parent().html('');
+  });
+
+  $(document).on("click",".m_observ_code_check_all",function(e){
+    var insurances = $(this).parent().siblings('div').eq(1).children(0);
+    insurances.children('div').children(':checkbox').prop('checked', this.checked);
+    insurances.children('div').children().eq(0).trigger('change');
+  });
+
+  $(document).on("change",".m_observ_code_check",function(e){
+    var insurances = $(this).parent().parent().children();
+    var value = '';
+    for(var i=0; i<insurances.length; i++){
+      if(insurances.eq(i).children(':checkbox').prop('checked')){
+        if(value != '')value += ',';
+        value += insurances.eq(i).children(':checkbox').data('insurance');
+      }
+    }
+    var code_object = $(this).parent().parent().parent().parent().children().eq(0);
+    code_object.children('.m_observ_code_value').data('insurance', value);
+  });
+  
+  
 
   function measureid_change(value){
     $('#m_observ_measure').addClass('d-none');
     qpp_measure_data = {}
-    datasrc = []
+
     if(qpp_mesures[value]){
       qpp_measure_data = qpp_mesures[value];
       $('#m_observ_measure_name').html(qpp_measure_data['title']);
@@ -573,35 +761,35 @@ $(document).ready(async function () {
       let entry = {
         id: qpp_measure_data['id']
       }
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/qppMeasuresDataById", (xhr, err) => {
-        if (!err) {
-          let result = JSON.parse(xhr.responseText)['data'];
-          if(result.length>0){
-            var strata = result[0]['strata'];
-            if(strata){
-              var obj = JSON.parse(strata.replace(/\n/g,"<br>"));
-              if(typeof obj==='object' || Array.isArray(obj)){
-                $('#m_observ_name').attr('data-bs-content', obj[0]['description'].replace(/<br>/g, '\n'));
-              }
-            }
+      // sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/qppMeasuresDataById", (xhr, err) => {
+      //   if (!err) {
+      //     let result = JSON.parse(xhr.responseText)['data'];
+      //     if(result.length>0){
+      //       var strata = result[0]['strata'];
+      //       if(strata){
+      //         var obj = JSON.parse(strata.replace(/\n/g,"<br>"));
+      //         if(typeof obj==='object' || Array.isArray(obj)){
+      //           $('#m_observ_name').attr('data-bs-content', obj[0]['description'].replace(/<br>/g, '\n'));
+      //         }
+      //       }
             
-            var eligibilityOptions = result[0]['eligibilityOptions'];
-            if(eligibilityOptions){
-              var obj = JSON.parse(eligibilityOptions);
-              if(typeof obj==='object' || Array.isArray(obj)){
-                var diagnosisCodes = obj[0]['diagnosisCodes'];
-                if(diagnosisCodes)
-                  for(var i=0; i<diagnosisCodes.length; i++){
-                    datasrc[i] = {label: diagnosisCodes[i], value: diagnosisCodes[i]};
-                  }
-              }
-            }
-          }
-        }
-      });
+      //       var eligibilityOptions = result[0]['eligibilityOptions'];
+      //       if(eligibilityOptions){
+      //         var obj = JSON.parse(eligibilityOptions);
+      //         if(typeof obj==='object' || Array.isArray(obj)){
+      //           var diagnosisCodes = obj[0]['diagnosisCodes'];
+      //           if(diagnosisCodes)
+      //             for(var i=0; i<diagnosisCodes.length; i++){
+      //               datasrc[i] = {label: diagnosisCodes[i], value: diagnosisCodes[i]};
+      //             }
+      //         }
+      //       }
+      //     }
+      //   }
+      // });
 
     }
-    ac_icd.setData(datasrc);
+    // ac_icd.setData(datasrc);
   }
 
 
@@ -612,15 +800,15 @@ $(document).ready(async function () {
   $(document).on("change","#m_observ_mid",function(e){
     measureid_change($(this).val())
   });
-  var datasrc = []
-  const ac_icd = new Autocomplete(document.getElementById('m_observ_icd'), {
-    data: datasrc,
-    treshold: 1,
-    maximumItems: 8,
-    onSelectItem: ({label, value}) => {
-        console.log("user selected:", label, value);
-    }
-  });
+  // var datasrc = []
+  // const ac_icd = new Autocomplete(document.getElementById('m_observ_icd'), {
+  //   data: datasrc,
+  //   treshold: 1,
+  //   maximumItems: 8,
+  //   onSelectItem: ({label, value}) => {
+  //       console.log("user selected:", label, value);
+  //   }
+  // });
 
   $("#m_observ_save_btn").click(function (e) {
     if($("#m_observ_mid").val() == ""){
@@ -638,6 +826,18 @@ $(document).ready(async function () {
       $("#m_observ_descrition").focus();
       return;
     }
+    var codes = [];
+    $('.m_observ_code_value').each(function() {
+      if($(this).val() != ""){
+        if(!codes[$(this).data('item')]){
+          codes[$(this).data('item')] = [];
+        }
+        codes[$(this).data('item')].push({
+          "code": $(this).val(),
+          "value": $(this).data('insurance'),
+        });
+      }
+    });
     let entry = {
       id: document.getElementById('m_observ_id').value,
       mid: document.getElementById('m_observ_mid').value,
@@ -657,12 +857,12 @@ $(document).ready(async function () {
       calendar_cycle: document.getElementById('m_observ_calendar_cycle').value,
       calendar_length: document.getElementById('m_observ_calendar_length').value,
       qualified: document.getElementById('m_observ_qualified').value,
-      unit: document.getElementById('m_observ_unit').value,
-      icd: document.getElementById('m_observ_icd').value,
-      cpt: document.getElementById('m_observ_cpt').value,
-      hcpcs: document.getElementById('m_observ_hcpcs').value,
-      loinc: document.getElementById('m_observ_loinc').value,
-      snomed: document.getElementById('m_observ_snomed').value,
+      acronym: document.getElementById('m_observ_acronym').value,
+      icd: codes['icd']?JSON.stringify(codes['icd']):"",
+      cpt: codes['cpt']?JSON.stringify(codes['cpt']):"",
+      hcpcs: codes['hcpcs']?JSON.stringify(codes['hcpcs']):"",
+      loinc: codes['loinc']?JSON.stringify(codes['loinc']):"",
+      snomed: codes['snomed']?JSON.stringify(codes['snomed']):"",
       map: document.getElementById('m_observ_map').value,
       
     }
@@ -670,26 +870,18 @@ $(document).ready(async function () {
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/addMeasureObservation", (xhr, err) => {
         if (!err) {
           $("#measure_observation_modal").modal("hide");
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          toastr.success('Measure Overvation is added successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          toastr.error('Action Failed');
         }
       });
     }else{
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/updateMeasureObservation", (xhr, err) => {
         if (!err) {
           $("#measure_observation_modal").modal("hide");
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          toastr.success('Measure Overvation is updated successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          toastr.error('Action Failed');
         }
       });
     }

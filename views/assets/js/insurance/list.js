@@ -5,20 +5,29 @@ $(document).ready(function () {
         "url": serviceUrl + "insurance/",
         "type": "GET"
     },
+    "order": [[3, 'asc']],
     "columns": [
         { data: "insName"},
-        { data: 'insphone' },
+        { data: 'abbrName' },
         { data: 'insaddress',
           render: function (data, type, row) {
               return row.insaddress+" "+row.insaddress2;
           } 
         },
+        { data: 'hedis_active',
+          render: function (data, type, row) {
+            if(row.hedis_active==1)
+              return "<span class='badge badge-success badge-lg px-4'> Active </span>";
+            else
+              return "<span class='badge badge-danger badge-lg px-3'>Inactive</span>";
+          } 
+        },
         { data: 'Inactive',
           render: function (data, type, row) {
             if(row.Inactive == 0)
-              return "<span class='tag tag-green'>Active</span>";
+              return "<span class='badge badge-success badge-lg px-4'> Active </span>";
             else
-              return "<span class='tag tag-red'>Inactive</span>";
+              return "<span class='badge badge-danger badge-lg px-3'>Inactive</span>";
           } 
         },
         { data: 'id',
@@ -32,12 +41,44 @@ $(document).ready(function () {
         }
     ]
   });
+
+  $('#table_search_input').on('keyup', function () {
+    insurancetable.search(this.value).draw();
+  });
   $(document).on("click",".insuranceaddbtn",function(){
+    $("#insname").val('');
+    $("#abbrname").val('');
+    $("#insaddress1").val('');
+    $("#insaddress2").val('');
+    $("#inscity").val('');
+    $("#insstate").val('');
+    $("#inszip").val('');
+    $("#insphone").val('');
+    $("#insfax").val('');
+    $("#insemail").val('');
+    $("#hedis").val('');
+    $("#insstatus").val('');
     $("#insurance-add-modal").modal("show");
   });
   $("#insaddbtn").click(function (e) {
+    if($("#insname").val() == ""){
+      toastr.info('Please enter Insurance Name');
+      $("#insname").focus();
+      return;
+    }
+    if($("#abbrname").val() == ""){
+      toastr.info('Please enter Abbr Name');
+      $("#abbrname").focus();
+      return;
+    }
+    if($("#insaddress1").val() == ""){
+      toastr.info('Please enter Address');
+      $("#insaddress1").focus();
+      return;
+    }
     let entry = {
       name: document.getElementById('insname').value,
+      abbr: document.getElementById('abbrname').value,
       email: document.getElementById('insemail').value,
       fax: document.getElementById('insfax').value,
       phone: document.getElementById('insphone').value,
@@ -46,17 +87,15 @@ $(document).ready(function () {
       city: document.getElementById('inscity').value,
       state: document.getElementById('insstate').value,
       zip: document.getElementById('inszip').value,
+      hedis: document.getElementById('hedis').value,
       status: document.getElementById('insstatus').value
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/add", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Insurance is added successfully"
-          });
+          $("#insurance-add-modal").modal("hide");
+          toastr.success('Insurance is added successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          toastr.error('Action Failed');
         }
     });
     setTimeout( function () {
@@ -72,6 +111,7 @@ $(document).ready(function () {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         $("#einsname").val(result[0]['insName']);
+        $("#eabbrname").val(result[0]['abbrName']);
         $("#einsaddress1").val(result[0]['insaddress']);
         $("#einsaddress2").val(result[0]['insaddress2']);
         $("#einscity").val(result[0]['inscity']);
@@ -80,20 +120,36 @@ $(document).ready(function () {
         $("#einsphone").val(result[0]['insphone']);
         $("#einsfax").val(result[0]['insfax']);
         $("#einsemail").val(result[0]['insemail']);
+        $("#ehedis").val(result[0]['hedis_active']);
         $("#einsstatus").val(result[0]['Inactive']);
 
         $("#insurance-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        toastr.error('Action Failed');
       }
     });
   });
   $("#inseditbtn").click(function (e) {
+    if($("#einsname").val() == ""){
+      toastr.info('Please enter Insurance Name');
+      $("#einsname").focus();
+      return;
+    }
+    if($("#eabbrname").val() == ""){
+      toastr.info('Please enter Abbr Name');
+      $("#eabbrname").focus();
+      return;
+    }
+    if($("#einsaddress1").val() == ""){
+      toastr.info('Please enter Address');
+      $("#einsaddress1").focus();
+      return;
+    }
+    
     let entry = {
       id: document.getElementById('chosen_insurance').value,
       name: document.getElementById('einsname').value,
+      abbr: document.getElementById('eabbrname').value,
       email: document.getElementById('einsemail').value,
       fax: document.getElementById('einsfax').value,
       phone: document.getElementById('einsphone').value,
@@ -102,17 +158,15 @@ $(document).ready(function () {
       city: document.getElementById('einscity').value,
       state: document.getElementById('einsstate').value,
       zip: document.getElementById('einszip').value,
+      hedis: document.getElementById('ehedis').value,
       status: document.getElementById('einsstatus').value
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/update", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Insurance is updated successfully"
-          });
+          $("#insurance-edit-modal").modal("hide");
+          toastr.success('Insurance is updated successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          toastr.error('Action Failed');
         }
     });
     setTimeout( function () {
@@ -123,27 +177,31 @@ $(document).ready(function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/delete", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/delete", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               insurancetable.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            toastr.error('Action Failed');
           }
         });
-			}
+      }
 		});
+
+    
   });
 });
