@@ -9,10 +9,21 @@
 	<link rel="shortcut icon" href="/assets/media/logos/favicon.ico" />
 	<link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 	<link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
 		
 	</head>
 
 	<body>
+		<div id="loader">
+			<div class="position-center-center">
+				<div class="cssload-thecube">
+					<div class="cssload-cube cssload-c1"></div>
+					<div class="cssload-cube cssload-c2"></div>
+					<div class="cssload-cube cssload-c4"></div>
+					<div class="cssload-cube cssload-c3"></div>
+				</div>
+			</div>
+		</div>
 
 		<!-- BACKGROUND-IMAGE -->
 			<%- include(pageKey); %>
@@ -22,7 +33,7 @@
 		<!--begin::Global Javascript Bundle(mandatory for all pages)-->
 		<script src="/assets/plugins/global/plugins.bundle.js"></script>
 		<script src="/assets/js/scripts.bundle.js"></script>
-
+		<script src="/assets/js/custom/app.js"></script>
 		<script src="/assets/js/api.js"></script>
 		<script src="/assets/js/pages/<%- pageKey -%>.js"></script>
 	</body>
