@@ -821,28 +821,40 @@
                             <div class="col-md-12 " id="m_observ_measure_name" ></div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-2">
+                    <div class="col-md-9 mb-2">
                         <div class="form-group">
                             <label for="m_observ_name" class="required fw-semibold fs-6 mb-2">Name:</label>
                             <input type="text" class=" form-control form-control-solid mb-3 mb-lg-0 typeahead" id="m_observ_name" >
                         </div>
                     </div>
-                    <div class="col-md-4 mb-2">
+                    <div class="col-md-3 mb-2">
                         <div class="form-group">
-                            <label for="m_observ_report_name" class="fw-semibold fs-6 mb-2">preferredReportName:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_report_name">
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-2">
-                        <div class="form-group">
-                            <label for="m_observ_title" class="fw-semibold fs-6 mb-2">Title:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_title">
+                            <label for="m_observ_acronym" class="fw-semibold fs-6 mb-2">Acronym:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_acronym">
                         </div>
                     </div>
                     <div class="col-md-2 mb-2">
                         <div class="form-group">
-                            <label for="m_observ_acronym" class="fw-semibold fs-6 mb-2">Acronym:</label>
-                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_acronym">
+                            <label for="m_observ_report_name" class="fw-semibold fs-6 mb-2">Multiple:</label>
+                        </div>
+                        <div class="d-flex justify-content-center pt-4">
+                            <input type="checkbox" class="form-check-input"  value="" id="m_observ_multiple" />
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-2">
+                        <div class="form-group non-multiple">
+                            <label for="m_observ_report_name" class="fw-semibold fs-6 mb-2">preferred Report Name:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_report_name">
+                        </div>
+                        <div class="form-group multiple d-none">
+                            <label for="m_observ_quantity" class="fw-semibold fs-6 mb-2">Quantity:</label>
+                            <input type="number" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_quantity">
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-2">
+                        <div class="form-group non-multiple">
+                            <label for="m_observ_title" class="fw-semibold fs-6 mb-2">Title:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_title">
                         </div>
                     </div>
                     <div class="col-md-10 mb-2">

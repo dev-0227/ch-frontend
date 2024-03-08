@@ -458,6 +458,10 @@ $(document).ready(async function () {
     $("#m_observ_name").val('');
     $("#m_observ_report_name").val('');
     $("#m_observ_title").val('');
+    $("#m_observ_multiple").prop('checked', false);
+    $('.multiple').addClass('d-none');
+    $('.non-multiple').removeClass('d-none');
+    $("#m_observ_quantity").val('1');
     $("#m_observ_descrition").val('');
     $("#m_observ_ldate").val(new Date().toISOString().split('T')[0]);
     $("#m_observ_publisher").val('');
@@ -502,6 +506,15 @@ $(document).ready(async function () {
           $("#m_observ_name").val(result[0]['name']);
           $("#m_observ_report_name").val(result[0]['preferredReportName']);
           $("#m_observ_title").val(result[0]['title']);
+          $("#m_observ_multiple").prop('checked',result[0]['multiple']);
+          if(result[0]['multiple']){
+            $('.multiple').removeClass('d-none');
+            $('.non-multiple').addClass('d-none');
+          }else{
+            $('.multiple').addClass('d-none');
+            $('.non-multiple').removeClass('d-none');
+          }
+          $("#m_observ_quantity").val(result[0]['quantity']);
           $("#m_observ_descrition").val(result[0]['description']);
           $("#m_observ_status").val(result[0]['p_status']);
           $("#m_observ_ldate").val(new Date(result[0]['lastdate']).toISOString().split('T')[0]);
@@ -726,6 +739,18 @@ $(document).ready(async function () {
     return data;
   }
 
+  
+
+  $(document).on("change","#m_observ_multiple",function(e){
+    if(this.checked){
+      $('.multiple').removeClass('d-none');
+      $('.non-multiple').addClass('d-none');
+    }else{
+      $('.multiple').addClass('d-none');
+      $('.non-multiple').removeClass('d-none');
+    }
+  });
+
   $(document).on("click",".add_observ_code_row",function(e){
     var item = $(this).data('item');
     $("#m_observ_"+item+"_code_list_body").append(add_observ_codeset_row(item, {}))
@@ -856,6 +881,8 @@ $(document).ready(async function () {
       name: document.getElementById('m_observ_name').value,
       report_name: document.getElementById('m_observ_report_name').value,
       title: document.getElementById('m_observ_title').value,
+      multiple: $('#m_observ_multiple').prop('checked')?"1":"0",
+      quantity: document.getElementById('m_observ_quantity').value,
       description: document.getElementById('m_observ_descrition').value,
       status: document.getElementById('m_observ_status').value,
       ldate: document.getElementById('m_observ_ldate').value,
