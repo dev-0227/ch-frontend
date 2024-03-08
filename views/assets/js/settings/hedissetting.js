@@ -522,35 +522,35 @@ $(document).ready(async function () {
           $("#m_observ_hcpcs_code_list_body").html('');
           $("#m_observ_loinc_code_list_body").html('');
           $("#m_observ_snomed_code_list_body").html('');
-          if(result[0]['ICD']){
+          if(isJsonString(result[0]['ICD'])){
             var data = JSON.parse(result[0]['ICD']);
             if(typeof data === 'object')
             for(var i=0; i<data.length; i++){
               $("#m_observ_icd_code_list_body").append(add_observ_codeset_row('icd', data[i]));
             }
           }
-          if(result[0]['CPT']){
+          if(isJsonString(result[0]['CPT'])){
             var data = JSON.parse(result[0]['CPT']);
             if(typeof data === 'object')
             for(var i=0; i<data.length; i++){
               $("#m_observ_cpt_code_list_body").append(add_observ_codeset_row('cpt', data[i]));
             }
           }
-          if(result[0]['HCPCS']){
+          if(isJsonString(result[0]['HCPCS'])){
             var data = JSON.parse(result[0]['HCPCS']);
             if(typeof data === 'object')
             for(var i=0; i<data.length; i++){
               $("#m_observ_hcpcs_code_list_body").append(add_observ_codeset_row('hcpcs', data[i]));
             }
           }
-          if(result[0]['LOINC']){
+          if(isJsonString(result[0]['LOINC'])){
             var data = JSON.parse(result[0]['LOINC']);
             if(typeof data === 'object')
             for(var i=0; i<data.length; i++){
               $("#m_observ_loinc_code_list_body").append(add_observ_codeset_row('loinc', data[i]));
             }
           }
-          if(result[0]['SNOMED']){
+          if(isJsonString(result[0]['SNOMED'])){
             var data = JSON.parse(result[0]['SNOMED']);
             if(typeof data === 'object')
             for(var i=0; i<data.length; i++){
@@ -711,7 +711,6 @@ $(document).ready(async function () {
       data += '<div class="col-md-2 py-1 pl-6">';
       data += '<input class="form-check-input m_observ_code_check" type="checkbox" ';
       if(typeof v['value'] === 'string'){
-        console.log(v['value']);
         var insurances = v['value'].split(",");
         for(var j=0; j<insurances.length; j++){
           if(insurances[j] == insurance_hedis[i]['id'])data += 'checked="checked" ';
