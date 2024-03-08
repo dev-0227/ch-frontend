@@ -347,6 +347,15 @@ $(document).ready(async function () {
     }
   });
 
+  function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+  }
+
   var measure_observation_table = $('#measure_observation_table').DataTable({
     "ajax": {
         "url": serviceUrl + "hedissetting/getMeasureObservation",
@@ -368,7 +377,7 @@ $(document).ready(async function () {
         { data: 'name' },
         { data: 'ICD',
           render: function (data, type, row) {
-            if(!row.ICD) return '';
+            if(!isJsonString(row.ICD)) return '';
             var data = JSON.parse(row.ICD);
             var code = ''
             if(typeof data === 'object')
@@ -380,7 +389,7 @@ $(document).ready(async function () {
         },
         { data: 'CPT',
           render: function (data, type, row) {
-            if(!row.CPT) return '';
+            if(!isJsonString(row.CPT)) return '';
             var data = JSON.parse(row.CPT);
             var code = ''
             if(typeof data === 'object')
@@ -392,7 +401,7 @@ $(document).ready(async function () {
         },
           { data: 'HCPCS',
             render: function (data, type, row) {
-              if(!row.HCPCS) return '';
+              if(!isJsonString(row.HCPCS)) return '';
               var data = JSON.parse(row.HCPCS);
               var code = ''
               if(typeof data === 'object')
@@ -404,7 +413,7 @@ $(document).ready(async function () {
           },
         { data: 'LOINC',
           render: function (data, type, row) {
-            if(!row.LOINC) return '';
+            if(!isJsonString(row.LOINC)) return '';
             var data = JSON.parse(row.LOINC);
             var code = ''
             if(typeof data === 'object')
@@ -416,7 +425,7 @@ $(document).ready(async function () {
         },
         { data: 'SNOMED',
           render: function (data, type, row) {
-            if(!row.SNOMED) return '';
+            if(!isJsonString(row.SNOMED)) return '';
             var data = JSON.parse(row.SNOMED);
             var code = ''
             if(typeof data === 'object')
