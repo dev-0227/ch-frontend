@@ -840,9 +840,13 @@ $(document).ready(async function () {
         if(!codes[$(this).data('item')]){
           codes[$(this).data('item')] = [];
         }
+        var prefix = "";
+        var insurance = $(this).data('insurance').toString();
+        if(insurance.split(",")==0)prefix = "0"
+        
         codes[$(this).data('item')].push({
           "code": $(this).val(),
-          "value": $(this).data('insurance'),
+          "value": prefix+$(this).data('insurance'),
         });
       }
     });
