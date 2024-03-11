@@ -623,6 +623,7 @@ $(document).ready(async function () {
       acronym: document.getElementById('m_data_acronym').value,
       multiple: $('#m_data_multiple').prop('checked')?"1":"0",
       multipleQuantity: document.getElementById('m_data_multipleQuantity').value,
+      multipleTest: $('#m_data_multipleTest').prop('checked')?"1":"0",
       hedis: $('#m_data_hedis').prop('checked')?"1":"0",
       nameMap: document.getElementById('m_data_nameMap').value,
       eMeasureId: document.getElementById('m_data_eMeasureId').value,
