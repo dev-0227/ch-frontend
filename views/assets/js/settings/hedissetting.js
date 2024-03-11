@@ -528,8 +528,8 @@ $(document).ready(async function () {
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "No, return",
       customClass: {
-          confirmButton: "btn btn-primary",
-          cancelButton: "btn btn-active-light"
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-primary"
       }
 		}).then(function (result) {
       if (result.value) {
@@ -926,8 +926,8 @@ $(document).ready(async function () {
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "No, return",
       customClass: {
-          confirmButton: "btn btn-primary",
-          cancelButton: "btn btn-active-light"
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-primary"
       }
 		}).then(function (result) {
       if (result.value) {
@@ -1401,8 +1401,8 @@ $(document).ready(async function () {
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "No, return",
       customClass: {
-          confirmButton: "btn btn-primary",
-          cancelButton: "btn btn-active-light"
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-primary"
       }
 		}).then(function (result) {
       if (result.value) {
