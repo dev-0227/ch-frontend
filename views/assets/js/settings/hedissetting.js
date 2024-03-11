@@ -339,7 +339,7 @@ $(document).ready(async function () {
   });
 
   let qpp_mesures = []
-  sendFormWithToken('GET', localStorage.getItem('authToken'), [], "hedissetting/qppMeasuresData?eyear=2023", (xhr, err) => {
+  sendFormWithToken('GET', localStorage.getItem('authToken'), [], "hedissetting/measuresData", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       for(var i=0; i<result.length; i++){
