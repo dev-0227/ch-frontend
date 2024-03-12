@@ -219,6 +219,7 @@ $(document).ready(async function () {
                   "headers": { 'Authorization': localStorage.getItem('authToken') }
               },
               "processing": true,
+              "autoWidth": false,
               "columns": [
                  { data: 'measureId'},
                  { data: 'nqfId'},
@@ -355,6 +356,7 @@ $(document).ready(async function () {
         "headers": { 'Authorization': localStorage.getItem('authToken') }
     },
     "processing": true,
+    "autoWidth": false,
     "columns": [
        { data: 'measureId'},
        { data: 'nqfId'},
@@ -363,8 +365,8 @@ $(document).ready(async function () {
        { data: 'id',
             render: function (data, type, row) {
               return `
-                <div idkey="`+row.id+`">
-                <button class="btn btn-sm btn-info showMeasureDataModal"><i class="fa fa-eye"></i></button>
+                <div class="btn-group align-top" idkey="`+row.id+`">
+                <button class="btn btn-sm btn-success showMeasureDataModal"><i class="fa fa-eye"></i></button>
                 <button class="btn btn-sm btn-primary showMeasureDataEditModal"><i class="fa fa-edit"></i></button>
                 <button class="btn btn-sm btn-danger deleteMeasureData"><i class="fa fa-trash"></i></button>
                 </div>
@@ -506,7 +508,7 @@ $(document).ready(async function () {
   });
 
   $(document).on("click","#add_meature_data_btn",function(){
-    $('.m_data').each(function() {
+    $('.form-control').each(function() {
       if($(this).attr('type')=='checkbox'){
         $(this).prop('checked', false);
       }else{
