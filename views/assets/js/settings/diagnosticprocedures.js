@@ -172,7 +172,7 @@ $(document).ready(function () {
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/diagnosticprocedures/update", (xhr, err) => {
         if (!err) {
           $("#diagnostic_procedure_modal").modal("hide");
-          toastr.success("Diagnostic Procedure is added successfully");
+          toastr.success("Diagnostic Procedure is updated successfully");
         } else {
           return toastr.error("Action Failed");
         }
