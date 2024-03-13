@@ -133,6 +133,7 @@ $(document).ready(function () {
         $(this).val('');
       }
     });
+    $('#d_procedure_measure').addClass('d-none');
     $("#diagnostic_procedure_modal").modal("show");
   });
 

@@ -35,7 +35,6 @@ $(document).ready(function () {
         if(result.status == "success"){
           localStorage.setItem('userid', result.userid);
           localStorage.setItem('usertype', result.type);
-          localStorage.setItem('userclinic', result.clinic);
           localStorage.setItem('username', result.fname+" "+result.lname);
           localStorage.setItem('email', result.email);
           localStorage.setItem('authToken', result.token);

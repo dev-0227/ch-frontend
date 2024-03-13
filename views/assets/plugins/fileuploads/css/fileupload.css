@@ -92,7 +92,8 @@
     width: 100%;
     opacity: 0;
     cursor: pointer;
-    z-index: 5; }
+    /* z-index: 5; */ 
+  }
   .dropify-wrapper .dropify-message {
     position: relative;
     top: 50%;

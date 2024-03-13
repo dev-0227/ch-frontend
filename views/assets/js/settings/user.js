@@ -75,7 +75,7 @@ $(document).ready(function () {
     }
   });
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "setting/getchosenclinics", (xhr, err) => {
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "setting/clinic/getAll", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       for(var i = 0; i < result.length; i++){

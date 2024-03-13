@@ -78,7 +78,7 @@ $(document).ready(function () {
   });
   $(document).on("click",".managerclinicbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/getchosenclinics", (xhr, err) => {
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/clinic/getAll", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         let clinics = $(this).attr("clinickey").split(",");

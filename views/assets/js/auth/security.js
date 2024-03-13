@@ -6,7 +6,6 @@ $(document).ready(function () {
       if(typeof result == "undefined" || result == null){
         localStorage.removeItem("userid");
         localStorage.removeItem("usertype");
-        localStorage.removeItem('userclinic');
         localStorage.removeItem('username');
         localStorage.removeItem("redirectkey");
         window.location.replace("./");
@@ -21,6 +20,10 @@ $(document).ready(function () {
       toastr.error('Credential is invalid');
     }
   });
+
+  
+
+
   $('#answer').keypress(function(e){
     if (e.which === 13) {
       $("#security_submit").trigger("click");
@@ -57,7 +60,6 @@ $(document).ready(function () {
         else{
           localStorage.removeItem("userid");
           localStorage.removeItem("usertype");
-          localStorage.removeItem('userclinic');
           localStorage.removeItem('username');
           localStorage.removeItem("redirectkey");
           window.location.replace("./");
@@ -66,7 +68,6 @@ $(document).ready(function () {
       else {
         localStorage.removeItem("userid");
         localStorage.removeItem("usertype");
-        localStorage.removeItem('userclinic');
         localStorage.removeItem('username');
         localStorage.removeItem("redirectkey");
         window.location.replace("./");

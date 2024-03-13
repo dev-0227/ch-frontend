@@ -99,43 +99,28 @@
 				
 				if (localStorage.getItem('userid') == '' || localStorage.getItem('userid') == undefined) {
 					window.location.replace("../");
-				} 
+				}
+
 				await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/getchosenclinics", (xhr, err) => {
+					let result = JSON.parse(xhr.responseText)['data'];
 					if (!err) {
-						let result = JSON.parse(xhr.responseText)['data'];
-						let clinics = localStorage.getItem('userclinic').split(",");
 						$("#chosen_clinics").empty();
-						if(clinics.length == 1 && clinics[0] == "0"){
-							for(var i = 0; i < result.length; i++){
-								if(result[i]['id'] == localStorage.getItem('chosen_clinic')){
-									$("#chosen_clinics").append(`<option value = "`+result[i]['id']+`" selected>`+result[i]['name']+`</option>`);
-								}
-								else{
-									$("#chosen_clinics").append(`<option value = "`+result[i]['id']+`">`+result[i]['name']+`</option>`);
-								}
-								
-							}
+						var selected = "";
+						for(var i = 0; i < result.length; i++){
+							selected = "";
+							if(localStorage.getItem('chosen_clinic')=='undefined')
+								localStorage.setItem('chosen_clinic', result[0]['id']);
+							if(result[i]['id'] == localStorage.getItem('chosen_clinic'))
+								selected = " selected ";
+							$("#chosen_clinics").append(`<option value = "`+result[i]['id']+`" `+selected+`>`+result[i]['name']+`</option>`);
 						}
-						else{
-							for(var i = 0; i < result.length; i++){
-								if(clinics.includes(result[i]['id'].toString())){
-									if(result[i]['id'] == localStorage.getItem('chosen_clinic')){
-										$("#chosen_clinics").append(`<option value = "`+result[i]['id']+`" selected>`+result[i]['name']+`</option>`);
-									}
-									else{
-										$("#chosen_clinics").append(`<option value = "`+result[i]['id']+`">`+result[i]['name']+`</option>`);
-									}
-								}
-							}
-						}
-						
-					} else {
-						return $.growl.error({
-						message: "Action Failed"
-						});
+					}
+					else {
+						toastr.error('Credential is invalid');
 					}
 				});
-				setTimeout(function(){$(".clinic-name").html($("#chosen_clinics option:checked").text())}, 1000);
+				
+				// setTimeout(function(){$(".clinic-name").html($("#chosen_clinics option:checked").text())}, 1000);
 				$("#chosen_clinics").change(function(){
 					localStorage.setItem('chosen_clinic', $(this).val());
 					location.reload();
@@ -143,7 +128,7 @@
 				$(".app_user_name").html(localStorage.getItem('username'));
 				$(".app_user_email").html(localStorage.getItem('email'));
 				$(".managertype").html((localStorage.getItem('usertype')==0?"Superadmin":(localStorage.getItem('usertype')==1?"Administrator":(localStorage.getItem('usertype')==2?"Manager":(localStorage.getItem('usertype')==3?"Specialist":(localStorage.getItem('usertype')==4?"Staff":"Doctor"))))));
-				$(".logoutbtn").click(async function(){
+				$("#sign_out_btn").click(async function(){
 					await sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid:localStorage.getItem('userid')}, "login/logout", (xhr, err) => {
 						if(!err){
 							
@@ -154,7 +139,6 @@
           			localStorage.removeItem("usertype");
           			localStorage.removeItem("username");
           			localStorage.removeItem("email");
-          			localStorage.removeItem("userclinic");
           			localStorage.removeItem("redirectkey");
           			localStorage.removeItem("loginid");
 					localStorage.removeItem("authToken");
