@@ -163,7 +163,7 @@ $(document).ready(function () {
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/diagnosticprocedures/create", (xhr, err) => {
         if (!err) {
           $("#diagnostic_procedure_modal").modal("hide");
-          toastr.success("Diagnostic Procedure is added successfully");
+          toastr.success("Diagnostic Report is added successfully");
         } else {
           return toastr.error("Action Failed");
         }
@@ -172,7 +172,7 @@ $(document).ready(function () {
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/diagnosticprocedures/update", (xhr, err) => {
         if (!err) {
           $("#diagnostic_procedure_modal").modal("hide");
-          toastr.success("Diagnostic Procedure is updated successfully");
+          toastr.success("Diagnostic Report is updated successfully");
         } else {
           return toastr.error("Action Failed");
         }

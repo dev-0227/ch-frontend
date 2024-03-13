@@ -949,7 +949,7 @@ $(document).ready(async function () {
   
   var qpp_measure_data = {}
 
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsPublicationState", (xhr, err) => {
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/publicationState", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
@@ -959,7 +959,7 @@ $(document).ready(async function () {
       $("#m_observ_status").html(options);
     }
   });
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsJurisdiction", (xhr, err) => {
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/jurisdiction", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
@@ -970,7 +970,7 @@ $(document).ready(async function () {
     }
   });
 
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsObservationCategory", (xhr, err) => {
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/observationCategory", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
@@ -980,7 +980,7 @@ $(document).ready(async function () {
       $("#m_observ_category").html(options);
     }
   });
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsSpecimenType", (xhr, err) => {
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/specimenType", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
@@ -991,7 +991,7 @@ $(document).ready(async function () {
     }
   });
 
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), [], "hedissetting/vsPermittedDataType", (xhr, err) => {
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/permittedDataType", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
