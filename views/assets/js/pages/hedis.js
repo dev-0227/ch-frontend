@@ -14,8 +14,8 @@ $(document).ready(function () {
           $(".inshedislist").empty();
           $(".inshedispoplutaion").empty();
           for(var i = 0;i < result.length;i++){
-            $(".inshedislist").append(`<a href="../pages/hedisreport?insid=`+result[i]['insid']+`" class="btn btn-outline-primary" target='_blank'>`+result[i]['insName']+`</a>`);
-            $(".inshedispoplutaion").append(`<a href="../pages/hedispopulation?insid=`+result[i]['insid']+`" class="btn btn-outline-primary" target='_blank'>`+result[i]['insName']+`</a>`);
+            $(".inshedislist").append(`<a href="../pages/hedisreport?insid=`+result[i]['insid']+`" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-2 mb-2" target='_blank'>`+result[i]['insName']+`</a>`);
+            $(".inshedispoplutaion").append(`<a href="../pages/hedispopulation?insid=`+result[i]['insid']+`" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-2 mb-2" target='_blank'>`+result[i]['insName']+`</a>`);
           }
         } else {
           return $.growl.warning({

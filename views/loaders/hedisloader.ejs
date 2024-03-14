@@ -45,228 +45,244 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Hedis Data</h3>
+                <h3 class="card-title">HEDIS Data Loader </h3>
             </div>
             <div class="card-body p-6">
                 <div class="panel panel-primary">
                     <div class=" tab-menu-heading">
-                        <div class="tabs-menu1 ">
+                        <div class=" tab-menu-heading">
                             <!-- Tabs -->
-                            <ul class="nav panel-tabs">
-                                <li ><a href="#hedis_tab" class="active" data-toggle="tab">Hedis Insurance</a></li>
-                                <li><a href="#enc_tab" data-toggle="tab">Enc File</a></li>
-                                <li><a href="#lab_tab" data-toggle="tab">Lab File</a></li>
-                                <li class="vaccine-area"><a href="#vaccine_tab" data-toggle="tab">Vaccine File</a></li>
-                                <li><a href="#prevnext_tab" data-toggle="tab">Prev and Next File</a></li>
+                            <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6 ">
+                                <li class="nav-item"><a class="nav-link active" href="#hedis_tab"  data-bs-toggle="tab">Hedis Insurance</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#enc_tab" data-bs-toggle="tab">Enc File</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#lab_tab" data-bs-toggle="tab">Lab File</a></li>
+                                <li class="nav-item vaccine-area"><a class="nav-link" href="#vaccine_tab" data-bs-toggle="tab">Vaccine File</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#prevnext_tab" data-bs-toggle="tab">Prev and Next File</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="panel-body tabs-menu-body">
+                    <div class="panel-body tabs-menu-body tab_area">
                         <div class="tab-content">
-                            <div class="tab-pane active " id="hedis_tab">
+                            <div class="tab-pane active" id="hedis_tab">
                                 <div class="row">
                                     <div class="col-lg-5">
-                                        <div class="form-group">
-                                            <label class="form-label"> Select Insurance to load quality data</label>
-                                            <select id="insforqualityloader" class="form-control select2-show-search" data-placeholder="Choose one (with searchbox)">
-                                                	    
-	  
-	   
-	 
-	    
-	    
-	     
-	  
-	  
-
-                                            </select>
-                                        </div>
+                                        
                                         <div class="card shadow">
-                                            <div class="card-header">
-                                                <h3 class="mb-0 card-title">Hedis Insurance</h3>
+                                            <div class="card-header ribbon ribbon-top  p-3">
+                                                <div class="ribbon-label py-2"> Select Insurance to load quality data
+                                                    <span class="ribbon-inner bg-success"></span>
+                                                </div>
+                                                <div class="card-title row w-100">
+                                                    <div class="col-md-12 pt-12">
+                                                        <select id="insforqualityloader" class="form-select  form-select-solid " data-placeholder="Choose one (with searchbox)">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
                                             </div>
                                             <div class="card-body">
-                                                <h6>
-                                                    <span class='tag tag-purple mt-1'>ptfname</span>
-                                                    <span class='tag tag-purple mt-1'>ptlname</span>
-                                                    <span class='tag tag-purple mt-1'>ptname</span>
-                                                    <span class='tag tag-purple mt-1'>phone</span>
-                                                    <span class='tag tag-purple mt-1'>dob</span>
-                                                    <span class='tag tag-purple mt-1'>email</span>
-                                                    <span class='tag tag-purple mt-1'>ins_pcp_id</span>
-                                                    <span class='tag tag-purple mt-1'>measure</span>
-                                                    <span class='tag tag-purple mt-1'>mid</span>
-                                                    <span class='tag tag-purple mt-1'>mlob</span>
-                                                </h6>
-                                                <input id="qualityfile" type="file" class="dropify" data-height="150" />
+                                                <div class="mb-4">
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>ptfname</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>ptlname</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>ptname</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>phone</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>dob</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>email</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>ins_pcp_id</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>measure</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>mid</span>
+                                                    <span class='badge badge-primary badge-square p-2 mt-1'>mlob</span>
+                                                </div>
+                                                <input id="qualityfile" type="file" class="dropify" accept=".csv" data-height="150" />
                                                 <div class="form-group">
-                                                    <div class="form-label">Please switch option to activate retrospect</div>
-                                                    <label class="custom-switch">
-                                                        <input type="checkbox" id="activateretro" class="custom-switch-input" value="1">
-                                                        <span class="custom-switch-indicator"></span>
-                                                        <span class="custom-switch-description">Activate Retrospect</span>
-                                                    </label>
+                                                    <div class="fs-6 fw-semibold text-gray-500">Please switch option to activate retrospect</div>
+                                                    <div class="form-check form-switch form-check-custom form-check-solid mt-2">
+                                                        <input type="checkbox" id="activateretro" class="form-check-input" value="1">
+                                                        <label class="form-check-label fw-semibold text-gray-500 ms-3" for="allowchanges">Activate Retrospect</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="btn-list text-center">
-                                            <button type="button" class="btn btn-success" id="qualityloadbtn"><i class="fe fe-upload mr-2 white-color"></i>Upload</button>
-                                            <button type="button" class="btn btn-danger" id="qualitydeletebtn"><i class="fe fe-delete mr-2 white-color"></i>Delete</button>
+                                        <div class="btn-list text-center mt-3 ">
+                                            <button type="button" class="btn btn-success" id="qualityloadbtn"><i class="fa fa-upload mr-2 white-color"></i>Upload</button>
+                                            <button type="button" class="btn btn-danger" id="qualitydeletebtn"><i class="fa fa-delete mr-2 white-color"></i>Delete</button>
                                         </div>
                                     </div>
                                     <div class="col-lg-7">
-                                        <div class="text-right">
-                                            <button type="button" class="btn btn-info" id="backupfilebtn"><i class="fa fa-hdd-o mr-2 white-color"></i>Backup Now</button>
-                                        </div>
-                                        <div class="table-responsive table-lg pt-2">
-                                            <table class="table table-striped table-bordered text-nowrap w-100" id="backuptable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Date</th>
-                                                        <th>Insurance</th>
-                                                        <th>File</th>
-                                                        <th class="text-center">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                        <div class="card shadow-sm">
+                                            <div class="card-header">
+                                                <div class="card-title">
                                                     
-                                                </tbody>
-                                            </table>
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button type="button" class="btn btn-primary" id="backupfilebtn">
+                                                        <i class="fa fa-hdd mr-2 "></i>Backup Now</button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive table-lg pt-2">
+                                                    <table class="table table-striped table-bordered text-nowrap w-100" id="backuptable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="70%">Date Time</th>
+                                                                <th width="30%" class="text-center">Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane " id="enc_tab">
                                 <div class="col-lg-6">
                                     <div class="card shadow">
-                                        <div class="card-header">
-                                            <h3 class="mb-0 card-title">Enc File</h3>
+                                        <div class="card-header ribbon ribbon-start ribbon-clip">
+                                            <div class="ribbon-label">
+                                                <div class="fs-3">Enc File</div>
+                                                <span class="ribbon-inner bg-success"></span>
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <h6>
-                                                <span class='tag tag-purple mt-1'>systollic</span>
-                                                <span class='tag tag-purple mt-1'>diastollic</span>
-                                                <span class='tag tag-purple mt-1'>INS_N</span>
-                                                <span class='tag tag-purple mt-1'>MedVerf</span>
-                                                <span class='tag tag-purple mt-1'>ENC_STATUS</span>
-                                                <span class='tag tag-purple mt-1'>ENC_VISIT_TYPE</span>
-                                                <span class='tag tag-purple mt-1'>patientId</span>
-                                                <span class='tag tag-purple mt-1'>DOB</span>
-                                                <span class='tag tag-purple mt-1'>doctorid</span>
-                                                <span class='tag tag-purple mt-1'>facilityid</span>
-                                                <span class='tag tag-purple mt-1'>encounterid</span>
-                                                <span class='tag tag-purple mt-1'>enctype</span>
-                                                <span class='tag tag-purple mt-1'>ICD_CODE</span>
-                                                <span class='tag tag-purple mt-1'>ICD_DESC</span>
-                                                <span class='tag tag-purple mt-1'>PainScale</span>
-                                                <span class='tag tag-purple mt-1'>AdultCare</span>
-                                                <span class='tag tag-purple mt-1'>Advalue</span>
-                                                <span class='tag tag-purple mt-1'>BP</span>
-                                                <span class='tag tag-purple mt-1'>date</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>systollic</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>diastollic</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>INS_N</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>MedVerf</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>ENC_STATUS</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>ENC_VISIT_TYPE</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>patientId</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>DOB</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>doctorid</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>facilityid</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>encounterid</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>enctype</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>ICD_CODE</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>ICD_DESC</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>PainScale</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>AdultCare</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>Advalue</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>BP</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>date</span>
                                             </h6>
                                             <input id="encfile" type="file" class="dropify" data-height="150" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="btn-list text-center">
-                                        <button type="button" class="btn btn-success" id="encloadbtn"><i class="fe fe-upload mr-2 white-color"></i>Upload</button>
+                                    <div class="btn-list text-center mt-3">
+                                        <button type="button" class="btn btn-success" id="encloadbtn"><i class="fa fa-upload mr-2 white-color"></i>Upload</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane " id="lab_tab">
                                 <div class="col-lg-6">
                                     <div class="card shadow">
-                                        <div class="card-header">
-                                            <h3 class="mb-0 card-title">Lab File</h3>
+                                        <div class="card-header ribbon ribbon-start ribbon-clip">
+                                            <div class="ribbon-label">
+                                                <div class="fs-3">Lab File</div>
+                                                <span class="ribbon-inner bg-success"></span>
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <h6>
-                                                <span class='tag tag-purple mt-1'>insuranceName</span>
-                                                <span class='tag tag-purple mt-1'>insid</span>
-                                                <span class='tag tag-purple mt-1'>SUBID</span>
-                                                <span class='tag tag-purple mt-1'>VISIT_TYPE</span>
-                                                <span class='tag tag-purple mt-1'>patientId</span>
-                                                <span class='tag tag-purple mt-1'>doctorid</span>
-                                                <span class='tag tag-purple mt-1'>enctype</span>
-                                                <span class='tag tag-purple mt-1'>Lab_D_Encounter</span>
-                                                <span class='tag tag-purple mt-1'>RId_HL7</span>
-                                                <span class='tag tag-purple mt-1'>LAB_testName</span>
-                                                <span class='tag tag-purple mt-1'>name_HL7</span>
-                                                <span class='tag tag-purple mt-1'>value_HL7</span>
-                                                <span class='tag tag-purple mt-1'>units_HL7</span>
-                                                <span class='tag tag-purple mt-1'>range_HL7</span>
-                                                <span class='tag tag-purple mt-1'>Lab_ResultDate</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>insuranceName</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>insid</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>SUBID</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>VISIT_TYPE</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>patientId</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>doctorid</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>enctype</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>Lab_D_Encounter</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>RId_HL7</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>LAB_testName</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>name_HL7</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>value_HL7</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>units_HL7</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>range_HL7</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>Lab_ResultDate</span>
                                             </h6>
                                             <input id="labfile" type="file" class="dropify" data-height="150" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="btn-list text-center">
-                                        <button type="button" class="btn btn-success" id="labloadbtn"><i class="fe fe-upload mr-2 white-color"></i>Upload</button>
+                                <div class="col-lg-6 ">
+                                    <div class="btn-list text-center mt-3 ">
+                                        <button type="button" class="btn btn-success" id="labloadbtn"><i class="fa fa-upload mr-2 white-color"></i>Upload</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane vaccine-area" id="vaccine_tab">
                                 <div class="col-lg-6">
                                     <div class="card shadow">
-                                        <div class="card-header">
-                                            <h3 class="mb-0 card-title">Vaccine File</h3>
+                                        <div class="card-header ribbon ribbon-start ribbon-clip">
+                                            <div class="ribbon-label">
+                                                <div class="fs-3">Vaccine File</div>
+                                                <span class="ribbon-inner bg-success"></span>
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <h6>
-                                                <span class='tag tag-purple mt-1'>encounterID</span>
-                                                <span class='tag tag-purple mt-1'>patientID</span>
-                                                <span class='tag tag-purple mt-1'>doctorID</span>
-                                                <span class='tag tag-purple mt-1'>VisitType</span>
-                                                <span class='tag tag-purple mt-1'>VAC_ID</span>
-                                                <span class='tag tag-purple mt-1'>cvx_code</span>
-                                                <span class='tag tag-purple mt-1'>vaccinename</span>
-                                                <span class='tag tag-purple mt-1'>V_GIVEN</span>
-                                                <span class='tag tag-purple mt-1'>CPT</span>
-                                                <span class='tag tag-purple mt-1'>ICD</span>
-                                                <span class='tag tag-purple mt-1'>ICD_DESC</span>
-                                                <span class='tag tag-purple mt-1'>icd1</span>
-                                                <span class='tag tag-purple mt-1'>DOB</span>
-                                                <span class='tag tag-purple mt-1'>date</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>encounterID</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>patientID</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>doctorID</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>VisitType</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>VAC_ID</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>cvx_code</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>vaccinename</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>V_GIVEN</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>CPT</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>ICD</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>ICD_DESC</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>icd1</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>DOB</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>date</span>
                                             </h6>
                                             <input id="vaccinefile" type="file" class="dropify" data-height="150" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="btn-list text-center">
-                                        <button type="button" class="btn btn-success" id="vaccineloadbtn"><i class="fe fe-upload mr-2 white-color"></i>Upload</button>
+                                    <div class="btn-list text-center mt-3">
+                                        <button type="button" class="btn btn-success" id="vaccineloadbtn"><i class="fa fa-upload mr-2 white-color"></i>Upload</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane " id="prevnext_tab">
                                 <div class="col-lg-6">
                                     <div class="card shadow">
-                                        <div class="card-header">
-                                            <h3 class="mb-0 card-title">Prev and Next File</h3>
+                                        <div class="card-header ribbon ribbon-start ribbon-clip">
+                                            <div class="ribbon-label">
+                                                <div class="fs-3">Prev and Next File</div>
+                                                <span class="ribbon-inner bg-success"></span>
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <h6>
-                                                <span class='tag tag-purple mt-1'>patientid</span>
-                                                <span class='tag tag-purple mt-1'>PrevApptPCP</span>
-                                                <span class='tag tag-purple mt-1'>PrevApptVType</span>
-                                                <span class='tag tag-purple mt-1'>PrevApptDate</span>
-                                                <span class='tag tag-purple mt-1'>NxtApptPCP</span>
-                                                <span class='tag tag-purple mt-1'>NxtApptVType</span>
-                                                <span class='tag tag-purple mt-1'>NxtApptDate</span>
-                                                <span class='tag tag-purple mt-1'>insid</span>
-                                                <span class='tag tag-purple mt-1'>insuranceName</span>
-                                                <span class='tag tag-purple mt-1'>subscriberno</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>patientid</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>PrevApptPCP</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>PrevApptVType</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>PrevApptDate</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>NxtApptPCP</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>NxtApptVType</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>NxtApptDate</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>insid</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>insuranceName</span>
+                                                <span class='badge badge-primary badge-square p-2 mt-1'>subscriberno</span>
                                             </h6>
                                             <input id="prevnextfile" type="file" class="dropify" data-height="150" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="btn-list text-center">
-                                        <button type="button" class="btn btn-success" id="prevnextloadbtn"><i class="fe fe-upload mr-2 white-color"></i>Upload</button>
+                                    <div class="btn-list text-center mt-3">
+                                        <button type="button" class="btn btn-success" id="prevnextloadbtn"><i class="fa fa-upload mr-2 white-color"></i>Upload</button>
                                     </div>
                                 </div>
                             </div>
@@ -283,45 +299,55 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Insurance Validation</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h3 class="modal-title" id="example-Modal3">Insurance Validation</h3>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
-                            <div class="card-header">
-                                <div class="card-title">This file is correct right? If then, turn on to check chosen insurance</div>
+                            <div class="card-header ribbon ribbon-end ribbon-clip">
+                                <div class="ribbon-label text-white-900 fs-5 fw-bold">
+                                    This file is correct right? If then, turn on to check chosen insurance
+                                    <span class="ribbon-inner bg-primary"></span>
+                                </div>
+                                
                             </div>
                             <div class="card-body">
-                                <h4 class="text-pink clinic-name text-center"></h4>
+                                <h4 class=" clinic-name text-center" id="clinic_name"></h4>
                                 <ul class="list-group">
                                     <li class="list-group-item">
-                                        <span id="insurance-validation-text" class="text-pink"></span>
-                                        <div class="material-switch pull-right">
-                                            <input id="inscheckbox" name="inscheckbox" type="checkbox"/>
-                                            <label for="inscheckbox" class="label-primary"></label>
+                                        <div class="form-check form-switch form-check-custom form-check-solid mt-2">
+                                            <label id="insurance-validation-text" class="form-check-label fw-semibold text-gray-500 m-3 text-pink mr-3" ></label>
+                                            <input type="checkbox" id="inscheckbox" name="inscheckbox" class=" form-check-input" value="1">
                                         </div>
                                     </li>
                                     <li class="list-group-item">
-                                        <span class="text-primary">Back up Hedis Data</span>
-                                        <div class="material-switch pull-right">
-                                            <input id="backupcheck" name="backupcheck" type="checkbox" checked/>
-                                            <label for="backupcheck" class="label-info"></label>
+                                        <div class="form-check form-switch form-check-custom form-check-solid mt-2">
+                                            <label class="form-check-label fw-semibold text-gray-500 m-3 text-pink mr-3" >Back up Hedis Data</label>
+                                            <input type="checkbox" id="backupcheck" name="backupcheck" class=" form-check-input" value="1">
                                         </div>
                                     </li>
+                                    <li class="list-group-item">
+                                        <div class="form-check form-switch form-check-custom form-check-solid mt-2">
+                                            <label class="form-check-label fw-semibold text-gray-500 m-3 text-pink mr-3" >Activate Retrospect</label>
+                                            <input type="checkbox" id="retrospectcheck" name="retrospectcheck" class=" form-check-input" value="1">
+                                        </div>
+                                    </li>
+                                    
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="qualitysubmitbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="qualitysubmitbtn"><i class="fa fa-upload">&nbsp;</i> Done</button>
+             </div>
+			
 		</div>
 	</div>
 </div>
@@ -329,10 +355,10 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Delete Hedis Data</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h3 class="modal-title" id="example-Modal3">Delete Hedis Data</h3>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -341,18 +367,17 @@
                     </div>
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label class="form-label"> Select date to delete hedis data</label>
+                            <label class="fw-semibold mb-4 fs-5 text-gray-500"> Select date to delete hedis data</label>
                             <select id="datadate" class="form-control">
-                                
                             </select>
                         </div>
                     </div>
                 </div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="deletedatabtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-danger" id="deletedatabtn"><i class="fa fa-trash">&nbsp;</i> Done</button>
+             </div>
 		</div>
 	</div>
 </div>
@@ -361,10 +386,10 @@
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Loaded Successfully</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h3 class="modal-title" id="example-Modal3">Loaded Successfully</h3>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -375,9 +400,9 @@
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+             </div>
 		</div>
 	</div>
 </div>
@@ -386,10 +411,10 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Loaded Successfully</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h3 class="modal-title" id="example-Modal3">Loaded Successfully</h3>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -405,8 +430,8 @@
                 </div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+            </div>
 		</div>
 	</div>
 </div>
@@ -415,10 +440,10 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Backup File Modal</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h3 class="modal-title" id="example-Modal3">Backup File Modal</h3>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -432,10 +457,11 @@
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success backupnowbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="backupnowbtn"><i class="fa fa-hdd">&nbsp;</i> Backup</button>
+            </div>
+			
 		</div>
 	</div>
 </div>

@@ -1,17 +1,20 @@
 $(document).ready(async function () {
   "use strict";
-  let entry = {
-    clinicid:localStorage.getItem('chosen_clinic')
-  }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/getTotal", (xhr, err) => {
-    if (!err) {
-      let data = JSON.parse(xhr.responseText)['data'];
-      $(".totalcount").html(data[0]['total']);
-      $('.managername').html(localStorage.getItem('username'));
-    } else {
-      toastr.error('Credential is invalid');
+  if(!localStorage.getItem('chosen_clinic') || localStorage.getItem('chosen_clinic') != 'undefined'){
+    let entry = {
+      clinicid:localStorage.getItem('chosen_clinic')
     }
-  });
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/getTotal", (xhr, err) => {
+      if (!err) {
+        let data = JSON.parse(xhr.responseText)['data'];
+        $(".totalcount").html(data[0]['total']);
+        $('.managername').html(localStorage.getItem('username'));
+      } else {
+        toastr.error('Credential is invalid');
+      }
+    });
+  }
+  
 
   $("#ptloadbtn").click(function(){
     var formData = new FormData();
