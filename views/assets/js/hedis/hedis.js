@@ -14,8 +14,8 @@ $(document).ready(function () {
           $(".inshedislist").empty();
           $(".inshedispoplutaion").empty();
           for(var i = 0;i < result.length;i++){
-            $(".inshedislist").append(`<a href="../pages/hedisreport?insid=`+result[i]['insid']+`" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-2 mb-2" target='_blank'>`+result[i]['insName']+`</a>`);
-            $(".inshedispoplutaion").append(`<a href="../pages/hedispopulation?insid=`+result[i]['insid']+`" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-2 mb-2" target='_blank'>`+result[i]['insName']+`</a>`);
+            $(".inshedislist").append(`<a href="../hedis/report?insid=`+result[i]['insid']+`" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-2 mb-2" target='_blank'>`+result[i]['insName']+`</a>`);
+            $(".inshedispoplutaion").append(`<a href="../hedis/population?insid=`+result[i]['insid']+`" class="btn btn-outline btn-outline-dashed btn-outline-secondary btn-active-light-secondary me-2 mb-2" target='_blank'>`+result[i]['insName']+`</a>`);
           }
         } else {
           return $.growl.warning({
@@ -57,7 +57,7 @@ $(document).ready(function () {
     $("#hedis_work_date_modal").modal("show");
   });
   $("#submireportlogbtn").click(function(){
-    $("body").append("<form id = 'hedisaccessform' action = '../pages/hedisaccess' method = 'POST'><input type='hidden' name='sdate' value='"+$("#sdate").val()+"' /><input type='hidden' name='edate' value='"+$("#edate").val()+"' /></form>");
+    $("body").append("<form id = 'hedisaccessform' action = '../hedis/access' method = 'POST'><input type='hidden' name='sdate' value='"+$("#sdate").val()+"' /><input type='hidden' name='edate' value='"+$("#edate").val()+"' /></form>");
     $("#hedisaccessform").submit();
     $("#hedisaccessform").remove();
   });

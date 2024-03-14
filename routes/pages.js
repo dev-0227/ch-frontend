@@ -21,46 +21,9 @@ router.get("/profile", (req, res, next) => {
     });
 });
 
-router.get("/hedis", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis",
-        pageKey: "../pages/hedis"
-    });
-});
 
 
 
-router.get("/hedisreport", (req, res, next) => {
-    res.render("jexcelblank", {
-        pageTitle: "Hedis Report",
-        pageKey: "../pages/hedisreport"
-    });
-});
-router.get("/hedisdaily", (req, res, next) => {
-    res.render("jexcelblank", {
-        pageTitle: "Hedis Daily",
-        pageKey: "../pages/hedisdaily"
-    });
-});
-
-router.get("/hedisnoncompliant", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Non Utilizers",
-        pageKey: "../pages/hedisnoncompliant"
-    });
-});
-router.get("/conciergereport", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Concierge Report",
-        pageKey: "../pages/conciergereport"
-    });
-});
-router.get("/hedispopulation", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Popluation",
-        pageKey: "../pages/hedispopulation"
-    });
-});
 router.get("/invoice", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Invoice",
@@ -189,12 +152,7 @@ router.post("/superbillview", (req, res, next) => {
         type: req.body.type,
     });
 });
-router.get("/hedismonthreport", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Monthly Report",
-        pageKey: "../pages/hedismonthreport"
-    });
-});
+
 
 router.get("/inslob", (req, res, next) => {
     res.render("layout/mainblank", {
@@ -236,14 +194,7 @@ router.get("/ticket", (req, res, next) => {
         pageKey: "../pages/ticket"
     });
 });
-router.post("/hedisaccess", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Work Report",
-        pageKey: "../pages/hedisaccess",
-        sdate: req.body.sdate,
-        edate: req.body.edate,
-    });
-});
+
 router.post("/accessdetail", (req, res, next) => {
     res.render("nosiderblank", {
         pageTitle: "Hedis Work Details",
@@ -253,11 +204,6 @@ router.post("/accessdetail", (req, res, next) => {
         edate: req.body.edate,
     });
 });
-router.get("/hedisquery", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Hedis Query Builder",
-        pageKey: "../pages/hedisquerybuilder"
-    });
-});
+
 
 module.exports = router;
