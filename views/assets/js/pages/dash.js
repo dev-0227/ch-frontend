@@ -8,23 +8,23 @@ $(document).ready(function () {
         clinicid:localStorage.getItem('chosen_clinic'),
         cyear:$("#hedisdate").val(),
       }
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), getinsentry, "hedis/getinsheislist", (xhr, err) => {
-        if (!err) {
-          let result = JSON.parse(xhr.responseText)['data'];
-          $(".insurance_tab_list").empty();
-          $("#tmpinsid").val(result[0]['insid']);
-          for(var i = 0;i < result.length;i++){
-            $(".insurance_tab_list").append(`
-              <li inskey = "`+result[i]['insid']+`"><a href="#`+result[i]['insName'].replaceAll(" ","_")+`_tab" class="`+(i==0?"active":"")+`" data-toggle="tab">`+result[i]['insName']+`</a></li>
-            `);
-          }
-          loadinschart();
-        } else {
-          return $.growl.warning({
-            message: "Action Failed"
-          });
-        }
-      });
+      // sendRequestWithToken('POST', localStorage.getItem('authToken'), getinsentry, "hedis/getinsheislist", (xhr, err) => {
+      //   if (!err) {
+      //     let result = JSON.parse(xhr.responseText)['data'];
+      //     $(".insurance_tab_list").empty();
+      //     $("#tmpinsid").val(result[0]['insid']);
+      //     for(var i = 0;i < result.length;i++){
+      //       $(".insurance_tab_list").append(`
+      //         <li inskey = "`+result[i]['insid']+`"><a href="#`+result[i]['insName'].replaceAll(" ","_")+`_tab" class="`+(i==0?"active":"")+`" data-toggle="tab">`+result[i]['insName']+`</a></li>
+      //       `);
+      //     }
+      //     loadinschart();
+      //   } else {
+      //     return $.growl.warning({
+      //       message: "Action Failed"
+      //     });
+      //   }
+      // });
     } else {
       return $.growl.error({
         message: "Action Failed"

@@ -19,6 +19,7 @@ $(document).ready(async function () {
             return new Date(row.date).toLocaleString();
           } 
         },
+        { data: "num"},
         { data: 'id',
           render: function (data, type, row) {
             return `
@@ -362,7 +363,7 @@ $(document).ready(async function () {
               let result = JSON.parse(xhr.responseText)['message'];
               if(result == "OK")
                 return toastr.success('Action Successfully');
-              $else
+              else
                 return toastr.info('You need to delete old data first');
             } else {
               return toastr.error('Action Failed');
