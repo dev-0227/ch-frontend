@@ -977,18 +977,43 @@
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_calendar_length">
                         </div>
                     </div>
-                    <div class="col-md-4 mb-2">
+                    <div class="col-md-3 mb-2">
                         <div class="form-group">
                             <label for="m_observ_qualified" class="fw-semibold fs-6 mb-2">Qualified Value:</label>
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_qualified">
                         </div>
                     </div>
-                    <div class="col-md-5 mb-2">
+                    <div class="col-md-2 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_min_age" class="fw-semibold fs-6 mb-2">Min Age:</label>
+                            <input type="number" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_min_age">
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_max_age" class="fw-semibold fs-6 mb-2">Max Age:</label>
+                            <input type="number" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_max_age">
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-group">
+                            <label for="m_observ_time_cycle" class="fw-semibold fs-6 mb-2">Time Cycle:</label>
+                            <select class="form-control" id="m_observ_time_cycle">
+                                <option value="day">Day</option>
+                                <option value="week">Week</option>
+                                <option value="month">Month</option>
+                                <option value="year">Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 mb-2">
                         <div class="form-group">
                             <label for="m_observ_map" class="fw-semibold fs-6 mb-2">Name Map:</label>
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="m_observ_map">
                         </div>
                     </div>
+                    
                     <div class="col-md-12 mt-2" id="m_observ_icd_code_list">
                         <div id="m_observ_icd_code_list_header"></div>
                         <div id="m_observ_icd_code_list_body"></div>
@@ -1008,6 +1033,10 @@
                     <div class="col-md-12 mt-2" id="m_observ_snomed_code_list">
                         <div id="m_observ_snomed_code_list_header"></div>
                         <div id="m_observ_snomed_code_list_body"></div>
+                    </div>
+                    <div class="col-md-12 mt-2" id="m_observ_ins_acronym_list">
+                        <div id="m_observ_ins_acronym_list_header"></div>
+                        <div id="m_observ_ins_acronym_list_body"></div>
                     </div>
                 </div>
                 

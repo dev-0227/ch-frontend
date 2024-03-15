@@ -812,6 +812,8 @@ $(document).ready(async function () {
     $("#m_observ_hcpcs_code_list_body").html('');
     $("#m_observ_loinc_code_list_body").html('');
     $("#m_observ_snomed_code_list_body").html('');
+    $("#m_observ_ins_acronym_list_body").html('');
+    
     $('#m_observ_measure').addClass('d-none');
     $("#measure_observation_modal").modal("show");
 
@@ -866,11 +868,16 @@ $(document).ready(async function () {
           $("#m_observ_qualified").val(result[0]['qualified_value']);
           $("#m_observ_acronym").val(result[0]['acronym']);
           $("#m_observ_map").val(result[0]['observ_name_map']);
+          $("#m_observ_min_age").val(result[0]['min_age']);
+          $("#m_observ_max_age").val(result[0]['max_age']);
+          $("#m_observ_time_cycle").val(result[0]['time_cycle']);
           $("#m_observ_icd_code_list_body").html('');
           $("#m_observ_cpt_code_list_body").html('');
           $("#m_observ_hcpcs_code_list_body").html('');
           $("#m_observ_loinc_code_list_body").html('');
           $("#m_observ_snomed_code_list_body").html('');
+          $("#m_observ_ins_acronym_list_body").html('');
+          
           if(isJsonString(result[0]['ICD'])){
             var data = JSON.parse(result[0]['ICD']);
             if(typeof data === 'object')
@@ -904,6 +911,13 @@ $(document).ready(async function () {
             if(typeof data === 'object')
             for(var i=0; i<data.length; i++){
               $("#m_observ_snomed_code_list_body").append(add_observ_codeset_row('snomed', data[i]));
+            }
+          }
+          if(isJsonString(result[0]['ins_acronym'])){
+            var data = JSON.parse(result[0]['ins_acronym']);
+            if(typeof data === 'object' && data != null)
+            for(var i=0; i<data.length; i++){
+              $("#m_observ_ins_acronym_list_body").append(add_observ_acronym_row('acronym', data[i]));
             }
           }
          
@@ -1024,15 +1038,19 @@ $(document).ready(async function () {
       $("#m_observ_hcpcs_code_list_header").html(add_observ_codeset_header('hcpcs'));
       $("#m_observ_loinc_code_list_header").html(add_observ_codeset_header('loinc'));
       $("#m_observ_snomed_code_list_header").html(add_observ_codeset_header('snomed'));
+      $("#m_observ_ins_acronym_list_header").html(add_observ_codeset_header('acronym'));
+      
     }
   });
 
   function add_observ_codeset_header(item){
+    var label = (item=="acronym")?"ins acronym":item;
     var data = '<div class="form-group row d-flex align-items-end " style="border-bottom: solid 1px #888888;">';
     data += '<div class="col-md-2">';
-    data += '<label class="fw-semibold fs-6 mb-2">'+item.toUpperCase()+'</label></div>';
+    data += '<label class="fw-semibold fs-6 mb-2">'+label.toUpperCase()+'</label></div>';
     data += '<div class="col-md-1">';
-    data += '<label  class="fw-semibold fs-6 mb-2">ALL</label></div>';
+    var allLabel = (item=="acronym")?"":"All"
+    data += '<label  class="fw-semibold fs-6 mb-2">'+allLabel+'</label></div>';
     data += '<div class="col-md-8 d-flex align-items-center"><div class="row w-100  m-0 p-0">';
     for(var i=0; i<insurance_hedis.length; i++){
       data += '<div class="col-md-2 ">';
@@ -1075,6 +1093,36 @@ $(document).ready(async function () {
     return data;
   }
 
+  function add_observ_acronym_row(item, v){
+    var data = '<div class="form-group row m_observ_code" style="border-bottom: dotted 1px #cccccc;">';
+    data += '<div class="col-md-2 py-2">';
+    data += '<input type="text" class="form-control form-control-solid m_observ_code_value" data-item="'+item+'" data-insurance="';
+    data += v['value']?v['value']:'';
+    data += '" value="';
+    data += v['code']?v['code']:'';
+    data += '"></div>';
+    data += '<div class="col-md-1 py-1 pl-6 d-flex align-items-center">';
+    data += '</div>';
+    data += '<div class="col-md-8 d-flex align-items-center"><div class="row w-100  m-0 p-0">';
+    for(var i=0; i<insurance_hedis.length; i++){
+      data += '<div class="col-md-2 py-1 pl-6">';
+      data += '<input class="form-control form-control-solid mb-3 mb-lg-0 m_observ_acronym_input" type="text" value="';
+      if(typeof v['value'] === 'string'){
+        var insurances = v['value'].split(",");
+        for(var j=0; j<insurances.length; j++){
+          var ins_acronym = insurances[j].split(":");
+          if(ins_acronym[0] == insurance_hedis[i]['id'])data += ins_acronym[1];
+        }
+      }
+      data += '" data-insurance="'+insurance_hedis[i]['id']+'" ></div>';
+    }
+    data += '</div></div>';
+    data += '<div class="col-md-1 d-flex justify-content-end align-items-center">';
+    data += '<a href="#" class="btn btn-icon btn-danger btn-sm remove_observ_code_row" data-item="'+item+'"><i class="fa fa-trash"></i></a></div>';
+    data += '</div>';
+    return data;
+  }
+
   
 
   $(document).on("change","#m_observ_multiple",function(e){
@@ -1089,8 +1137,15 @@ $(document).ready(async function () {
 
   $(document).on("click",".add_observ_code_row",function(e){
     var item = $(this).data('item');
-    $("#m_observ_"+item+"_code_list_body").append(add_observ_codeset_row(item, {}))
+    if(item == "acronym"){
+      $("#m_observ_ins_acronym_list_body").append(add_observ_acronym_row(item, {}))
+    }else{
+      $("#m_observ_"+item+"_code_list_body").append(add_observ_codeset_row(item, {}))
+    }
+    
   });
+
+
 
   $(document).on("click",".remove_observ_code_row",function(e){
     $(this).parent().parent().html('');
@@ -1102,6 +1157,8 @@ $(document).ready(async function () {
     insurances.children('div').children().eq(0).trigger('change');
   });
 
+  
+
   $(document).on("change",".m_observ_code_check",function(e){
     var insurances = $(this).parent().parent().children();
     var value = '';
@@ -1109,6 +1166,21 @@ $(document).ready(async function () {
       if(insurances.eq(i).children(':checkbox').prop('checked')){
         if(value != '')value += ',';
         value += insurances.eq(i).children(':checkbox').data('insurance');
+      }
+    }
+    var code_object = $(this).parent().parent().parent().parent().children().eq(0);
+    code_object.children('.m_observ_code_value').data('insurance', value);
+  });
+
+  $(document).on("change",".m_observ_acronym_input",function(e){
+    var insurances = $(this).parent().parent().children();
+    var value = '';
+    for(var i=0; i<insurances.length; i++){
+      if(insurances.eq(i).children().val()!=""){
+        if(value != '')value += ',';
+        value += insurances.eq(i).children().data('insurance');
+        value += ':'
+        value += insurances.eq(i).children().val();
       }
     }
     var code_object = $(this).parent().parent().parent().parent().children().eq(0);
@@ -1169,15 +1241,6 @@ $(document).ready(async function () {
   $(document).on("change","#m_observ_mid",function(e){
     measureid_change($(this).val())
   });
-  // var datasrc = []
-  // const ac_icd = new Autocomplete(document.getElementById('m_observ_icd'), {
-  //   data: datasrc,
-  //   treshold: 1,
-  //   maximumItems: 8,
-  //   onSelectItem: ({label, value}) => {
-  //       console.log("user selected:", label, value);
-  //   }
-  // });
 
   $("#m_observ_save_btn").click(function (e) {
     if($("#m_observ_mid").val() == ""){
@@ -1211,6 +1274,7 @@ $(document).ready(async function () {
         });
       }
     });
+    console.log(codes);
     let entry = {
       id: document.getElementById('m_observ_id').value,
       mid: document.getElementById('m_observ_mid').value,
@@ -1239,7 +1303,10 @@ $(document).ready(async function () {
       loinc: codes['loinc']?JSON.stringify(codes['loinc']):"",
       snomed: codes['snomed']?JSON.stringify(codes['snomed']):"",
       map: document.getElementById('m_observ_map').value,
-      
+      min_age: document.getElementById('m_observ_min_age').value,
+      max_age: document.getElementById('m_observ_max_age').value,
+      time_cycle: document.getElementById('m_observ_time_cycle').value,
+      ins_acronym: codes['acronym']?JSON.stringify(codes['acronym']):"",
     }
     if($("#m_observ_id").val() == ""){
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/addMeasureObservation", (xhr, err) => {
