@@ -73,6 +73,7 @@
                                                     <span class="ribbon-inner bg-success"></span>
                                                 </div>
                                                 <div class="card-title row w-100">
+
                                                     <div class="col-md-12 pt-12">
                                                         <select id="insforqualityloader" class="form-select  form-select-solid " data-placeholder="Choose one (with searchbox)">
                                                         </select>
@@ -81,6 +82,15 @@
                                                 
                                             </div>
                                             <div class="card-body">
+                                                <div class="">
+                                                    <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                                        <div class="d-flex align-items-center">
+                                                            <label class="form-check-label fw-semibold text-gray-500 ms-3 mr-3" for="allowchanges">Current Patients:</label>
+                                                            <div class="m-3"></div>
+                                                            <div class="fw-semibold fs-4 text-end text-gray-500 " id="patient_count">0</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="mb-4">
                                                     <span class='badge badge-primary badge-square p-2 mt-1'>ptfname</span>
                                                     <span class='badge badge-primary badge-square p-2 mt-1'>ptlname</span>
@@ -94,12 +104,16 @@
                                                     <span class='badge badge-primary badge-square p-2 mt-1'>mlob</span>
                                                 </div>
                                                 <input id="qualityfile" type="file" class="dropify" accept=".csv" data-height="150" />
-                                                <div class="form-group">
-                                                    <div class="fs-6 fw-semibold text-gray-500">Please switch option to activate retrospect</div>
-                                                    <div class="form-check form-switch form-check-custom form-check-solid mt-2">
-                                                        <input type="checkbox" id="activateretro" class="form-check-input" value="1">
-                                                        <label class="form-check-label fw-semibold text-gray-500 ms-3" for="allowchanges">Activate Retrospect</label>
+                                                <div class="form-group row">
+                                                    <div class="fs-6 fw-semibold text-gray-500 col-md-12">Please switch option to activate retrospect</div>
+                                                        
+                                                    <div class="col-md-12">
+                                                        <div class="form-check form-switch form-check-custom form-check-solid mt-2">
+                                                            <input type="checkbox" id="activateretro" class="form-check-input" value="1">
+                                                            <label class="form-check-label fw-semibold text-gray-500 ms-3" for="allowchanges">Activate Retrospect</label>
+                                                        </div>
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>

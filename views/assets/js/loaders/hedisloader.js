@@ -47,6 +47,7 @@ $(document).ready(async function () {
           
       }
       backuptable.ajax.reload();
+      getHedisDataCount();
     }
   })
 
@@ -69,6 +70,22 @@ $(document).ready(async function () {
       toastr.error('Action Failed');
     }
   });
+
+  function getHedisDataCount(){
+    var entry = {
+      id:localStorage.getItem('chosen_clinic'),
+      insid: insuranceid
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/checkhedisdata", (xhr, err) => {
+      if (!err) {
+        let total = JSON.parse(xhr.responseText)['data'];
+        $("#patient_count").html(total);
+        
+      } else {
+        toastr.error('Action Failed');
+      }
+    });
+  }
   
   $("#qualityloadbtn").click(function(){
     if($("#qualityfile").val() == ""){
@@ -123,6 +140,7 @@ $(document).ready(async function () {
               $(".hedis-loader").addClass("d-none");
               $("#hedis-load-result-modal").modal("show");
               backuptable.ajax.reload();
+              getHedisDataCount();
             } else {
               $(".hedis-loader").addClass("d-none");
               return toastr.error('Action Failed');
@@ -141,6 +159,7 @@ $(document).ready(async function () {
   $(document).on("change","#insforqualityloader",function(){
     insuranceid = $(this).val();
     backuptable.ajax.reload();
+    getHedisDataCount();
   })
 
   $(document).on("click",".resultlink5",function(){
@@ -329,6 +348,7 @@ $(document).ready(async function () {
           if (!err) {
             setTimeout( function () {
               backuptable.ajax.reload();
+              getHedisDataCount();
             }, 1000 );
           } else {
             return toastr.error('Action Failed');
@@ -421,6 +441,7 @@ $(document).ready(async function () {
             $("#backup-modal").modal("hide");
             setTimeout( function () {
               backuptable.ajax.reload();
+              getHedisDataCount();
             }, 1000 );
           } else {
             return toastr.error('Action Failed');
