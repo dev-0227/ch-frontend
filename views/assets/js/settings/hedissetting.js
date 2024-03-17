@@ -812,6 +812,9 @@ $(document).ready(async function () {
     $("#m_observ_hcpcs_code_list_body").html('');
     $("#m_observ_loinc_code_list_body").html('');
     $("#m_observ_snomed_code_list_body").html('');
+    $("#m_observ_min_age").val('');
+    $("#m_observ_max_age").val('');
+    $("#m_observ_time_cycle").val('');
     $("#m_observ_ins_acronym_list_body").html('');
     
     $('#m_observ_measure').addClass('d-none');

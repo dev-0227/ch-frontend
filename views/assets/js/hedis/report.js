@@ -861,87 +861,7 @@ $('#eshowalleducation').click(function(){
       ]
   });
   });
-  $(document).on("click",".notesbtn",function(){
-    $("#chosen_item").val($(this).parent().parent().children().eq(1).html());
-    $("#notes-modal-name").html($(this).parent().parent().children().eq(4).html()+" "+$(this).parent().parent().children().eq(5).html());
-    $("#notes-modal-mid").html($(this).parent().parent().children().eq(2).html());
-    $("#notes-modal-dob").html($(this).parent().parent().children().eq(6).html());
-    $("#notes-modal-phone").html($(this).parent().parent().children().eq(7).html());
-    $("#notes-created").html(localStorage.getItem('username')+" : "+new Date().toLocaleString());
-    $("#allviewnotes").empty();
-    $("#allviewnotes").append('<a href="../pages/notesview?qid='+$("#chosen_item").val()+'" target="_blank" class="form-control-label text-primary">See More</a>');
-    let noteentry = {
-      mid:$(this).parent().parent().children().eq(2).html(),
-      clinicid:localStorage.getItem('chosen_clinic'),
-      userid:localStorage.getItem('userid'),
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), noteentry, "hedis/getnotes", (xhr, err) => {
-      if (!err) {
-        let data = JSON.parse(xhr.responseText)['data'];
-        $("#token_area").empty();
-        for(var i = 0;i< data.length;i++){
-          $("#token_area").append("<div><span class='text-primary'>"+data[i]['fname']+" "+data[i]['lname']+" "+new Date(data[i]['created']).toLocaleString()+" > </span><span class='notearea'>"+data[i]['note']+"</span>"+(data[i]['createduser']==localStorage.getItem('userid')?"&nbsp;<i class='fa fa-pencil text-info updatenotebtn' key='"+data[i]['id']+"'></i>&nbsp;<i class='fa fa-trash text-danger deletenotebtn' key='"+data[i]['id']+"'></i>":"")+"</div>")
-        }
-      } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
-      }
-    });
-    let entry = {
-      mid:$(this).parent().parent().children().eq(2).html(),
-      clinicid:localStorage.getItem('chosen_clinic'),
-      cyear:$("#hedisdate").val(),
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/getpatientchart", (xhr, err) => {
-      if (!err) {
-        let data = JSON.parse(xhr.responseText)['data'];
-        $(".completednotemeasure").empty();
-        $(".notcompletednotemeasure").empty();
-        var completecnt = 0;
-        for(var i=0;i<data.length;i++){
-          if(data[i]['status'] == 1||data[i]['status'] == 2||data[i]['status'] == 3){
-            $(".completednotemeasure").append(`
-              <li class="p-1">
-                <span class="list-label"></span>${data[i]['measure']} - ${DateFormat(new Date(data[i]['dos']))}
-              </li>
-            `);
-            completecnt++;
-          }
-          else{
-            $(".notcompletednotemeasure").append(`
-              <li class="p-1">
-                <span class="list-label"></span>`+data[i]['measure']+`
-              </li>
-            `);
-          }
-        }
-        $(".completedpernote").html(Math.round(completecnt/data.length*100)+"%");
-        $(".notcompletedpernote").html((100-Math.round(completecnt/data.length*100))+"%");
-        $(".completedbarlengthnote").circleProgress({value: (Math.round(completecnt/data.length*100)/100),size:80});
-        $(".notcompletedbarlengthnote").circleProgress({value: ((1-Math.round(completecnt/data.length*100)/100)),size:80});
-      } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
-      }
-    });
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getavaiuserchosenclinic", (xhr, err) => {
-      if (!err) {
-        let data = JSON.parse(xhr.responseText)['data'];
-        $("#notes-assuser").empty();
-        $("#notes-assuser").append("<option value='0'>All</option>");
-        for(var i = 0; i < data.length;i++){
-          $("#notes-assuser").append("<option value='"+data[i]['id']+"'>"+data[i]['fname']+" "+data[i]['lname']+"</option>");
-        }
-        $("#notes-modal").modal("show");
-      } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
-      }
-    });
-  });
+  
   $(document).on("click",".updatenotebtn",function(){
     tmpupdatenote = $(this).parent().find(".notearea");
     $("#notetext").val($(this).parent().find(".notearea").html())
@@ -1798,7 +1718,6 @@ async function loadData(){
     if (!err) {
       $(".progress-load").addClass("d-none");
       let data = JSON.parse(xhr.responseText)['data'];
-      console.log("data")
       console.log(data)
       let ptcnt = JSON.parse(xhr.responseText)['ptcnt'];
       let measurecnt = JSON.parse(xhr.responseText)['measurecnt'];
@@ -1875,10 +1794,10 @@ async function loadData(){
           data[i]['ptlname'], 
           dob, 
           data[i]['phone'], 
-          "<i class='fa fa-file-text-o viewresultbtn "+tmpclass+"'>&nbsp;</i><i class='fa fa-sticky-note"+(data[i]['notecheck'] != null?"":"-o")+" notesbtn "+tmpclass+" "+tmpnoteclass+"'></i> <i class='fa fa-trash-o delrowbtn' ></i>", 
+          "<i class='fa fa-file-text viewresultbtn "+tmpclass+"'>&nbsp;</i><i class='fa fa-sticky-note"+(data[i]['notecheck'] != null?"":"")+" notesbtn "+tmpclass+" "+tmpnoteclass+"'></i> <i class='fa fa-trash delrowbtn' ></i>", 
           "<i class='ti-printer printletter "+tmpclass+"'></i>&nbsp;"+((data[i]['email']!=null&&data[i]['email']!="")?"<i class='ti-email sendemail "+tmpclass+"'></i>":"")+"&nbsp;<i class='ti-mobile sendsms "+tmpclass+"'></i>&nbsp; <i class='fa fa-phone phonecallbtn' aria-hidden='true' value = 'dragon' style='cursor: pointer;'></i>", 
           data[i]['mlob'], 
-          "<i class='ti-eye statusbtn'></i>&nbsp;<i class='mdi mdi-apps viewmlogbtn'></i>", 
+          "<i class='fa fa-eye statusbtn'></i>&nbsp;<i class='mdi mdi-apps viewmlogbtn'></i>", 
           tmpmeasure, 
           tmpdate, 
           (data[i]['value1']==""||data[i]['value1']==null)?"":(data[i]['dos']==null?"":data[i]['value1']), 
@@ -2216,3 +2135,310 @@ async function loadData(){
     }
   });
 }
+
+var patient_id = 0;
+
+var encounter_table = $('#encounter_table').DataTable({
+  "ajax": {
+      "url": serviceUrl + "hedis/encounter",
+      "type": "POST",
+      "headers": { 'Authorization': localStorage.getItem('authToken') },
+      "data":function (d) {
+        d.clinic_id = localStorage.getItem('chosen_clinic'),
+        d.patient_id = patient_id
+      },
+  },
+  "pageLength": 10,
+  "order": [],
+  "bAutoWidth": false, 
+  "columns": [
+      { data: 'enc_start',
+        render: function (data, type, row) {
+          return new Date(row.enc_start).toLocaleString();;
+        } 
+      },
+      { data: 'total_mins' },
+      { data: "enc_type"},
+      { data: 'status' },
+      { data: 'id',
+        render: function (data, type, row) {
+          return `
+            <div class="btn-group align-top " idkey="`+row.id+`">
+              <button class="btn  btn-primary badge edit_btn"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+              <button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
+            </div>
+          `
+        } 
+      }
+  ]
+});
+
+$(document).on("click",".notesbtn",function(){
+  $("#chosen_item").val($(this).parent().parent().children().eq(1).html());
+  
+  $("#encounter_clinic_id").val(localStorage.getItem('chosen_clinic'));
+  $("#encounter_pcp_id").val(localStorage.getItem('userid'));
+  $("#encounter_patient_id").val('');
+  $("#encounter_emr_id").val('');
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $("#chosen_item").val()}, "hedis/getPatient", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      if(result.length>0){
+        $("#encounter_patient_id").val(result[0]['id']);
+        $("#encounter_emr_id").val(result[0]['patientid']);
+        if(result[0]['GENDER'] == "Female"){
+          $("#pt_male").addClass('d-none');
+          $("#pt_female").removeClass('d-none');
+        }else{
+          $("#pt_female").addClass('d-none');
+          $("#pt_male").removeClass('d-none');
+        }
+        $("#pt_fullname").html(result[0]['FNAME'] + " " + result[0]['LNAME'])
+        $("#pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
+        $("#pt_dob").html(result[0]['DOB'])
+        $("#pt_telephone").html(result[0]['PHONE'])
+        $("#pt_phone").html(result[0]['MOBILE'])
+        $("#pt_email").html(result[0]['EMAIL']);
+        $("#pt_language").html(result[0]['Language']);
+        $("#pt_insid").html(result[0]['INS_ID']);
+
+        patient_id = result[0]['id'];
+        encounter_table.ajax.reload();
+        
+        
+        $("#encounter_modal").modal("show");
+      }
+    }
+  });
+  
+});
+
+$(document).on("click",".edit_btn",function(){
+  observation_id = null;
+  $("#encounter_id").val($(this).parent().attr("idkey"));
+  let entry = {
+    id: $("#encounter_id").val(),
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/chosen", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      $("#encounter_enc_type").val(result[0]['enc_type']);
+      $("#encounter_status").val(result[0]['status']);
+      $("#encounter_team_member").val(result[0]['team_member']);
+      $("#encounter_assigned").val(result[0]['assigned']);
+      $("#encounter_enc_start").val(new Date(result[0]['enc_start']));
+      $("#encounter_total_mins").val(result[0]['total_mins']);
+      $("#encounter_notes").val(result[0]['notes']);
+      $("#encounter_action_taken").val(result[0]['action_taken']);
+      $("#encounter_class").val(result[0]['class']);
+      $("#encounter_priority").val(result[0]['priority']);
+      $("#encounter_service_type").val(result[0]['service_type']);
+      $("#encounter_participant_type").val(result[0]['participant_type']);
+      $("#encounter_reason").val(result[0]['reason']);
+      $("#encounter_reason_use").val(result[0]['reason_use']);
+      $("#encounter_reason_codes").val(result[0]['reason_codes']);
+      $("#encounter_edit_modal").modal("show");
+    } else {
+      return toastr.error("Action Failed");
+    }
+  });
+});
+
+
+
+$(document).on("click","#add_btn",function(){
+  $("#encounter_id").val('');
+  $("#encounter_enc_type").val('phone call');
+  $("#encounter_status").val('');
+  $("#encounter_team_member").val('');
+  $("#encounter_assigned").val('');
+  $("#encounter_total_mins").val('1');
+  $("#encounter_notes").val('');
+  $("#encounter_action_taken").val('');
+  $("#encounter_enc_start").val('');
+  $("#encounter_reason").val('');
+  
+
+  $("#encounter_edit_modal").modal("show");
+});
+
+$(document).on("click",".delete_btn",function(){
+  let entry = {
+    id: $(this).parent().attr("idkey"),
+  }
+  Swal.fire({
+    text: "Are you sure you would like to delete?",
+    icon: "error",
+    showCancelButton: true,
+    buttonsStyling: false,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, return",
+    customClass: {
+      confirmButton: "btn btn-danger",
+      cancelButton: "btn btn-primary"
+    }
+  }).then(function (result) {
+    if (result.value) {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/delete", (xhr, err) => {
+        if (!err) {
+          setTimeout( function () {
+            encounter_table.ajax.reload();
+          }, 1000 );
+        } else {
+          return toastr.error("Action Failed");
+        }
+      });
+    }
+  });
+
+});
+
+// sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterType", (xhr, err) => {
+//   if (!err) {
+//     let result = JSON.parse(xhr.responseText)['data'];
+//     var options = '';
+//     for(var i=0; i<result.length; i++){
+//       options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+//     }
+//     $("#encounter_enc_type").html(options);
+//   }
+// });
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterStatus", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#encounter_status").html(options);
+  }
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterClass", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#encounter_class").html(options);
+  }
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterPriority", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#encounter_priority").html(options);
+  }
+});
+
+// sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterServiceType", (xhr, err) => {
+//   if (!err) {
+//     let result = JSON.parse(xhr.responseText)['data'];
+//     var options = '';
+//     for(var i=0; i<result.length; i++){
+//       options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+//     }
+//     $("#encounter_service_type").html(options);
+//   }
+// });
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterSubjectStatus", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#encounter_subject_status").html(options);
+  }
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterParticipantType", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#encounter_participant_type").html(options);
+  }
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterReasonUse", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#encounter_reason_use").html(options);
+  }
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterReasonCodes", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    options += '<option value="" ></option>';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#encounter_reason_codes").html(options);
+  }
+});
+
+new tempusDominus.TempusDominus(document.getElementById("encounter_enc_start"), {
+  
+});
+
+
+$("#update_btn").click(function (e) {
+  if($("#encounter_enc_start").val() == ""){
+    toastr.info('Please enter Start Time');
+    $("#encounter_enc_start").focus();
+    return;
+  }
+  if($("#encounter_total_mins").val() == ""){
+    toastr.info('Please enter correctly Total Mins');
+    $("#encounter_total_mins").focus();
+    return;
+  }
+  let entry = {}
+
+  $('.form-control').each(function() {
+    if($(this).data('field')!==undefined){
+        entry[$(this).data('field')] = $(this).val();
+    }
+  });
+
+  if($("#encounter_id").val()==""){
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/create", (xhr, err) => {
+      if (!err) {
+        $("#encounter_edit_modal").modal("hide");
+        toastr.success("Encounter is added successfully");
+      } else {
+        return toastr.error("Action Failed");
+      }
+    });
+  }else{
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/update", (xhr, err) => {
+      if (!err) {
+        $("#encounter_edit_modal").modal("hide");
+        toastr.success("Diagnostic Report is updated successfully");
+      } else {
+        return toastr.error("Action Failed");
+      }
+    });
+  }
+  
+  setTimeout( function () {
+    encounter_table.ajax.reload();
+  }, 1000 );
+});
+

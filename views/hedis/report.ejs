@@ -1,166 +1,4 @@
-<style>
-	.popup {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  border: 2px dashed white;
-  padding: 5px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 
-/* The actual popup */
-.popup .popuptext {
-  visibility: hidden;
-  width: 400px;
-  font-size: 20px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-}
-
-/* Popup arrow */
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-/* Toggle this class - hide and show the popup */
-.popup .show {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s;
-}
-
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;} 
-  to {opacity: 1;}
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
-}
-	/* ////////////////////// */
-	 div#pop-up {
-   display: none;
-   position: absolute;
-   width: 280px;
-   padding: 10px;
-   background: #eeeeee;
-   color: #000000;
-   border: 1px solid #1a1a1a;
-   font-size: 90%;
- }
- 
-	.btn-circle.btn-xl {
-    width: 70px;
-    height: 70px;
-    padding: 10px 16px;
-    border-radius: 35px;
-    font-size: 24px;
-    line-height: 1.33;
-}
-	.bclicked{
-		background-color:rgb(247, 213, 63);
-	}
-    .jexcel{
-        width:100%!important;
-    }
-	.jcalendar-content{
-		color:#25252a!important;
-	}
-	.notesbtn,.printletter,.sendemail,.sendsms,.statusbtn,.viewmlogbtn{
-		cursor: pointer;
-	}
-	.notesavailbtn {
-		font-weight: 700;
-    	color: #8CCB8D;
-	}
-	.settingicon i{
-		padding-right:20px;
-		font-size: 0.9rem;
-		cursor: pointer;
-	}
-	.blue-color{
-		color:blue;
-	}
-	#ui-datepicker-div{
-		z-index: 10000!important;
-	}
-	#notesform .nav.nav-tabs.step-anchor {
-		border-bottom: 0 !important;
-		padding: 30px;
-	}
-	#notesform  .nav-tabs {
-		border-top: 0 !important;
-	}
-	#notesform .nav-link {
-		padding: 8px 40px;
-		border-radius:5px !important;
-	}
-	@media only screen and (max-width: 490px){
-		#notesform .nav-link {
-			padding: 15px 21px;
-		}
-	}
-	#token_area{
-		min-height: 150px;
-		max-height: 150px;
-		border: 1px solid #d8dde4;
-		border-radius: 5px;
-		overflow: auto;
-		padding:5px;
-	}
-	.note-cal-area{
-		min-height: 100px;
-		max-height: 250px;
-		overflow: auto;
-	}
-	#allviewnotes{
-		position: absolute;
-		right:20px;
-		text-decoration: underline;
-	}
-	.completedbarlengthnote,.notcompletedbarlengthnote{
-		width: 80px;
-		height: 80px;
-	}
-	.cbp_tmtimeline>li .cbp_tmtime span:last-child {
-		font-size: 13px!important;
-	}
-	.sort-done-notdone{
-		position: relative;
-    	left: 10px;
-	}
-	.reviewdonebtn{
-		cursor: pointer;
-	}
-	.regeneratebtn{
-		cursor: pointer;
-		z-index:100;
-		position:relative;
-	}
-	.viewresultbtn{
-		cursor: pointer;
-	}
-</style>
 <input type="hidden" id ="hedisdate" />
 <input type="hidden" id ="chosen_item" />
 <div class="row ml-2 mr-2 mt-2">
@@ -209,803 +47,311 @@
         <div id="hedisreport" class="jexcel_modern"></div>
     </div>
 </div>
-<div class="modal fade" id="color-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" >Color Definition</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12 color-list">
-                        
-                    </div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="ins-list-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="query-count" ></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12 ins-id-list">
-                        
-                    </div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="status-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" >Set Status</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="custom-controls-stacked status-option">
-                            <div class=" status-none">
-								<label class="custom-control custom-radio">
-									<input type="radio" class="custom-control-input statusoption" name="statusoption" value="0">
-									<span class="tag custom-control-label">None</span>
-								</label>
-							</div>
-                            <div class="status-measure">
-								<h5 style="padding-top: 1rem">Measure Status</h5>
-								<hr style="margin-bottom: 1rem;margin-top: 0rem;">
-							</div>
-                            <div class="status-patient">
-								<h5 style="padding-top: 1rem">Patient Status</h5>
-								<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
-							</div>
-                            <div class="status-meas-rep">
-								<h5 style="padding-top: 1rem">Measure Report Status</h5>
-								<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
-							</div>
-                        </div>
-                    </div>
-					<div class="col-lg-6 appt_date_area d-none">
-						<label class="form-control-label">Next Appt Date:</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
-								</div>
-							</div><input class="form-control fc-datepicker apptdate" placeholder="MM/DD/YYYY" type="text">
-						</div>
-					</div>
-					<div class="col-lg-6 appt_date_area d-none">
-						<label class="form-control-label">Appt Visit Type:</label>
-						<div class="input-group">
-							<input class="form-control apptvisittype" type="text">
-						</div>
-					</div>
-					<div class="col-lg-6 appt_date_area d-none mt-2">
-						<label class="form-control-label">Appt PCP:</label>
-						<div class="input-group">
-							<select class="form-control apptpcpname"></select>
-						</div>
-					</div>
-					<div class="col-lg-6 visit_date_area d-none">
-						<label class="form-control-label">Last Visit:</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
-								</div>
-							</div><input class="form-control fc-datepicker lastdate" placeholder="MM/DD/YYYY" type="text">
-						</div>
-					</div>
-					<!-- <div class="col-lg-6 visit_date_area d-none">
-						<label class="form-control-label">Next Appt Date:</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
-								</div>
-							</div><input class="form-control fc-datepicker nextdate" placeholder="MM/DD/YYYY" type="text">
-						</div>
-					</div> -->
-					
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success setstatusbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="sort-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" >Sort By Options</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-						<div class="panel panel-primary">
-							<div class="tabs-menu1 ">
-								<!-- Tabs -->
-								<ul class="nav panel-tabs">
-									<li ><a optiontype="1" href="#allsorttab" class="active optiontype" data-toggle="tab">All</a></li>
-									<li><a optiontype="3" href="#outcomessorttab" class="optiontype" data-toggle="tab">Outcomes</a></li>
-									<li><a optiontype="4" href="#colorsorttab" class="optiontype" data-toggle="tab">Color Key</a></li>
-								</ul>
-							</div>
-							<div class="tab-content">
-								<div class="tab-pane active " id="allsorttab">
-									<div class="row">
-										<div class="col-md-12 mt-2 allcheckoption">
-											
-										</div>
-										<span class="sort-done-notdone">
-											<label class="custom-control custom-radio d-inline-flex">
-												<input type="radio" class="custom-control-input sortoption" name="sortoption" value="1" checked>
-												<span class="tag custom-control-label">All</span>
-											</label>
-											<label class="custom-control custom-radio d-inline-flex">
-												<input type="radio" class="custom-control-input sortoption" name="sortoption" value="2">
-												<span class="tag custom-control-label">Completed</span>
-											</label>
-											<label class="custom-control custom-radio d-inline-flex">
-												<input type="radio" class="custom-control-input sortoption" name="sortoption" value="3">
-												<span class="tag custom-control-label">Not Completed</span>
-											</label>
-										</span>
-									</div>
-								</div>
-								<div class="tab-pane " id="outcomessorttab">
-									<div class="row">
-										<div class="col-md-12 mt-2 outrangeoption">
-											
-										</div>
-									</div>
-								</div>
-								<div class="tab-pane " id="colorsorttab">
-									<div class="row">
-										<div class="col-md-12 color-sort-list">
-											<div class=" status-none">
-												<label class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="0">
-													<span class="tag custom-control-label">None</span>
-												</label>
-												<label class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input searchoption colorsort" name="colorsort" value="-1">
-													<span class="tag custom-control-label" style="color:blue">Measure Complaint</span>
-												</label>
-											</div>
-											<div class="cstatus-measure">
-												<h5 style="padding-top: 1rem">Measure Status</h5>
-												<hr style="margin-bottom: 1rem;margin-top: 0rem;">
-											</div>
-											<div class="cstatus-patient">
-												<h5 style="padding-top: 1rem">Patient Status</h5>
-												<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
-											</div>
-											<div class="cstatus-meas-rep">
-												<h5 style="padding-top: 1rem">Measure Report Status</h5>
-												<hr  style="margin-bottom: 1rem;margin-top: 0rem;">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-                    </div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				
-				<button type="button" class="btn btn-success sortclearbtn" data-dismiss="modal">Clear</button>
-				<button type="button" class="btn btn-primary sortsearchbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="email-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id = "email-subject"></h5>
-				&nbsp;<h5 class="modal-title"> | </h5>&nbsp;
-				<h5 class="modal-title" id="email-other" style="color: blue; cursor: pointer;"> <i class="fa fa-envelope-o" aria-hidden="true" style="font-size: 25px;"></i> Another Email </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-                    <div class="col-lg-12 text-center">
-                        <label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input emailoption" name="emailoption" value="1" checked>
-							<span class="tag custom-control-label">Default</span>
-						</label>
-						<label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input emailoption" name="emailoption" value="2">
-							<span class="tag custom-control-label">Custom</span>
-						</label>
-						<label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input emailoption"   name="emailoption" value="3">
-							<span class="tag custom-control-label">Education</span>
-						</label>
-						<input type="hidden" id="ecliname" value="">
-						<input type="hidden" id="eptfname" value="">
-						<input type="hidden" id="eptinsid" value="">
-						<input type="hidden" id="eptemrid" value="">
-                    </div>
-                </div>
-				<div class="row ptemaildiv d-flex justify-content-center mt-3 mb-1">
-					
-                    <div class="col-lg-6">
-                        <h5 id="ptemailtag"></h5>
-                    </div>
-                </div>
-				<div class="row otheremailaddr d-flex justify-content-center">
-					
-                    <div class="col-lg-6">
-                        <input type="email" class="form-control other-email" style="display: none;" id="otheremail" placeholder="please add email">
-                    </div>
-                </div>
-				
-				<div class="row customemailarea d-none">
-                    <div class="col-lg-12">
-                        <textarea id="customemailbody" class="form-control" rows="10"></textarea>
-                    </div>
-                </div>
-                <div class="row defaultemailarea">
-                    <div class="col-lg-12" id = "email-body">
-                        
-                    </div>
-                </div>
-				<div class="row eduemailarea d-none">
-					
-					<div class="col-lg-12 " >
-                        <label class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="eshowalleducation">
-							<span class="custom-control-label">Show All Education list</span>
-						</label>
-                    </div>
-                    <div class="col-lg-12 " id = "edu-email-body">
-                        
-                    </div>
-					<div class="col-lg-12 d-none edu-email-link" id = "edu-email-link">
-                        
-                    </div>
-                </div>
 
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" id = "emailsendbtn" data-dismiss="modal">Send</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="sms-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-		
-			
+<div class="modal fade" id="encounter_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-fullscreen p-9" role="document">
+		<div class="modal-content modal-rounded">
 			<div class="modal-header">
-				<h5 class="modal-title" id = "sms-subject" style="display: none;"></h5>&nbsp; <h5 class="modal-title"> | </h5>&nbsp;
-				<h5 class="modal-title" id="sms-patient-name" style="cursor: pointer;"> </h5> &nbsp;<h5 class="modal-title"> | </h5>&nbsp;
-				<h5 class="modal-title" id="sms-othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-commenting" aria-hidden="true" style="font-size: 25px;"></i> Text number </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h3 class="modal-title" >Encounters </h3>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
 			</div>
-			
 			<div class="modal-body">
 				<div class="row">
-                    <div class="col-lg-12 text-center">
-                        <label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input smsoption" name="smsoption" value="1" checked>
-							<span class="tag custom-control-label">Default</span>
-						</label>
-						<label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input smsoption" name="smsoption" value="2">
-							<span class="tag custom-control-label">Custom</span>
-						</label>
-						<label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input smsoption"   name="smsoption" value="3">
-							<span class="tag custom-control-label">Education</span>
-						</label>
-                    </div>
-					<input type="hidden" id="cliname" value="">
-					<input type="hidden" id="ptfname" value="">
-					<input type="hidden" id="ptinsid" value="">
-					<input type="hidden" id="ptemrid" value="">
-					
-                </div>
-				<div class="row d-flex justify-content-center">
-					<div class="col-lg-5 text-center phonelist" >
-                        
-                    </div>
-					<!-- <div class="col-lg-5 text-center ">
-						<label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input phoneitem" name="phoneitem" value="c2">
-							<span class="tag1 custom-control-label"></span>
-							<input type="text" class="form-control" id="othsmsnumber" placeholder="123456789">
-						</label>
+					<div class="d-flex flex-wrap flex-sm-nowrap mb-3 col-md-4">
+						<!--begin: Pic-->
 						
-                    </div> -->
-				</div>
-				<div class="row d-flex justify-content-center" >
-					<input type="text" class=" col-md-4 mb-3 form-control" id="othsmsnumber" style = "display: none;" placeholder="123456789">
-					<br>
-				</div>
-				<div class="row customsmsarea d-none">
-                    <div class="col-lg-12">
-                        <textarea id="customsmsbody" class="form-control" rows="10"></textarea>
-                    </div>
-                </div>
-                <div class="row defaultsmsarea">
-                    <div class="col-lg-12" id = "sms-body">
-                        
-                    </div>
-                </div>
-				<div class="row edusmsarea d-none">
-				
-					<div class="col-lg-12 " >
-                        <label class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="showalleducation">
-							<span class="custom-control-label">Show All Education list</span>
-						</label>
-                    </div>
-                    <div class="col-lg-12 " id = "edu-sms-body">
-                        
-                    </div>
-					<div class="col-lg-12 d-none edu-sms-link" id = "edu-sms-link">
-                        
-                    </div>
-                </div>
-			</div>
-			<div class="modal-footer" style="position: relative;">
-				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
-					<b><span id="smscounts"></span>&nbsp;&nbsp;Available</b>
-					
-				</div>
-				<div class="text-primary" style="display: inline-block;position:absolute;left:120px;top:23px;">
-					<label class="custom-control custom-checkbox d-inline-flex">
-						<input type="checkbox" class="custom-control-input whatsappoption" name="whatsappoption" value="1">
-						<span class="custom-control-label" style="line-height:1.6rem;">Whatsapp&nbsp;<i class="fa fa-whatsapp"></i></span>
-					</label>
-				</div>
-				<a href="../pages/creditsms" target="_blank" class="btn btn-primary">Add Credit</a>
-				<button type="button" class="btn btn-success" id = "smssendbtn" data-dismiss="modal">Send</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="patient-chart-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id = "patient-modal-title"></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body" id = "patient-modal-print-area">
-				<div class="row">
-					<div class="col-md-12">
-						<h3 id = "patient-modal-insurance" class="text-center"></h3>
-					</div>
-					<div class="col-auto">
-						Name : <span id = "patient-modal-name" class="text-center"></span>
-					</div>
-					<div class="col-auto">
-						Ins ID : <span id = "patient-modal-mid" class="text-center"></span>
-					</div>
-					<div class="col-auto">
-						DOB : <span id = "patient-modal-dob" class="text-center"></span>
-					</div>
-					<div class="col">
-						Phone : <span id = "patient-modal-phone" class="text-center"></span>
-					</div>
-				</div>
-				<div class="row mt-5">
-					<div class="col-sm-12 col-lg-6 col-md-6 completed-area">
-						<h4 class="text-center">Completed</h4>
-						<div class="mt-3 text-center">
-							<div class="chart-circle mx-auto chart-dropshadow-success completedbarlength" data-value="" data-thickness="7" data-color="#33ce7b"><div class="chart-circle-value"><div class="font-weight-normal fs-20 completedper"></div></div></div>
-						</div>
-						<ul class="list-items mt-2 completedptmeasure text-center">
-							
-						</ul>
-					</div>
-					<div class="col-sm-12 col-lg-6 col-md-6 notcompleted-area">
-						<h4 class="text-center">Not Completed</h4>
-						<div class="mt-3 text-center">
-							<div class="chart-circle mx-auto chart-dropshadow-info notcompletedbarlength" data-value="" data-thickness="7" data-color="#f82649"><div class="chart-circle-value"><div class="font-weight-normal fs-20 notcompletedper"></div></div></div>
-						</div>
-						<ul class="list-items mt-2 notcompletedptmeasure text-center">
-							
-						</ul>
-					</div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" id = "print-patient-modal-btn"><i class="ti-printer"></i></button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="notes-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id = "notes-modal-title"></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="row">
-							<div class="col-auto">
-								Name : <span id = "notes-modal-name" class="text-center"></span>
-							</div>
-							<div class="col-auto">
-								Ins ID : <span id = "notes-modal-mid" class="text-center"></span>
-							</div>
-							<div class="col-auto">
-								DOB : <span id = "notes-modal-dob" class="text-center"></span>
-							</div>
-							<div class="col">
-								Phone : <span id = "notes-modal-phone" class="text-center"></span>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-12 note-cal-area">
-						<div class="row justify-content-center">
-							<div class="col-xl-6 col-lg-6 col-sm-6 pr-0 pl-0">
-								<div class="card-body text-center">
-									<h6 class="text-center text-muted">Completed</h6>
-									<div class="text-center">
-										<div class="chart-circle mx-auto chart-dropshadow-success completedbarlengthnote" data-value="" data-thickness="7" data-color="#33ce7b"><div class="chart-circle-value"><div class="font-weight-normal fs-17 completedpernote"></div></div></div>
+						<!--end::Pic-->
+						<!--begin::Info-->
+						<div class="flex-grow-1">
+							<!--begin::Title-->
+							<div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+								<!--begin::User-->
+								<div class="d-flex flex-column">
+									<!--begin::Name-->
+									<div class="d-flex align-items-center mb-2">
+										<div class="d-none" id="pt_male">
+											<svg xmlns="http://www.w3.org/2000/svg" width="40" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><path fill-rule="nonzero" d="M256 0c70.69 0 134.69 28.655 181.018 74.982C483.345 121.31 512 185.31 512 256s-28.655 134.69-74.982 181.018C390.69 483.345 326.69 512 256 512s-134.69-28.655-181.018-74.982C28.655 390.69 0 326.69 0 256S28.655 121.31 74.982 74.982C121.31 28.655 185.31 0 256 0zm-49.371 316.575c-.992-1.286 2.594-10.118 3.443-11.546-9.722-8.651-17.404-17.379-19.041-35.34l-1.043.022c-2.408-.032-4.729-.586-6.903-1.825-3.481-1.979-5.93-5.379-7.583-9.212-3.5-8.043-15.031-34.738 2.537-32.628-9.823-18.345 12.409-49.684-25.935-61.275 31.46-39.845 97.839-101.281 146.483-39.654 53.245 5.16 69.853 68.437 34 103.093 2.101.076 4.08.56 5.832 1.498 6.665 3.57 6.884 11.318 5.132 17.819-1.733 5.429-3.934 9.104-6.01 14.397-2.524 7.147-6.215 8.478-13.345 7.708-.362 17.67-8.528 26.343-19.518 36.724l3.007 10.187c-14.737 31.261-75.957 32.518-101.056.032zM78.752 394.224c12.076-51.533 45.656-33.396 110.338-73.867 22.982 47.952 116.386 51.437 135.54 0 55.35 35.384 98.967 20.923 109.958 72.138 28.965-37.841 46.176-85.158 46.176-136.495 0-62.068-25.158-118.26-65.83-158.934C374.26 56.394 318.068 31.236 256 31.236S137.74 56.394 97.066 97.066C56.394 137.74 31.236 193.932 31.236 256c0 52.123 17.744 100.099 47.516 138.224z"/></svg>
+										</div>
+										<div class="" id="pt_female">
+												<svg xmlns="http://www.w3.org/2000/svg" width="40" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><path fill-rule="nonzero" d="M256 0c70.69 0 134.69 28.655 181.018 74.982C483.345 121.31 512 185.31 512 256s-28.655 134.69-74.982 181.018C390.69 483.345 326.69 512 256 512s-134.69-28.655-181.018-74.982C28.655 390.69 0 326.69 0 256S28.655 121.31 74.982 74.982C121.31 28.655 185.31 0 256 0zm83.858 360.495c-8.946-17.959-20.291-33.187-33.495-47.498 86.303 33.392 107.758 28.216 126.204 82.097 30.184-38.263 48.197-86.574 48.197-139.094 0-62.068-25.158-118.26-65.83-158.934C374.26 56.394 318.068 31.236 256 31.236S137.74 56.394 97.066 97.066C56.394 137.74 31.236 193.932 31.236 256c0 52.461 17.973 100.722 48.095 138.965 18.247-55.6 36.446-48.494 122.961-81.968-13.204 14.311-24.549 29.539-33.5 47.498l25.915-.635 58.179 46.465 61.058-46.465 25.914.635zm-127.87-64.325v15.645l-15.421 25.895 57.727 45.55 57.794-45.959-20.199-26.986v-14.557c20.758-1.106 38.585-2.954 48.454-5.364 12.753-3.109 23.387-7.763 30.725-14.781-11.447-5.501-18.761-14.911-22.976-27.214-9.796-28.591-.507-60.756-4.884-91.797-5.864-41.569-33.021-55.47-59.976-52.595-34.379-28.257-96.069-11.754-112.764 36.542-8.433 24.396-3.3 44.822-4.204 69.543-1.22 33.255-9.873 55.471-28.678 62.555 6.51 7.745 15.82 13.696 28.08 17.699 9.152 2.987 26.194 4.87 46.322 5.824z"/></svg>
+										</div>
+										<a class="text-gray-900 text-hover-primary fs-2 fw-bold mx-2" ><div class="" id="pt_fullname"></div></a>
+										<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
 									</div>
-									<ul class="list-items mt-2 completednotemeasure text-center">
-									
-									</ul>
+									<div class= "fw-semibold fs-6 m-1 pe-2">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+											<i class="ki-duotone ki-calendar fs-1 me-1">
+												<span class="path1"></span>
+												<span class="path2"></span>
+											</i><div class="" id="pt_dob"></div></a>
+									</div>
+									<div class= "fw-semibold fs-6 m-1 pe-2">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+										<i class="ki-duotone ki-geolocation fs-1 me-1">
+											<span class="path1"></span>
+											<span class="path2"></span>
+										</i><div class="" id="pt_address"></div></a>
+									</div>
+									<div class= "fw-semibold fs-6 m-1 pe-2 d-flex align-items-center">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+											<i class="fa fa-phone ms-1 me-3 " aria-hidden="true"></i> <div id="pt_telephone"></div></a>
+									</div>
+									<div class= "fw-semibold fs-6 m-1 pe-2 d-flex align-items-center">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+											<i class="ki-duotone ki-phone fs-1 me-1">
+											<span class="path1"></span>
+											<span class="path2"></span>
+											</i> <div id="pt_phone"></div></a>
+									</div>
+									<div class= "fw-semibold fs-6 m-1 pe-2">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+										<i class="ki-duotone ki-sms fs-1 me-1">
+											<span class="path1"></span>
+											<span class="path2"></span>
+										</i><div id="pt_email"></div></a>
+									</div>
+									<div class= "fw-semibold fs-6 m-1 pe-2">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip" data-bs-original-title="Susan Redwood" data-kt-initialized="1">
+												<span class="symbol-label bg-primary text-inverse-primary fw-bold">L</span>
+											</div><div id="pt_language"></div></a>
+									</div>
+									<div class= "fw-semibold fs-6 m-1 pe-2">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip" data-bs-original-title="Susan Redwood" data-kt-initialized="1">
+												<span class="symbol-label bg-success text-inverse-success fw-bold">I</span>
+											</div>Ins ID: <div id="pt_insid"></div></a>
+									</div>
+									<!--end::Info-->
 								</div>
 							</div>
-							<div class="col-xl-6 col-lg-6 col-sm-6 pr-0 pl-0">
-								<div class="card-body text-center">
-									<h6 class="text-center text-muted">Not Completed</h6>
-									<div class="text-center">
-										<div class="chart-circle mx-auto chart-dropshadow-info notcompletedbarlengthnote" data-value="" data-thickness="7" data-color="#f82649"><div class="chart-circle-value"><div class="font-weight-normal fs-17 notcompletedpernote"></div></div></div>
+							<div class="d-flex flex-wrap flex-stack">
+								
+								<div class="d-flex align-items-center w-100 flex-column mt-3">
+									<div class="d-flex justify-content-between w-100 mt-auto mb-2">
+										<span class="fw-semibold fs-6 text-gray-500">Completed</span>
+										<span class="fw-bold fs-6">0%</span>
 									</div>
-									<ul class="list-items mt-2 notcompletednotemeasure text-center">
-									
-									</ul>
+									<div class="h-5px mx-3 w-100 bg-light mb-3">
+										<div class="bg-success rounded h-5px" role="progressbar" style="width: 1%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
 								</div>
+								
+							</div>
+							<div class="d-flex justify-content-end">
+								<a class="btn btn-primary permissionaddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>New Encounter</a>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row mt-2">
-					<div class="col-md-12">
-						<label class="form-control-label">Action Token:</label><label id = "allviewnotes">See More</label>
-						<div id = "token_area"></div>
-					</div>
-				</div>
-				<div class="row mt-2">
-					<div class="col-md-12">
-						<div>
-							<div class="form-group text-right">
-								<label for="notes-text" id="notes-created" class="form-control-label">Notes:</label>
-								<textarea id="notes-text" class="form-control" rows="5" placeholder="Notes"></textarea>
-							</div>		
-							<div class="form-group">
-								<label for="notes-assuser" class="form-control-label">Assigned to User:</label>
-								<select class="form-control" id="notes-assuser">
-									
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="custom-control custom-radio d-inline-flex">
-									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="1" checked>
-									<span class="tag custom-control-label">Open</span>
-								</label>
-								<label class="custom-control custom-radio d-inline-flex">
-									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="2">
-									<span class="tag custom-control-label">In progress</span>
-								</label>
-								<label class="custom-control custom-radio d-inline-flex">
-									<input type="radio" class="custom-control-input notes-status" name="notes-status" value="3">
-									<span class="tag custom-control-label">Closed</span>
-								</label>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" id="notes-submit" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="mlog-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" >View Measure Updated Log</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-					<div class="col-md-12" style="max-height: 500px;overflow: auto;">
-						<ul class="cbp_tmtimeline" id = "log_list">
-							
-						</ul>
-					</div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="output-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-sm" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" >Track File Generation</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-					<div class="col-md-12">
-						<label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input trackoption" name="trackoption" value="1" checked>
-							<span class="tag custom-control-label">Yes</span>
-						</label>
-						<label class="custom-control custom-radio d-inline-flex">
-							<input type="radio" class="custom-control-input trackoption" name="trackoption" value="2">
-							<span class="tag custom-control-label">No</span>
-						</label>
-					</div>
-					<input type="hidden" id = "fileid" />
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success viewrlogbtn" data-dismiss="modal">Log</button>
-				<button type="button" class="btn btn-primary generateoutfile" data-dismiss="modal">Create File</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="rlog-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" >Measure Route Tracking</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-					<div class="col-md-12" style="max-height: 500px;overflow: auto;">
-						<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-							
-						</div>
-					</div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- ROW CLOSE -->
-<div class="modal fade" id="update-note-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Update your Note</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="pwd" class="form-control-label">Note:</label>
-                            <textarea class="form-control" id="notetext" rows="5"></textarea>
-                            <input class="form-control" id="chosen_note" type="hidden" />
-                        </div>
-                    </div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="editnotebtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- ROW CLOSE -->
-<div class="modal fade" id="reset-del-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Reset / Delete </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-                <div class="row d-flex justify-content-around ">
-
-                    <div class="col-md-3">
-						<button type="button" class="btn btn-outline-primary" id="resetmeasure">Reset Measure</button>
-                    </div>
-					<div class="col-md-3">
-						<button type="button" class="btn btn-outline-info"  id="delmeasure"> Delete Measure</button>
-					</div>
-					<div class="col-md-3">
-						<button type="button" class="btn btn-outline-danger"  id="delpatient">Delete Patient</button>
-					</div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<!-- <button type="button" class="btn btn-primary" id="editnotebtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-				<input type="hidden" id="drowid" value="">
-				<input type="hidden" id="dtableid" value="">
-				<input type="hidden" id="ddos" value="">
-				<input type="hidden" id="dmeasureid" value="">
-				<input type="hidden" id="dmid" value="">
-				<input type="hidden" id="dinsmid" value="">
-				
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="call-patient-modal" tabindex="-1" role="dialog"  aria-hidden="true" >
-	<div class="modal-dialog" role="document" >
-		<div class="modal-content" >
-			<div class="modal-header">
-				<h5 class="modal-title" id="patient-name" style="cursor: pointer;"> </h5> &nbsp;<h5 class="modal-title"> | </h5>&nbsp;
-				<h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<input type="hidden" id="callmid" value="">
-				<div class="row d-flex justify-content-center">
-					<div >
-						<h3 id = "patient-num" > </h3>
-						<input type="text" class="form-control" id="customphone" placeholder="+1123456789" style="display: none;">
-					</div>
-				</div>
-				<br />
-				<div class="row d-flex justify-content-center">
-					<h4 id="duration-demo">00:00:00</h4>
-				</div>
-				<div class="row d-flex justify-content-center">
-					<label> Caller  Voice</label>
-				</div>
-				<div class="row d-flex justify-content-center">
-					<div id="input-volume"></div>
-				</div>
-				<div class="row d-flex justify-content-center">
-					<label>Recipient (PT) Voice</label>
-				</div>
-				<div class="row d-flex justify-content-center">
-					<div id="output-volume"></div>
-				</div>
-                <div class="row d-flex justify-content-around ">
-                    <div class="col-md-2">
-						<button type="button" class="btn btn-success btn-circle btn-xl callringbtn" id="callringbtn">
-							<i class="fa fa-phone" style="font-size: 1.9rem;"></i>
-						</button>
-                    </div>
-					<div class="col-md-2">
-						<button type="button" class="btn btn-danger btn-circle btn-xl" id="closeringbtn">
-							<i class="fa fa-times" style="font-size: 1.9rem;"></i>
-						</button>
-					</div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
-					<b><span id="callcounts"></span>&nbsp;&nbsp;(min) Available</b>
+				  <div class="card-body col-md-8 ">
+					<input type="hidden" id="chosen_vital" />
 					
+					<table class="table table-striped table-bordered text-nowrap w-100"  id="encounter_table" >
+					  <thead>
+						<tr >
+							<th width="40%">Date Time</th>
+							<th width="10%">Mins</th>
+							<th width="10%">Type</th>
+							<th width="10%">Status</th>
+							<th width="30%" class="text-center col-md-3"></th>
+						</tr>
+					  </thead>
+					  <tbody></tbody>
+					</table>
+				  </div>
 				</div>
-				
-				<a href="../pages/creditcall" target="_blank" class="btn btn-primary">Add Credit</a>
-				
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+			 </div>
 		</div>
 	</div>
 </div>
 
-<div class="modal fade" id="education-sms-modal" tabindex="-1" role="dialog"  aria-hidden="true" >
-	<div class="modal-dialog" role="document" >
-		<div class="modal-content" >
-			<div class="modal-header">
-				<h5 class="modal-title" id="edu-pat-name" style="cursor: pointer;"> </h5> 
-				<!-- &nbsp;<h5 class="modal-title"> | </h5>&nbsp;
-				<h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5> -->
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+<div class="modal fade" id="encounter_edit_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-xl" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="example-Modal3">Encounter</h5>
+		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+		  </div>
+		  <input type="hidden" class="form-control" id="encounter_id" data-field="id">
+		  <input type="hidden" class="form-control" id="encounter_clinic_id" data-field="clinic_id">
+		  <input type="hidden" class="form-control" id="encounter_patient_id" data-field="patient_id">
+		  <input type="hidden" class="form-control" id="encounter_emr_id" data-field="emr_id">
+		  <input type="hidden" class="form-control" id="encounter_pcp_id" data-field="pcp_id">
+		</div>
+		<div class="modal-body">
+		  <div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_enc_type" class="fw-semibold fs-6 my-2">Type:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_type" id="encounter_enc_type">
+				</div>
 			</div>
-			<div class="modal-body">
-				<div class="row d-flex justify-content-center">
-					<div >
-						<h3 id = "edu-pat-num" > </h3>
-						<!-- <input type="text" class="form-control" id="customphone" placeholder="+1123456789" style="display: none;"> -->
+			<!-- <div class="col-md-2">
+				<div class="form-group">
+					<label for="encounter_visit_type" class="fw-semibold fs-6 my-2">Visit Type:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="visit_typ" id="encounter_visit_type">
+				</div>
+			</div> -->
+			<!-- <div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_icd" class="fw-semibold fs-6 my-2">ICD:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="icd" id="encounter_icd">
+				</div>
+			</div> -->
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_status" class="fw-semibold fs-6 my-2">Status:</label>
+					<select  class="form-control select2 custom-select" id="encounter_status" data-field="status"></select>
+				</div>
+			</div>
+			<!-- <div class="col-md-4">
+				<div class="form-group">
+					<label for="encounter_transition_care" class="fw-semibold fs-6 my-2">Transition Of Care:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="transition_care" id="encounter_transition_care">
+				</div>
+			</div> -->
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_team_member" class="fw-semibold fs-6 my-2">Team Member:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="team_member" id="encounter_team_member">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_assigned" class="fw-semibold fs-6 my-2">Assigned To:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="assigned" id="encounter_assigned">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group" >
+					<label for="encounter_enc_start" class="required  fs-6 my-2">Start Time:</label>
+					<div class="input-group"  data-td-target-input="nearest" data-td-target-toggle="nearest" >
+						<input id="encounter_enc_start" type="text" class="form-control" data-field="enc_start" />
+						<span class="input-group-text" data-td-target="#kt_td_picker_basic" data-td-toggle="datetimepicker">
+							<i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+						</span>
 					</div>
 				</div>
-				<br />
-				<div class="row d-flex justify-content-center">
-					<textarea class="form-control" rows="10" id="edu-sms-content"></textarea>
-				</div>
-				
 			</div>
-			<div class="modal-footer" style="position: relative;">
-				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
-					<b><span id="edusmscounts"></span>&nbsp;&nbsp;Available</b>
-					
+			<div class="col-md-2">
+				<div class="form-group">
+					<label for="encounter_total_mins" class="required fw-semibold fs-6 my-2">Total Mins:</label>
+					<input type="number" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="total_mins" id="encounter_total_mins">
 				</div>
-				<div class="text-primary" style="display: inline-block;position:absolute;left:120px;top:23px;">
-					<label class="custom-control custom-checkbox d-inline-flex">
-						<input type="checkbox" class="custom-control-input whatsappoption" name="whatsappoption" value="1">
-						<span class="custom-control-label" style="line-height:1.6rem;">Whatsapp&nbsp;<i class="fa fa-whatsapp"></i></span>
-					</label>
-				</div>
-				<a href="../pages/creditsms" target="_blank" class="btn btn-primary">Add Credit</a>
-				<button type="button" class="btn btn-success" id = "edusmssendbtn" data-dismiss="modal">Send</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
+			<!-- <div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_enc_end" class="fw-semibold fs-6 my-2">End Time:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_end" id="encounter_enc_end">
+				</div>
+			</div> -->
+			<div class="col-md-7">
+				<div class="form-group">
+					<label for="encounter_notes" class="fw-semibold fs-6 my-2">Notes:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="encounter_notes">
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="encounter_action_taken" class="fw-semibold fs-6 my-2">Action Taken:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="action_taken" id="encounter_action_taken">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_class" class="fw-semibold fs-6 my-2">Class:</label>
+					<select  class="form-control select2 custom-select" id="encounter_class" data-field="class"></select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_priority" class="fw-semibold fs-6 my-2">Priority:</label>
+					<select  class="form-control select2 custom-select" id="encounter_priority" data-field="priority"></select>
+				</div>
+			</div>
+			<!-- <div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_subject_status" class="fw-semibold fs-6 my-2">Subject Status:</label>
+					<select  class="form-control select2 custom-select" id="encounter_subject_status" data-field="subject_status"></select>
+				</div>
+			</div> -->
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_service_type" class="fw-semibold fs-6 my-2">Service Type:</label>
+					<select  class="form-control select2 custom-select" id="encounter_service_type" data-field="service_type">
+						<option value="Immunization">Immunization</option>
+						<option value="Health Information/Referral">Health Information/Referral</option>
+						<option value="Obstetrics & Gynaecology">Obstetrics & Gynaecology</option>
+						<option value="Ophthalmology">Ophthalmology</option>
+						<option value="Assessment">Assessment</option>
+						<option value="Asthma">Asthma</option>
+						<option value="Behavior">Behavior</option>
+						<option value="Child Services">Child Services</option>
+						<option value="Counselling">Counselling</option>
+						<option value="Dental Hygiene">Dental Hygiene</option>
+						<option value="Depression">Depression</option>
+						<option value="Diabetes">Diabetes</option>
+						<option value="Hypertension">Hypertension</option>
+						<option value="Medical Specialists">Medical Specialists</option>
+						<option value="Medical Service">Medical Service</option>
+						<option value="Medication Administration">Medication Administration</option>
+						<option value="Oral Hygiene">Oral Hygiene</option>
+						<option value="Prescriptions">Prescriptions</option>
+						<option value="Referral">Referral</option>
+						<option value="Respiratory">Respiratory</option>
+						<option value="Secure Extended Care">Secure Extended Care</option>
+						<option value="Gastroenterology">Gastroenterology</option>
+						<option value="Gynaecology">Gynaecology</option>
+						<option value="Obstetrics">Obstetrics</option>
+						<option value="Women's Health">Women's Health</option>
+						<option value="Men's Health">Men's Health</option>
+						<option value="Asthma">Asthma</option>
+					</select>
+				</div>
+			</div>
+			<!-- <div class="col-md-5">
+				<div class="form-group">
+					<label for="encounter_participant" class="fw-semibold fs-6 my-2">Participant:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="participant" id="encounter_participant">
+				</div>
+			</div> -->
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_participant_type" class="fw-semibold fs-6 my-2">Participant Type:</label>
+					<select  class="form-control select2 custom-select" id="encounter_participant_type" data-field="participant_type"></select>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="encounter_reason" class="fw-semibold fs-6 my-2">Reason:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="encounter_reason">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_reason_use" class="fw-semibold fs-6 my-2">Reason Use:</label>
+					<select  class="form-control select2 custom-select" id="encounter_reason_use" data-field="reason_use"></select>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="encounter_reason_codes" class="fw-semibold fs-6 my-2">Reason Codes:</label>
+					<select  class="form-control select2 custom-select" id="encounter_reason_codes" data-field="reason_codes"></select>
+				</div>
+			</div>
+	
+		  </div>
 		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+		  <button type="button" class="btn btn-primary" id="update_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
+		</div>
+	  </div>
 	</div>
-</div>
+  </div>
