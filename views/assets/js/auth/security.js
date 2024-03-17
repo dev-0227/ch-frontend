@@ -21,7 +21,15 @@ $(document).ready(function () {
     }
   });
 
-  
+  $('#password-addon').click(function(){
+    if ($("#answer").data("view")=="0") {
+      $("#answer").attr("type", "text");
+      $("#answer").data("view", "1");
+    }else{
+      $("#answer").attr("type", "password");
+      $("#answer").data("view", "0");
+    }
+  })
 
 
   $('#answer').keypress(function(e){
