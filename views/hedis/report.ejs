@@ -68,17 +68,26 @@
 							<!--begin::Title-->
 							<div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
 								<!--begin::User-->
-								<div class="d-flex flex-column">
-									<!--begin::Name-->
-									<div class="d-flex align-items-center mb-2">
-										<div class="d-none" id="pt_male">
-											<svg xmlns="http://www.w3.org/2000/svg" width="40" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><path fill-rule="nonzero" d="M256 0c70.69 0 134.69 28.655 181.018 74.982C483.345 121.31 512 185.31 512 256s-28.655 134.69-74.982 181.018C390.69 483.345 326.69 512 256 512s-134.69-28.655-181.018-74.982C28.655 390.69 0 326.69 0 256S28.655 121.31 74.982 74.982C121.31 28.655 185.31 0 256 0zm-49.371 316.575c-.992-1.286 2.594-10.118 3.443-11.546-9.722-8.651-17.404-17.379-19.041-35.34l-1.043.022c-2.408-.032-4.729-.586-6.903-1.825-3.481-1.979-5.93-5.379-7.583-9.212-3.5-8.043-15.031-34.738 2.537-32.628-9.823-18.345 12.409-49.684-25.935-61.275 31.46-39.845 97.839-101.281 146.483-39.654 53.245 5.16 69.853 68.437 34 103.093 2.101.076 4.08.56 5.832 1.498 6.665 3.57 6.884 11.318 5.132 17.819-1.733 5.429-3.934 9.104-6.01 14.397-2.524 7.147-6.215 8.478-13.345 7.708-.362 17.67-8.528 26.343-19.518 36.724l3.007 10.187c-14.737 31.261-75.957 32.518-101.056.032zM78.752 394.224c12.076-51.533 45.656-33.396 110.338-73.867 22.982 47.952 116.386 51.437 135.54 0 55.35 35.384 98.967 20.923 109.958 72.138 28.965-37.841 46.176-85.158 46.176-136.495 0-62.068-25.158-118.26-65.83-158.934C374.26 56.394 318.068 31.236 256 31.236S137.74 56.394 97.066 97.066C56.394 137.74 31.236 193.932 31.236 256c0 52.123 17.744 100.099 47.516 138.224z"/></svg>
+								<div class="d-flex flex-column w-100">
+									<div class="row  align-items-center mb-2">
+										<div class="col-md-8 d-flex align-items-center">
+											<div class="symbol symbol-40px symbol-circle me-1" >
+												<span class="symbol-label fs-3 bg-primary text-inverse-primary fw-bold" id="pt_name_icon">A</span>
+											</div>
+											<a class="text-gray-900 text-hover-primary fs-2 fw-bold mx-2" ><div class="" id="pt_fullname"></div></a>
+											<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
 										</div>
-										<div class="" id="pt_female">
-												<svg xmlns="http://www.w3.org/2000/svg" width="40" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><path fill-rule="nonzero" d="M256 0c70.69 0 134.69 28.655 181.018 74.982C483.345 121.31 512 185.31 512 256s-28.655 134.69-74.982 181.018C390.69 483.345 326.69 512 256 512s-134.69-28.655-181.018-74.982C28.655 390.69 0 326.69 0 256S28.655 121.31 74.982 74.982C121.31 28.655 185.31 0 256 0zm83.858 360.495c-8.946-17.959-20.291-33.187-33.495-47.498 86.303 33.392 107.758 28.216 126.204 82.097 30.184-38.263 48.197-86.574 48.197-139.094 0-62.068-25.158-118.26-65.83-158.934C374.26 56.394 318.068 31.236 256 31.236S137.74 56.394 97.066 97.066C56.394 137.74 31.236 193.932 31.236 256c0 52.461 17.973 100.722 48.095 138.965 18.247-55.6 36.446-48.494 122.961-81.968-13.204 14.311-24.549 29.539-33.5 47.498l25.915-.635 58.179 46.465 61.058-46.465 25.914.635zm-127.87-64.325v15.645l-15.421 25.895 57.727 45.55 57.794-45.959-20.199-26.986v-14.557c20.758-1.106 38.585-2.954 48.454-5.364 12.753-3.109 23.387-7.763 30.725-14.781-11.447-5.501-18.761-14.911-22.976-27.214-9.796-28.591-.507-60.756-4.884-91.797-5.864-41.569-33.021-55.47-59.976-52.595-34.379-28.257-96.069-11.754-112.764 36.542-8.433 24.396-3.3 44.822-4.204 69.543-1.22 33.255-9.873 55.471-28.678 62.555 6.51 7.745 15.82 13.696 28.08 17.699 9.152 2.987 26.194 4.87 46.322 5.824z"/></svg>
+										<div class="col-md-4 d-flex justify-content-end">
+											<a class="btn btn-primary permissionaddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>New</a>
 										</div>
-										<a class="text-gray-900 text-hover-primary fs-2 fw-bold mx-2" ><div class="" id="pt_fullname"></div></a>
-										<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
+									</div>
+									<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+										<i class="ki-duotone ki-verify fs-1 text-primary">
+											<span class="path1"></span>
+											<span class="path2"></span>
+										</i>
+										<a  class="btn  btn-light-primary fw-bold fs-6 py-1 ">
+										<div class="" id="pt_gender">Female</div></a>
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
@@ -114,13 +123,13 @@
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip" data-bs-original-title="Susan Redwood" data-kt-initialized="1">
+											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
 												<span class="symbol-label bg-primary text-inverse-primary fw-bold">L</span>
 											</div><div id="pt_language"></div></a>
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip" data-bs-original-title="Susan Redwood" data-kt-initialized="1">
+											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
 												<span class="symbol-label bg-success text-inverse-success fw-bold">I</span>
 											</div>Ins ID: <div id="pt_insid"></div></a>
 									</div>
@@ -140,9 +149,7 @@
 								</div>
 								
 							</div>
-							<div class="d-flex justify-content-end">
-								<a class="btn btn-primary permissionaddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>New Encounter</a>
-							</div>
+							
 						</div>
 					</div>
 				  <div class="card-body col-md-8 ">
@@ -151,11 +158,12 @@
 					<table class="table table-striped table-bordered text-nowrap w-100"  id="encounter_table" >
 					  <thead>
 						<tr >
-							<th width="40%">Date Time</th>
-							<th width="10%">Mins</th>
 							<th width="10%">Type</th>
+							<th width="20%">Date Time</th>
+							<th width="10%">Mins</th>
+							<th width="20%">Reason</th>
 							<th width="10%">Status</th>
-							<th width="30%" class="text-center col-md-3"></th>
+							<th width="20%" class="text-center col-md-3"></th>
 						</tr>
 					  </thead>
 					  <tbody></tbody>

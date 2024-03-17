@@ -2152,13 +2152,14 @@ var encounter_table = $('#encounter_table').DataTable({
   "order": [],
   "bAutoWidth": false, 
   "columns": [
+      { data: "enc_type"},
       { data: 'enc_start',
         render: function (data, type, row) {
           return new Date(row.enc_start).toLocaleString();;
         } 
       },
       { data: 'total_mins' },
-      { data: "enc_type"},
+      { data: "reason"},
       { data: 'status' },
       { data: 'id',
         render: function (data, type, row) {
@@ -2186,13 +2187,9 @@ $(document).on("click",".notesbtn",function(){
       if(result.length>0){
         $("#encounter_patient_id").val(result[0]['id']);
         $("#encounter_emr_id").val(result[0]['patientid']);
-        if(result[0]['GENDER'] == "Female"){
-          $("#pt_male").addClass('d-none');
-          $("#pt_female").removeClass('d-none');
-        }else{
-          $("#pt_female").addClass('d-none');
-          $("#pt_male").removeClass('d-none');
-        }
+        
+        $("#pt_gender").html(result[0]['GENDER']);
+        $("#pt_name_icon").html(result[0]['FNAME'].substring(0,1)+result[0]['LNAME'].substring(0,1));
         $("#pt_fullname").html(result[0]['FNAME'] + " " + result[0]['LNAME'])
         $("#pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
         $("#pt_dob").html(result[0]['DOB'])
