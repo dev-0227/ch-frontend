@@ -2195,11 +2195,36 @@ $(document).on("click",".notesbtn",function(){
         $("#pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
         $("#pt_dob").html(new Date(result[0]['DOB']).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})),
         $("#pt_telephone").html(result[0]['PHONE'])
+        if(result[0]['PHONE']){
+          $("#pt_telephone").parent().parent().removeClass("d-none");
+        }else{
+          $("#pt_telephone").parent().parent().addClass("d-none");
+        }
         $("#pt_phone").html(result[0]['MOBILE'])
+        if(result[0]['MOBILE']){
+          $("#pt_phone").parent().parent().removeClass("d-none");
+          $("#encounter_modal_phone").parent().removeClass("d-none");
+        }else{
+          $("#pt_phone").parent().parent().addClass("d-none");
+          $("#encounter_modal_phone").parent().addClass("d-none");
+        }
         $("#pt_email").html(result[0]['EMAIL']);
+        if(result[0]['EMAIL']){
+          $("#pt_email").parent().parent().removeClass("d-none");
+          $("#encounter_modal_email").parent().removeClass("d-none");
+        }else{
+          $("#pt_email").parent().parent().addClass("d-none");
+          $("#encounter_modal_email").parent().addClass("d-none");
+        }
         $("#pt_language").html(result[0]['Language']);
         $("#pt_insid").html(result[0]['INS_ID']);
+        if(result[0]['INS_ID']){
+          $("#pt_insid").parent().parent().removeClass("d-none");
+        }else{
+          $("#pt_insid").parent().parent().addClass("d-none");
+        }
         $("#encounter_modal_fullname").html($("#pt_fullname").html());
+        $("#encounter_modal_language").html($("#pt_language").html());
         $("#encounter_modal_clinic").html($("#hedis_clinic_name").val());
         $("#encounter_modal_gender").html($("#pt_gender").html());
         $("#encounter_modal_dob").html($("#pt_dob").html());

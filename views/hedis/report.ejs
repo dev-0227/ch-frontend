@@ -60,7 +60,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="row h-100 flex-wrap align-content-start">
-					<div class="d-flex  flex-sm-nowrap mb-3 col-md-12 mh-50px">
+					<div class="d-flex  flex-sm-nowrap mb-3 col-md-12 mh-50px border-bottom">
 						<div class="row  align-items-center mb-2 w-100">
 							<div class="col-md-8 d-flex align-items-center">
 								<div class="symbol symbol-40px symbol-circle me-1" >
@@ -141,9 +141,7 @@
 										<div class="bg-success rounded h-5px" role="progressbar" style="width: 1%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
 									</div>
 								</div>
-								
 							</div>
-							
 						</div>
 					</div>
 				  <div class="card-body col-md-8 ">
@@ -173,26 +171,41 @@
 <div class="modal fade" id="encounter_edit_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
 	  <div class="modal-content">
-		<div class="modal-header">
+		<div class="modal-header pb-1">
 		    <div class="modal-title" id="encounter_title">
 			  <div class="d-flex align-items-center mb-2">
-				<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="encounter_modal_fullname">Max Smith</a>
-				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+				<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="encounter_modal_fullname"></a>
+				<!-- <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
 					<a  class="btn  btn-light-primary fw-bold fs-6 py-1 ">
 					<div id="encounter_modal_gender"></div></a>
+				</div> -->
+				<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
+				<div class= "fw-semibold fs-6 m-1 pe-2">
+					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+						<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+							<span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
+						</div><div id="encounter_modal_language"></div></a>
+				</div>
+				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+						<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+						<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
+						</div><div class="" id="encounter_modal_gender"></div></a>
+				</div>
+				<div class= "fw-semibold fs-6 m-1 pe-2">
+					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+						<i class="ki-duotone ki-calendar fs-1 me-1">
+							<span class="path1"></span>
+							<span class="path2"></span>
+						</i><div class="" id="encounter_modal_dob"></div></a>
 				</div>
 			  </div>
-			  <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
+			  <div class="d-flex flex-wrap fw-semibold fs-6 mb-2 pe-2">
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 					<i class="ki-duotone ki-safe-home fs-4 me-1">
 						<span class="path1"></span>
 						<span class="path2"></span>
 					</i><div id="encounter_modal_clinic"></div></a>
-				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-					<i class="ki-duotone ki-calendar fs-4 me-1">
-						<span class="path1"></span>
-						<span class="path2"></span>
-					</i><div id="encounter_modal_dob"></div></a>
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 				<i class="fa fa-phone me-2"></i><div id="encounter_modal_telephone"></div></a>
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
@@ -216,14 +229,33 @@
 		  <input type="hidden" class="form-control" id="encounter_emr_id" data-field="emr_id">
 		  <input type="hidden" class="form-control" id="encounter_pcp_id" data-field="pcp_id">
 		</div>
-		<div class="modal-body">
+		<div class="modal-body pt-2">
 		  <div class="row">
 			<div class="col-md-3">
 				<div class="form-group">
-					<label for="encounter_enc_type" class="fw-semibold fs-6 my-2">Type:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_type" id="encounter_enc_type">
+					<label for="encounter_reason" class="fw-semibold fs-6 my-2">Reason:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="encounter_reason">
 				</div>
 			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_team_member" class="fw-semibold fs-6 my-2">Created By:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="team_member" id="encounter_team_member">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_status" class="fw-semibold fs-6 my-2">Status:</label>
+					<select  class="form-control select2 custom-select" id="encounter_status" data-field="status"></select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_assigned" class="fw-semibold fs-6 my-2">Assigned To:</label>
+					<select  class="form-control select2 custom-select" id="encounter_assigned" data-field="assigned"></select>
+				</div>
+			</div>
+			
 			<!-- <div class="col-md-2">
 				<div class="form-group">
 					<label for="encounter_visit_type" class="fw-semibold fs-6 my-2">Visit Type:</label>
@@ -236,83 +268,32 @@
 					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="icd" id="encounter_icd">
 				</div>
 			</div> -->
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="encounter_status" class="fw-semibold fs-6 my-2">Status:</label>
-					<select  class="form-control select2 custom-select" id="encounter_status" data-field="status"></select>
-				</div>
-			</div>
+			
 			<!-- <div class="col-md-4">
 				<div class="form-group">
 					<label for="encounter_transition_care" class="fw-semibold fs-6 my-2">Transition Of Care:</label>
 					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="transition_care" id="encounter_transition_care">
 				</div>
 			</div> -->
-			<div class="col-md-3">
+			<!-- <div class="col-md-5">
 				<div class="form-group">
-					<label for="encounter_team_member" class="fw-semibold fs-6 my-2">Team Member:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="team_member" id="encounter_team_member">
+					<label for="encounter_participant" class="fw-semibold fs-6 my-2">Participant:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="participant" id="encounter_participant">
 				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="encounter_assigned" class="fw-semibold fs-6 my-2">Assigned To:</label>
-					<select  class="form-control select2 custom-select" id="encounter_assigned" data-field="status"></select>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group" >
-					<label for="encounter_enc_start" class="required  fs-6 my-2">Start Time:</label>
-					<div class="input-group"  data-td-target-input="nearest" data-td-target-toggle="nearest" >
-						<input id="encounter_enc_start" type="text" class="form-control" data-field="enc_start" />
-						<span class="input-group-text" data-td-target="#kt_td_picker_basic" data-td-toggle="datetimepicker">
-							<i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-2">
-				<div class="form-group">
-					<label for="encounter_total_mins" class="required fw-semibold fs-6 my-2">Total Mins:</label>
-					<input type="number" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="total_mins" id="encounter_total_mins">
-				</div>
-			</div>
+			</div> -->
+			
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_reason_use" class="fw-semibold fs-6 my-2">Reason Use:</label>
 					<select  class="form-control select2 custom-select" id="encounter_reason_use" data-field="reason_use"></select>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_reason_codes" class="fw-semibold fs-6 my-2">Reason Codes:</label>
 					<select  class="form-control select2 custom-select" id="encounter_reason_codes" data-field="reason_codes"></select>
 				</div>
 			</div>
-			<!-- <div class="col-md-3">
-				<div class="form-group">
-					<label for="encounter_enc_end" class="fw-semibold fs-6 my-2">End Time:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_end" id="encounter_enc_end">
-				</div>
-			</div> -->
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="encounter_class" class="fw-semibold fs-6 my-2">Class:</label>
-					<select  class="form-control select2 custom-select" id="encounter_class" data-field="class"></select>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="encounter_priority" class="fw-semibold fs-6 my-2">Priority:</label>
-					<select  class="form-control select2 custom-select" id="encounter_priority" data-field="priority"></select>
-				</div>
-			</div>
-			<!-- <div class="col-md-3">
-				<div class="form-group">
-					<label for="encounter_subject_status" class="fw-semibold fs-6 my-2">Subject Status:</label>
-					<select  class="form-control select2 custom-select" id="encounter_subject_status" data-field="subject_status"></select>
-				</div>
-			</div> -->
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_service_type" class="fw-semibold fs-6 my-2">Service Type:</label>
@@ -347,38 +328,78 @@
 					</select>
 				</div>
 			</div>
-			<!-- <div class="col-md-5">
-				<div class="form-group">
-					<label for="encounter_participant" class="fw-semibold fs-6 my-2">Participant:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="participant" id="encounter_participant">
-				</div>
-			</div> -->
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_participant_type" class="fw-semibold fs-6 my-2">Participant Type:</label>
 					<select  class="form-control select2 custom-select" id="encounter_participant_type" data-field="participant_type"></select>
 				</div>
 			</div>
+
+
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_priority" class="fw-semibold fs-6 my-2">Priority:</label>
+					<select  class="form-control select2 custom-select" id="encounter_priority" data-field="priority"></select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_class" class="fw-semibold fs-6 my-2">Class:</label>
+					<select  class="form-control select2 custom-select" id="encounter_class" data-field="class"></select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+					<label for="encounter_enc_type" class="fw-semibold fs-6 my-2">Type:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_type" id="encounter_enc_type">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group" >
+					<label for="encounter_enc_start" class="required  fs-6 my-2">Start Time:</label>
+					<div class="input-group"  data-td-target-input="nearest" data-td-target-toggle="nearest" >
+						<input id="encounter_enc_start" type="text" class="form-control" data-field="enc_start" />
+						<span class="input-group-text" data-td-target="#kt_td_picker_basic" data-td-toggle="datetimepicker">
+							<i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="form-group">
+					<label for="encounter_total_mins" class="required fw-semibold fs-6 my-2">Mins:</label>
+					<input type="number" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="total_mins" id="encounter_total_mins">
+				</div>
+			</div>
+			
+			<!-- <div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_enc_end" class="fw-semibold fs-6 my-2">End Time:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_end" id="encounter_enc_end">
+				</div>
+			</div> -->
+			
+			<!-- <div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_subject_status" class="fw-semibold fs-6 my-2">Subject Status:</label>
+					<select  class="form-control select2 custom-select" id="encounter_subject_status" data-field="subject_status"></select>
+				</div>
+			</div> -->
+			
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="encounter_notes" class="fw-semibold fs-6 my-2">Notes:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="encounter_notes">
-				</div>
+					<textarea rows="3" class="form-control" id="encounter_notes" data-field="notes"></textarea>
 			</div>
 			
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="encounter_action_taken" class="fw-semibold fs-6 my-2">Action Taken:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="action_taken" id="encounter_action_taken">
+					<textarea rows="3" class="form-control" id="encounter_action_taken" data-field="action_taken"></textarea>
 				</div>
 			</div>
 			
-			<div class="col-md-12">
-				<div class="form-group">
-					<label for="encounter_reason" class="fw-semibold fs-6 my-2">Reason:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="encounter_reason">
-				</div>
-			</div>
+			
 			
 	
 		  </div>
