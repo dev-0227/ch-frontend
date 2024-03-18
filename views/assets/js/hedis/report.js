@@ -2153,15 +2153,20 @@ var encounter_table = $('#encounter_table').DataTable({
   "order": [],
   "bAutoWidth": false, 
   "columns": [
+      { data: "high_priority",
+      render: function (data, type, row) {
+        return `<div class="text-center d-flex align-items-center"><i class="ki-duotone ki-lock fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i></div>`;
+      } 
+    },
+      { data: "reason"},
       { data: "enc_type"},
+      { data: 'status' },
       { data: 'enc_start',
         render: function (data, type, row) {
           return new Date(row.enc_start).toLocaleString();;
         } 
       },
       { data: 'total_mins' },
-      { data: "reason"},
-      { data: 'status' },
       { data: 'id',
         render: function (data, type, row) {
           return `
@@ -2282,7 +2287,7 @@ $(document).on("click","#add_btn",function(){
   $("#encounter_total_mins").val('1');
   $("#encounter_notes").val('');
   $("#encounter_action_taken").val('');
-  $("#encounter_enc_start").val('');
+  $("#encounter_enc_start").val(new Date().toLocaleString());
   $("#encounter_reason").val('');
   $("#encounter_participant_type").val('CALLBCK');
   $("#encounter_service_type").val('Medical Service');
