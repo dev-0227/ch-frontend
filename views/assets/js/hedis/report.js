@@ -2155,7 +2155,7 @@ var encounter_table = $('#encounter_table').DataTable({
   "columns": [
       { data: "high_priority",
       render: function (data, type, row) {
-        return `<div class="text-center d-flex align-items-center"><i class="ki-duotone ki-lock fs-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i></div>`;
+        return `<div class="text-center d-flex align-items-center"><i class="ki-duotone ki-lock fs-1 text-success"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i></div>`;
       } 
     },
       { data: "reason"},
