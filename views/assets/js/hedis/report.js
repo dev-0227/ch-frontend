@@ -2287,7 +2287,7 @@ $(document).on("click","#add_btn",function(){
   $("#encounter_participant_type").val('CALLBCK');
   $("#encounter_service_type").val('Medical Service');
   $("#encounter_reason_use").val('HM');
-  
+  $("#timer_diplay").html("00 : 00");
   
 
   $("#encounter_edit_modal").modal("show");
@@ -2307,6 +2307,7 @@ var timer_start = 0;
 var timer_diff = 0
 $(document).on("click","#timer_start",function(){
   timer_start = new Date().getTime()
+  $("#encounter_total_mins").val("1");
   timer = setInterval( function () {
     timer_diff= parseInt((new Date().getTime() - timer_start)/1000);
     $("#timer_diplay").html(pad(parseInt(timer_diff / 60))+" : "+pad(timer_diff % 60));
