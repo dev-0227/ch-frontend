@@ -206,6 +206,7 @@ $(document).ready(function () {
     if (!err) {
       let result = JSON.parse(xhr.responseText);
       $(".hedis-title").html(result['clinic']+" | "+result['ins']+" Hedis Quality Tracking");
+      $("#hedis_clinic_name").val(result['clinic']);
       $("#patient-modal-insurance").html(result['clinic']+" | "+result['ins']);
       $("#notes-modal-title").html(result['clinic']+" | "+result['ins']);
   } else {
@@ -2192,17 +2193,21 @@ $(document).on("click",".notesbtn",function(){
         $("#pt_name_icon").html(result[0]['FNAME'].substring(0,1)+result[0]['LNAME'].substring(0,1));
         $("#pt_fullname").html(result[0]['FNAME'] + " " + result[0]['LNAME'])
         $("#pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
-        $("#pt_dob").html(result[0]['DOB'])
+        $("#pt_dob").html(new Date(result[0]['DOB']).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})),
         $("#pt_telephone").html(result[0]['PHONE'])
         $("#pt_phone").html(result[0]['MOBILE'])
         $("#pt_email").html(result[0]['EMAIL']);
         $("#pt_language").html(result[0]['Language']);
         $("#pt_insid").html(result[0]['INS_ID']);
-
+        $("#encounter_modal_fullname").html($("#pt_fullname").html());
+        $("#encounter_modal_clinic").html($("#hedis_clinic_name").val());
+        $("#encounter_modal_gender").html($("#pt_gender").html());
+        $("#encounter_modal_dob").html($("#pt_dob").html());
+        $("#encounter_modal_telephone").html($("#pt_telephone").html());
+        $("#encounter_modal_phone").html($("#pt_phone").html());
+        $("#encounter_modal_email").html($("#pt_email").html());
         patient_id = result[0]['id'];
         encounter_table.ajax.reload();
-        
-        
         $("#encounter_modal").modal("show");
       }
     }
@@ -2290,16 +2295,19 @@ $(document).on("click",".delete_btn",function(){
 
 });
 
-// sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterType", (xhr, err) => {
-//   if (!err) {
-//     let result = JSON.parse(xhr.responseText)['data'];
-//     var options = '';
-//     for(var i=0; i<result.length; i++){
-//       options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
-//     }
-//     $("#encounter_enc_type").html(options);
-//   }
-// });
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: localStorage.getItem('chosen_clinic')}, "user/getUsersByClinic", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    options += '<option value="" ></option>';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['id']+'" >'+result[i]['fname'] +' '+result[i]['lname']+'</option>';
+    }
+    $("#encounter_assigned").html(options);
+  }
+});
+
+
 
 sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterStatus", (xhr, err) => {
   if (!err) {
@@ -2333,6 +2341,17 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
     $("#encounter_priority").html(options);
   }
 });
+
+// sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterType", (xhr, err) => {
+//   if (!err) {
+//     let result = JSON.parse(xhr.responseText)['data'];
+//     var options = '';
+//     for(var i=0; i<result.length; i++){
+//       options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+//     }
+//     $("#encounter_enc_type").html(options);
+//   }
+// });
 
 // sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterServiceType", (xhr, err) => {
 //   if (!err) {
