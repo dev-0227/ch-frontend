@@ -2251,14 +2251,16 @@ $(document).on("click",".edit_btn",function(){
 $(document).on("click","#add_btn",function(){
   $("#encounter_id").val('');
   $("#encounter_enc_type").val('phone call');
-  $("#encounter_status").val('');
-  $("#encounter_team_member").val('');
+  $("#encounter_status").val('in-progress');
+  $("#encounter_team_member").val(localStorage.getItem('username'));
   $("#encounter_assigned").val('');
   $("#encounter_total_mins").val('1');
   $("#encounter_notes").val('');
   $("#encounter_action_taken").val('');
   $("#encounter_enc_start").val('');
   $("#encounter_reason").val('');
+  $("#encounter_reason_use").val('HM');
+  
   
 
   $("#encounter_edit_modal").modal("show");

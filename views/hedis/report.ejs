@@ -59,44 +59,44 @@
 				</div>
 			</div>
 			<div class="modal-body">
-				<div class="row">
-					<div class="d-flex flex-wrap flex-sm-nowrap mb-3 col-md-4">
-						<!--begin: Pic-->
-						
-						<!--end::Pic-->
-						<!--begin::Info-->
-						<div class="flex-grow-1">
-							<!--begin::Title-->
-							<div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
-								<!--begin::User-->
-								<div class="d-flex flex-column w-100">
-									<div class="row  align-items-center mb-2">
-										<div class="col-md-8 d-flex align-items-center">
-											<div class="symbol symbol-40px symbol-circle me-1" >
-												<span class="symbol-label fs-3 bg-primary text-inverse-primary fw-bold" id="pt_name_icon">A</span>
-											</div>
-											<a class="text-gray-900 text-hover-primary fs-2 fw-bold mx-2" ><div class="" id="pt_fullname"></div></a>
-											<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
-										</div>
-										<div class="col-md-4 d-flex justify-content-end">
-											<a class="btn btn-primary permissionaddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>New</a>
-										</div>
-									</div>
-									<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-										<i class="ki-duotone ki-verify fs-1 text-primary">
+				<div class="row h-100 flex-wrap align-content-start">
+					<div class="d-flex  flex-sm-nowrap mb-3 col-md-12 mh-50px">
+						<div class="row  align-items-center mb-2 w-100">
+							<div class="col-md-8 d-flex align-items-center">
+								<div class="symbol symbol-40px symbol-circle me-1" >
+									<span class="symbol-label fs-3 bg-primary text-inverse-primary fw-bold" id="pt_name_icon">A</span>
+								</div>
+								<a class="text-gray-900 text-hover-primary fs-2 fw-bold mx-2" ><div class="" id="pt_fullname"></div></a>
+								<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
+								<div class= "fw-semibold fs-6 m-1 pe-2">
+									<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+										<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+											<span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
+										</div><div id="pt_language"></div></a>
+								</div>
+								<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+									<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+										<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+										<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
+										</div><div class="" id="pt_gender">Female</div></a>
+								</div>
+								<div class= "fw-semibold fs-6 m-1 pe-2">
+									<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+										<i class="ki-duotone ki-calendar fs-1 me-1">
 											<span class="path1"></span>
 											<span class="path2"></span>
-										</i>
-										<a  class="btn  btn-light-primary fw-bold fs-6 py-1 ">
-										<div class="" id="pt_gender">Female</div></a>
-									</div>
-									<div class= "fw-semibold fs-6 m-1 pe-2">
-										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-											<i class="ki-duotone ki-calendar fs-1 me-1">
-												<span class="path1"></span>
-												<span class="path2"></span>
-											</i><div class="" id="pt_dob"></div></a>
-									</div>
+										</i><div class="" id="pt_dob"></div></a>
+								</div>
+							</div>
+							<div class="col-md-4 d-flex justify-content-end">
+								<a class="btn btn-primary permissionaddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>New</a>
+							</div>
+						</div>
+					</div>
+					<div class="d-flex flex-wrap flex-sm-nowrap mb-3 col-md-4" style="height: calc(100% - 50px);">
+						<div class="d-flex align-content-between h-100 row w-100">
+							<div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+								<div class="d-flex flex-column w-100">
 									<div class= "fw-semibold fs-6 m-1 pe-2">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 										<i class="ki-duotone ki-geolocation fs-1 me-1">
@@ -125,20 +125,13 @@
 									<div class= "fw-semibold fs-6 m-1 pe-2">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
-												<span class="symbol-label bg-primary text-inverse-primary fw-bold">L</span>
-											</div><div id="pt_language"></div></a>
-									</div>
-									<div class= "fw-semibold fs-6 m-1 pe-2">
-										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
 												<span class="symbol-label bg-success text-inverse-success fw-bold">I</span>
 											</div>Ins ID: <div id="pt_insid"></div></a>
 									</div>
 									<!--end::Info-->
 								</div>
 							</div>
-							<div class="d-flex flex-wrap flex-stack">
-								
+							<div class="d-flex flex-wrap flex-stack m-4 pe-16">
 								<div class="d-flex align-items-center w-100 flex-column mt-3">
 									<div class="d-flex justify-content-between w-100 mt-auto mb-2">
 										<span class="fw-semibold fs-6 text-gray-500">Completed</span>
@@ -172,9 +165,7 @@
 				  </div>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-			 </div>
+			
 		</div>
 	</div>
 </div>
@@ -187,10 +178,6 @@
 			  <div class="d-flex align-items-center mb-2">
 				<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="encounter_modal_fullname">Max Smith</a>
 				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-					<i class="ki-duotone ki-verify fs-1 text-primary">
-						<span class="path1"></span>
-						<span class="path2"></span>
-					</i>
 					<a  class="btn  btn-light-primary fw-bold fs-6 py-1 ">
 					<div id="encounter_modal_gender"></div></a>
 				</div>
@@ -290,18 +277,24 @@
 					<input type="number" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="total_mins" id="encounter_total_mins">
 				</div>
 			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="encounter_reason_use" class="fw-semibold fs-6 my-2">Reason Use:</label>
+					<select  class="form-control select2 custom-select" id="encounter_reason_use" data-field="reason_use"></select>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="encounter_reason_codes" class="fw-semibold fs-6 my-2">Reason Codes:</label>
+					<select  class="form-control select2 custom-select" id="encounter_reason_codes" data-field="reason_codes"></select>
+				</div>
+			</div>
 			<!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_enc_end" class="fw-semibold fs-6 my-2">End Time:</label>
 					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_end" id="encounter_enc_end">
 				</div>
 			</div> -->
-			<div class="col-md-7">
-				<div class="form-group">
-					<label for="encounter_notes" class="fw-semibold fs-6 my-2">Notes:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="encounter_notes">
-				</div>
-			</div>
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_class" class="fw-semibold fs-6 my-2">Class:</label>
@@ -368,6 +361,13 @@
 			</div>
 			<div class="col-md-12">
 				<div class="form-group">
+					<label for="encounter_notes" class="fw-semibold fs-6 my-2">Notes:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="encounter_notes">
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<div class="form-group">
 					<label for="encounter_action_taken" class="fw-semibold fs-6 my-2">Action Taken:</label>
 					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="action_taken" id="encounter_action_taken">
 				</div>
@@ -379,18 +379,7 @@
 					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="encounter_reason">
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="encounter_reason_use" class="fw-semibold fs-6 my-2">Reason Use:</label>
-					<select  class="form-control select2 custom-select" id="encounter_reason_use" data-field="reason_use"></select>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="form-group">
-					<label for="encounter_reason_codes" class="fw-semibold fs-6 my-2">Reason Codes:</label>
-					<select  class="form-control select2 custom-select" id="encounter_reason_codes" data-field="reason_codes"></select>
-				</div>
-			</div>
+			
 	
 		  </div>
 		</div>
