@@ -54,4 +54,14 @@ $(document).ready(function () {
       }
     });
   });
+
+  $('#password-addon').click(function(){
+    if ($("#password").data("view")=="0") {
+      $("#password").attr("type", "text");
+      $("#password").data("view", "1");
+    }else{
+      $("#password").attr("type", "password");
+      $("#password").data("view", "0");
+    }
+  })
 });
