@@ -173,34 +173,27 @@
 	  <div class="modal-content">
 		<div class="modal-header pb-1">
 		    <div class="modal-title" id="encounter_title">
-			  <div class="d-flex align-items-center mb-2">
+			  <div class="d-flex align-items-center ">
 				<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="encounter_modal_fullname"></a>
-				<!-- <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-					<a  class="btn  btn-light-primary fw-bold fs-6 py-1 ">
-					<div id="encounter_modal_gender"></div></a>
-				</div> -->
 				<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
 				<div class= "fw-semibold fs-6 m-1 pe-2">
-					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
 						<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
 							<span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
 						</div><div id="encounter_modal_language"></div></a>
 				</div>
 				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
 						<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
 						<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
 						</div><div class="" id="encounter_modal_gender"></div></a>
 				</div>
-				<div class= "fw-semibold fs-6 m-1 pe-2">
-					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-						<i class="ki-duotone ki-calendar fs-1 me-1">
-							<span class="path1"></span>
-							<span class="path2"></span>
-						</i><div class="" id="encounter_modal_dob"></div></a>
+				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+					<div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
+					<div class="text-gray-500" id="encounter_modal_dob"></div>
 				</div>
 			  </div>
-			  <div class="d-flex flex-wrap fw-semibold fs-6 mb-2 pe-2">
+			  <div class="d-flex flex-wrap fw-semibold fs-6 my-2 pe-2">
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 					<i class="ki-duotone ki-safe-home fs-4 me-1">
 						<span class="path1"></span>
@@ -220,6 +213,17 @@
 				</i><div id="encounter_modal_email"></div></a>
 			  </div>
 		    </div>
+			<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+				<div class=" text-center">
+					<div class="fs-1 fw-bold counted" id="timer_diplay" >00 : 00</div>
+					<input type="hidden" id="encounter_timer">
+				</div>
+				<div class="d-flex justify-content-between">
+					<a id="timer_start" class="btn btn-sm fs-6 btn-primary w-80px me-3 py-1" >Start</a>
+					<a id="timer_end" class="btn btn-sm fs-6 btn-primary w-80px py-1" >Stop</a>
+				</div>
+				
+			</div>
 		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 		  </div>

@@ -2284,11 +2284,40 @@ $(document).on("click","#add_btn",function(){
   $("#encounter_action_taken").val('');
   $("#encounter_enc_start").val('');
   $("#encounter_reason").val('');
+  $("#encounter_participant_type").val('CALLBCK');
+  $("#encounter_service_type").val('Medical Service');
   $("#encounter_reason_use").val('HM');
   
   
 
   $("#encounter_edit_modal").modal("show");
+});
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+
+var timer;
+var timer_start = 0;
+var timer_diff = 0
+$(document).on("click","#timer_start",function(){
+  timer_start = new Date().getTime()
+  timer = setInterval( function () {
+    timer_diff= parseInt((new Date().getTime() - timer_start)/1000);
+    $("#timer_diplay").html(pad(parseInt(timer_diff / 60))+" : "+pad(timer_diff % 60));
+    $("#encounter_timer").val(timer_diff);
+  }, 1000 );
+});
+
+$(document).on("click","#timer_end",function(){
+  clearInterval(timer)
+  console.log(Math.ceil(timer_diff/60));
+  $("#encounter_total_mins").val(Math.ceil(timer_diff/60));
 });
 
 $(document).on("click",".delete_btn",function(){
