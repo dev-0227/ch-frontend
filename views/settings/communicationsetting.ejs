@@ -1,33 +1,6 @@
 <style>
-    .tab_area i {
-        color:#25252a;
-    }
-    .table-responsive{
-        padding:10px;
-    }
-    .reduce_text {
-        width: 100px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: block;
-    }
-    .reduce_text_2 {
-        width: 200px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: block;
-    }
-    .color-box{
-        display: inline-block;
-        width: 100%;
-        border-radius: 3px;
-        border: 1px solid #eaedf1;
-        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
-    }
-    #definemeasuretable tr{
-        cursor: pointer;
+    .form-control-label {
+        margin-top: 6px;
     }
 </style>
 <!-- ROW-1 OPEN -->
@@ -37,58 +10,59 @@
             <div class="card-header">
                 <h3 class="card-title">Communication Settings</h3>
             </div>
+
             <div class="card-body p-6">
                 <div class="panel panel-primary">
-                    <div class=" tab-menu-heading">
-                        <div class="tabs-menu1">
-                            <!-- Tabs -->
-                            <ul class="nav panel-tabs">
-                                <li class="superadmin-right"><a href="#phonesetting_tab" class="active" data-toggle="tab">Phone Number Settings</a></li>
-                                <li><a href="#hedisalert_tab" class="active tmpfirstclass" data-toggle="tab">Hedis Alerts</a></li>
-                                <li><a href="#statusreason_tab" class="active tmpfirstclass" data-toggle="tab">Status Reason </a></li>
-                                <li><a href="#status_tab" class="active tmpfirstclass" data-toggle="tab">Status Codes </a></li>
-                                <li><a href="#category_tab" class="active tmpfirstclass" data-toggle="tab">Measure_Category </a></li>
-                                <li><a href="#topic_tab" class="active tmpfirstclass" data-toggle="tab">Topic Codes </a></li>
-                                <li><a href="#medium_tab" class="active tmpfirstclass" data-toggle="tab">Medium Codes </a></li>
-                                <li><a href="#priority_tab" class="active tmpfirstclass" data-toggle="tab">Priority Codes </a></li>
-                                <li><a href="#edu_cat_tab" class="active tmpfirstclass" data-toggle="tab">Education_category </a></li>
-                                <li><a href="#com_cat_tab" class="active tmpfirstclass" data-toggle="tab">Communication_category </a></li>
-                                
-                            </ul>
-                        </div>
+                    <div class="tab-menu-heading">
+                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                            <li class="nav-item"><a href="#phonesetting_tab" class="nav-link active" data-bs-toggle="tab">Phone Number Settings</a></li>
+                            <li class="nav-item"><a href="#hedisalert_tab" class="nav-link " data-bs-toggle="tab">Hedis Alerts</a></li>
+                            <li class="nav-item"><a href="#statusreason_tab" class="nav-link " data-bs-toggle="tab">Status Reason </a></li>
+                            <li class="nav-item"><a href="#status_tab" class="nav-link " data-bs-toggle="tab">Status Codes </a></li>
+                            <li class="nav-item"><a href="#category_tab" class="nav-link " data-bs-toggle="tab">Measure_Category </a></li>
+                            <li class="nav-item"><a href="#topic_tab" class="nav-link " data-bs-toggle="tab">Topic Codes </a></li>
+                            <li class="nav-item"><a href="#medium_tab" class="nav-link " data-bs-toggle="tab">Medium Codes </a></li>
+                            <li class="nav-item"><a href="#priority_tab" class="nav-link " data-bs-toggle="tab">Priority Codes </a></li>
+                            <li class="nav-item"><a href="#edu_cat_tab" class="nav-link " data-bs-toggle="tab">Education_category </a></li>
+                            <li class="nav-item"><a href="#com_cat_tab" class="nav-link " data-bs-toggle="tab">Communication_category </a></li>
+                        </ul>
                     </div>
                     <div class="panel-body tabs-menu-body tab_area">
                         <div class="tab-content">
-                            <div class="tab-pane superadmin-right active" id="phonesetting_tab">
+                            <div class="tab-pane active" id="phonesetting_tab">
                                 <div class="row">
                                     <div class="col-md-3 col-lg-3">
                                         <div class="form-group">
-                                            <div class="form-label">Activate SMS</div>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" id="activatecheck" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description">Activate SMS</span>
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-label">Activate Call</div>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" id="activatecallcheck" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description">Activate Call</span>
+                                            <div class="form-label mt-2">Activate SMS</div>
+                                            <label class="form-check form-switch form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="checkbox" id="activatecheck" />
+                                                <span class="form-check-label">
+                                                    Activate SMS
+                                                </span>
                                             </label>
                                         </div>
                                         
                                         <div class="form-group">
-                                            <div class="form-label">Activate Replenish When 150</div>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" id="autopaycheck" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description">I agree with replenishing</span>
+                                            <div class="form-label mt-2">Activate Call</div>
+                                            <label class="form-check form-switch form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="checkbox" id="activatecallcheck" />
+                                                <span class="form-check-label">
+                                                    Activate Call
+                                                </span>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="form-label mt-2">Activate Replenish When 150</div>
+                                            <label class="form-check form-switch form-check-custom form-check-solid">
+                                                <input class="form-check-input" type="checkbox" id="autopaycheck" />
+                                                <span class="form-check-label">
+                                                    I agree with replenishing
+                                                </span>
                                             </label>
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label">Replenish Amount</label>
+                                            <label class="form-label mt-2">Replenish Amount</label>
                                             <div class="row gutters-xs">
                                                 <div class="col">
                                                     <input type="text" class="form-control" placeholder="" id="repamount">
@@ -99,7 +73,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label">Replenish Counts</label>
+                                            <label class="form-label mt-2">Replenish Counts</label>
                                             <div class="row gutters-xs">
                                                 <div class="col">
                                                     <input type="text" class="form-control" placeholder="" id="repcounts">
@@ -110,7 +84,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label">Price Per SMS</label>
+                                            <label class="form-label mt-2">Price Per SMS</label>
                                             <div class="row gutters-xs">
                                                 <div class="col">
                                                     <input type="text" class="form-control" placeholder="" id="pricevalue">
@@ -121,7 +95,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label">Price Per Call</label>
+                                            <label class="form-label mt-2">Price Per Call</label>
                                             <div class="row gutters-xs">
                                                 <div class="col">
                                                     <input type="text" class="form-control" placeholder="" id="pricecallvalue">
@@ -132,7 +106,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label">Phone number  -----  Monthly Cost</label>
+                                            <label class="form-label mt-2">Phone number  -----  Monthly Cost</label>
                                             <div class="row gutters-xs">
                                                 <div class="col">
                                                     <input type="text" class="form-control" placeholder="" id="phonenumber">
@@ -145,10 +119,8 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="form-group ">
+                                        <div class="form-group mt-3 text-center">
                                             <button class="btn btn-success" type="button" id="twiliophonebtn">Twilio Setting </button>
-
-                                           
                                         </div>
                                     </div>
                                     <div class="col-md-9 col-lg-9">
@@ -177,7 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane active tmpfirstclass" id="hedisalert_tab">
+                            <div class="tab-pane" id="hedisalert_tab">
                                 <div class="row justify-content-center">
                                     <div class="col-md-3">
                                         <div class="form-group">
@@ -532,15 +504,14 @@
     </div><!-- COL-END -->
 </div>
 
-
 <div class="modal fade" id="twilio-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="example-Modal3">Twilio SubAccount Setting </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -590,10 +561,11 @@
                    
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="subtokenaddbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="subtokenaddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+			
 		</div>
 	</div>
 </div>
@@ -679,3 +651,5 @@
 		</div>
 	</div>
 </div>
+
+<script src='../assets/plugins/crypto-js/crypto-js.js'></script>

@@ -50,9 +50,7 @@ function editcomvalfunc (tbname,id){
       $("#com_e_id").val(result[0]['id'])
       $("#commvalue-edit-modal").modal("show");
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 }
@@ -98,13 +96,9 @@ function delcomvalfunc(tbname,id){
     if (inputValue) {
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/delcomvalbyid", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Action Successfully"
-          });
+          return toastr.success('Action Successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
       });
     
@@ -160,9 +154,7 @@ $(document).ready(async function () {
       else
         $("#pricevalue").val("0.07");
       } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 
@@ -174,9 +166,7 @@ $(document).ready(async function () {
       else
         $("#pricevalue").val("0.07");
       } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 
@@ -188,9 +178,7 @@ $(document).ready(async function () {
       else
         $("#pricecallvalue").val("0.01");
       } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 
@@ -206,9 +194,7 @@ $(document).ready(async function () {
         $("#repcounts").val("");
       }
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getAutopayment", (xhr, err) => {
@@ -221,9 +207,7 @@ $(document).ready(async function () {
         $("#autopaycheck").prop("checked",false);
       }
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getPhone", (xhr, err) => {
@@ -238,9 +222,7 @@ $(document).ready(async function () {
       $("#phonenumber").val(result[0]['name']);
       $("#phoneprice").val(result[0]['desc']);
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getcallactive", (xhr, err) => {
@@ -253,9 +235,7 @@ $(document).ready(async function () {
         $("#activatecallcheck").prop("checked",false);
       }
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   var paymenthistorytable = $('#paymenthistorytable').DataTable({
@@ -470,13 +450,9 @@ $(document).ready(async function () {
   $("#updatepricebtn").click(function(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),price:$("#pricevalue").val()}, "setting/updatePriceSMS", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -484,52 +460,36 @@ $(document).ready(async function () {
   $("#updatecallpricebtn").click(function(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),price:$("#pricecallvalue").val()}, "setting/updatePricecall", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
   $("#updaterepamountbtn").click(function(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),price:$("#repamount").val()}, "setting/updateRepAmountSMS", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
   $("#updaterepcountsbtn").click(function(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),price:$("#repcounts").val()}, "setting/updateRepCountsSMS", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
   $("#updatephonebtn").click(function(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),price:$("#phoneprice").val(),number:$("#phonenumber").val()}, "setting/updatePhone", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -541,8 +501,6 @@ $(document).ready(async function () {
       if (!err) {
 
         let result = JSON.parse(xhr.responseText)['data'];
-        console.log("result")
-        console.log(result)
         if(result.length > 0){
          let dgkey = 'roslongenc2023'
           document.getElementById('clisubphone').value = CryptoJS.AES.decrypt(result[0].phone_num, dgkey).toString(CryptoJS.enc.Utf8)
@@ -610,14 +568,10 @@ $(document).ready(async function () {
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {ciphertext : ciphertext}, "setting/addtwiliosubaccount", (xhr, err) => {
         if (!err) {
           $("#twilio-add-modal").modal("hide");
-          return $.growl.notice({
-            message: "Action successfully"
-          });
+          return toastr.success('Action Successfully');
         } else {
           $("#twilio-add-modal").modal("hide");
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
     });
     
@@ -633,13 +587,9 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),value:checkvalue}, "setting/updateActivatesms", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -653,13 +603,9 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),value:checkvalue}, "setting/updateActivatecall", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -675,20 +621,16 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),value:checkvalue}, "setting/updateAutopayment", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successful"
-        });
+        return toastr.success('Action Successful');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
-  $('#hedis_alert_body').summernote({
-		tabsize: 3,
-		height: 300
-  });
+  // $('#hedis_alert_body').summernote({
+	// 	tabsize: 3,
+	// 	height: 300
+  // });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getLanguage", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -702,23 +644,19 @@ $(document).ready(async function () {
           if(result.length > 0){
             $("#hedis_alert_id").val(result[0]['id']);
             $("#hedis_alert_subject").val(result[0]['name']);
-            $("#hedis_alert_body").summernote("code", result[0]['desc']);
+            // $("#hedis_alert_body").summernote("code", result[0]['desc']);
           }
           else{
             $("#hedis_alert_id").val(0);
             $("#hedis_alert_subject").val("");
-            $("#hedis_alert_body").summernote("code","");
+            // $("#hedis_alert_body").summernote("code","");
           }
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
       });
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   
@@ -737,9 +675,7 @@ $(document).ready(async function () {
           $("#hedis_alert_body").summernote("code","");
         }
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -758,9 +694,7 @@ $(document).ready(async function () {
           $("#hedis_alert_body").summernote("code","");
         }
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -774,13 +708,9 @@ $(document).ready(async function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/setHedisalerts", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successfully"
-        });
+        return toastr.success('Action Successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -866,13 +796,9 @@ $(document).ready(async function () {
     
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/setcommunicationitem", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successfully"
-        });
+        return toastr.success('Action Successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
 
@@ -934,13 +860,9 @@ $(document).ready(async function () {
     
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/updatecommunicationitem", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successfully"
-        });
+        return toastr.success('Action Successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
 
