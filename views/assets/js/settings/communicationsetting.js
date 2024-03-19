@@ -627,10 +627,18 @@ $(document).ready(async function () {
       }
     });
   });
-  // $('#hedis_alert_body').summernote({
-	// 	tabsize: 3,
-	// 	height: 300
-  // });
+
+  
+  var hedis_alert_editor;
+  ClassicEditor.create(document.querySelector('#hedis_alert_body'))
+    .then( editor => {
+      hedis_alert_editor = editor;
+    } )
+    .catch( err => {
+        console.error( err.stack );
+    } );
+
+
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getLanguage", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -644,12 +652,12 @@ $(document).ready(async function () {
           if(result.length > 0){
             $("#hedis_alert_id").val(result[0]['id']);
             $("#hedis_alert_subject").val(result[0]['name']);
-            // $("#hedis_alert_body").summernote("code", result[0]['desc']);
+            hedis_alert_editor.data.set(result[0]['desc']);
           }
           else{
             $("#hedis_alert_id").val(0);
             $("#hedis_alert_subject").val("");
-            // $("#hedis_alert_body").summernote("code","");
+            hedis_alert_editor.data.set('');
           }
         } else {
           return toastr.error('Action Failed');
@@ -667,12 +675,12 @@ $(document).ready(async function () {
         if(result.length > 0){
           $("#hedis_alert_id").val(result[0]['id']);
           $("#hedis_alert_subject").val(result[0]['name']);
-          $("#hedis_alert_body").summernote("code", result[0]['desc']);
+          hedis_alert_editor.data.set(result[0]['desc']);
         }
         else{
           $("#hedis_alert_id").val(0);
           $("#hedis_alert_subject").val("");
-          $("#hedis_alert_body").summernote("code","");
+          hedis_alert_editor.data.set('');
         }
       } else {
         return toastr.error('Action Failed');
@@ -686,12 +694,12 @@ $(document).ready(async function () {
         if(result.length > 0){
           $("#hedis_alert_id").val(result[0]['id']);
           $("#hedis_alert_subject").val(result[0]['name']);
-          $("#hedis_alert_body").summernote("code", result[0]['desc']);
+          hedis_alert_editor.data.set(result[0]['desc']);
         }
         else{
           $("#hedis_alert_id").val(0);
           $("#hedis_alert_subject").val("");
-          $("#hedis_alert_body").summernote("code","");
+          hedis_alert_editor.data.set('');
         }
       } else {
         return toastr.error('Action Failed');
@@ -704,7 +712,7 @@ $(document).ready(async function () {
       langid:$("#hedis_alert_language").val(),
       id:$("#hedis_alert_id").val(),
       subject:$("#hedis_alert_subject").val(),
-      body:$("#hedis_alert_body").summernote("code")
+      body: hedis_alert_editor.getData()
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/setHedisalerts", (xhr, err) => {
       if (!err) {
