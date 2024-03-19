@@ -59,9 +59,13 @@ $(document).ready(function () {
     if ($("#password").data("view")=="0") {
       $("#password").attr("type", "text");
       $("#password").data("view", "1");
+      $(".eye-icon").removeClass("ki-eye");
+      $(".eye-icon").addClass("ki-eye-slash");
     }else{
       $("#password").attr("type", "password");
       $("#password").data("view", "0");
+      $(".eye-icon").addClass("ki-eye");
+      $(".eye-icon").removeClass("ki-eye-slash");
     }
   })
 });

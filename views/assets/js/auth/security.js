@@ -25,9 +25,13 @@ $(document).ready(function () {
     if ($("#answer").data("view")=="0") {
       $("#answer").attr("type", "text");
       $("#answer").data("view", "1");
+      $(".eye-icon").removeClass("ki-eye");
+      $(".eye-icon").addClass("ki-eye-slash");
     }else{
       $("#answer").attr("type", "password");
       $("#answer").data("view", "0");
+      $(".eye-icon").addClass("ki-eye");
+      $(".eye-icon").removeClass("ki-eye-slash");
     }
   })
 

@@ -2153,9 +2153,11 @@ var encounter_table = $('#encounter_table').DataTable({
   "order": [],
   "bAutoWidth": false, 
   "columns": [
-      { data: "high_priority",
+      { data: "comleted",
       render: function (data, type, row) {
-        return `<div class="text-center d-flex align-items-center"><i class="ki-duotone ki-lock fs-1 text-success"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i></div>`;
+        var icon = "unlock";
+        if(row.completed == "1")icon = "lock";
+        return `<div class="text-center d-flex align-items-center mt-2"><i class="fa fa-`+icon+` fs-3 text-success"  aria-hidden="true"></i></div>`;
       } 
     },
       { data: "reason"},
@@ -2254,6 +2256,7 @@ $(document).on("click",".edit_btn",function(){
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
+      $("#encounter_completed").prop("checked", result[0]['completed']);
       $("#encounter_enc_type").val(result[0]['enc_type']);
       $("#encounter_status").val(result[0]['status']);
       $("#encounter_team_member").val(result[0]['team_member']);
@@ -2280,6 +2283,7 @@ $(document).on("click",".edit_btn",function(){
 
 $(document).on("click","#add_btn",function(){
   $("#encounter_id").val('');
+  $("#encounter_completed").prop("checked", false);
   $("#encounter_enc_type").val('phone call');
   $("#encounter_status").val('in-progress');
   $("#encounter_team_member").val(localStorage.getItem('username'));
@@ -2491,9 +2495,16 @@ $("#update_btn").click(function (e) {
 
   $('.form-control').each(function() {
     if($(this).data('field')!==undefined){
-        entry[$(this).data('field')] = $(this).val();
+        
+        if($(this).attr('type')=='checkbox'){
+          entry[$(this).data('field')] = $(this).prop("checked")?"1":"0";
+        }else{
+          entry[$(this).data('field')] = $(this).val();
+        }
     }
   });
+
+  
 
   if($("#encounter_id").val()==""){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/create", (xhr, err) => {

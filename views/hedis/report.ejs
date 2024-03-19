@@ -223,6 +223,13 @@
 				</div>
 				
 			</div>
+			<div class="border border-gray-300 border-dashed rounded min-w-125px py-2 px-4 me-6 mb-3 d-flex align-items-center">
+				<div class="d-flex justify-content-center align-items-center ">
+					<input type="checkbox" class="form-control form-check-input h-30px mt-0" id="encounter_completed" data-field="completed" />
+					<label for="encounter_completed" class=" ps-2 fw-semibold fs-6 ">Completed</label>
+				</div>
+				
+			</div>
 		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 		  </div>
@@ -291,12 +298,12 @@
 					<select  class="form-control select2 custom-select" id="encounter_reason_use" data-field="reason_use"></select>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_reason_codes" class="fw-semibold fs-6 my-2">Reason Codes:</label>
 					<select  class="form-control select2 custom-select" id="encounter_reason_codes" data-field="reason_codes"></select>
 				</div>
-			</div>
+			</div> -->
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_service_type" class="fw-semibold fs-6 my-2">Service Type:</label>
@@ -351,13 +358,13 @@
 					<select  class="form-control select2 custom-select" id="encounter_class" data-field="class"></select>
 				</div>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_enc_type" class="fw-semibold fs-6 my-2">Type:</label>
 					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_type" id="encounter_enc_type">
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="form-group" >
 					<label for="encounter_enc_start" class="required  fs-6 my-2">Date:</label>
 					<div class="input-group"  data-td-target-input="nearest" data-td-target-toggle="nearest" >
@@ -368,9 +375,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-1">
+			<div class="col-md-2">
 				<div class="form-group">
-					<label for="encounter_total_mins" class="required fw-semibold fs-6 my-2">Mins:</label>
+					<label for="encounter_total_mins" class="required fw-semibold fs-6 my-2">Total Mins:</label>
 					<input type="number" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="total_mins" id="encounter_total_mins">
 				</div>
 			</div>
