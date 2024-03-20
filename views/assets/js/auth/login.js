@@ -3,7 +3,7 @@ var points = [],
   canvas = document.getElementById('container'),
   context = canvas.getContext('2d'),
   radius = 6,
-  boundaryX = 800,
+  boundaryX = 600,
   boundaryY = 600,
   numberOfPoints = 30;
 
@@ -68,17 +68,23 @@ function drawCircle(i, x, y) {
 
   context.beginPath();
   context.arc(x, y, 1, 0, 2 * Math.PI, false);
-  context.fillStyle = '#ffffff';
+  context.fillStyle = '#FFFFFF';
   context.fill();
   var textString = ins[i],
   textWidth = context.measureText(textString ).width;
   var xx = x - textWidth/2;
   var yy = y - 3
   context.beginPath();
-  context.rect(xx-3, yy+3, textWidth+6, -20);
-  context.stroke();
-  // context.fill();
-  context.font = "16px Arial";
+  context.rect(xx-3, yy+3, textWidth+6, -16);
+  context.strokeStyle = '#FFFFFF';
+  context.lineWidth = '1';
+  context.shadowColor = "#d53";
+  // context.stroke();
+  context.fillStyle = '#00A8FF';
+  context.fill();
+  
+  context.font = "14px Arial";
+  context.fillStyle = '#FFFFFF';
   context.fillText(textString, xx, yy );
 
 }
@@ -87,7 +93,8 @@ function drawLine(x1, y1, x2, y2) {
   context.beginPath();
   context.moveTo(x1, y1);
   context.lineTo(x2, y2);
-  context.strokeStyle = '#ffffff'
+  context.lineWidth = '1';
+  context.strokeStyle = '#CCCCCC'
   context.stroke();
 }  
 
@@ -97,9 +104,10 @@ function draw() {
     var point = points[i];
     point.x += point.vx;
     point.y += point.vy;
-    drawCircle(i, point.x, point.y);
     // lines
     drawLine(point.x, point.y, point.buddy.x, point.buddy.y);
+    drawCircle(i, point.x, point.y);
+    
     // check for edge
     if(point.x < 0+radius) {
       resetVelocity(point, 'x', 1);
