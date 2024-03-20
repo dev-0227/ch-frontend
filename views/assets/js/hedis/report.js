@@ -983,6 +983,7 @@ $('#eshowalleducation').click(function(){
   }
   function updateUIAcceptedOutgoingCall(call) {
     toastr.success('Call in progress ...');
+    $("#calling-details").removeClass("d-none");
     console.log(call)
     // callButton.disabled = true;
     // outgoingCallHangupButton.classList.remove("hide");
@@ -1045,8 +1046,8 @@ $('#eshowalleducation').click(function(){
   function updateUIDisconnectedOutgoingCall() {
     toastr.error('Call disconnected.');
     $('.callringbtn').prop('disabled', false);
-    $('.callringbtn').addClass('btn-success');
     $('.callringbtn').removeClass('bclicked');
+    $("#calling-details").addClass("d-none");
     clearInterval(calltimer);
     let endcalltime = new Date().getTime();
     let gduration =  Math.floor((endcalltime - startcalltime ) / 1000);
@@ -1105,20 +1106,18 @@ $('#eshowalleducation').click(function(){
 
   
   $('#othernumber').on('click',function(){
-    if($(this).attr('data-click-state') == 1) {
-        $(this).attr('data-click-state', 0);
+    if($(this).data('status') == "0") {
+        $(this).data('status', "1");
         customnumber = true
-        $("#patient-num").css("display", "none");
-        $("#customphone").css("display", "block");
-        $(this).html('<i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Patient Number ')
+        $("#patient-num").addClass("d-none");
+        $("#customphone").removeClass("d-none");
+        $("#customphone").val("")
       }
     else {
-      $(this).attr('data-click-state', 1);
-
+      $(this).data('status', "0");
       customnumber = false
-      $("#patient-num").css("display", "block");
-      $("#customphone").css("display", "none");
-      $(this).html('<i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call Number ')
+      $("#patient-num").removeClass("d-none");
+      $("#customphone").addClass("d-none");
     }
   });
 
@@ -1168,7 +1167,7 @@ $('#eshowalleducation').click(function(){
   
     $('.callringbtn').prop('disabled', true);
     $('.callringbtn').addClass('bclicked');
-    $('.callringbtn').removeClass('btn-success');
+    $("#calling-details").addClass("d-none");
 
     if(customnumber == true){
       gcallnumber = document.getElementById('customphone').value 
@@ -1225,7 +1224,6 @@ $('#eshowalleducation').click(function(){
               outgoingCallHangupButton.onclick = () => {
                 console.log("Hanging up ...");
                 $('.callringbtn').prop('disabled', false);
-                $('.callringbtn').addClass('btn-success');
                 $('.callringbtn').removeClass('bclicked');
                     clearInterval(calltimer);
                     call.disconnect();
@@ -1289,12 +1287,10 @@ $('#eshowalleducation').click(function(){
           if(result['counts'] < 5){
             $('.callringbtn').prop('disabled', true);
             $('.callringbtn').addClass('bclicked');
-            $('.callringbtn').removeClass('btn-success');
             return toastr.info('You have to charge call time');
           }else{
             $('.callringbtn').prop('disabled', false);
             $('.callringbtn').addClass('btn-success');
-            $('.callringbtn').removeClass('bclicked');
           }
         }  
         $("#call-patient-modal").modal("show");

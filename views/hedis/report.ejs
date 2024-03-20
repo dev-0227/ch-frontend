@@ -445,34 +445,43 @@
 				</div>
 				
 			</div>
-			<div class="modal-body min-h-400px">
+			<div class="modal-body min-h-425px d-flex align-content-between row py-3">
 				<input type="hidden" id="callmid" value="">
-				<div class="d-flex justify-content-center">
-					<div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-						<img src="/assets/media/avatars/blank.png" alt="image">
-						<div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
+				<div class="col-md-12">
+					<div class="d-flex justify-content-center">
+						<div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
+							<img src="/assets/media/avatars/blank.png" alt="image">
+							<div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="d-flex justify-content-center">
+							<div class="w-20px" ></div>
+							<h3 class="text-center py-2" id="patient-num" ></h3>
+							<input type="text" class="form-control w-150px d-none" id="customphone" placeholder="+1123456789">
+							<div class="mx-2 cursor-pointer btn-color-primary align-self-center" id="othernumber" data-status="0"><i class="fa fa-pencil"></i></div>
+						</div>
+						
+					</div>
+					<div id="calling-details" class="d-none">
+						<div class="mt-2">
+							<h2 class="text-center" id="duration-demo">00:00:00</h2>
+						</div>
+						<div class="mt-2">
+							<div class="text-center" >Caller  Voice</div>
+						</div>
+						<div class="mt-1">
+							<div class="text-center h-5px" id="input-volume"></div>
+						</div>
+						<div class="mt-1">
+							<div class="text-center " >Recipient (PT) Voice</div>
+						</div>
+						<div class="mt-2">
+							<div class="text-center h-5px" id="output-volume"></div>
+						</div>
 					</div>
 				</div>
-				<div class="row d-flex justify-content-center mt-1">
-					<h3 class="text-center" id="patient-num" ></h3>
-					<input type="text" class="form-control w-300px" id="customphone" placeholder="+1123456789" style="display: none;">
-				</div>
-				<div class="mt-6">
-					<h2 class="text-center" id="duration-demo">00:00:00</h2>
-				</div>
-				<div class="mt-2">
-					<div class="text-center" >Caller  Voice</div>
-				</div>
-				<div class="mt-2">
-					<div class="text-center h-5px" id="input-volume"></div>
-				</div>
-				<div class="mt-2">
-					<div class="text-center " >Recipient (PT) Voice</div>
-				</div>
-				<div class="mt-2">
-					<div class="text-center h-5px" id="output-volume"></div>
-				</div>
-                <div class="row mt-10">
+                <div class="col-md-12 d-flex ">
                     <div class="col-md-6 d-flex justify-content-center">
 						<button type="button" class="btn btn-danger rounded-circle w-70px h-70px" id="closeringbtn">
 							<?xml version="1.0" ?><svg height="24px" version="1.1" viewBox="0 0 24 11" width="38px" style="margin-left: -4px;" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><title/><desc/><defs/><g  fill-rule="evenodd" stroke="black" stroke-width="0"><g  id="Icons-Communication" transform="translate(-40.000000, -4.000000)"><g id="call-end" transform="translate(40.000000, 4.500000)">
@@ -502,7 +511,7 @@
 							</i>
 						</span>
 					</a>
-					<div class="fs-6 fw-semibold text-gray-500">Add credit</div>
+					<div class="fs-6 fw-semibold text-gray-500">Add Credit</div>
 				</div>
 				<div class="" >
 					<b>(min) Available</b>
