@@ -54,6 +54,9 @@
 		<div class="modal-content modal-rounded">
 			<div class="modal-header">
 				<h3 class="modal-title" >Encounters </h3>
+				<input type="hidden" id="pt_mid" />
+				<input type="hidden" id="pt_emrid" />
+				<input type="hidden" id="pt_insurance" />
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 				</div>
@@ -104,14 +107,14 @@
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2 d-flex align-items-center">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-											<i class="fa fa-phone ms-1 me-3 " aria-hidden="true"></i> <div id="pt_telephone"></div></a>
+											<i class="fa fa-phone ms-1 me-3 " aria-hidden="true"></i> <div id="pt_telephone" class="calling cursor-pointer"></div></a>
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2 d-flex align-items-center">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 											<i class="ki-duotone ki-phone fs-1 me-1">
 											<span class="path1"></span>
 											<span class="path2"></span>
-											</i> <div id="pt_phone"></div></a>
+											</i> <div id="pt_phone" class="calling cursor-pointer"></div></a>
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
@@ -199,12 +202,12 @@
 						<span class="path2"></span>
 					</i><div id="encounter_modal_clinic"></div></a>
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-				<i class="fa fa-phone me-2"></i><div id="encounter_modal_telephone"></div></a>
+				<i class="fa fa-phone me-2"></i><div id="encounter_modal_telephone" class="calling cursor-pointer"></div></a>
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 					<i class="ki-duotone ki-phone fs-4 me-1">
 						<span class="path1"></span>
 						<span class="path2"></span>
-					</i><div id="encounter_modal_phone"></div></a>
+					</i><div id="encounter_modal_phone" class="calling cursor-pointer"></div></a>
 					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
 				<i class="ki-duotone ki-sms fs-4 me-1">
 					<span class="path1"></span>
@@ -428,7 +431,7 @@
 		<div class="modal-content" >
 			<div class="modal-header">
 				<h5 class="modal-title" id="patient-name" style="cursor: pointer;"> </h5>
-				<!-- <h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5> -->
+				<h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5>
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 				</div>
@@ -437,10 +440,10 @@
 				<input type="hidden" id="callmid" value="">
 				<div class="row d-flex justify-content-center">
 					<h3 class="text-center" id="patient-num" ></h3>
-					<input type="text" class="form-control" id="customphone" placeholder="+1123456789" style="display: none;">
+					<input type="text" class="form-control w-300px" id="customphone" placeholder="+1123456789" style="display: none;">
 				</div>
 				<div class="mt-6">
-					<h4 class="text-center" id="duration-demo">00:00:00</h4>
+					<h2 class="text-center" id="duration-demo">00:00:00</h2>
 				</div>
 				<div class="mt-2">
 					<div class="text-center" >Caller  Voice</div>
@@ -471,8 +474,8 @@
 				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
 					<b><span id="callcounts"></span>&nbsp;&nbsp;(min) Available</b>
 				</div>
-				<a href="../pages/creditcall" target="_blank" class="btn btn-primary">Add Credit</a>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<a href="../pages/creditcall" target="_blank" class="btn btn-primary"><i class="fa fa-plus">&nbsp;</i> Add Credit</a>
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
 			</div>
 		</div>
 	</div>

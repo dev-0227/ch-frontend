@@ -76,7 +76,6 @@ $(document).ready(function () {
 
  
   let insid = getUrlVars();
-  console.log(insid)
   if(insid['status'] != null){
     optioncheck = 4;
     options.push(insid['status']);
@@ -964,7 +963,7 @@ $('#eshowalleducation').click(function(){
 
   function addDeviceListeners(device) {
     device.on("registered", function () {
-      console.log("Twilio.Device Ready to make and receive calls!");
+      toastr.error('Twilio.Device Ready to make and receive calls!');
       // callControlsDiv.classList.remove("hide");
     });
 
@@ -983,7 +982,7 @@ $('#eshowalleducation').click(function(){
     }
   }
   function updateUIAcceptedOutgoingCall(call) {
-    console.log("Call in progress ...");
+    toastr.success('Call in progress ...');
     console.log(call)
     // callButton.disabled = true;
     // outgoingCallHangupButton.classList.remove("hide");
@@ -1040,7 +1039,7 @@ $('#eshowalleducation').click(function(){
     });
   }
   function updateUIDisconnectedOutgoingCall() {
-    console.log("Call disconnected.");
+    toastr.error('Call disconnected.');
     $('.callringbtn').prop('disabled', false);
     $('.callringbtn').addClass('btn-success');
     $('.callringbtn').removeClass('bclicked');
@@ -1048,9 +1047,6 @@ $('#eshowalleducation').click(function(){
     let endcalltime = new Date().getTime();
     let gduration =  Math.floor((endcalltime - startcalltime ) / 1000);
     
-    console.log("gduration")
-    console.log(gduration)
-
     let entry ={
       ptinsid : patientinsid,
       ptemrid : patientemrid,
@@ -1060,9 +1056,10 @@ $('#eshowalleducation').click(function(){
       cmid : $("#callmid").val(),
       durat: gduration
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/gettingtwiliologlist", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/communications/gettingtwiliologlist", (xhr, err) => {
       if (!err) {
         console.log("clicked")
+        toastr.info('Error Reported.');
       } else {
         return toastr.error('Action Failed');
       }
@@ -1191,15 +1188,13 @@ $('#eshowalleducation').click(function(){
     //   }
     // });
   
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/getcalltoken", async (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/communications/getcalltoken", async (xhr, err) => {
           if (!err) {
             let token = JSON.parse(xhr.responseText)['token'];
-            console.log(token)
             try {
               odevice = new Twilio.Device(token)
             } catch (error) {
-              console.log(err);
-              console.log("An error occurred. See your browser console for more information.");
+              toastr.error('An error occurred. See your browser console for more information.');
             }
             addDeviceListeners(odevice);
             
@@ -1214,7 +1209,8 @@ $('#eshowalleducation').click(function(){
               const call = await odevice.connect({ params });
         
               call.on('error', (error) => {
-                console.log('An error has occurred: ', error);
+                console.log('An error has occurred: ', error)
+                
               });
               
               call.on("accept", updateUIAcceptedOutgoingCall);
@@ -1233,15 +1229,19 @@ $('#eshowalleducation').click(function(){
         
             } else {
               console.log("Unable to make call.");
+              toastr.error('Unable to make call.');
             }
           }
           
 
     })
   })
- 
   
- 
+  outputVolumeBar = document.getElementById("output-volume");
+  inputVolumeBar = document.getElementById("input-volume");
+  outgoingCallHangupButton = document.getElementById("closeringbtn");
+
+
   $(document).on("click",".phonecallbtn",function(){
 
     let ptname = $(this).parent().parent().children().eq(4).html() + " " +$(this).parent().parent().children().eq(5).html()
@@ -1252,13 +1252,29 @@ $('#eshowalleducation').click(function(){
     let measureid = $(this).parent().parent().children().eq(24).html()
     $("#callmid").val( measureid) 
 
-    outputVolumeBar = document.getElementById("output-volume");
-    inputVolumeBar = document.getElementById("input-volume");
-    outgoingCallHangupButton = document.getElementById("closeringbtn");
-
     patientemrid = $(this).parent().parent().children().eq(3).html()
     patientinsid = $(this).parent().parent().children().eq(2).html()
+    open_calling_modal();
 
+  })
+
+  $(document).on("click",".calling",function(){
+
+    let ptname = $("#pt_fullname").html();
+    let ptnum = $(this).html()
+    document.getElementById('patient-name').innerHTML = ptname
+    document.getElementById('patient-num').innerHTML = ptnum
+    let measureid = $("#pt_mid").val()
+    $("#callmid").val( measureid) 
+    patientemrid = $("#pt_emrid").val();
+    patientinsid = $("#pt_insurance").val();
+    open_calling_modal();
+
+  })
+
+  
+
+  function open_calling_modal(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/communications/checkcalltime", (xhr, err) => {
       if (!err) {
 
@@ -1272,7 +1288,6 @@ $('#eshowalleducation').click(function(){
             $('.callringbtn').removeClass('btn-success');
             alert("you have to charge call time")
           }else{
-         
             $('.callringbtn').prop('disabled', false);
             $('.callringbtn').addClass('btn-success');
             $('.callringbtn').removeClass('bclicked');
@@ -1285,8 +1300,8 @@ $('#eshowalleducation').click(function(){
         return toastr.error('Getting Available call time error');
       }
     });
-   
-  })
+  }
+
   $(document).on("click",".delrowbtn",function(){
     
     let rowid = $(this).parent().parent().children().eq(1).html()
@@ -1651,7 +1666,6 @@ async function loadData(){
     if (!err) {
       $(".progress-load").addClass("d-none");
       let data = JSON.parse(xhr.responseText)['data'];
-      console.log(data)
       let ptcnt = JSON.parse(xhr.responseText)['ptcnt'];
       let measurecnt = JSON.parse(xhr.responseText)['measurecnt'];
       $(".totalptcnt").html(ptcnt)
@@ -2114,7 +2128,9 @@ var encounter_table = $('#encounter_table').DataTable({
 
 $(document).on("click",".notesbtn",function(){
   $("#chosen_item").val($(this).parent().parent().children().eq(1).html());
-  
+  $("#pt_mid").val($(this).parent().parent().children().eq(24).html());
+  $("#pt_emrid").val($(this).parent().parent().children().eq(3).html());
+  $("#pt_insurance").val($(this).parent().parent().children().eq(2).html());
   $("#encounter_clinic_id").val(localStorage.getItem('chosen_clinic'));
   $("#encounter_pcp_id").val(localStorage.getItem('userid'));
   $("#encounter_patient_id").val('');
