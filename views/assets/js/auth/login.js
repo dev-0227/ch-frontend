@@ -70,7 +70,6 @@ function drawCircle(i, x, y) {
   context.arc(x, y, 1, 0, 2 * Math.PI, false);
   context.fillStyle = '#ffffff';
   context.fill();
-  console.log(ins.length)
   var textString = ins[i],
   textWidth = context.measureText(textString ).width;
   var xx = x - textWidth/2;

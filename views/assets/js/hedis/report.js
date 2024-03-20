@@ -1256,6 +1256,9 @@ $('#eshowalleducation').click(function(){
 
     patientemrid = $(this).parent().parent().children().eq(3).html()
     patientinsid = $(this).parent().parent().children().eq(2).html()
+    // $("#calling_language").html($(this).parent().parent().children().eq(3).html()) 
+    // $("#calling_gender").html($(this).parent().parent().children().eq(3).html()) 
+    $("#calling_dob").html($(this).parent().parent().children().eq(6).html()) 
     open_calling_modal();
 
   })
@@ -1270,6 +1273,10 @@ $('#eshowalleducation').click(function(){
     $("#callmid").val( measureid) 
     patientemrid = $("#pt_emrid").val();
     patientinsid = $("#pt_insurance").val();
+
+    $("#calling_language").html($("#pt_language").html()) 
+    $("#calling_gender").html($("#pt_gender").html()) 
+    $("#calling_dob").html($("#pt_dob").html()) 
     open_calling_modal();
 
   })
