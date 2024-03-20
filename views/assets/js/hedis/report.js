@@ -112,9 +112,7 @@ $(document).ready(function () {
         $(".apptpcpname").append(`<option value='${result[i]['userid']}'>${result[i]['fullname'].trim()}</option>`)
       }
   } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/gethediscolor", (xhr, err) => {
@@ -169,9 +167,7 @@ $(document).ready(function () {
         
       }
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/gethedisyear", (xhr, err) => {
@@ -180,9 +176,7 @@ $(document).ready(function () {
       $("#hedisdate").val(new Date(result[0]['idate']).getFullYear());
       loadData();
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   sendRequestWithToken('POST', localStorage.getItem('authToken'), {insid:insid['insid']}, "setting/getoutputbtn", (xhr, err) => {
@@ -197,9 +191,7 @@ $(document).ready(function () {
       <a href="../pages/hedismonthreport" target="_blank" class="btn btn-sm btn-outline-primary">Monthly Report</a>
       `);
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),insid:insid['insid']}, "setting/getClinicins", (xhr, err) => {
@@ -210,9 +202,7 @@ $(document).ready(function () {
       $("#patient-modal-insurance").html(result['clinic']+" | "+result['ins']);
       $("#notes-modal-title").html(result['clinic']+" | "+result['ins']);
   } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
   $(document).on("click",".outputbtn",function(){
@@ -292,9 +282,7 @@ $(document).ready(function () {
         $("#ptemailtag").html(ptemail)  
         $("#email-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -434,24 +422,18 @@ $('#eshowalleducation').click(function(){
           $("#sms-modal").modal("show");
         }
         else if(result['status'] == "pending"){
-          return $.growl.notice({
-            message: "Need to be activated with sending SMS"
-          });
+          return toastr.info('Need to be activated with sending SMS');
+          
         }
         else if(result['status'] == "no credit"){
-          return $.growl.notice({
-            message: "Need to add credit"
-          });
+          return toastr.info('Need to add credit');
+          
         }
         else{
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -530,13 +512,9 @@ $('#eshowalleducation').click(function(){
       if (!err) {
         let result = JSON.parse(xhr.responseText);
         if(result['message'] == "success")
-          return $.growl.notice({
-            message: "Sent Successfully"
-          });
+          return toastr.success('Sent Successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -572,22 +550,14 @@ $('#eshowalleducation').click(function(){
         let result = JSON.parse(xhr.responseText);
         console.log(result)
         if(result['message'] == "pending")
-          return $.growl.notice({
-            message: "Need to purchase Phone number"
-          });
+          return toastr.info('Need to purchase Phone number');
         else if(result['message'] == "no credit"){
-          return $.growl.notice({
-            message: "Need to add credit"
-          });
+          return toastr.info('Need to add credit');
         }
         else if(result['message'] == "success")
-          return $.growl.notice({
-            message: "Sent Successfully"
-          });
+          return toastr.success('Sent Successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
 
@@ -794,9 +764,7 @@ $('#eshowalleducation').click(function(){
           
         tmpchosenitem.children().eq(23).html(status);
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -965,9 +933,7 @@ $('#eshowalleducation').click(function(){
       if (!err) {
         tmpupdatenote.html($("#notetext").val())
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -989,9 +955,7 @@ $('#eshowalleducation').click(function(){
           if (!err) {
             tmp.remove();
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error('Action Failed');
           }
         });
 			}
@@ -1100,9 +1064,7 @@ $('#eshowalleducation').click(function(){
       if (!err) {
         console.log("clicked")
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
     
@@ -1225,9 +1187,7 @@ $('#eshowalleducation').click(function(){
     //   if (!err) {
     //     console.log("clicked")
     //   } else {
-    //     return $.growl.error({
-    //       message: "Action Failed"
-    //     });
+    //     return toastr.error('Action Failed');
     //   }
     // });
   
@@ -1299,7 +1259,7 @@ $('#eshowalleducation').click(function(){
     patientemrid = $(this).parent().parent().children().eq(3).html()
     patientinsid = $(this).parent().parent().children().eq(2).html()
 
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/checkcalltime", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/communications/checkcalltime", (xhr, err) => {
       if (!err) {
 
         let result = JSON.parse(xhr.responseText);
@@ -1318,13 +1278,11 @@ $('#eshowalleducation').click(function(){
             $('.callringbtn').removeClass('bclicked');
           }
         }  
-        $("#call-patient-modal").modal({backdrop: 'static', keyboard: false},"show");
+        $("#call-patient-modal").modal("show");
 
 
       } else {
-        return $.growl.error({
-          message: "Getting Available call time error"
-        });
+        return toastr.error('Getting Available call time error');
       }
     });
    
@@ -1388,9 +1346,7 @@ $('#eshowalleducation').click(function(){
         $(".notcompletedbarlength").circleProgress({value: ((1-Math.round(completecnt/data.length*100)/100))});
         $("#patient-chart-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -1405,13 +1361,9 @@ $('#eshowalleducation').click(function(){
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/writenotes", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successfully"
-        });
+        return toastr.success('Action Successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -1426,9 +1378,7 @@ $('#eshowalleducation').click(function(){
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         if(result.length == 0){
-          return $.growl.notice({
-            message: "No Action"
-          });
+          return toastr.info('No Action');
         }
         $("#log_list").empty();
         for(var i = 0; i < result.length;i++){
@@ -1444,9 +1394,7 @@ $('#eshowalleducation').click(function(){
         }
         $("#mlog-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   })
@@ -1459,9 +1407,7 @@ $('#eshowalleducation').click(function(){
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         if(result.length == 0){
-          return $.growl.notice({
-            message: "No Action"
-          });
+          return toastr.info('No Action');
         }
         $("#accordion").empty();
         for(var i = 0; i < result.length;i++){
@@ -1518,9 +1464,7 @@ $('#eshowalleducation').click(function(){
         });
         $("#rlog-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -1532,13 +1476,9 @@ $('#eshowalleducation').click(function(){
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/updatereported", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action Successfully"
-        });
+        return toastr.success('Action Successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -1561,9 +1501,7 @@ $('#eshowalleducation').click(function(){
         $(".reportedfile").html(data[0]['rdate']==null?"":" | Reported : "+(data[0]['rby']==1?"FTP":(data[0]['rby']==2?"Email":"Portal"))+" "+DateFormat(new Date(data[0]['rdate'])));
         loadData()
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   })
@@ -1616,9 +1554,7 @@ let changed = function(instance, cell, x, y, value) {
         if (!err) {
           
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
       });
   }
@@ -1630,9 +1566,7 @@ let changed = function(instance, cell, x, y, value) {
       if (!err) {
         
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   }
@@ -1691,9 +1625,7 @@ let selectionActive = function(instance, x1, y1, x2, y2, origin) {
   //       $(".notcompletedbarlength").circleProgress({value: ((1-Math.round(completecnt/data.length*100)/100))});
   //       $("#patient-chart-modal").modal("show");
   //     } else {
-  //       return $.growl.error({
-  //         message: "Action Failed"
-  //       });
+  //       return toastr.error('Action Failed');
   //     }
   //   });
   // }
@@ -2130,9 +2062,7 @@ async function loadData(){
         $(".generatetitle").addClass("d-none");
       }
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error('Action Failed');
     }
   });
 }

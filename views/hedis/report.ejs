@@ -421,3 +421,60 @@
 	  </div>
 	</div>
   </div>
+</div>
+
+<div class="modal fade" id="call-patient-modal" tabindex="-1" role="dialog"  aria-hidden="true" >
+	<div class="modal-dialog" role="document" >
+		<div class="modal-content" >
+			<div class="modal-header">
+				<h5 class="modal-title" id="patient-name" style="cursor: pointer;"> </h5>
+				<!-- <h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5> -->
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="callmid" value="">
+				<div class="row d-flex justify-content-center">
+					<h3 class="text-center" id="patient-num" ></h3>
+					<input type="text" class="form-control" id="customphone" placeholder="+1123456789" style="display: none;">
+				</div>
+				<div class="mt-6">
+					<h4 class="text-center" id="duration-demo">00:00:00</h4>
+				</div>
+				<div class="mt-2">
+					<div class="text-center" >Caller  Voice</div>
+				</div>
+				<div class="mt-2">
+					<div class="text-center" id="input-volume"></div>
+				</div>
+				<div class="mt-2">
+					<div class="text-center" >Recipient (PT) Voice</div>
+				</div>
+				<div class="mt-2">
+					<div class="text-center" id="output-volume"></div>
+				</div>
+                <div class="row d-flex justify-content-around ">
+                    <div class="col-md-2">
+						<button type="button" class="btn btn-success btn-circle btn-xl callringbtn" id="callringbtn">
+							<i class="fa fa-phone" style="font-size: 1.9rem;"></i>
+						</button>
+                    </div>
+					<div class="col-md-2">
+						<button type="button" class="btn btn-danger btn-circle btn-xl" id="closeringbtn">
+							<i class="fa fa-times" style="font-size: 1.9rem;"></i>
+						</button>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
+					<b><span id="callcounts"></span>&nbsp;&nbsp;(min) Available</b>
+				</div>
+				<a href="../pages/creditcall" target="_blank" class="btn btn-primary">Add Credit</a>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
