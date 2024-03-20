@@ -1,4 +1,9 @@
 
+
+ <style>
+
+
+ </style>
 <input type="hidden" id ="hedisdate" />
 <input type="hidden" id ="chosen_item" />
 <div class="row ml-2 mr-2 mt-2">
@@ -411,10 +416,6 @@
 					<textarea rows="3" class="form-control" id="encounter_action_taken" data-field="action_taken"></textarea>
 				</div>
 			</div>
-			
-			
-			
-	
 		  </div>
 		</div>
 		<div class="modal-footer">
@@ -426,19 +427,33 @@
   </div>
 </div>
 
-<div class="modal fade" id="call-patient-modal" tabindex="-1" role="dialog"  aria-hidden="true" >
-	<div class="modal-dialog" role="document" >
-		<div class="modal-content" >
+<div class="modal fade bs-b" id="call-patient-modal" tabindex="-1" role="dialog"  aria-hidden="true" style="--bs-modal-border-radius: 32px; --bs-modal-border-width: 10px;" >
+	<div class="modal-dialog modal-sm" role="document" >
+		<div class="modal-content " >
 			<div class="modal-header">
-				<h5 class="modal-title" id="patient-name" style="cursor: pointer;"> </h5>
-				<h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5>
+				<div>
+					<h5 class="modal-title" id="patient-name" style="cursor: pointer;"> </h5>
+					<!-- <h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5> -->
+					
+					<a class="btn btn-primary fs-8 py-1 px-1 " style="margin-left:-10px">English</a>
+					<a class="btn btn-info fs-8 py-1 px-1">Male</a>
+					<a class="btn btn-success fs-8 py-1 px-1">DOB: 12/12/2222</a>
+				</div>
+				
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 				</div>
+				
 			</div>
-			<div class="modal-body">
+			<div class="modal-body min-h-400px">
 				<input type="hidden" id="callmid" value="">
-				<div class="row d-flex justify-content-center">
+				<div class="d-flex justify-content-center">
+					<div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
+						<img src="/assets/media/avatars/blank.png" alt="image">
+						<div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
+					</div>
+				</div>
+				<div class="row d-flex justify-content-center mt-1">
 					<h3 class="text-center" id="patient-num" ></h3>
 					<input type="text" class="form-control w-300px" id="customphone" placeholder="+1123456789" style="display: none;">
 				</div>
@@ -449,33 +464,51 @@
 					<div class="text-center" >Caller  Voice</div>
 				</div>
 				<div class="mt-2">
-					<div class="text-center" id="input-volume"></div>
+					<div class="text-center h-5px" id="input-volume"></div>
 				</div>
 				<div class="mt-2">
-					<div class="text-center" >Recipient (PT) Voice</div>
+					<div class="text-center " >Recipient (PT) Voice</div>
 				</div>
 				<div class="mt-2">
-					<div class="text-center" id="output-volume"></div>
+					<div class="text-center h-5px" id="output-volume"></div>
 				</div>
-                <div class="row d-flex justify-content-around ">
-                    <div class="col-md-2">
-						<button type="button" class="btn btn-success btn-circle btn-xl callringbtn" id="callringbtn">
-							<i class="fa fa-phone" style="font-size: 1.9rem;"></i>
-						</button>
-                    </div>
-					<div class="col-md-2">
-						<button type="button" class="btn btn-danger btn-circle btn-xl" id="closeringbtn">
-							<i class="fa fa-times" style="font-size: 1.9rem;"></i>
+                <div class="row mt-10">
+                    <div class="col-md-6 d-flex justify-content-center">
+						<button type="button" class="btn btn-danger rounded-circle w-70px h-70px" id="closeringbtn">
+							<?xml version="1.0" ?><svg height="24px" version="1.1" viewBox="0 0 24 11" width="38px" style="margin-left: -4px;" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><title/><desc/><defs/><g  fill-rule="evenodd" stroke="black" stroke-width="0"><g  id="Icons-Communication" transform="translate(-40.000000, -4.000000)"><g id="call-end" transform="translate(40.000000, 4.500000)">
+								<path fill="#FFFFFF" d="M12,2 C10.4,2 8.9,2.3 7.4,2.7 L7.4,5.8 C7.4,6.2 7.2,6.5 6.8,6.7 C5.8,7.2 4.9,7.8 4.1,8.6 C3.9,8.8 3.7,8.9 3.4,8.9 C3.1,8.9 2.9,8.8 2.7,8.6 L0.2,6.1 C0.1,5.9 0,5.7 0,5.4 C0,5.1 0.1,4.9 0.3,4.7 C3.3,1.8 7.5,-8.8817842e-16 12,-8.8817842e-16 C16.5,-8.8817842e-16 20.7,1.8 23.7,4.7 C23.9,4.9 24,5.1 24,5.4 C24,5.7 23.9,5.9 23.7,6.1 L21.2,8.6 C21,8.8 20.8,8.9 20.5,8.9 C20.2,8.9 20,8.8 19.8,8.6 C19,7.9 18.1,7.2 17.1,6.7 C16.8,6.5 16.5,6.2 16.5,5.8 L16.5,2.7 C15.1,2.3 13.6,2 12,2 L12,2 Z" id="Shape"/></g></g></g></svg>
 						</button>
 					</div>
+					<div class="col-md-6 d-flex justify-content-center">
+						<button type="button" class="btn btn-success rounded-circle w-70px h-70px callringbtn" id="callringbtn">
+							<?xml version="1.0" ?><svg height="28px" version="1.1" viewBox="0 0 18 18" width="28px" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><title/><desc/><defs/><g fill="white" fill-rule="evenodd" stroke="black" stroke-width="0"><g fill="#000000" id="Icons-Communication" transform="translate(-1.000000, 0.000000)"><g id="call" transform="translate(1.000000, 0.000000)">
+								<path fill="#FFFFFF" d="M3.6,7.8 C5,10.6 7.4,12.9 10.2,14.4 L12.4,12.2 C12.7,11.9 13.1,11.8 13.4,12 C14.5,12.4 15.7,12.6 17,12.6 C17.6,12.6 18,13 18,13.6 L18,17 C18,17.6 17.6,18 17,18 C7.6,18 0,10.4 0,1 C0,0.4 0.4,0 1,0 L4.5,0 C5.1,0 5.5,0.4 5.5,1 C5.5,2.2 5.7,3.4 6.1,4.6 C6.2,4.9 6.1,5.3 5.9,5.6 L3.6,7.8 L3.6,7.8 Z" id="Shape"/></g></g></g></svg>
+						</button>
+                    </div>
+					
                 </div>
+				
 			</div>
-			<div class="modal-footer">
-				<div class="text-primary" style="display: inline-block;position:absolute;left:10px">
-					<b><span id="callcounts"></span>&nbsp;&nbsp;(min) Available</b>
+			<div class="modal-footer justify-content-between">
+				<div class="text-center">
+					<a href="../pages/creditcall" target="_blank" class="symbol symbol-45px  ">
+						<span class="symbol-label bg-primary">
+							<i class="ki-duotone ki-two-credit-cart text-inverse-primary fs-1">
+								<span class="path1"></span>
+								<span class="path2"></span>
+								<span class="path3"></span>
+								<span class="path4"></span>
+								<span class="path5"></span>
+							</i>
+						</span>
+					</a>
+					<div class="fs-6 fw-semibold text-gray-500">Add credit</div>
 				</div>
-				<a href="../pages/creditcall" target="_blank" class="btn btn-primary"><i class="fa fa-plus">&nbsp;</i> Add Credit</a>
-				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+				<div class="" >
+					<b>(min) Available</b>
+					<div class="text-end" id="callcounts"></div>
+				</div>
+				
 			</div>
 		</div>
 	</div>

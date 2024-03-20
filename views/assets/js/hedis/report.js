@@ -990,6 +990,8 @@ $('#eshowalleducation').click(function(){
 
     let starttime = new Date().getTime();
     startcalltime = new Date().getTime();
+
+
     calltimer = setInterval(function() {
 
       // Get today's date and time
@@ -1005,6 +1007,7 @@ $('#eshowalleducation').click(function(){
       if(minutes < 10) minutes = '0'+minutes
       if(seconds < 10) seconds = '0'+seconds
       // Display the result in the element with id="demo"
+
       document.getElementById("duration-demo").innerHTML =  hours + " : "
       + minutes + " : " + seconds + " s ";
     }, 1000);
@@ -1012,6 +1015,7 @@ $('#eshowalleducation').click(function(){
 
     bindVolumeIndicators(call);
   }
+  
 
   function bindVolumeIndicators(call) {
     call.on("volume", function (inputVolume, outputVolume) {
@@ -1286,7 +1290,7 @@ $('#eshowalleducation').click(function(){
             $('.callringbtn').prop('disabled', true);
             $('.callringbtn').addClass('bclicked');
             $('.callringbtn').removeClass('btn-success');
-            alert("you have to charge call time")
+            return toastr.info('You have to charge call time');
           }else{
             $('.callringbtn').prop('disabled', false);
             $('.callringbtn').addClass('btn-success');
