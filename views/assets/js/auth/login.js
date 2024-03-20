@@ -1,11 +1,11 @@
 var points = [],
-  velocity2 = 20, // velocity squared
+  velocity2 = 3, // velocity squared
   canvas = document.getElementById('container'),
   context = canvas.getContext('2d'),
   radius = 6,
   boundaryX = 800,
   boundaryY = 600,
-  numberOfPoints = 80;
+  numberOfPoints = 30;
 
 init();
 
@@ -58,11 +58,29 @@ function resetVelocity(point, axis, dir) {
   }
 }
 
-function drawCircle(x, y) {
+
+function drawCircle(i, x, y) {
+  const ins = ["Self Paid", "Surescripts", "Americhoice", "1199 NATIONAL BENEFIT FOUND", "ABC HEALTH PLAN", "AETNA",
+           "AFFINITY HEALTH PLAN MEDICAID", "AMALGAMATED LIFE", "AMERIGROUP HEALTHPLUS", "ATLANTIS HEALTH PLAN", "BAKERY AND CONFECTIONERY UNION",
+           "CIGNA", "DC 1707 LOCAL 389", "FIDELIS", "GHI", "GREAT WEST HEALTHCARE", "HEALTHFIRST", "AMERIGROUP HEALTHPLUS PHSP",
+           "HEALTHNET ACS", "HIP", "INTERNATIONAL BENEFITS ADM", "LIBERTY HEALTH ADVANTAGE", "LOCAL 272 WELLFARE FUND", "MAGNACARE",
+           "MEDICAID", "MEDICARE", "NATIONAL ASSOCAITION OF LETTER", "NATIONAL HEALTH PLAN", "NEIGHBORHOOD DO NOT USE THIS INS", "BROCKERAGE CONCEPTS INC"]
+
   context.beginPath();
-  context.arc(x, y, radius, 0, 2 * Math.PI, false);
+  context.arc(x, y, 1, 0, 2 * Math.PI, false);
   context.fillStyle = '#ffffff';
   context.fill();
+  console.log(ins.length)
+  var textString = ins[i],
+  textWidth = context.measureText(textString ).width;
+  var xx = x - textWidth/2;
+  var yy = y - 3
+  context.beginPath();
+  context.rect(xx-3, yy+3, textWidth+6, -20);
+  context.stroke();
+  // context.fill();
+  context.font = "16px Arial";
+  context.fillText(textString, xx, yy );
 
 }
 
@@ -80,7 +98,7 @@ function draw() {
     var point = points[i];
     point.x += point.vx;
     point.y += point.vy;
-    drawCircle(point.x, point.y);
+    drawCircle(i, point.x, point.y);
     // lines
     drawLine(point.x, point.y, point.buddy.x, point.buddy.y);
     // check for edge
