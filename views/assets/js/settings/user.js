@@ -1,7 +1,11 @@
+// const { jsPDF } = require("jspdf");
+// import { jsPDF } from "jspdf";
+
 $(document).ready(function () {
   "use strict";
   $("body").tooltip({ selector: '[data-toggle=tooltip]' });
-  
+
+
   var usertable = $('#usertable').DataTable({
     "ajax": {
         "url": serviceUrl + "user/",
@@ -219,11 +223,77 @@ $(document).ready(function () {
         $("#etype").val(result[0]['type']);
         $("#estatus").val(result[0]['status']);
         $("#edit_user_modal").modal("show");
+
+
+        $(".rccs__name").html($("#efname").val() +" "+$("#elname").val());
+        $(".rccs__number").html("Phone "+$("#ephone").val());
+        $(".rccs__email").html($("#eemail").val());
+        makeQRCode();
       } else {
         toastr.error('Credential is invalid');
       }
     });
   });
+
+  $(document).on("click",".card-back",function(){
+    $(".rccs__card").addClass('rccs__card--flipped');
+  });
+
+  $(document).on("click",".card-front",function(){
+    $(".rccs__card").removeClass('rccs__card--flipped');
+  });
+
+  var qrcode = new QRCode(document.getElementById("qrcode"), {
+    width : 100,
+    height : 100
+  });
+
+  function makeQRCode () {
+    var value = "";
+    value += "Name: "+$(".rccs__name").html();
+    value += "\n";
+    value += "Phone: "+ $("#rccs_phone_number").html();
+    value += "\n";
+    value += "Email: "+$(".rccs__email").html();
+    value += "\n";
+    value += "Clinic: "+$(".rccs_clinic_name").html();
+    value += "\n";
+    value += "Address: "+$(".rccs_clinic_address").html();
+    // value += "\n";
+    // value += "URL: "+$("#rccs_clinic_url").html();
+    // value += "\n";
+    // value += "Phone: "+$("#rccs_clinic_phone").html();
+    qrcode.makeCode(value);
+  }
+
+  $(document).on("keyup",".card-name",function(e){
+    $(".rccs__name").html($("#efname").val() +" "+$("#elname").val());
+    makeQRCode();
+  });
+
+  $(document).on("keyup",".card-phone",function(e){
+    $(".rccs__number").html("Phone "+$(this).val());
+    makeQRCode();
+  });
+
+ 
+  $(document).on("keyup",".card-email",function(e){
+    $(".rccs__email").html($(this).val());
+    makeQRCode();
+  });
+
+  $(document).on("click","#card_pdf",function(e){
+    var pdf = new jsPDF('p', 'pt', 'letter');
+    pdf.canvas.height = 72 * 6;
+    pdf.canvas.width = 72 * 4;
+    
+    var html = $(".rccs__name").html();
+    pdf.fromHTML(html);
+
+    pdf.save('card.pdf');
+  });
+
+  
 
   $("#edit_btn").click(function (e) {
     if($("#efname").val() == ""){
@@ -415,6 +485,8 @@ $(document).ready(function () {
       }
     });
   });
+
+  
 
   
   $(document).on("click",".userpwdbtn",function(){

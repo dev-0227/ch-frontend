@@ -45,63 +45,82 @@
         </div>
       </div>
       <div class="modal-body">
-        <div class="rccs">
-          <div class="rccs__card rccs__card--visa">
-            <!-- <div class="rccs__card--front">
-              <div class="rccs__card__background"></div>
-              <div class="rccs__issuer"></div>
-              <div class="rccs__cvc__front">681</div>
-              <div class="rccs__number   rccs--filled">4532 3616 2070 5678</div>
-              <div class="rccs__name  rccs--filled">Mildred Wagner</div>
-              <div class="rccs__expiry  rccs--filled">
-                <div class="rccs__expiry__valid">valid thru</div>
-                <div class="rccs__expiry__value">02/24</div>
+        <div class="row">
+          <div class="col-md-2" ></div>
+          <div class="rccs col-md-8">
+            <div class="rccs__card rccs__card--dankort">
+              <div class="rccs__card--front">
+                <div class="rccs__card__background"></div>
+                <div class="rccs__issuer"></div>
+                <div class="rccs__name  rccs--filled">Mildred Wagner</div>
+                <div class="rccs__number   rccs--filled">Phone <span id="rccs_phone_number">532-366-2070</span></div>
+                <div class="rccs__email   rccs--filled">admin@gmail.com</div>
+                <div class="rccs__qr_code w-100px h-100px" id="qrcode"></div>
+                
+                <div class="rccs__chip"></div>
               </div>
-              <div class="rccs__chip"></div></div>
               <div class="rccs__card--back">
                 <div class="rccs__card__background"></div>
-                <div class="rccs__stripe"></div>
-                <div class="rccs__signature"></div>
-                <div class="rccs__cvc">681</div>
+                <div class="rccs__cvc">CONECTOR HEALTH</div>
                 <div class="rccs__issuer"></div>
+                <div class="rccs__expiry  rccs--filled">
+                  <div class="rccs_clinic_name">GODWIN MEDICAL</div>
+                  <div class="rccs_clinic_address">231 west 231 street Store front B</div>
+                  <div class="rccs__expiry__more">For Information</div>
+                  <div class="rccs__expiry__valid">Visit <span id="rccs_clinic_url">ch.precisionq.com</span></div>
+                  <div class="rccs__expiry__value">Or Call <span id="rccs_clinic_phone">347-587-4020</span></div>
+                </div>
               </div>
-            </div> -->
+            </div>
           </div>
+          <div class="col-md-2" >
+            <div class="text-end">
+              <img alt="" id="card_pdf" class="w-30px me-3 cursor-pointer " src="/assets/media/svg/files/pdf.svg">
+            </div>
+          </div>
+          
+        </div>
         <div class="row mt-4">
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-3 fv-row mb-7">
             <div class="form-group">
               <label for="efname" class="required  fw-semibold fs-6 mb-2">First Name:</label>
-              <input type="text" class=" form-control form-control-solid mb-3 mb-lg-0" id="efname" />
+              <input type="text" class=" form-control form-control-solid mb-3 mb-lg-0 card-front card-name" id="efname" />
             </div>
           </div>
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-3 fv-row mb-7">
             <div class="form-group">
               <label for="elname" class="required fw-semibold fs-6 mb-2">Last Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="elname" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-front card-name" id="elname" />
             </div>
           </div>
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-6 fv-row mb-7">
             <div class="form-group">
               <label for="eemail" class="required fw-semibold fs-6 mb-2">Email:</label>
-              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0" id="eemail" />
+              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 card-front card-email" id="eemail" />
             </div>
           </div>
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-3 fv-row mb-7">
             <div class="form-group">
               <label for="ephone" class="required fw-semibold fs-6 mb-2">Phone:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="ephone" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-front card-phone" id="ephone" />
             </div>
           </div>
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-2 fv-row mb-7">
+            <div class="form-group">
+              <label for="eext" class="required fw-semibold fs-6 mb-2">Ext:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-front" id="eext" />
+            </div>
+          </div>
+          <div class="col-md-3 fv-row mb-7">
             <div class="form-group">
               <label for="ecity" class="required fw-semibold fs-6 mb-2">City:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="ecity" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-front" id="ecity" />
             </div>
           </div>
           <div class="col-md-4 fv-row mb-7">
             <div class="form-group">
               <label for="estate" class="fw-semibold fs-6 mb-2">State:</label>
-              <select id="estate" class="form-control custom-select">
+              <select id="estate" class="form-control custom-select card-front">
                 <optgroup label="Alaskan/Hawaiian Time Zone">
                   <option value="AK">Alaska</option>
                   <option value="HI">Hawaii</option>
@@ -165,19 +184,25 @@
               </select>
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 mb-6">
             <div class="form-group">
               <label for="eaddr" class="required fw-semibold fs-6 mb-2">Address:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="eaddr" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-front" id="eaddr" />
             </div>
           </div>
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-4 fv-row ">
+            <div class="form-group">
+              <label for="eclinic" class="fw-semibold fs-6 mb-2">Clinic:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-back" id="eclinic" />
+            </div>
+          </div>
+          <div class="col-md-3 fv-row ">
             <div class="form-group">
               <label for="ezip" class="fw-semibold fs-6 mb-2">Zip:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="ezip" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-front" id="ezip" />
             </div>
           </div>
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-3 fv-row ">
             <div class="form-group">
               <label for="etype" class="fw-semibold fs-6 mb-2">Role:</label>
               <select
@@ -186,7 +211,7 @@
               ></select>
             </div>
           </div>
-          <div class="col-md-4 fv-row mb-7">
+          <div class="col-md-2 fv-row ">
             <div class="form-group">
               <label for="estatus" class="fw-semibold fs-6 mb-2">Status:</label>
               <select id="estatus" class="form-control custom-select">
@@ -482,3 +507,5 @@
 </div>
 
 
+<script src='/assets/plugins/qrcode.min.js'></script>
+<script src="/assets/plugins/jspdf.min.js"></script>
