@@ -243,8 +243,8 @@ $(document).ready(function () {
   });
 
   var qrcode = new QRCode(document.getElementById("qrcode"), {
-    width : 64,
-    height : 64,
+    width : 256,
+    height : 256,
     colorDark : "#000000",
     colorLight : "#ffffff",
     correctLevel : QRCode.CorrectLevel.H
@@ -252,19 +252,48 @@ $(document).ready(function () {
 
   function makeQRCode () {
     var value = "";
-    value += "Name: "+$(".rccs__name").html();
+    // value += "Name: "+$(".rccs__name").html();
+    // value += "\n";
+    // value += "Phone: "+$("#rccs_phone_number").html();
+    // value += "\n";
+    // value += "Email: "+$(".rccs__email").html();
+    // value += "\n";
+    // value += "Clinic: "+$(".rccs_clinic_name").html();
+    // value += "\n";
+    // value += "Address: "+$(".rccs_clinic_address").html();
+    // value += "\n";
+    // value += "Web: "+$("#rccs_clinic_url").html();
+    // value += "\n";
+    // value += "Phone: "+$("#rccs_clinic_phone").html();
+
+    // value += "BEGIN:VCARD";
+    // value += "\n";
+    // value += "VERSION:3.0";
+    // value += "\n";
+    // value += "FN:John Smith";
+    // value += "\n";
+    // value += "ORG:Acme";
+    // value += "\n";
+    // value += "TEL:5550000000";
+    // value += "\n";
+    // value += "EMAIL:foo@example.org";
+    // value += "\n";
+    // value += "END:VCARD";
+    // value += "\n";
+
+    value += "BEGIN:VCARD";
     value += "\n";
-    value += "Phone: "+$("#rccs_phone_number").html();
+    value += "VERSION:3.0";
     value += "\n";
-    value += "Email: "+$(".rccs__email").html();
+    value += "FN:"+$(".rccs__name").html();
     value += "\n";
-    value += "Clinic: "+$(".rccs_clinic_name").html();
+    value += "ORG:"+$(".rccs_clinic_name").html();;
     value += "\n";
-    value += "Address: "+$(".rccs_clinic_address").html();
+    value += "TEL:"+$("#rccs_phone_number").html().replaceAll("-", "").replaceAll(" ", "");
     value += "\n";
-    value += "URL: "+$("#rccs_clinic_url").html();
+    value += "EMAIL:"+$(".rccs__email").html();
     value += "\n";
-    value += "Phone: "+$("#rccs_clinic_phone").html();
+    value += "END:VCARD";
     qrcode.clear();
     qrcode.makeCode(value);
   }
