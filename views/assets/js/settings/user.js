@@ -243,8 +243,11 @@ $(document).ready(function () {
   });
 
   var qrcode = new QRCode(document.getElementById("qrcode"), {
-    width : 100,
-    height : 100
+    width : 64,
+    height : 64,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
   });
 
   function makeQRCode () {
@@ -262,6 +265,7 @@ $(document).ready(function () {
     value += "URL: "+$("#rccs_clinic_url").html();
     value += "\n";
     value += "Phone: "+$("#rccs_clinic_phone").html();
+    qrcode.clear();
     qrcode.makeCode(value);
   }
 
@@ -289,15 +293,34 @@ $(document).ready(function () {
     makeQRCode();
   });
 
-  $(document).on("click","#card_pdf",function(e){
+  $(document).on("click","#card_pdf",async function(e){
     var pdf = new jsPDF('p', 'pt', 'letter');
     pdf.canvas.height = 72 * 6;
     pdf.canvas.width = 72 * 4;
-    
-    var html = $(".rccs__name").html();
-    pdf.fromHTML(html);
+
+    $(".rccs__card").removeClass('rccs__card--flipped')
+    const front=document.querySelector(".rccs__card--front")
+    await html2canvas(front,{allowTaint:true}).then(canvas => {
+      var img = canvas.toDataURL("image/png");
+      pdf.addImage(img, 'SVG', 20, 40, 290, 182);
+    });
+
+    const back=document.querySelector(".rccs_card_back")
+    await html2canvas(back,{allowTaint:true}).then(canvas => {
+      var img = canvas.toDataURL("image/png");
+      pdf.addImage(img, 'PNG', 20, 240, 290, 182);
+    });
 
     pdf.save('card.pdf');
+
+    // var pdf = new jsPDF('p', 'pt', 'letter');
+    // pdf.canvas.height = 72 * 6;
+    // pdf.canvas.width = 72 * 4;
+    
+    // var html = $(".rccs__name").html();
+    // pdf.fromHTML(html);
+
+    // pdf.save('card.pdf');
   });
 
   

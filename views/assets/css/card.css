@@ -9,7 +9,7 @@
       transform-style: preserve-3d;
       transition: all 0.4s linear;
       width: 290px; }
-      .rccs__card--front, .rccs__card--back {
+      .rccs__card--front, .rccs__card--back, .rccs_card_back {
         -webkit-backface-visibility: hidden;
                 backface-visibility: hidden;
         background: linear-gradient(25deg, #939393, #717171);
@@ -26,8 +26,15 @@
       .rccs__card--front {
         z-index: 20; }
       .rccs__card--back {
-        transform: rotateY(180deg); }
+        transform: rotateY(180deg);       }
         .rccs__card--back .rccs__issuer {
+          background-position: top center;
+          top: 15%;
+          left: 20%;
+          right: auto;
+          bottom: auto;
+          transform: translateX(-50%); }
+        .rccs_card_back .rccs__issuer {
           background-position: top center;
           top: 15%;
           left: 20%;
@@ -202,7 +209,7 @@
     .rccs__qr_code {
       position: absolute;
       right: 10%;
-      top: 25%; }
+      top: 32%; }
     .rccs--filled {
       opacity: 0.8 !important; }
     .rccs--focused {
