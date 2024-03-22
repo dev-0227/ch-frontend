@@ -79,6 +79,27 @@ $(document).ready(function () {
     }
   });
 
+  var clinics = [];
+
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "clinic", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var index = 0;
+      var data = "";
+      for(var i = 0; i < result.length; i++){
+        if(i==0)index = result[i].id;
+        data += '<option value="'+result[i].id+'">'+result[i].name+'</option>';
+        clinics[result[i].id] = result[i];
+      }
+
+      $(".rccs_clinic_name").html(clinics[index]['name']);
+      $(".rccs_clinic_address").html(clinics[index]['address1']);
+      $("#rccs_clinic_url").html(clinics[index]['web']);
+      $("#rccs_clinic_phone").html(clinics[index]['phone']);
+      $(".clinic_list").html(data);
+    }
+  });
+
   sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "setting/clinic/getAll", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -145,65 +166,30 @@ $(document).ready(function () {
     }
   });
 
+  
+
+  
+
   $(document).on("click","#add_btn",function(){
-    $("#add_user_modal").modal("show");
+    $("#chosen_user").val('');
+    $("#efname").val('');
+    $("#elname").val('');
+    $("#eemail").val('');
+    $("#ephone").val('');
+    $("#eaddr").val('');
+    $("#ecity").val('');
+    $("#estate").val('');
+    $("#ezip").val('');
+    $("#etype").val('');
+    $("#estatus").val('');
+    $(".rccs__name").html($("#efname").val() +" "+$("#elname").val());
+    $("#rccs_phone_number").html($("#ephone").val());
+    $(".rccs__email").html($("#eemail").val());
+    makeQRCode();
+    $("#edit_user_modal").modal("show");
   });
 
-  $("#add_user_submit").click(function (e) {
-    if($("#fname").val() == ""){
-      toastr.info('Please enter First name');
-      $("#fname").focus();
-      return;
-    }
-    if($("#lname").val() == ""){
-      toastr.info('Please enter Last name');
-      $("#lname").focus();
-      return;
-    }
-    if($("#email").val() == ""){
-      toastr.info('Please enter Email');
-      $("#email").focus();
-      return;
-    }
-    if($("#phone").val() == ""){
-      toastr.info('Please enter Phone number');
-      $("#phone").focus();
-      return;
-    }
-    if($("#addr").val() == ""){
-      toastr.info('Please enter Address');
-      $("#addr").focus();
-      return;
-    }
-    if($("#city").val() == ""){
-      toastr.info('Please enter City');
-      $("#city").focus();
-      return;
-    }
-    let entry = {
-      fname: document.getElementById('fname').value,
-      lname: document.getElementById('lname').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      addr: document.getElementById('addr').value,
-      city: document.getElementById('city').value,
-      state: document.getElementById('state').value,
-      zip: document.getElementById('zip').value,
-      type: document.getElementById('type').value
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/add", (xhr, err) => {
-        if (!err) {
-          toastr.success('user is added successfully');
-          $("#add_user_modal").modal("hide");
-        } else {
-          toastr.error('Action Failed');
-        }
-    });
-    setTimeout( function () {
-      usertable.ajax.reload();
-    }, 1000 );
-  });
-
+  
   $(document).on("click",".usereditbtn",function(){
     $("#chosen_user").val($(this).parent().attr("idkey"));
     let entry = {
@@ -217,29 +203,42 @@ $(document).ready(function () {
         $("#eemail").val(result[0]['email']);
         $("#ephone").val(result[0]['phone']);
         $("#eaddr").val(result[0]['address']);
+        $("#eext").val(result[0]['ext']);
         $("#ecity").val(result[0]['city']);
         $("#estate").val(result[0]['state']);
         $("#ezip").val(result[0]['zip']);
         $("#etype").val(result[0]['type']);
+        $("#eclinic").val(result[0]['clinic1']);
         $("#estatus").val(result[0]['status']);
-        $("#edit_user_modal").modal("show");
-
-
         $(".rccs__name").html($("#efname").val() +" "+$("#elname").val());
-        $(".rccs__number").html("Phone "+$("#ephone").val());
+        $("#rccs_phone_number").html($("#ephone").val());
         $(".rccs__email").html($("#eemail").val());
         makeQRCode();
+        $("#edit_user_modal").modal("show");
       } else {
         toastr.error('Credential is invalid');
       }
     });
   });
 
+  $(document).on("click",".rccs__card",function(){
+    if($(this).data('type')=="0"){
+      $(this).data('type', "1");
+      $(".rccs__card").addClass('rccs__card--flipped');
+    }else{
+      $(this).data('type', "0");
+      $(".rccs__card").removeClass('rccs__card--flipped');
+    }
+    
+  });
+
   $(document).on("click",".card-back",function(){
+    $(".rccs__card").data('type', "1");
     $(".rccs__card").addClass('rccs__card--flipped');
   });
 
   $(document).on("click",".card-front",function(){
+    $(".rccs__card").data('type', "0");
     $(".rccs__card").removeClass('rccs__card--flipped');
   });
 
@@ -252,17 +251,17 @@ $(document).ready(function () {
     var value = "";
     value += "Name: "+$(".rccs__name").html();
     value += "\n";
-    value += "Phone: "+ $("#rccs_phone_number").html();
+    value += "Phone: "+$("#rccs_phone_number").html();
     value += "\n";
     value += "Email: "+$(".rccs__email").html();
     value += "\n";
     value += "Clinic: "+$(".rccs_clinic_name").html();
     value += "\n";
     value += "Address: "+$(".rccs_clinic_address").html();
-    // value += "\n";
-    // value += "URL: "+$("#rccs_clinic_url").html();
-    // value += "\n";
-    // value += "Phone: "+$("#rccs_clinic_phone").html();
+    value += "\n";
+    value += "URL: "+$("#rccs_clinic_url").html();
+    value += "\n";
+    value += "Phone: "+$("#rccs_clinic_phone").html();
     qrcode.makeCode(value);
   }
 
@@ -279,6 +278,14 @@ $(document).ready(function () {
  
   $(document).on("keyup",".card-email",function(e){
     $(".rccs__email").html($(this).val());
+    makeQRCode();
+  });
+
+  $(document).on("click",".clinic_list",function(){
+    $(".rccs_clinic_name").html(clinics[$(this).val()]['name']);
+    $(".rccs_clinic_address").html(clinics[$(this).val()]['address1']);
+    $("#rccs_clinic_url").html(clinics[$(this).val()]['web']);
+    $("#rccs_clinic_phone").html(clinics[$(this).val()]['phone']);
     makeQRCode();
   });
 
@@ -338,15 +345,29 @@ $(document).ready(function () {
       zip: document.getElementById('ezip').value,
       type: document.getElementById('etype').value,
       status: document.getElementById('estatus').value,
+      ext: document.getElementById('eext').value,
+      clinic: document.getElementById('eclinic').value,
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/update", (xhr, err) => {
+    if(document.getElementById('chosen_user').value == ""){
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/add", (xhr, err) => {
+        if (!err) {
+          toastr.success('user is added successfully');
+          $("#add_user_modal").modal("hide");
+        } else {
+          toastr.error('Action Failed');
+        }
+      });
+    }else{
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/update", (xhr, err) => {
         if (!err) {
           toastr.success('User is updated successfully');
           $("#edit_user_modal").modal("hide");
         } else {
           toastr.error('Action Failed');
         }
-    });
+      });
+    }
+
     setTimeout( function () {
       usertable.ajax.reload();
     }, 1000 );

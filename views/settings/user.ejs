@@ -48,13 +48,13 @@
         <div class="row">
           <div class="col-md-2" ></div>
           <div class="rccs col-md-8">
-            <div class="rccs__card rccs__card--dankort">
+            <div class="rccs__card rccs__card--dankort cursor-pointer" data-type="0">
               <div class="rccs__card--front">
                 <div class="rccs__card__background"></div>
                 <div class="rccs__issuer"></div>
                 <div class="rccs__name  rccs--filled">Mildred Wagner</div>
-                <div class="rccs__number   rccs--filled">Phone <span id="rccs_phone_number">532-366-2070</span></div>
-                <div class="rccs__email   rccs--filled">admin@gmail.com</div>
+                <div class="rccs__number rccs--filled">Phone <span id="rccs_phone_number">532-366-2070</span></div>
+                <div class="rccs__email rccs--filled">admin@gmail.com</div>
                 <div class="rccs__qr_code w-100px h-100px" id="qrcode"></div>
                 
                 <div class="rccs__chip"></div>
@@ -193,7 +193,8 @@
           <div class="col-md-4 fv-row ">
             <div class="form-group">
               <label for="eclinic" class="fw-semibold fs-6 mb-2">Clinic:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 card-back" id="eclinic" />
+              <select  id="eclinic"  class="form-control custom-select card-back clinic_list" ></select>
+              
             </div>
           </div>
           <div class="col-md-3 fv-row ">
@@ -231,145 +232,7 @@
   </div>
 </div>
 
-<div  class="modal fade"  id="add_user_modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-650px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="fw-bold">Add User</h2>
-        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-        </div>
-      </div>
-      <div class="modal-body px-5 my-7">
-        <div class="row">
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="fname" class="required fw-semibold fs-6 mb-2">First Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="fname" />
-            </div>
-          </div>
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="lname" class="required fw-semibold fs-6 mb-2">Last Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="lname" />
-            </div>
-          </div>
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="email" class="required fw-semibold fs-6 mb-2">Email:</label>
-              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0" id="email" />
-            </div>
-          </div>
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="phone" class="required fw-semibold fs-6 mb-2">Phone:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="phone" />
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="addr" class="required fw-semibold fs-6 mb-2">Address:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="addr" />
-            </div>
-          </div>
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="city" class="required fw-semibold fs-6 mb-2">City:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="city" />
-            </div>
-          </div>
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="state" class="fw-semibold fs-6 mb-2">State:</label>
-              <select id="state" class="form-control custom-select">
-                <optgroup label="Alaskan/Hawaiian Time Zone">
-                  <option value="AK">Alaska</option>
-                  <option value="HI">Hawaii</option>
-                </optgroup>
-                <optgroup label="Pacific Time Zone">
-                  <option value="CA">California</option>
-                  <option value="NV">Nevada</option>
-                  <option value="OR">Oregon</option>
-                  <option value="WA">Washington</option>
-                </optgroup>
-                <optgroup label="Mountain Time Zone">
-                  <option value="AZ">Arizona</option>
-                  <option value="CO">Colorado</option>
-                  <option value="ID">Idaho</option>
-                  <option value="MT">Montana</option>
-                  <option value="NE">Nebraska</option>
-                  <option value="NM">New Mexico</option>
-                  <option value="ND">North Dakota</option>
-                  <option value="UT">Utah</option>
-                  <option value="WY">Wyoming</option>
-                </optgroup>
-                <optgroup label="Central Time Zone">
-                  <option value="AL">Alabama</option>
-                  <option value="AR">Arkansas</option>
-                  <option value="IL">Illinois</option>
-                  <option value="IA">Iowa</option>
-                  <option value="KS">Kansas</option>
-                  <option value="KY">Kentucky</option>
-                  <option value="LA">Louisiana</option>
-                  <option value="MN">Minnesota</option>
-                  <option value="MS">Mississippi</option>
-                  <option value="MO">Missouri</option>
-                  <option value="OK">Oklahoma</option>
-                  <option value="SD">South Dakota</option>
-                  <option value="TX">Texas</option>
-                  <option value="TN">Tennessee</option>
-                  <option value="WI">Wisconsin</option>
-                </optgroup>
-                <optgroup label="Eastern Time Zone">
-                  <option value="CT">Connecticut</option>
-                  <option value="DE">Delaware</option>
-                  <option value="FL">Florida</option>
-                  <option value="GA">Georgia</option>
-                  <option value="IN">Indiana</option>
-                  <option value="ME">Maine</option>
-                  <option value="MD">Maryland</option>
-                  <option value="MA">Massachusetts</option>
-                  <option value="MI">Michigan</option>
-                  <option value="NH">New Hampshire</option>
-                  <option value="NJ">New Jersey</option>
-                  <option value="NY" selected>New York</option>
-                  <option value="NC">North Carolina</option>
-                  <option value="OH">Ohio</option>
-                  <option value="PA">Pennsylvania</option>
-                  <option value="RI">Rhode Island</option>
-                  <option value="SC">South Carolina</option>
-                  <option value="VT">Vermont</option>
-                  <option value="VA">Virginia</option>
-                  <option value="WV">West Virginia</option>
-                </optgroup>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="zip" class="fw-semibold fs-6 mb-2">Zip:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="zip" />
-            </div>
-          </div>
-          <div class="col-md-6 fv-row mb-7">
-            <div class="form-group">
-              <label for="type" class="fw-semibold fs-6 mb-2">Role:</label>
-              <select
-                id="type"
-                class="form-control custom-select role_list"
-              ></select>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-        <button type="button" class="btn btn-primary" id="add_user_submit"><i class="fa fa-save">&nbsp;</i> Save</button>
-      </div>
-      
-    </div>
-  </div>
-</div>
+
 
 <div  class="modal fade"  id="user_permission_modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
