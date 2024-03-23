@@ -285,9 +285,11 @@ $(document).ready(function () {
     value += "\n";
     value += "VERSION:3.0";
     value += "\n";
-    value += "FN:"+$(".rccs__name").html();
+    value += "N:"+$(".rccs__name").html();
     value += "\n";
     value += "ORG:"+$(".rccs_clinic_name").html();;
+    value += "\n";
+    value += "ADR:;;"+$(".rccs_clinic_addres1").html();;
     value += "\n";
     value += "TEL:"+$("#rccs_phone_number").html().replaceAll("-", "").replaceAll(" ", "");
     value += "\n";
