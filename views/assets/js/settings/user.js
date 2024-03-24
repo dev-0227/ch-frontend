@@ -208,11 +208,29 @@ $(document).ready(function () {
         $("#estate").val(result[0]['state']);
         $("#ezip").val(result[0]['zip']);
         $("#etype").val(result[0]['type']);
-        $("#eclinic").val(result[0]['clinic1']);
+        var data = "";
+        var index = "";
+        if(result[0]['clinic']){
+          var user_clinics = result[0]['clinic'].split(",");
+          for(var i = 0; i < user_clinics.length; i++){
+            if(i==0)index = clinics[user_clinics[i]].id;
+            if(clinics[user_clinics[i]])
+              data += '<option value="'+clinics[user_clinics[i]].id+'">'+clinics[user_clinics[i]].name+'</option>';
+          }
+        }
+        $(".clinic_list").html(data);
+        if(result[0]['clinic1']){
+          $("#eclinic").val(result[0]['clinic1']);
+          index = result[0]['clinic1'];
+        }
         $("#estatus").val(result[0]['status']);
         $(".rccs__name").html($("#efname").val() +" "+$("#elname").val());
         $("#rccs_phone_number").html($("#ephone").val());
         $(".rccs__email").html($("#eemail").val());
+        $(".rccs_clinic_name").html(clinics[index]['name']);
+        $(".rccs_clinic_address").html(clinics[index]['address1']);
+        $("#rccs_clinic_url").html(clinics[index]['web']);
+        $("#rccs_clinic_phone").html(clinics[index]['phone']);
         makeQRCode();
         $("#edit_user_modal").modal("show");
       } else {
@@ -283,17 +301,19 @@ $(document).ready(function () {
 
     value += "BEGIN:VCARD";
     value += "\n";
-    value += "VERSION:3.0";
+    // value += "VERSION:3.0";
+    // value += "\n";
+    value += "N:"+$(".rccs__name").html()+" - "+$(".rccs_clinic_name").html();
     value += "\n";
-    value += "N:"+$(".rccs__name").html();
-    value += "\n";
-    value += "ORG:"+$(".rccs_clinic_name").html();;
-    value += "\n";
+    // value += "ORG:"+$(".rccs_clinic_name").html();
+    // value += "\n";
     value += "ADR:;;"+$(".rccs_clinic_addres1").html();;
     value += "\n";
     value += "TEL:"+$("#rccs_phone_number").html().replaceAll("-", "").replaceAll(" ", "");
     value += "\n";
     value += "EMAIL:"+$(".rccs__email").html();
+    value += "\n";
+    value += "URL:"+$("#rccs_clinic_url").html();
     value += "\n";
     value += "END:VCARD";
     qrcode.clear();
