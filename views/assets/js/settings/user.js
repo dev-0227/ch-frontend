@@ -294,13 +294,6 @@ $(document).ready(function () {
       value += "ADR:;;"+$(".rccs_clinic_address").html();
       value += "\n";
     }
-    
-    if($("#qr_phone").prop("checked")){
-      if($("#rccs_phone_number").html().trim()!=""){
-        value += "TEL;CELL:"+$("#rccs_phone_number").html().replaceAll("-", "").replaceAll(" ", "");
-        value += "\n";
-      }
-    }
     if($("#rccs_clinic_phone").html().trim()!=""){
       value += "TEL;WORK:"+$("#rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
       value += "\n";
@@ -308,6 +301,13 @@ $(document).ready(function () {
     if($(".rccs__email").html().trim()!=""){
       value += "EMAIL:"+$(".rccs__email").html();
       value += "\n";
+    }
+    var value1= value;
+    if($("#qr_phone").prop("checked")){
+      if($("#rccs_phone_number").html().trim()!=""){
+        value += "TEL;CELL:"+$("#rccs_phone_number").html().replaceAll("-", "").replaceAll(" ", "");
+        value += "\n";
+      }
     }
     if($("#rccs_clinic_url").html().trim()!=""){
       value += "URL:"+$("#rccs_clinic_url").html();
@@ -318,22 +318,7 @@ $(document).ready(function () {
     try{
       qrcode.makeCode(value);
     }catch{
-      value = "BEGIN:VCARD";
-      value += "\n";
-      value += "N:"+$(".rccs__name").html()+" - "+$(".rccs_clinic_name").html();
-      value += "\n";
-      if($(".rccs_clinic_address").html().trim()!=""){
-        value += "ADR:;;"+$(".rccs_clinic_address").html();
-        value += "\n";
-      }
-      if($("#rccs_clinic_phone").html().trim()!=""){
-        value += "TEL;WORK:"+$("#rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
-        value += "\n";
-      }
-      if($(".rccs__email").html().trim()!=""){
-        value += "EMAIL:"+$(".rccs__email").html();
-        value += "\n";
-      }
+      value = value1
       value += "END:VCARD";
       qrcode.makeCode(value);
     }
