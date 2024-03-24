@@ -315,7 +315,29 @@ $(document).ready(function () {
     }
     value += "END:VCARD";
     qrcode.clear();
-    qrcode.makeCode(value);
+    try{
+      qrcode.makeCode(value);
+    }catch{
+      value = "BEGIN:VCARD";
+      value += "\n";
+      value += "N:"+$(".rccs__name").html()+" - "+$(".rccs_clinic_name").html();
+      value += "\n";
+      if($(".rccs_clinic_address").html().trim()!=""){
+        value += "ADR:;;"+$(".rccs_clinic_address").html();
+        value += "\n";
+      }
+      if($("#rccs_clinic_phone").html().trim()!=""){
+        value += "TEL;WORK:"+$("#rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
+        value += "\n";
+      }
+      if($(".rccs__email").html().trim()!=""){
+        value += "EMAIL:"+$(".rccs__email").html();
+        value += "\n";
+      }
+      value += "END:VCARD";
+      qrcode.makeCode(value);
+    }
+    
   }
 
   $(document).on("keyup",".card-name",function(e){
