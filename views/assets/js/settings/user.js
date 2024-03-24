@@ -93,7 +93,7 @@ $(document).ready(function () {
       }
 
       $(".rccs_clinic_name").html(clinics[index]['name']);
-      $(".rccs_clinic_address").html(clinics[index]['address1']);
+      $(".rccs_clinic_address").html(clinics[index]['address1']+' '+clinics[index]['address2']);
       $("#rccs_clinic_url").html(clinics[index]['web']);
       $("#rccs_clinic_phone").html(clinics[index]['phone']);
       $(".clinic_list").html(data);
@@ -228,7 +228,7 @@ $(document).ready(function () {
         $("#rccs_phone_number").html($("#ephone").val());
         $(".rccs__email").html($("#eemail").val());
         $(".rccs_clinic_name").html(clinics[index]['name']);
-        $(".rccs_clinic_address").html(clinics[index]['address1']);
+        $(".rccs_clinic_address").html(clinics[index]['address1']+' '+clinics[index]['address2']);
         $("#rccs_clinic_url").html(clinics[index]['web']);
         $("#rccs_clinic_phone").html(clinics[index]['phone']);
         makeQRCode();
@@ -299,23 +299,23 @@ $(document).ready(function () {
     // value += "END:VCARD";
     // value += "\n";
 
-    value += "BEGIN:VCARD";
-    value += "\n";
+    // value += "BEGIN:VCARD";
+    // value += "\n";
     // value += "VERSION:3.0";
     // value += "\n";
     value += "N:"+$(".rccs__name").html()+" - "+$(".rccs_clinic_name").html();
     value += "\n";
     // value += "ORG:"+$(".rccs_clinic_name").html();
     // value += "\n";
-    value += "ADR:;;"+$(".rccs_clinic_addres1").html();;
+    value += "ADR:;;"+$(".rccs_clinic_address").html();
     value += "\n";
     value += "TEL:"+$("#rccs_phone_number").html().replaceAll("-", "").replaceAll(" ", "");
     value += "\n";
     value += "EMAIL:"+$(".rccs__email").html();
     value += "\n";
     value += "URL:"+$("#rccs_clinic_url").html();
-    value += "\n";
-    value += "END:VCARD";
+    // value += "\n";
+    // value += "END:VCARD";
     qrcode.clear();
     qrcode.makeCode(value);
   }
