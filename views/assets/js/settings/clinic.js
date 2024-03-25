@@ -266,11 +266,12 @@ $(document).ready(function () {
         sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "clinic/uploadlogo", (xhr, err) => {
           if (!err) {
             var filename = JSON.parse(xhr.responseText)['data'];
-            var f = filename.split("\\");
-            entry.logo = f[f.length-1];
+            // var f = filename.split("\\");
+            entry.logo = filename;
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
               if (!err) {
                 return toastr.success('Clinic is updated successfully');
+                $("#clinic-edit-modal").modal("hide");
               } else {
                 return toastr.error('Action Failed');
               }
