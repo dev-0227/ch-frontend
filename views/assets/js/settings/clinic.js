@@ -147,7 +147,7 @@ $(document).ready(function () {
           $("#logo_dropzone").addClass("d-none");
           $("#logo_image").removeClass("d-none");
           // $("#logo_image_src").attr("src", "https://ch.precisionq.com/uploads/logos/1711379755487.svg");
-          $("#logo_image_src").attr("src", "/uploads/logos/"+logo_info[0]?logo_info[0]:"")
+          $("#logo_image_src").attr("src", "/uploads/logos/"+logo_info[0])
           $("#logo_width").val(logo_info[1]?logo_info[1]:"120");
           $("#logo_height").val(logo_info[2]?logo_info[2]:"120");
           $("#logo_image_src").attr("width", parseInt($("#logo_width").val())>300?"300":$("#logo_width").val());
