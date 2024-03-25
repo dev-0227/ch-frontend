@@ -86,11 +86,9 @@ $(document).ready(function () {
         if(parseInt(img.width)>min_width){
           var rate = parseInt(img.width)/parseInt(img.height);
           $(".dz-image img").css("height", min_width/rate+'px');
-          
+          $("#logo_width").val(img.width);
+          $("#logo_height").val(img.height);
         }
-        
-        
-        
       };
       return img.src = fr.result;
     };
@@ -141,11 +139,18 @@ $(document).ready(function () {
           $("#contactcheck").prop("checked",false);
         $("#contact_area").removeClass("d-none");
         $("#logo_area").removeClass("d-none");
-        $('#clinic_logo')[0].dropzone.removeAllFiles();  
+        $('#clinic_logo')[0].dropzone.removeAllFiles();
+        $("#logo_width").val("0");
+        $("#logo_height").val("0");
         if(result[0]['logo']){
+          var logo_info = result[0]['logo'].split(",");
           $("#logo_dropzone").addClass("d-none");
           $("#logo_image").removeClass("d-none");
-          $("#logo_image_src").attr("src", "/uploads/logos/"+result[0]['logo'])
+          // $("#logo_image_src").attr("src", "https://ch.precisionq.com/uploads/logos/1711379755487.svg");
+          $("#logo_image_src").attr("src", "/uploads/logos/"+logo_info[0]?logo_info[0]:"")
+          $("#logo_width").val(logo_info[1]?logo_info[1]:"120");
+          $("#logo_height").val(logo_info[2]?logo_info[2]:"120");
+          $("#logo_image_src").attr("width", parseInt($("#logo_width").val())>300?"300":$("#logo_width").val());
           
         }else{
           $("#logo_dropzone").removeClass("d-none");
@@ -158,6 +163,16 @@ $(document).ready(function () {
       }
     });
   });
+
+  $(document).on("click","#logo_delete",function(){
+    $("#logo_image_src").attr("src", "")
+    $("#logo_width").val("0");
+    $("#logo_height").val("0");
+    $("#logo_dropzone").removeClass("d-none");
+    $("#logo_image").addClass("d-none");
+  });
+
+  
   
   $(document).on("click",".clinicdeletebtn",function(){
     let entry = {
@@ -217,6 +232,9 @@ $(document).ready(function () {
       $("#contactcheck").prop("checked", false);
       $("#contact_area").addClass("d-none");
       $("#logo_area").addClass("d-none");
+      $("#logo_width").val(img.width);
+      $("#logo_height").val(img.height);
+      $('#clinic_logo')[0].dropzone.removeAllFiles();  
       $("#clinic-edit-modal").modal("show");
   });
   
@@ -251,6 +269,7 @@ $(document).ready(function () {
       
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/add", (xhr, err) => {
             if (!err) {
+              $("#clinic-edit-modal").modal("hide");
               return toastr.success('Action Successfully');
             } else {
               return toastr.error('Action Failed');
@@ -267,10 +286,10 @@ $(document).ready(function () {
           var filename = JSON.parse(xhr.responseText)['data'];
           if (!err && filename) {
             var f = filename.split("\\");
-            entry.logo = f[f.length-1];
+            entry.logo = f[f.length-1]+','+$("#logo_width").val()+','+$("#logo_height").val();
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
               if (!err) {
-                $("#clinic-edit-modal").modal("show");
+                $("#clinic-edit-modal").modal("hide");
                 return toastr.success('Clinic is updated successfully');
                 
               } else {

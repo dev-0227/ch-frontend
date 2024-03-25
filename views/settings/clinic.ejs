@@ -76,7 +76,7 @@
 						</div>
 						
 					</div>
-					<div class="col-md-4 d-flex align-items-center" id="logo_area">
+					<div class="col-md-4 d-flex justify-content-center align-items-center" id="logo_area">
 						<form class="form" action="#" method="post">
 							<div class="fv-row" id="logo_dropzone">
 								<div class="dropzone " id="clinic_logo">
@@ -91,8 +91,14 @@
 							</div>
 						</form>
 						<div id="logo_image">
-							<div class="d-flex justify-content-center align-items-center">
-								<img data-dz-thumbnail="" alt="" src="" id="logo_image_src">
+							<div class="dropzone ">
+								<input type="hidden" id="logo_width">
+								<input type="hidden" id="logo_height">
+								<div class="dz-preview d-flex justify-content-center align-items-center bg-white">
+									<img data-dz-thumbnail="" alt="" src="" id="logo_image_src">
+									<a class="dz-remove" href="javascript:undefined;" data-dz-remove="" id="logo_delete">Remove file</a>
+								</div>
+								
 							</div>
 						</div>
 						
