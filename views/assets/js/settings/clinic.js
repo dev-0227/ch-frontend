@@ -264,14 +264,15 @@ $(document).ready(function () {
         formData.append("id", document.getElementById('chosen_clinic').value);
         formData.append("filename", $(".dz-filename span").html());
         sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "clinic/uploadlogo", (xhr, err) => {
-          if (!err) {
-            var filename = JSON.parse(xhr.responseText)['data'];
-            // var f = filename.split("\\");
-            entry.logo = filename;
+          var filename = JSON.parse(xhr.responseText)['data'];
+          if (!err && filename) {
+            var f = filename.split("\\");
+            entry.logo = f[f.length-1];
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
               if (!err) {
+                $("#clinic-edit-modal").modal("show");
                 return toastr.success('Clinic is updated successfully');
-                $("#clinic-edit-modal").modal("hide");
+                
               } else {
                 return toastr.error('Action Failed');
               }
