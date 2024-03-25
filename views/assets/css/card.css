@@ -30,14 +30,14 @@
         .rccs__card--back .rccs__issuer {
           background-position: top center;
           top: 15%;
-          left: 20%;
+          left: 40%;
           right: auto;
           bottom: auto;
           transform: translateX(-50%); }
         .rccs_card_back .rccs__issuer {
           background-position: top center;
           top: 15%;
-          left: 20%;
+          left: 40%;
           right: auto;
           bottom: auto;
           transform: translateX(-50%); }
@@ -73,7 +73,7 @@
       .rccs__card--dankort .rccs__card__background {
         background: linear-gradient(25deg, #fff, #eee); }
       .rccs__card--dankort .rccs__issuer {
-        background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjMwOCIgdmlld0JveD0iMCAwIDUxMiAzMDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCB4MT0iNTAlIiB5MT0iMCUiIHgyPSI1MCUiIHkyPSIxMDAlIiBpZD0iYSI+PHN0b3Agc3RvcC1jb2xvcj0iI0Y1MDkxQSIgb2Zmc2V0PSIwJSIvPjxzdG9wIHN0b3AtY29sb3I9IiM5RTBDMTciIG9mZnNldD0iMTAwJSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0zNTguNDA3IDBoLTIwNC43OTVjLTg0Ljg0MiAwLTE1My42MTIgNjguNzcxLTE1My42MTIgMTUzLjU5MyAwIDg0Ljg1MSA2OC43NyAxNTMuNjA2IDE1My42MTIgMTUzLjYwNmgyMDQuNzk1Yzg0LjgyMiAwIDE1My41OTMtNjguNzU1IDE1My41OTMtMTUzLjYwNiAwLTg0LjgyMS02OC43Ny0xNTMuNTkzLTE1My41OTMtMTUzLjU5MyIgZmlsbD0iI0ZFRkVGRSIvPjxwYXRoIGQ9Ik0zOTUuNTkxIDE0NC40ODZsNjguMzI4IDgxLjI2MWMxNC4xNTEtMjAuNDUxIDIyLjQ2Mi00NS4yNDIgMjIuNDYyLTcxLjk0NSAwLTI4LjE4My05LjI1OS01NC4yNDgtMjQuODg0LTc1LjMxNWwtNjUuOTA2IDY1Ljk5OXptLTI0MS4zOTctMTE3LjM4NmMtMzguNTQ3IDAtNzMuMTIxIDE3LjI5My05Ni4zODMgNDQuNTI4aDE0NC4xNTljNTEuMDI3IDAgODkuNDc0IDEyLjk4MyA5My40MzEgNTUuOTc0bDUzLjcwMi01NS45ODFoMTA2LjkzMWMtMjMuMjYzLTI3LjIyNy01Ny44MzEtNDQuNTItOTYuMzYxLTQ0LjUyaC0yMDUuNDc5em0yOS4yMzYgMjA1LjQ3OWgtMTI4LjQyOWMyMy4yMzMgMjkuMTkzIDU5LjA2MiA0Ny45NDYgOTkuMTk0IDQ3Ljk0NmgyMDUuNDc5YzQwLjExNyAwIDc1LjkzNy0xOC43NDUgOTkuMTcxLTQ3LjkzOWgtMTA5LjI5NWwtNTYuNzk2LTcxLjc3NmMtMTAuNTA2IDQ4LjkzOS00NC44ODEgNzEuNzY5LTEwOS4zMjMgNzEuNzY5ek0xMTguNDQgMTI1Ljk5N2wtMTguMjIyIDUwLjFoNzMuNTE3YzIxLjczMyAwIDI4LjMxLTguOTk4IDMzLjE3My0yNi4zMTkgNC44MTUtMTcuMTMxLTcuMjc3LTIzLjc4LTIyLjEyOS0yMy43OGgtNjYuMzM5eiIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg=="); }
+        background-image: url("/assets/images/logos/bce.svg"); }
       .rccs__card--dinersclub > div {
         color: #555; }
       .rccs__card--dinersclub .rccs__card__background {
@@ -183,7 +183,7 @@
       position: absolute;
       left: 5%;
       top: 35%;
-      width: 40%; }
+      width: 50%; }
     .rccs__stripe {
       background-color: #2a1d16;
       height: 22%;

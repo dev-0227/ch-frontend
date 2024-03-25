@@ -12,7 +12,6 @@ $(document).ready(function () {
             return (row.address1==null?"":row.address1)+" "+(row.address2==null?"":row.address2);
           } 
         },
-        { data: 'city' },
         { data: 'phone'},
         { data: 'id',
           render: function (data, type, row) {
@@ -48,11 +47,61 @@ $(document).ready(function () {
     clinictable.search(this.value).draw();
   });
 
+  var clinic_logo = new Dropzone("#clinic_logo", {
+    url: "https://ch.precisionq.com/scripts/void.php", // Set the url for your upload script location
+    paramName: "svg", // The name that will be used to transfer the file
+    maxFiles: 1,
+    maxFilesize: 10, // MB
+    addRemoveLinks: true,
+    maxfilesexceeded: function(file) {
+      this.removeAllFiles();
+      this.addFile(file);
+    },
+    accept: function(file, done) {
+        if (file.name == "wow.jpg") {
+            done("Naha, you don't.");
+            
+        } else {
+          $(".dz-image").addClass("d-flex");
+          $(".dz-image").addClass("justify-content-center");
+          $(".dz-image").addClass("align-items-center");
+          $(".dz-error-message").addClass("d-none");
+          $(".dz-progress").addClass("d-none");
+          $(".dz-success-mark").addClass("d-none");
+          //$(".dz-details").addClass("d-none");
+          $(".dz-error-mark").addClass("d-none");
+          done();
+        }
+    }
+ });
+
+ clinic_logo.on("addedfile", function(file, xhr) {
+    var fr;
+    fr = new FileReader;
+    fr.onload = function() {
+      var img;
+      img = new Image;
+      img.onload = function() {
+        var min_width = 300;
+        if(parseInt(img.width)>min_width){
+          var rate = parseInt(img.width)/parseInt(img.height);
+          $(".dz-image img").css("height", min_width/rate+'px');
+          
+        }
+        
+        
+        
+      };
+      return img.src = fr.result;
+    };
+    return fr.readAsDataURL(file);
+  });
+
 
   $(document).on("click",".cliniceditbtn",function(){
     $("#chosen_clinic").val($(this).parent().attr("idkey"));
     let entry = {
-      id: $(this).parent().attr("idkey"),
+      id: $("#chosen_clinic").val(),
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/chosen", (xhr, err) => {
       if (!err) {
@@ -90,12 +139,22 @@ $(document).ready(function () {
           $("#contactcheck").prop("checked",true);
         else
           $("#contactcheck").prop("checked",false);
-
+        $("#contact_area").removeClass("d-none");
+        $("#logo_area").removeClass("d-none");
+        $('#clinic_logo')[0].dropzone.removeAllFiles();  
+        if(result[0]['logo']){
+          $("#logo_dropzone").addClass("d-none");
+          $("#logo_image").removeClass("d-none");
+          $("#logo_image_src").attr("src", "localhost:8080"+result[0]['logo'])
+          
+        }else{
+          $("#logo_dropzone").removeClass("d-none");
+          $("#logo_image").addClass("d-none");
+        }
+        
         $("#clinic-edit-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -104,65 +163,63 @@ $(document).ready(function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
+    Swal.fire({
       text: "You won't be able to revert this!",
-      type: "warning",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/delete", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+        confirmButton: "btn btn-danger",
+        cancelButton: "btn btn-primary"
+      }
+    }).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/delete", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               clinictable.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error('Action Failed');
           }
         });
-			}
-		});
+      }
+    });
+
+    
   });
   $(document).on("click",".clinicaddbtn",function(){
-    $("#clinic-add-modal").modal("show");
+      $("#chosen_clinic").val("");
+      $("#eclinic_name").val("");
+      $("#eclinic_acronym").val("");
+      $("#eclinic_address1").val("");
+      $("#eclinic_address2").val("");
+      $("#eclinic_city").val("");
+      $("#eclinic_state").val("");
+      $("#eclinic_zip").val("");
+      $("#eclinic_country").val("");
+      $("#eclinic_tel").val("");
+      $("#eclinic_fax").val("");
+      $("#eclinic_email").val("");
+      $("#eclinic_web").val("");
+      $("#eclinic_portal").val("");
+      $("#eclinic_pos").val("");
+      $("#eclinic_status").val("");
+      $("#eclinic_c_name").val("");
+      $("#eclinic_c_email").val("");
+      $("#eclinic_c_tel").val("");
+      $("#eclinic_c_cel").val("");
+      $("#eclinic_c_ex").val("");
+      $("#eclinic_c_web").val("");
+      $("#portalcheck").prop("checked", false);
+      $("#contactcheck").prop("checked", false);
+      $("#contact_area").addClass("d-none");
+      $("#logo_area").addClass("d-none");
+      $("#clinic-edit-modal").modal("show");
   });
-  $("#clinic-addbtn").click(function (e) {
-    let entry = {
-      name: document.getElementById('clinic_name').value,
-      acronym: document.getElementById('clinic_acronym').value,
-      address1: document.getElementById('clinic_address1').value,
-      address2: document.getElementById('clinic_address2').value,
-      city: document.getElementById('clinic_city').value,
-      state: document.getElementById('clinic_state').value,
-      zip: document.getElementById('clinic_zip').value,
-      country: document.getElementById('clinic_country').value,
-      tel: document.getElementById('clinic_tel').value,
-      fax: document.getElementById('clinic_fax').value,
-      email: document.getElementById('clinic_email').value,
-      web: document.getElementById('clinic_web').value,
-      portal: document.getElementById('clinic_portal').value,
-      pos: document.getElementById('clinic_pos').value,
-      status: document.getElementById('clinic_status').value
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/add", (xhr, err) => {
-        if (!err) {
-          return $.growl.notice({
-            message: "clinic is added successfully"
-          });
-        } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
-        }
-    });
-    setTimeout( function () {
-      clinictable.ajax.reload();
-    }, 1000 );
-  });
+  
   $("#clinic-editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_clinic').value,
@@ -187,18 +244,42 @@ $(document).ready(function () {
       ccel: document.getElementById('eclinic_c_cel').value,
       cex: document.getElementById('eclinic_c_ex').value,
       cweb: document.getElementById('eclinic_c_web').value,
+      
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
-        if (!err) {
-          return $.growl.notice({
-            message: "clinic is updated successfully"
-          });
-        } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
-        }
-    });
+
+    if($("chosen_clinic").val==""){
+      
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/add", (xhr, err) => {
+            if (!err) {
+              return toastr.success('Action Successfully');
+            } else {
+              return toastr.error('Action Failed');
+            }
+        });
+    }else{
+      var formData = new FormData();
+      var clinic_logo_file = $('#clinic_logo')[0].dropzone.getAcceptedFiles();
+      if (clinic_logo_file.length > 0) {
+        formData.append("logo", clinic_logo_file[0]);
+        formData.append("id", document.getElementById('chosen_clinic').value);
+        formData.append("filename", $(".dz-filename span").html());
+        sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "clinic/uploadlogo", (xhr, err) => {
+          if (!err) {
+            var filename = JSON.parse(xhr.responseText)['data'];
+            var f = filename.split("\\");
+            entry.logo = f[f.length-1];
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
+              if (!err) {
+                return toastr.success('Clinic is updated successfully');
+              } else {
+                return toastr.error('Action Failed');
+              }
+            });
+          }
+        });
+      }
+    }
+    
     setTimeout( function () {
       clinictable.ajax.reload();
     }, 1000 );
@@ -214,16 +295,13 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/updatewebcheck", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action successfully"
-        });
+        return toastr.success('Action successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
+
   $(document).on("click","#portalcheck",function(){
     if($(this).prop("checked"))
       var tmpcheck = 1
@@ -235,13 +313,9 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/updateportalcheck", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action successfully"
-        });
+        return toastr.success('Action successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -256,13 +330,9 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/updatecontactcheck", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action successfully"
-        });
+        return toastr.success('Action successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -277,13 +347,9 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/updateapcheck", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Action successfully"
-        });
+        return toastr.success('Action successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -305,15 +371,11 @@ $(document).ready(function () {
               $("#clinicmanagers").val(result[0]['manager']).trigger('change');
             $("#clinic-manager-modal").modal("show");
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error('Action Failed');
           }
         });
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -326,17 +388,11 @@ $(document).ready(function () {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['message'];
         if(result == "OK")
-          return $.growl.notice({
-            message: "Action Successfully"
-          });
+          return toastr.error('Action Successfully');
         else
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });

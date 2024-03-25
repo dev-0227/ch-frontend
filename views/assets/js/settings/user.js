@@ -356,7 +356,7 @@ $(document).ready(function () {
     makeQRCode();
   });
 
-  $(document).on("click","#card_pdf",async function(e){
+  $(document).on("click","#vcard_pdf",async function(e){
     var pdf = new jsPDF('p', 'pt', 'letter');
     pdf.canvas.height = 72 * 6;
     pdf.canvas.width = 72 * 4;
@@ -374,16 +374,22 @@ $(document).ready(function () {
       pdf.addImage(img, 'PNG', 20, 240, 290, 182);
     });
 
-    pdf.save('card.pdf');
+    pdf.save($('.rccs__name').html()+' VCard.pdf');
+  });
 
-    // var pdf = new jsPDF('p', 'pt', 'letter');
-    // pdf.canvas.height = 72 * 6;
-    // pdf.canvas.width = 72 * 4;
-    
-    // var html = $(".rccs__name").html();
-    // pdf.fromHTML(html);
+  $(document).on("click","#qr_pdf",async function(e){
+    var pdf = new jsPDF('p', 'pt', 'letter');
+    pdf.canvas.height = 72 * 6;
+    pdf.canvas.width = 72 * 4;
 
-    // pdf.save('card.pdf');
+    $(".rccs__card").removeClass('rccs__card--flipped')
+    const front=document.querySelector(".rccs__qr_code")
+    await html2canvas(front,{allowTaint:true}).then(canvas => {
+      var img = canvas.toDataURL("image/png");
+      pdf.addImage(img, 'SVG', 20, 40, 100, 100);
+    });
+    pdf.save($('.rccs__name').html()+' QR.pdf');
+
   });
 
   
