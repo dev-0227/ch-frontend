@@ -145,7 +145,7 @@ $(document).ready(function () {
         if(result[0]['logo']){
           $("#logo_dropzone").addClass("d-none");
           $("#logo_image").removeClass("d-none");
-          $("#logo_image_src").attr("src", "localhost:8080"+result[0]['logo'])
+          $("#logo_image_src").attr("src", "/uploads/logos/"+result[0]['logo'])
           
         }else{
           $("#logo_dropzone").removeClass("d-none");
