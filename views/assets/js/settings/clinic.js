@@ -285,7 +285,7 @@ $(document).ready(function () {
         sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "clinic/uploadlogo", (xhr, err) => {
           var filename = JSON.parse(xhr.responseText)['data'];
           if (!err && filename) {
-            var f = filename.split("\\");
+            var f = filename.split("/");
             entry.logo = f[f.length-1]+','+$("#logo_width").val()+','+$("#logo_height").val();
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
               if (!err) {
