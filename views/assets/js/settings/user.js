@@ -280,12 +280,12 @@ $(document).ready(function () {
     value += "\n";
     // value += "ORG:"+$(".rccs_clinic_name").html();
     // value += "\n";
-    if($("#rccs_clinic_address").html().trim()!=""){
-      value += "ADR:;;"+$("#rccs_clinic_address").html();
+    if($(".rccs_clinic_address").html().trim()!=""){
+      value += "ADR:;;"+$(".rccs_clinic_address").html();
       value += "\n";
     }
-    if($("#rccs_clinic_phone").html().trim()!=""){
-      value += "TEL;WORK:"+$("#rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
+    if($(".rccs_clinic_phone").html().trim()!=""){
+      value += "TEL;WORK:"+$(".rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
       value += "\n";
     }
     if($(".rccs__email").html().trim()!=""){
@@ -299,8 +299,8 @@ $(document).ready(function () {
         value += "\n";
       }
     }
-    if($("#rccs_clinic_url").html().trim()!=""){
-      value += "URL:"+$("#rccs_clinic_url").html();
+    if($(".rccs_clinic_url").html().trim()!=""){
+      value += "URL:"+$(".rccs_clinic_url").html();
       value += "\n";
     }
     value += "END:VCARD";
@@ -370,44 +370,44 @@ $(document).ready(function () {
       }
       $(".rccs__issuer").html(clinic_logo);
       $(".rccs_clinic_name").html(clinics[index]['name']);
-      $("#rccs_clinic_address").html(clinics[index]['address1']);
+      $(".rccs_clinic_address").html(clinics[index]['address1']);
       if(clinics[index]['email'].trim()==""){
-        $("#rccs_clinic_email").parent().addClass("d-none");
-        $("#rccs_clinic_email").html("");
+        $(".rccs_clinic_email").parent().addClass("d-none");
+        $(".rccs_clinic_email").html("");
       }else{
-        $("#rccs_clinic_email").parent().removeClass("d-none");
-        $("#rccs_clinic_email").html(clinics[index]['email']);
+        $(".rccs_clinic_email").parent().removeClass("d-none");
+        $(".rccs_clinic_email").html(clinics[index]['email']);
       }
 
       if(clinics[index]['cel'].trim()==""){
-        $("#rccs_clinic_fax").parent().addClass("d-none");
-        $("#rccs_clinic_fax").html("");
+        $(".rccs_clinic_fax").parent().addClass("d-none");
+        $(".rccs_clinic_fax").html("");
       }else{
-        $("#rccs_clinic_fax").parent().removeClass("d-none");
-        $("#rccs_clinic_fax").html(clinics[index]['cel']);
+        $(".rccs_clinic_fax").parent().removeClass("d-none");
+        $(".rccs_clinic_fax").html(clinics[index]['cel']);
       }
 
       if(clinics[index]['web'].trim()==""){
-        $("#rccs_clinic_url").parent().addClass("d-none");
-        $("#rccs_clinic_url").html("");
+        $(".rccs_clinic_url").parent().addClass("d-none");
+        $(".rccs_clinic_url").html("");
       }else{
-        $("#rccs_clinic_url").parent().removeClass("d-none");
-        $("#rccs_clinic_url").html(clinics[index]['web']);
+        $(".rccs_clinic_url").parent().removeClass("d-none");
+        $(".rccs_clinic_url").html(clinics[index]['web']);
       }
 
       if(clinics[index]['phone'].trim()==""){
-        $("#rccs_clinic_phone").parent().addClass("d-none");
-        $("#rccs_clinic_phone").html("");
+        $(".rccs_clinic_phone").parent().addClass("d-none");
+        $(".rccs_clinic_phone").html("");
       }else{
-        $("#rccs_clinic_phone").parent().removeClass("d-none");
-        $("#rccs_clinic_phone").html(clinics[index]['phone']);
+        $(".rccs_clinic_phone").parent().removeClass("d-none");
+        $(".rccs_clinic_phone").html(clinics[index]['phone']);
       }
     }else{
       $(".rccs__issuer").html('');
       $(".rccs_clinic_name").html("");
-      $("#rccs_clinic_address").html("");
-      $("#rccs_clinic_url").html("");
-      $("#rccs_clinic_phone").html("");
+      $(".rccs_clinic_address").html("");
+      $(".rccs_clinic_url").html("");
+      $(".rccs_clinic_phone").html("");
       $(".rccs__expiry__valid").addClass("d-none");
       $(".rccs__expiry__value").addClass("d-none");
     }
