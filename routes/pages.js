@@ -7,12 +7,6 @@ router.get("/dash", (req, res, next) => {
         pageKey: "../pages/dash"
     });
 });
-router.get("/qrcode", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "QR Code",
-        pageKey: "../pages/qrcode"
-    });
-});
 
 router.get("/profile", (req, res, next) => {
     res.render("layout/mainblank", {
@@ -20,8 +14,6 @@ router.get("/profile", (req, res, next) => {
         pageKey: "../pages/profile"
     });
 });
-
-
 
 
 router.get("/invoice", (req, res, next) => {

@@ -99,4 +99,11 @@ router.get("/diagnosticreport", (req, res, next) => {
     });
 });
 
+router.get("/qrcode", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "QR Code",
+        pageKey: "../settings/qrcode"
+    });
+});
+
 module.exports = router;
