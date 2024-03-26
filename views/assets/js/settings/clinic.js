@@ -304,6 +304,16 @@ $(document).ready(function () {
             });
           }
         });
+      }else{
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
+          if (!err) {
+            $("#clinic-edit-modal").modal("hide");
+            return toastr.success('Clinic is updated successfully');
+            
+          } else {
+            return toastr.error('Action Failed');
+          }
+        });
       }
     }
     
