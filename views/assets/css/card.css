@@ -123,14 +123,14 @@
       font-size: 11px;
       left: 10%;
       position: absolute;
-      bottom: 15%; }
+      bottom: 24%; }
     .rccs__email {
       clear: both;
       font-family: "Consolas", "Courier", monospace;
       font-size: 11px;
       left: 10%;
       position: absolute;
-      bottom: 7%; }
+      bottom: 15%; }
       .rccs__name {
       top: 10%;
       font-family: "Consolas", "Courier", monospace;
@@ -144,28 +144,19 @@
       text-transform: uppercase;
       width: 60%; }
     .rccs__expiry {
-      bottom: 15%;
+      bottom: 10%;
       font-size: 0;
       line-height: 1;
       position: absolute;
       left: 15%; }
       .rccs__expiry > * {
         vertical-align: middle; }
-      .rccs_clinic_name {
+      .rccs__expiry_sub_item {
         font-size: 11px;
-        margin-bottom: 3px; }
-      .rccs_clinic_address {
-        font-size: 11px;
-        margin-bottom: 6px; }
-      .rccs__expiry__more {
-        font-size: 11px;
-        margin-bottom: 3px; }
-      .rccs__expiry__valid {
-        font-size: 11px;
-        margin-bottom: 3px; }
-      .rccs__expiry__value {
+        margin-bottom: 5px; }
+      .rccs_clinic_visit {
         font-size: 11px; }
-    .rccs__number, .rccs__name, .rccs__expiry, .rccs__cvc {
+    .rccs__number, .rccs__name, .rccs_clinic_name {
       opacity: 0.5;
       transition: opacity 0.3s; }
     .rccs__chip {
@@ -199,14 +190,14 @@
       position: absolute;
       top: 35%;
       width: 75%; }
-    .rccs__cvc {
+    .rccs_clinic_name {
       color: #222;
       font-family: "Consolas", "Courier", monospace;
-      font-size: 20px;
-      left: 35%;
+      font-size: 16px;
+      left: 15%;
       line-height: 1;
       position: absolute;
-      top: 22%; }
+      top: 27%; }
     .rccs__qr_code {
       position: absolute;
       right: 10%;

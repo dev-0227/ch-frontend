@@ -1,5 +1,6 @@
 var conector = "";
 var website = "";
+
 $(document).ready(async function () {
   "use strict";
   
@@ -12,9 +13,7 @@ $(document).ready(async function () {
       website = result['web'];
       conector = window.location.origin+"/connection?t="+btoa(unescape(encodeURIComponent(localStorage.getItem('chosen_clinic'))))+"&n="+btoa(unescape(encodeURIComponent(result['clinic'])));
     } else {
-      return $.growl.error({
-        message: "Action Failed"
-      });
+      return toastr.error("Action Failed");
     }
   });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getqrcodetype", (xhr, err) => {
