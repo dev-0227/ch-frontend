@@ -91,12 +91,6 @@ $(document).ready(function () {
         data += '<option value="'+result[i].id+'">'+result[i].name+'</option>';
         clinics[result[i].id] = result[i];
       }
-
-      $(".rccs_clinic_name").html(clinics[index]['name']);
-      $(".rccs_clinic_address").html(clinics[index]['address1']);
-      $("#rccs_clinic_url").html(clinics[index]['web']);
-      $("#rccs_clinic_phone").html(clinics[index]['phone']);
-      $(".clinic_list").html(data);
     }
   });
 
@@ -166,10 +160,6 @@ $(document).ready(function () {
     }
   });
 
-  
-
-  
-
   $(document).on("click","#add_btn",function(){
     $("#chosen_user").val('');
     $("#efname").val('');
@@ -182,9 +172,12 @@ $(document).ready(function () {
     $("#ezip").val('');
     $("#etype").val('');
     $("#estatus").val('');
-    $(".rccs__name").html($("#efname").val() +" "+$("#elname").val());
-    $("#rccs_phone_number").html($("#ephone").val());
-    $(".rccs__email").html($("#eemail").val());
+    $(".rccs__name").html('');
+    $("#rccs_phone_number").html('');
+    $(".rccs__number").addClass('d-none');
+    $(".rccs__email").html('');
+    $("#eclinic").html('');
+    vcard_clinic_fill(-1);
     makeQRCode();
     $("#edit_user_modal").modal("show");
   });
@@ -228,21 +221,18 @@ $(document).ready(function () {
         $(".rccs__name").html($("#efname").val() +" "+$("#elname").val());
         var personal_phone_number = $("#ephone").val();
         if($("#eext").val().trim() != "")personal_phone_number += " ("+$("#eext").val()+")"
-        $("#rccs_phone_number").html(personal_phone_number);
-        
-        $(".rccs__email").html($("#eemail").val());
-        if(clinics[index]){
-          $(".rccs_clinic_name").html(clinics[index]['name']);
-          $(".rccs_clinic_address").html(clinics[index]['address1']);
-          $("#rccs_clinic_url").html(clinics[index]['web']);
-          $("#rccs_clinic_phone").html(clinics[index]['phone']);
+        if(personal_phone_number==""){
+          $(".rccs__number").addClass('d-none');
         }else{
-          $(".rccs_clinic_name").html("");
-          $(".rccs_clinic_address").html("");
-          $("#rccs_clinic_url").html("");
-          $("#rccs_clinic_phone").html("");
+          $(".rccs__number").removeClass('d-none');
+          $("#rccs_phone_number").html(personal_phone_number);
         }
         
+        
+        $(".rccs__email").html($("#eemail").val());
+
+        
+        vcard_clinic_fill(index);
         makeQRCode();
         $("#edit_user_modal").modal("show");
       } else {
@@ -333,7 +323,12 @@ $(document).ready(function () {
   $(document).on("keyup",".card-phone",function(e){
     var personal_phone_number = $("#ephone").val();
     if($("#eext").val().trim() !="")personal_phone_number += " ("+$("#eext").val()+")"
-    $("#rccs_phone_number").html(personal_phone_number);
+    if(personal_phone_number==""){
+      $(".rccs__number").addClass('d-none');
+    }else{
+      $(".rccs__number").removeClass('d-none');
+      $("#rccs_phone_number").html(personal_phone_number);
+    }
     makeQRCode();
   });
   
@@ -348,11 +343,62 @@ $(document).ready(function () {
     makeQRCode();
   });
 
+  function vcard_clinic_fill(index){
+    if(clinics[index]){
+      var clinic_logo = ""
+      if(clinics[index]['logo']){
+        var logo_info = clinics[index]['logo'].split(",");
+        var w = logo_info[1]?logo_info[1]:"0";
+        var height = "50";
+        if(parseInt(w)>300){
+          height = "30";
+        }
+        clinic_logo = '<img height="'+height+'" src="/uploads/logos/'+logo_info[0]+'" />';
+      }else{
+        var acronym = clinics[index]['acronym'];
+        if(!clinics[index]['acronym']){
+          var names = clinics[index]['name'].split(" ");
+          var acronym = "";
+          for(var i=0; i<names.length; i++){
+            acronym += names[i].substr(0,1);
+          }
+          if(names.length == 1){
+            acronym = clinics[index]['name'].substr(0, 4);
+          }
+        }
+        clinic_logo = '<div class="fs-2hx fw-bold text-primary">'+acronym+'</div>';
+      }
+      $(".rccs__issuer").html(clinic_logo);
+      $(".rccs_clinic_name").html(clinics[index]['name']);
+      $(".rccs_clinic_address").html(clinics[index]['address1']);
+      if(clinics[index]['web'].trim()==""){
+        $(".rccs__expiry__valid").addClass("d-none");
+        $("#rccs_clinic_url").html("");
+      }else{
+        $(".rccs__expiry__valid").removeClass("d-none");
+        $("#rccs_clinic_url").html(clinics[index]['web']);
+      }
+
+      if(clinics[index]['phone'].trim()==""){
+        $(".rccs__expiry__value").addClass("d-none");
+        $("#rccs_clinic_phone").html("");
+      }else{
+        $(".rccs__expiry__value").removeClass("d-none");
+        $("#rccs_clinic_phone").html(clinics[index]['phone']);
+      }
+    }else{
+      $(".rccs__issuer").html('');
+      $(".rccs_clinic_name").html("");
+      $(".rccs_clinic_address").html("");
+      $("#rccs_clinic_url").html("");
+      $("#rccs_clinic_phone").html("");
+      $(".rccs__expiry__valid").addClass("d-none");
+      $(".rccs__expiry__value").addClass("d-none");
+    }
+  }
+
   $(document).on("click",".clinic_list",function(){
-    $(".rccs_clinic_name").html(clinics[$(this).val()]['name']);
-    $(".rccs_clinic_address").html(clinics[$(this).val()]['address1']);
-    $("#rccs_clinic_url").html(clinics[$(this).val()]['web']);
-    $("#rccs_clinic_phone").html(clinics[$(this).val()]['phone']);
+    vcard_clinic_fill($(this).val());
     makeQRCode();
   });
 
@@ -391,8 +437,6 @@ $(document).ready(function () {
     pdf.save($('.rccs__name').html()+' QR.pdf');
 
   });
-
-  
 
   $("#edit_btn").click(function (e) {
     if($("#efname").val() == ""){

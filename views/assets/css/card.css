@@ -30,9 +30,10 @@
         .rccs__card--back .rccs__issuer {
           background-position: top center;
           top: 15%;
-          left: 40%;
-          right: auto;
+          left: 50%;
+          width: 90%;
           bottom: auto;
+          text-align: center;
           transform: translateX(-50%); }
         .rccs_card_back .rccs__issuer {
           background-position: top center;
@@ -72,8 +73,8 @@
         visibility: visible; }
       .rccs__card--dankort .rccs__card__background {
         background: linear-gradient(25deg, #fff, #eee); }
-      .rccs__card--dankort .rccs__issuer {
-        background-image: url("/assets/images/logos/bce.svg"); }
+      /* .rccs__card--dankort .rccs__issuer {
+        background-image: url("/assets/images/logos/bce.svg"); } */
       .rccs__card--dinersclub > div {
         color: #555; }
       .rccs__card--dinersclub .rccs__card__background {
@@ -176,7 +177,7 @@
       top: 50%;
       width: 41.42857px; }
     .rccs__issuer {
-      background-position: top left;
+      background-position: top center;
       background-repeat: no-repeat;
       background-size: contain;
       height: 23%;

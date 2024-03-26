@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 
 // Static Pages
 app.use('/assets', express.static(path.join(__dirname, 'views/assets')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', login);
 app.use('/pages', pages);
 app.use('/settings', settings);

@@ -146,11 +146,10 @@ $(document).ready(function () {
           var logo_info = result[0]['logo'].split(",");
           $("#logo_dropzone").addClass("d-none");
           $("#logo_image").removeClass("d-none");
-          // $("#logo_image_src").attr("src", "https://ch.precisionq.com/uploads/logos/1711379755487.svg");
-          $("#logo_image_src").attr("src", "/uploads/logos/"+logo_info[0])
+          $("#logo_image_src").attr("src", "/uploads/logos/"+logo_info[0]);
           $("#logo_width").val(logo_info[1]?logo_info[1]:"120");
           $("#logo_height").val(logo_info[2]?logo_info[2]:"120");
-          $("#logo_image_src").attr("width", parseInt($("#logo_width").val())>300?"300":$("#logo_width").val());
+          $("#logo_image_src").attr("width", parseInt($("#logo_width").val())>300?"300":"120");
           
         }else{
           $("#logo_dropzone").removeClass("d-none");
@@ -286,7 +285,14 @@ $(document).ready(function () {
           var filename = JSON.parse(xhr.responseText)['data'];
           if (!err && filename) {
             var f = filename.split("/");
-            entry.logo = f[f.length-1]+','+$("#logo_width").val()+','+$("#logo_height").val();
+            var fname = ""
+            if(f.length>1){
+              fname = f[f.length-1];
+            }else{
+              f = filename.split("\\");
+              fname = f[f.length-1];
+            }
+            entry.logo = fname+','+$("#logo_width").val()+','+$("#logo_height").val();
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/update", (xhr, err) => {
               if (!err) {
                 $("#clinic-edit-modal").modal("hide");
