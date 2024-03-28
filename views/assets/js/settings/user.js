@@ -346,13 +346,13 @@ $(document).ready(function () {
     if(clinics[index]){
       var clinic_logo = ""
       var logo_x = "5";
-      var logo_y = "5";
+      var logo_y = "35";
       if(clinics[index]['logo']){
         var logo_info = clinics[index]['logo'].split(",");
         var logo_size = logo_info[3]?logo_info[3]:"20";
         clinic_logo = '<img height="'+logo_size+'" src="/uploads/logos/'+logo_info[0]+'" />';
         logo_x = logo_info[4]?logo_info[4]:"5";
-        logo_y = logo_info[5]?logo_info[5]:"35";
+        logo_y = (logo_info[5] && logo_info[5]!="")?logo_info[5]:"35";
       }else{
         var acronym = clinics[index]['acronym'];
         if(!clinics[index]['acronym']){
