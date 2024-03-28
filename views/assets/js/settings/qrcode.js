@@ -102,26 +102,35 @@ $(document).ready(async function () {
       
       draw_logo();
       set_background();
+      
     } else {
       return toastr.error("Action Failed");
     }
+  });
+
+  var qrcode = new QRCode(document.getElementById("qr_code"), {
+    width : 256,
+    height : 256,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.L
   });
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getqrcodetype", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['result'];
       if(result.length > 0){
         if(result[0]['age'] == 1)
-          new QRCode(document.getElementById("qr_code"), conector);
+          qrcode.makeCode(conector);
         else if(website == "" || website == null)
-          new QRCode(document.getElementById("qr_code"), conector);
+          qrcode.makeCode(conector);
         else
-          new QRCode(document.getElementById("qr_code"), website);
+          qrcode.makeCode(website);
       }
       else{
         if(website == "" || website == null)
-          new QRCode(document.getElementById("qr_code"), conector);
+          qrcode.makeCode(conector);
         else
-          new QRCode(document.getElementById("qr_code"), website);
+          qrcode.makeCode(website);
       }
     } else {
       return toastr.error("Action Failed");
