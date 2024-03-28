@@ -106,7 +106,7 @@ $(document).ready(async function () {
       return toastr.error("Action Failed");
     }
   });
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getqrcodetype", (xhr, err) => {
+  await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getqrcodetype", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['result'];
       if(result.length > 0){
