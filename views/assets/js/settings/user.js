@@ -274,23 +274,27 @@ $(document).ready(function () {
     value += "\n";
     // value += "VERSION:3.0";
     // value += "\n";
+    var value1= value;
     value += "N:"+$(".rccs__name").html()+" - "+$(".rccs_clinic_name").html();
     value += "\n";
     // value += "ORG:"+$(".rccs_clinic_name").html();
     // value += "\n";
+    
     if($(".rccs_clinic_address").html().trim()!=""){
       value += "ADR:;;"+$(".rccs_clinic_address").html();
       value += "\n";
     }
-    if($(".rccs_clinic_phone").html()!=""){
+    
+    if($(".rccs_clinic_phone").html().trim()!=""){
       value += "TEL;WORK:"+$(".rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
       value += "\n";
     }
+    
     if($("#rccs__email").html().trim()!=""){
       value += "EMAIL:"+$("#rccs__email").html();
       value += "\n";
     }
-    var value1= value;
+    
     if($("#qr_phone").prop("checked")){
       if($("#rccs_phone_number").html().trim()!=""){
         value += "TEL;CELL:"+$("#rccs_phone_number").html().replaceAll("-", "").replaceAll(" ", "");
