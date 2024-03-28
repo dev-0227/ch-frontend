@@ -120,20 +120,20 @@ $(document).ready(async function () {
     // value += "\n";
     value += "ORG:"+clinic_info['name'];
     value += "\n";
-    if(clinic_info['address1']!=""){
+    if(clinic_info['address1'] && clinic_info['address1']!=""){
       value += "ADR:;;"+clinic_info['address1'];
       value += "\n";
     }
-    if(clinic_info['phone']!=""){
+    if(clinic_info['phone'] && clinic_info['phone']!=""){
       value += "TEL;WORK:"+clinic_info['phone'].replaceAll("-", "").replaceAll(" ", "");
       value += "\n";
     }
-    if(clinic_info['email']!=""){
+    if(clinic_info['email'] && clinic_info['email']!=""){
       value += "EMAIL:"+clinic_info['email'];
       value += "\n";
     }
     var value1= value;
-    if(clinic_info['web']!=""){
+    if(clinic_info['web'] && clinic_info['web']!=""){
       value += "URL:"+clinic_info['web'];
       value += "\n";
     }

@@ -282,7 +282,7 @@ $(document).ready(function () {
       value += "ADR:;;"+$(".rccs_clinic_address").html();
       value += "\n";
     }
-    if($(".rccs_clinic_phone").html().trim()!=""){
+    if($(".rccs_clinic_phone").html()!=""){
       value += "TEL;WORK:"+$(".rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
       value += "\n";
     }
@@ -487,7 +487,6 @@ $(document).ready(function () {
   }
 
   function set_layout(layout){
-    console.log(layout);
     switch(layout){
       case "0":
         $(".rccs__name").css("top", "10%");
