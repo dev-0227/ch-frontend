@@ -230,8 +230,7 @@ $(document).ready(function () {
         
         
         $(".rccs__email").html($("#eemail").val());
-
-        
+ 
         vcard_clinic_fill(index);
         makeQRCode();
         $("#edit_user_modal").modal("show");
@@ -346,14 +345,14 @@ $(document).ready(function () {
   function vcard_clinic_fill(index){
     if(clinics[index]){
       var clinic_logo = ""
+      var logo_x = "5";
+      var logo_y = "5";
       if(clinics[index]['logo']){
         var logo_info = clinics[index]['logo'].split(",");
-        var w = logo_info[0]?logo_info[0]:"0";
-        var height = "50";
-        if(parseInt(w)>300){
-          height = "30";
-        }
-        clinic_logo = '<img height="'+height+'" src="/uploads/logos/'+logo_info[0]+'" />';
+        var logo_size = logo_info[3]?logo_info[3]:"20";
+        clinic_logo = '<img height="'+logo_size+'" src="/uploads/logos/'+logo_info[0]+'" />';
+        logo_x = logo_info[4]?logo_info[4]:"5";
+        logo_y = logo_info[5]?logo_info[5]:"35";
       }else{
         var acronym = clinics[index]['acronym'];
         if(!clinics[index]['acronym']){
@@ -368,7 +367,12 @@ $(document).ready(function () {
         }
         clinic_logo = '<div class="fs-2hx fw-bold text-primary">'+acronym+'</div>';
       }
+      var bg_color = clinics[index]['color']?clinics[index]['color']:"#eeeeee";
+      var bg_pattern = clinics[index]['pattern']?clinics[index]['pattern']:"";
       $(".rccs__issuer").html(clinic_logo);
+      $(".rccs__issuer").css("left", logo_x+'%');
+      $(".rccs__issuer").css("top", logo_y+'%');
+      set_background(bg_color, bg_pattern);
       $(".rccs_clinic_name").html(clinics[index]['name']);
       $(".rccs_clinic_address").html(clinics[index]['address1']);
       if(clinics[index]['email'].trim()==""){
@@ -411,6 +415,71 @@ $(document).ready(function () {
       $(".rccs__expiry__valid").addClass("d-none");
       $(".rccs__expiry__value").addClass("d-none");
     }
+  }
+
+  function hexToRgb(hex) {
+    const normal = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+    if (normal) return normal.slice(1).map(e => parseInt(e, 16));
+    const shorthand = hex.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i);
+    if (shorthand) return shorthand.slice(1).map(e => 0x11 * parseInt(e, 16));
+    return null;
+  }
+
+  function alterColor(rgb, type, percent) {
+    var red = $.trim(rgb[0]);
+    var green = $.trim(rgb[1]);
+    var blue = $.trim(rgb[2]);
+    if (red == 0 && green == 0 && blue == 0) {
+      red = 100;
+      green = 100;
+      blue = 100;
+    }
+    if (type === "darken") {
+      red = parseInt(red * (100 - percent) / 100, 10);
+      green = parseInt(green * (100 - percent) / 100, 10);
+      blue = parseInt(blue * (100 - percent) / 100, 10);
+    } else {
+      red = parseInt(red * (100 + percent) / 100, 10);
+      green = parseInt(green * (100 + percent) / 100, 10);
+      blue = parseInt(blue * (100 + percent) / 100, 10);
+    }
+    rgb = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+    return rgb;
+  }
+
+  function ContrastColor(rgb)
+  {
+      var d = 0;
+      var luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2])/255;
+      if (luminance > 0.5)
+         d = "#000000"; // bright colors - black font
+      else
+         d = "#FFFFFF"; // dark colors - white font
+      return  d;
+  }
+
+  function set_background(color, pattern){
+    var rgb = hexToRgb(color);
+    var darkerColor = alterColor(rgb, 'darken', 30);
+    var lighterColor = alterColor(rgb, 'lighten', 50);
+    var fontColor = ContrastColor(rgb);
+    
+    if(pattern==""){
+      $(".rccs__card__background").attr("style", '');
+      $(".rccs__card__background").css("background-image", "linear-gradient(25deg, "+color+", "+lighterColor+")");
+      $(".rccs__card__background").css("background-color", color);
+    }else{
+      var pattern = pattern.replaceAll("#ffffff", color);
+      pattern = pattern.replaceAll("#cccccc", darkerColor);
+      fontColor = "#FFFFFF";
+      $(".rccs__card__background").attr("style", '');
+      $(".rccs__card__background").attr("style", pattern);
+      $(".rccs__card__background").css("background-color", color);
+    }
+    
+    $(".rccs__name").css("color", fontColor);
+    $(".rccs__number").css("color", fontColor);
+    $(".rccs__email").css("color", fontColor);
   }
 
   $(document).on("click",".clinic_list",function(){

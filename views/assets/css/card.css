@@ -142,7 +142,7 @@
       text-align: left;
       text-overflow: ellipsis;
       text-transform: uppercase;
-      width: 60%; }
+      width: 100%; }
     .rccs__expiry {
       bottom: 10%;
       font-size: 0;
@@ -199,9 +199,11 @@
       position: absolute;
       top: 27%; }
     .rccs__qr_code {
+      background-color: #FFFFFF;
+      padding: 8px;
       position: absolute;
       right: 10%;
-      top: 28%; }
+      top: 22%; }
     .rccs--filled {
       opacity: 0.8 !important; }
     .rccs--focused {

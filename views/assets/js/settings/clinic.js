@@ -3,7 +3,8 @@ $(document).ready(function () {
   var clinictable = $('#clinictable').DataTable({
     "ajax": {
         "url": serviceUrl + "clinic/",
-        "type": "GET"
+        "type": "GET",
+        "headers": { 'Authorization': localStorage.getItem('authToken') }
     },
     "columns": [
         { data: "name"},
@@ -86,9 +87,10 @@ $(document).ready(function () {
         if(parseInt(img.width)>min_width){
           var rate = parseInt(img.width)/parseInt(img.height);
           $(".dz-image img").css("height", min_width/rate+'px');
-          $("#logo_width").val(img.width);
-          $("#logo_height").val(img.height);
+          
         }
+        $("#logo_width").val(img.width);
+        $("#logo_height").val(img.height);
       };
       return img.src = fr.result;
     };

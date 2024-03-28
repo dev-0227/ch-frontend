@@ -8,6 +8,7 @@
     .bootstrap-tagsinput{
         width: 100%;
     }
+    
 </style>
 <!-- ROW-1 OPEN -->
 <div class="row">
@@ -19,15 +20,12 @@
             <div class="card-body p-6">
                 <div class="panel panel-primary">
                     <div class=" tab-menu-heading">
-                        <div class="tabs-menu1 ">
-                            <!-- Tabs -->
-                            <ul class="nav panel-tabs">
-                                <li ><a href="#gtab" class="active" data-toggle="tab">General</a></li>
-                                <li ><a href="#qtab" data-toggle="tab">Questions</a></li>
-                                <li><a href="#rtab" data-toggle="tab">Response Options</a></li>
-                                <li><a href="#mtab" data-toggle="tab">Modules</a></li>
-                            </ul>
-                        </div>
+                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                            <li class="nav-item"><a href="#gtab" class="nav-link active" data-bs-toggle="tab">General</a></li>
+                            <li class="nav-item"><a href="#qtab" class="nav-link" data-bs-toggle="tab">Questions</a></li>
+                            <li class="nav-item"><a href="#rtab" class="nav-link" data-bs-toggle="tab">Response Options</a></li>
+                            <li class="nav-item"><a href="#mtab" class="nav-link" data-bs-toggle="tab">Modules</a></li>
+                        </ul>
                     </div>
                     <div class="panel-body tabs-menu-body">
                         <div class="tab-content">
@@ -35,14 +33,16 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Global Description</label>
+                                            <label class="m-2 fs-4 text-gray-500 fw-bolder">Global Description</label>
                                             <textarea rows="5" class="form-control" id="gdesc" name="gdesc"></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <label>Specific Description</label>
+                                            <label class="m-2 fs-4 text-gray-500 fw-bolder">Specific Description</label>
                                             <textarea rows="5" class="form-control" id="sdesc" name="sdesc"></textarea>
                                         </div>
-                                        <button class="btn btn-primary updateconnectiondesc">Update</button>
+                                        <div class="text-end">
+                                            <button class="btn btn-primary updateconnectiondesc mt-2">Update</button>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="card">
@@ -175,9 +175,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="example-Modal3">Add Question</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -198,10 +198,10 @@
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="qaddbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="qaddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
 		</div>
 	</div>
 </div>
@@ -210,9 +210,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="example-Modal3">Edit Question</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -233,10 +233,10 @@
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal" id="qeditbtn">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="qeditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
 		</div>
 	</div>
 </div>
@@ -245,9 +245,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="example-Modal3">Add Response</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -268,10 +268,10 @@
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="reskeyaddbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="reskeyaddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
 		</div>
 	</div>
 </div>
@@ -280,9 +280,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="example-Modal3">Add Module</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -303,10 +303,10 @@
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="moduleaddbtn" data-dismiss="modal">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="moduleaddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
 		</div>
 	</div>
 </div>
@@ -315,9 +315,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="example-Modal3">Edit Module</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -338,10 +338,11 @@
                     </div>
                 </div>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal" id="moduleeditbtn">Done</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="moduleeditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+			
 		</div>
 	</div>
 </div>
