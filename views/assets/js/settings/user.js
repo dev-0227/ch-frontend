@@ -459,6 +459,7 @@ $(document).ready(function () {
   }
 
   function set_background(color, pattern){
+    if(color=="")return;
     var rgb = hexToRgb(color);
     var darkerColor = alterColor(rgb, 'darken', 30);
     var lighterColor = alterColor(rgb, 'lighten', 50);

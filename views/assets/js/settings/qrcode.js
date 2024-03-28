@@ -197,6 +197,7 @@ $(document).ready(async function () {
   function set_background(){
     var color = $("#selected_bg_color").val();
     var pattern = $("#selected_bg_pattern").val();
+    if(color=="")return;
     var rgb = hexToRgb(color);
     var darkerColor = alterColor(rgb, 'darken', 30);
     var lighterColor = alterColor(rgb, 'lighten', 50);
