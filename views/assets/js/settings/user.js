@@ -175,7 +175,7 @@ $(document).ready(function () {
     $(".rccs__name").html('');
     $("#rccs_phone_number").html('');
     $(".rccs__number").addClass('d-none');
-    $(".rccs__email").html('');
+    $("#rccs__email").html('');
     $("#eclinic").html('');
     vcard_clinic_fill(-1);
     makeQRCode();
@@ -229,8 +229,7 @@ $(document).ready(function () {
         }
         
         
-        $(".rccs__email").html($("#eemail").val());
- 
+        $("#rccs__email").html($("#eemail").val());
         vcard_clinic_fill(index);
         makeQRCode();
         $("#edit_user_modal").modal("show");
@@ -287,8 +286,8 @@ $(document).ready(function () {
       value += "TEL;WORK:"+$(".rccs_clinic_phone").html().replaceAll("-", "").replaceAll(" ", "");
       value += "\n";
     }
-    if($(".rccs__email").html().trim()!=""){
-      value += "EMAIL:"+$(".rccs__email").html();
+    if($("#rccs__email").html().trim()!=""){
+      value += "EMAIL:"+$("#rccs__email").html();
       value += "\n";
     }
     var value1= value;
@@ -331,10 +330,8 @@ $(document).ready(function () {
     makeQRCode();
   });
   
-
- 
   $(document).on("keyup",".card-email",function(e){
-    $(".rccs__email").html($(this).val());
+    $("#rccs__email").html($(this).val());
     makeQRCode();
   });
 
@@ -347,32 +344,32 @@ $(document).ready(function () {
       var clinic_logo = ""
       var logo_x = "5";
       var logo_y = "35";
-      if(clinics[index]['logo']){
-        var logo_info = clinics[index]['logo'].split(",");
-        var logo_size = logo_info[3]?logo_info[3]:"20";
+      
+      var logo_info = clinics[index]['logo'].split(",");
+      var logo_size = logo_info[3]?logo_info[3]:"20";
+      if(logo_info[0]!=""){         
         clinic_logo = '<img height="'+logo_size+'" src="/uploads/logos/'+logo_info[0]+'" />';
-        logo_x = logo_info[4]?logo_info[4]:"5";
-        logo_y = (logo_info[5] && logo_info[5]!="")?logo_info[5]:"35";
       }else{
-        var acronym = clinics[index]['acronym'];
-        if(!clinics[index]['acronym']){
-          var names = clinics[index]['name'].split(" ");
-          var acronym = "";
-          for(var i=0; i<names.length; i++){
-            acronym += names[i].substr(0,1);
-          }
-          if(names.length == 1){
-            acronym = clinics[index]['name'].substr(0, 4);
-          }
-        }
-        clinic_logo = '<div class="fs-2hx fw-bold text-primary">'+acronym+'</div>';
+        clinic_logo = '<div class="fw-bold logo-text">'+clinics[index]['name']+'</div>';
       }
+      logo_x = logo_info[4]?logo_info[4]:"5";
+      logo_y = (logo_info[5] && logo_info[5]!="")?logo_info[5]:"35";
+      
+      
       var bg_color = clinics[index]['color']?clinics[index]['color']:"#eeeeee";
       var bg_pattern = clinics[index]['pattern']?clinics[index]['pattern']:"";
       $(".rccs__issuer").html(clinic_logo);
+      var layout = clinics[index]['layout'].toString();
+      set_layout(layout);
+
+      if(logo_info[0]!=""){
+        $(".rccs__issuer img").attr("height", logo_size);
+      }else{
+        $(".logo-text").css("font-size", logo_size+'px');
+      }
       $(".rccs__issuer").css("left", logo_x+'%');
       $(".rccs__issuer").css("top", logo_y+'%');
-      set_background(bg_color, bg_pattern);
+      
       $(".rccs_clinic_name").html(clinics[index]['name']);
       $(".rccs_clinic_address").html(clinics[index]['address1']);
       if(clinics[index]['email'].trim()==""){
@@ -383,7 +380,7 @@ $(document).ready(function () {
         $(".rccs_clinic_email").html(clinics[index]['email']);
       }
 
-      if(clinics[index]['cel'].trim()==""){
+      if(clinics[index]['cel'].replace(/\s/g, '')==""){
         $(".rccs_clinic_fax").parent().addClass("d-none");
         $(".rccs_clinic_fax").html("");
       }else{
@@ -391,7 +388,7 @@ $(document).ready(function () {
         $(".rccs_clinic_fax").html(clinics[index]['cel']);
       }
 
-      if(clinics[index]['web'].trim()==""){
+      if(clinics[index]['web'].replace(/\s/g, '')==""){
         $(".rccs_clinic_url").parent().addClass("d-none");
         $(".rccs_clinic_url").html("");
       }else{
@@ -399,13 +396,15 @@ $(document).ready(function () {
         $(".rccs_clinic_url").html(clinics[index]['web']);
       }
 
-      if(clinics[index]['phone'].trim()==""){
+      if(clinics[index]['phone'].replace(/\s/g, '')==""){
         $(".rccs_clinic_phone").parent().addClass("d-none");
         $(".rccs_clinic_phone").html("");
       }else{
         $(".rccs_clinic_phone").parent().removeClass("d-none");
         $(".rccs_clinic_phone").html(clinics[index]['phone']);
       }
+      set_background(bg_color, bg_pattern);
+      
     }else{
       $(".rccs__issuer").html('');
       $(".rccs_clinic_name").html("");
@@ -414,6 +413,8 @@ $(document).ready(function () {
       $(".rccs_clinic_phone").html("");
       $(".rccs__expiry__valid").addClass("d-none");
       $(".rccs__expiry__value").addClass("d-none");
+      set_background("#eeeeee", "");
+      set_layout("0");
     }
   }
 
@@ -479,8 +480,77 @@ $(document).ready(function () {
     }
     
     $(".rccs__name").css("color", fontColor);
-    $(".rccs__number").css("color", fontColor);
-    $(".rccs__email").css("color", fontColor);
+    $(".rccs_front_expiry_sub_item").css("color", fontColor);
+    $(".rccs_clinic_name").css("color", fontColor);
+    $(".rccs__expiry_sub_item").css("color", fontColor);
+    $(".logo-text").css("color", fontColor);
+  }
+
+  function set_layout(layout){
+    console.log(layout);
+    switch(layout){
+      case "0":
+        $(".rccs__name").css("top", "10%");
+        $(".rccs__name").css("left", "10%");
+        $(".rccs__name").css("width", "80%");
+        $(".rccs__name").css("text-align", "left");
+        $(".rccs__issuer").css("left", "45%");
+        $(".rccs__issuer").css("top", "35%");
+        $(".rccs__issuer").css("width", "50%");
+        $(".logo-text").css("text-align", "left");
+        $(".rccs__qr_code").css("left", "6%");
+        $(".rccs__qr_code").css("top", "25%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "right");
+        $(".rccs_front_expiry").css("left", "10%");
+        $(".rccs_front_expiry").css("width", "80%");
+        break;
+      case "1":
+        $(".rccs__name").css("top", "10%");
+        $(".rccs__name").css("left", "10%");
+        $(".rccs__name").css("width", "80%");
+        $(".rccs__name").css("text-align", "left");
+        $(".rccs__issuer").css("left", "7%");
+        $(".rccs__issuer").css("top", "35%");
+        $(".rccs__issuer").css("width", "50%");
+        $(".logo-text").css("text-align", "right");
+        $(".rccs__qr_code").css("left", "60%");
+        $(".rccs__qr_code").css("top", "25%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "left");
+        $(".rccs_front_expiry").css("left", "10%");
+        $(".rccs_front_expiry").css("width", "80%");
+        break;
+      case "2":
+        $(".rccs__name").css("top", "35%");
+        $(".rccs__name").css("left", "45%");
+        $(".rccs__name").css("width", "50%");
+        $(".rccs__name").css("text-align", "right");
+        $(".rccs__issuer").css("left", "10%");
+        $(".rccs__issuer").css("top", "15%");
+        $(".rccs__issuer").css("width", "80%");
+        $(".logo-text").css("text-align", "left");
+        $(".rccs__qr_code").css("left", "10%");
+        $(".rccs__qr_code").css("top", "35%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "left");
+        $(".rccs_front_expiry").css("left", "45%");
+        $(".rccs_front_expiry").css("width", "50%");
+        break;
+      case "3":
+        $(".rccs__name").css("top", "35%");
+        $(".rccs__name").css("left", "7%");
+        $(".rccs__name").css("width", "50%");
+        $(".rccs__name").css("text-align", "left");
+        $(".rccs__issuer").css("left", "10%");
+        $(".rccs__issuer").css("top", "15%");
+        $(".rccs__issuer").css("width", "80%");
+        $(".logo-text").css("text-align", "right");
+        $(".rccs__qr_code").css("left", "60%");
+        $(".rccs__qr_code").css("top", "35%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "left");
+        $(".rccs_front_expiry").css("left", "10%");
+        $(".rccs_front_expiry").css("width", "50%");
+        break;
+    }
+
   }
 
   $(document).on("click",".clinic_list",function(){

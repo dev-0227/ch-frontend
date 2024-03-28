@@ -17,10 +17,11 @@ $(document).ready(async function () {
   });
 
   size_slider.noUiSlider.on("update", function (values, handle) {
-      $(".rccs__issuer img").attr("height", Math.round(values[handle]))
+      $("#logo_size").val(parseInt(Math.round(values[handle])))
       if (handle) {
-          $(".rccs__issuer img").attr("height", Math.round(values[handle]))
+        $("#logo_size").val(parseInt(Math.round(values[handle])))
       }
+      adjust_logo();
   });
 
   var x_slider = document.querySelector("#logo_x_slider");
@@ -35,10 +36,11 @@ $(document).ready(async function () {
   });
 
   x_slider.noUiSlider.on("update", function (values, handle) {
-      $(".rccs__issuer").css("left", Math.round(values[handle])+'%')
+      $("#logo_x").val(parseInt(Math.round(values[handle])))
       if (handle) {
-        $(".rccs__issuer").css("left", Math.round(values[handle])+'%')
+        $("#logo_x").val(parseInt(Math.round(values[handle])))
       }
+      adjust_logo();
   });
 
   var y_slider = document.querySelector("#logo_y_slider");
@@ -53,10 +55,11 @@ $(document).ready(async function () {
   });
 
   y_slider.noUiSlider.on("update", function (values, handle) {
-      $(".rccs__issuer").css("top", Math.round(values[handle])+'%')
+      $("#logo_y").val(parseInt(Math.round(values[handle])))
       if (handle) {
-        $(".rccs__issuer").css("top", Math.round(values[handle])+'%')
+        $("#logo_y").val(parseInt(Math.round(values[handle])))
       }
+      adjust_logo();
   });
   
   await sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:localStorage.getItem('chosen_clinic')}, "clinic/chosen", (xhr, err) => {
@@ -67,41 +70,34 @@ $(document).ready(async function () {
       $(".clinic-phone").html(result[0]['phone']);
       website = result['web'];
       conector = window.location.origin+"/connection?t="+btoa(unescape(encodeURIComponent(localStorage.getItem('chosen_clinic'))))+"&n="+btoa(unescape(encodeURIComponent(result[0]['name'])));
-
-      clinic_info = result[0];
       
-      $(".rccs__name").html(clinic_info['name']);
-      $(".rccs__number").html('Phone: '+clinic_info['phone']);
-      $(".rccs__email").html(clinic_info['email']);
-      $('#clinic_logo')[0].dropzone.removeAllFiles();
+      clinic_info = result[0];
+      // $(".rccs__name").html(clinic_info['name']);
+      $("#rccs__number").html('Phone: '+clinic_info['phone']);
+      $("#rccs__email").html(clinic_info['email']);
       $("#logo_width").val("0");
       $("#logo_height").val("0");
       $("#selected_bg_color").val(clinic_info['color']);
       $("#selected_bg_pattern").val(clinic_info['pattern']);
+      $("#card_layout").val(clinic_info['layout']);
+      
       if(result[0]['logo'] && result[0]['logo']!=""){
         var logo_info = result[0]['logo'].split(",");
         $("#selected_logo").val(logo_info[0]);
-        $("#logo_dropzone").addClass("d-none");
-        $("#logo_image").removeClass("d-none");
-        $("#logo_image_src").attr("src", "/uploads/logos/"+logo_info[0]);
         $("#logo_width").val(logo_info[1]?logo_info[1]:"120");
         $("#logo_height").val(logo_info[2]?logo_info[2]:"120");
+      }
+      draw_logo();
+      set_layout();
+      if(result[0]['logo'] && result[0]['logo']!=""){
+        var logo_info = result[0]['logo'].split(",");
         size_slider.noUiSlider.set(logo_info[3]?logo_info[3]:20);
         x_slider.noUiSlider.set(logo_info[4]?logo_info[4]:5);
         y_slider.noUiSlider.set(logo_info[5]?logo_info[5]:35);
-        var rate = parseInt($("#logo_width").val())/parseInt($("#logo_height").val());
-        if(rate>1.5){
-          $("#logo_image_src").css("width", '200px');
-        }else{
-          $("#logo_image_src").css("width", '120px');
-        }
-      }else{
-        $("#logo_dropzone").removeClass("d-none");
-        $("#logo_image").addClass("d-none");
       }
-      
-      draw_logo();
+      adjust_logo();
       set_background();
+      makeQRCode();
       
     } else {
       return toastr.error("Action Failed");
@@ -115,27 +111,43 @@ $(document).ready(async function () {
     colorLight : "#ffffff",
     correctLevel : QRCode.CorrectLevel.L
   });
-  await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getqrcodetype", (xhr, err) => {
-    if (!err) {
-      let result = JSON.parse(xhr.responseText)['result'];
-      if(result.length > 0){
-        if(result[0]['age'] == 1)
-          qrcode.makeCode(conector);
-        else if(website == "" || website == null)
-          qrcode.makeCode(conector);
-        else
-          qrcode.makeCode(website);
-      }
-      else{
-        if(website == "" || website == null)
-          qrcode.makeCode(conector);
-        else
-          qrcode.makeCode(website);
-      }
-    } else {
-      return toastr.error("Action Failed");
+
+  function makeQRCode () {
+    var value = "";
+    value += "BEGIN:VCARD";
+    value += "\n";
+    // value += "VERSION:3.0";
+    // value += "\n";
+    value += "ORG:"+clinic_info['name'];
+    value += "\n";
+    if(clinic_info['address1']!=""){
+      value += "ADR:;;"+clinic_info['address1'];
+      value += "\n";
     }
-  });
+    if(clinic_info['phone']!=""){
+      value += "TEL;WORK:"+clinic_info['phone'].replaceAll("-", "").replaceAll(" ", "");
+      value += "\n";
+    }
+    if(clinic_info['email']!=""){
+      value += "EMAIL:"+clinic_info['email'];
+      value += "\n";
+    }
+    var value1= value;
+    if(clinic_info['web']!=""){
+      value += "URL:"+clinic_info['web'];
+      value += "\n";
+    }
+    value += "END:VCARD";
+    qrcode.clear();
+    try{
+      qrcode.makeCode(value);
+    }catch{
+      value = value1
+      value += "END:VCARD";
+      qrcode.makeCode(value);
+    }
+    
+  }
 
   function hexToRgb(hex) {
     const normal = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
@@ -226,8 +238,11 @@ $(document).ready(async function () {
     }
     
     $(".rccs__name").css("color", fontColor);
-    $(".rccs__number").css("color", fontColor);
-    $(".rccs__email").css("color", fontColor);
+    $(".logo-text").css("color", fontColor);
+    $("#rccs__number").css("color", fontColor);
+    $("#rccs__email").css("color", fontColor);
+    
+    
   }
 
   $(".background-pattern").click(function(){
@@ -252,112 +267,30 @@ $(document).ready(async function () {
     pdf.save($(".clinic-name").html()+' QR Code.pdf');
   });
 
-  var clinic_logo = new Dropzone("#clinic_logo", {
-    url: "https://ch.precisionq.com/scripts/void.php", // Set the url for your upload script location
-    paramName: "svg", // The name that will be used to transfer the file
-    maxFiles: 1,
-    maxFilesize: 10, // MB
-    addRemoveLinks: true,
-    maxfilesexceeded: function(file) {
-      this.removeAllFiles();
-      this.addFile(file);
-    },
-    accept: function(file, done) {
-        if (file.name == "wow.jpg") {
-            done("Naha, you don't.");
-            
-        } else {
-          $(".dz-image").addClass("d-flex");
-          $(".dz-image").addClass("justify-content-center");
-          $(".dz-image").addClass("align-items-center");
-          $(".dz-error-message").addClass("d-none");
-          $(".dz-progress").addClass("d-none");
-          $(".dz-success-mark").addClass("d-none");
-          //$(".dz-details").addClass("d-none");
-          $(".dz-error-mark").addClass("d-none");
-          done();
-        }
-    }
- });
+  
 
  function draw_logo(){
-  var logo_file = $("#selected_logo").val()
+  var logo_file = $("#selected_logo").val();
+  var clinic_logo="";
   if(logo_file!=""){
     clinic_logo = '<img height="'+size_slider.noUiSlider.get()+'" src="/uploads/logos/'+logo_file+'" />';
   }else{
-    var acronym = clinic_info['acronym'];
-    if(!clinic_info['acronym']){
-      var names = clinic_info['name'].split(" ");
-      var acronym = "";
-      for(var i=0; i<names.length; i++){
-        acronym += names[i].substr(0,1);
-      }
-      if(names.length == 1){
-        acronym = clinic_info['name'].substr(0, 4);
-      }
-    }
-    clinic_logo = '<div class="fs-2hx fw-bold text-primary">'+acronym+'</div>';
+    clinic_logo = '<div class="fw-bold logo-text">'+clinic_info['name']+'</div>';
   }
   $(".rccs__issuer").html(clinic_logo);
   
  }
 
- clinic_logo.on("addedfile", function(file, xhr) {
-    var fr;
-    fr = new FileReader;
-    fr.onload = function() {
-      var img;
-      img = new Image;
-      img.onload = function() {
-        var min_width = 200;
-        var rate = parseInt(img.width)/parseInt(img.height);
-        if(rate>1.5){
-          $(".dz-image img").css("height", min_width/rate+'px');
-        }else{
-          $(".dz-image img").css("width", '120px');
-        }
-        $("#logo_width").val(img.width);
-        $("#logo_height").val(img.height);
-
-        var formData = new FormData();
-        var clinic_logo_file = $('#clinic_logo')[0].dropzone.getAcceptedFiles();
-        if (clinic_logo_file.length > 0) {
-          formData.append("logo", clinic_logo_file[0]);
-          formData.append("id", $('#chosen_clinic').value);
-          formData.append("filename", $(".dz-filename span").html());
-          sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "clinic/uploadlogo", (xhr, err) => {
-            var entry = {}
-            var filename = JSON.parse(xhr.responseText)['data'];
-            if (!err && filename) {
-              var f = filename.split("/");
-              var fname = ""
-              if(f.length>1){
-                fname = f[f.length-1];
-              }else{
-                f = filename.split("\\");
-                fname = f[f.length-1];
-              }
-              $("#selected_logo").val(fname);
-              draw_logo();
-            }
-          });
-        }
-      };
-      return img.src = fr.result;
-    };
-    return fr.readAsDataURL(file);
-  });
-
-  $(document).on("click","#logo_delete",function(){
-    $("#logo_image_src").attr("src", "")
-    $("#logo_width").val("0");
-    $("#logo_height").val("0");
-    $("#selected_logo").val("");
-    $("#logo_dropzone").removeClass("d-none");
-    $("#logo_image").addClass("d-none");
-    draw_logo();
-  });
-
+ function adjust_logo(){
+  var logo_file = $("#selected_logo").val();
+  if(logo_file!=""){
+    $(".rccs__issuer img").attr("height", $("#logo_size").val());
+  }else{
+    $(".logo-text").css("font-size", $("#logo_size").val()+'px');
+  }
+  $(".rccs__issuer").css("left", $("#logo_x").val()+"%")
+  $(".rccs__issuer").css("top", $("#logo_y").val()+"%")
+ }
 
   $(document).on("click","#clinic_setting_save",function(e){
     var logo = $("#selected_logo").val();
@@ -366,12 +299,12 @@ $(document).ready(async function () {
     logo += "," + parseInt(size_slider.noUiSlider.get());
     logo += "," + parseInt(x_slider.noUiSlider.get());
     logo += "," + parseInt(y_slider.noUiSlider.get());
-    if($("#selected_logo").val()=="")logo="";
     var entry = {
       clinic_id: localStorage.getItem('chosen_clinic'),
       logo: logo,
       color: $("#selected_bg_color").val(),
       pattern: $("#selected_bg_pattern").val(),
+      layout: $("#card_layout").val(),
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "clinic/updateVCard", (xhr, err) => {
       if (!err) {
@@ -382,5 +315,100 @@ $(document).ready(async function () {
       }
     });
   });
+
+  $(document).on("click","#layout_left",function(e){
+    $("#card_layout").val("1");
+    set_layout();
+  });
+
+  $(document).on("click","#layout_right",function(e){
+    $("#card_layout").val("0");
+    set_layout();
+  });
+
+  $(document).on("click","#layout_top",function(e){
+    $("#card_layout").val("2");
+    set_layout();
+  });
+
+  $(document).on("click","#layout_bottom",function(e){
+    $("#card_layout").val("3");
+    set_layout();
+  });
+
+  function set_layout(){
+    var layout = $("#card_layout").val();
+    switch(layout){
+      case "0":
+        $(".rccs__name").css("top", "10%");
+        $(".rccs__name").css("left", "10%");
+        $(".rccs__name").css("width", "80%");
+        $(".rccs__name").css("text-align", "left");
+        $(".rccs__issuer").css("left", "45%");
+        $(".rccs__issuer").css("top", "35%");
+        $(".rccs__issuer").css("width", "50%");
+        $(".logo-text").css("text-align", "left");
+        $(".rccs__qr_code").css("left", "6%");
+        $(".rccs__qr_code").css("top", "25%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "right");
+        $(".rccs_front_expiry").css("left", "10%");
+        $(".rccs_front_expiry").css("width", "80%");
+        x_slider.noUiSlider.set(45);
+        y_slider.noUiSlider.set(35);
+        break;
+      case "1":
+        $(".rccs__name").css("top", "10%");
+        $(".rccs__name").css("left", "10%");
+        $(".rccs__name").css("width", "80%");
+        $(".rccs__name").css("text-align", "left");
+        $(".rccs__issuer").css("left", "7%");
+        $(".rccs__issuer").css("top", "35%");
+        $(".rccs__issuer").css("width", "50%");
+        $(".logo-text").css("text-align", "right");
+        $(".rccs__qr_code").css("left", "60%");
+        $(".rccs__qr_code").css("top", "25%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "left");
+        $(".rccs_front_expiry").css("left", "10%");
+        $(".rccs_front_expiry").css("width", "80%");
+        x_slider.noUiSlider.set(7);
+        y_slider.noUiSlider.set(35);
+        break;
+      case "2":
+        $(".rccs__name").css("top", "35%");
+        $(".rccs__name").css("left", "40%");
+        $(".rccs__name").css("width", "55%");
+        $(".rccs__name").css("text-align", "right");
+        $(".rccs__issuer").css("left", "10%");
+        $(".rccs__issuer").css("top", "15%");
+        $(".rccs__issuer").css("width", "80%");
+        $(".logo-text").css("text-align", "left");
+        $(".rccs__qr_code").css("left", "10%");
+        $(".rccs__qr_code").css("top", "35%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "left");
+        $(".rccs_front_expiry").css("left", "45%");
+        $(".rccs_front_expiry").css("width", "50%");
+        x_slider.noUiSlider.set(10);
+        y_slider.noUiSlider.set(15);
+        break;
+      case "3":
+        $(".rccs__name").css("top", "35%");
+        $(".rccs__name").css("left", "7%");
+        $(".rccs__name").css("width", "50%");
+        $(".rccs__name").css("text-align", "left");
+        $(".rccs__issuer").css("left", "10%");
+        $(".rccs__issuer").css("top", "15%");
+        $(".rccs__issuer").css("width", "80%");
+        $(".logo-text").css("text-align", "right");
+        $(".rccs__qr_code").css("left", "60%");
+        $(".rccs__qr_code").css("top", "35%");
+        $(".rccs_front_expiry_sub_item").css("text-align", "left");
+        $(".rccs_front_expiry").css("left", "10%");
+        $(".rccs_front_expiry").css("width", "50%");
+        x_slider.noUiSlider.set(10);
+        y_slider.noUiSlider.set(15);
+        break;
+    }
+
+  }
 
 });

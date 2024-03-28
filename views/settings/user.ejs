@@ -201,12 +201,13 @@
               <div class="rccs__card rccs__card--dankort cursor-pointer" data-type="0">
                 <div class="rccs__card--front">
                   <div class="rccs__card__background"></div>
-
                   <div class="rccs__issuer "></div>
                   <div class="rccs__name  rccs--filled">Mildred Wagner</div>
-                  <div class="rccs__number rccs--filled">Phone <span id="rccs_phone_number">532-366-2070</span></div>
-                  <div class="rccs__email rccs--filled">admin@gmail.com</div>
                   <div class="rccs__qr_code " id="qrcode"></div>
+                  <div class="rccs_front_expiry  rccs--filled">
+                    <div class="rccs_front_expiry_sub_item">Phone <span id="rccs_phone_number"></span></div>
+                    <div class="rccs_front_expiry_sub_item"><div id="rccs__email"></div></div>
+                  </div>
                   
                   <div class="rccs__chip"></div>
                 </div>
@@ -234,6 +235,12 @@
                 <div class="ps-8"><label class="text-gray-600 fs-6 fw-semibold">Download QR Code</label></div>
                 <div class="ps-8">
                   <img alt="" id="qr_pdf" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/pdf.svg">
+                </div>
+              </div>
+              <div class="text-center">
+                <div class="ps-8"><label class="text-gray-600 fs-6 fw-semibold">VCard Editor</label></div>
+                <div class="ps-8">
+                  <a href="/settings/qrcode"><img alt="" id="qr_pdf" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/vcard-o.svg"></a>
                 </div>
               </div>
             </div>

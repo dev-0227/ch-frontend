@@ -68,8 +68,8 @@
     .bg-yellow, .yellow::after{
         background-color: #FBB034!important;
     }
-    .bg-lime, .lime::after{
-        background-color: #7bd235!important;
+    .bg-white, .lime::after{
+        background-color: #f7f8f6!important;
     }
     .bg-green, .green::after{
         background-color: #4ecc48!important;
@@ -116,10 +116,12 @@
                     <div class="rccs__card--front bg-white">
                         <div class="rccs__card__background"></div>
                         <div class="rccs__issuer "></div>
-                        <div class="rccs__name  rccs--filled">Mildred Wagner</div>
-                        <div class="rccs__number rccs--filled">Phone <span id="rccs_phone_number">000-000-000</span></div>
-                        <div class="rccs__email rccs--filled">info@gmail.com</div>
+                        <div class="rccs__name  rccs--filled d-none">John Smith</div>
                         <div class="rccs__qr_code" id="qr_code"></div>
+                        <div class="rccs_front_expiry  rccs--filled">
+                            <div class="rccs_front_expiry_sub_item"><div id="rccs__number"></div></div>
+                            <div class="rccs_front_expiry_sub_item"><div id="rccs__email"></div></div>
+                        </div>
                         <div class="rccs__chip"></div>
                     </div>
                 </div>
@@ -128,12 +130,15 @@
     </div>
     <div class="col-md-6 no-print">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Clinic Settings</h3>
-            </div>
             <div class="card-body">
-                <label class="form-label">Select Color</label>
-                <div class="row gutters-xs d-flex align-items-center">
+                <label class="form-label">Background Color</label>
+                <div class="row gutters-xs d-flex align-items-center rounded border-primary bg-light-primary border border-dashed  py-5 fw-semibold fs-4">
+                    <div class="col-auto">
+                        <label class="colorinput">
+                            <input name="color" type="radio" value="#eeeeee" key="white" class="colorinput-input colorbtn" />
+                            <span class="colorinput-color bg-gray"></span>
+                        </label>
+                    </div>
                     <div class="col-auto">
                         <label class="colorinput">
                             <input name="color" type="radio" value="#45aaf2" key="azure" class="colorinput-input colorbtn" checked />
@@ -178,12 +183,6 @@
                     </div>
                     <div class="col-auto">
                         <label class="colorinput">
-                            <input name="color" type="radio" value="#7bd235" key="lime" class="colorinput-input colorbtn" />
-                            <span class="colorinput-color bg-lime"></span>
-                        </label>
-                    </div>
-                    <div class="col-auto">
-                        <label class="colorinput">
                             <input name="color" type="radio" value="#4ecc48" key="green" class="colorinput-input colorbtn" />
                             <span class="colorinput-color bg-green"></span>
                         </label>
@@ -199,75 +198,95 @@
                     </div>
                     
                 </div>
-                <div class="row">
+                <label class="form-label mt-3">Background Pattern</label>
+                <div class="row rounded border-primary bg-light-primary border border-dashed  py-5 fw-semibold fs-4">
                     <div class="col-md-2">
-                        <div class="background-pattern-none w-100 h-50px" 
+                        <div class="border-black border">
+                            <div class="background-pattern-none w-100 h-50px" 
                         style="background-color: #eeeeee; opacity: 0.3;"></div>
+                        </div>
+                        
                     </div>
                     <div class="col-md-2">
-                        <div class="background-pattern w-100 h-50px"  
-                        style = "background-color: #ffffff; opacity: 0.3; background-image:  linear-gradient(#cccccc 0.6000000000000001px, transparent 0.6000000000000001px), linear-gradient(to right, #cccccc 0.6000000000000001px, #ffffff 0.6000000000000001px); background-size: 12px 12px;"></div>
+                        <div class="border-black border">
+                            <div class="background-pattern w-100 h-50px border"  
+                            style = "background-color: #ffffff; opacity: 0.3; background-image:  linear-gradient(#cccccc 0.6000000000000001px, transparent 0.6000000000000001px), linear-gradient(to right, #cccccc 0.6000000000000001px, #ffffff 0.6000000000000001px); background-size: 12px 12px;"></div>
+                            </div>
                         </div>
                     <div class="col-md-2">
-                        <div class="background-pattern w-100 h-50px" 
-                        style ="background-color: #ffffff; opacity: 0.3; background-image: linear-gradient(135deg, #cccccc 25%, transparent 25%), linear-gradient(225deg, #cccccc 25%, transparent 25%), linear-gradient(45deg, #cccccc 25%, transparent 25%), linear-gradient(315deg, #cccccc 25%, #ffffff 25%); background-position:  6px 0, 6px 0, 0 0, 0 0; background-size: 6px 6px; background-repeat: repeat;"></div>
+                        <div class="border-black border">
+                            <div class="background-pattern w-100 h-50px" 
+                            style ="background-color: #ffffff; opacity: 0.3; background-image: linear-gradient(135deg, #cccccc 25%, transparent 25%), linear-gradient(225deg, #cccccc 25%, transparent 25%), linear-gradient(45deg, #cccccc 25%, transparent 25%), linear-gradient(315deg, #cccccc 25%, #ffffff 25%); background-position:  6px 0, 6px 0, 0 0, 0 0; background-size: 6px 6px; background-repeat: repeat;"></div>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <div class="background-pattern w-100 h-50px " 
-                        style="background-color: #ffffff; opacity: 0.3; background-image:  linear-gradient(135deg, #cccccc 25%, transparent 25%), linear-gradient(225deg, #cccccc 25%, transparent 25%), linear-gradient(45deg, #cccccc 25%, transparent 25%), linear-gradient(315deg, #cccccc 25%, #ffffff 25%); background-position:  6px 0, 6px 0, 0 0, 0 0; background-size: 12px 12px; background-repeat: repeat;"></div> 
+                        <div class="border-black border">
+                            <div class="background-pattern w-100 h-50px " 
+                            style="background-color: #ffffff; opacity: 0.3; background-image:  linear-gradient(135deg, #cccccc 25%, transparent 25%), linear-gradient(225deg, #cccccc 25%, transparent 25%), linear-gradient(45deg, #cccccc 25%, transparent 25%), linear-gradient(315deg, #cccccc 25%, #ffffff 25%); background-position:  6px 0, 6px 0, 0 0, 0 0; background-size: 12px 12px; background-repeat: repeat;"></div> 
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <div class="background-pattern w-100 h-50px " 
-                        style="background-color: #ffffff; opacity: 0.3; background-image: radial-gradient( ellipse farthest-corner at 6px 6px , #cccccc, #cccccc 50%, #ffffff 50%); background-size: 6px 6px;"></div> 
+                        <div class="border-black border">
+                            <div class="background-pattern w-100 h-50px " 
+                            style="background-color: #ffffff; opacity: 0.3; background-image: radial-gradient( ellipse farthest-corner at 6px 6px , #cccccc, #cccccc 50%, #ffffff 50%); background-size: 6px 6px;"></div> 
+                        </div>
                     </div>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-md-6 d-flex justify-content-center align-items-center" id="logo_area">
-						<form class="form" action="#" method="post">
-							<div class="fv-row" id="logo_dropzone">
-								<div class="dropzone " id="clinic_logo">
-									<div class="dz-message needsclick">
-										<i class="ki-duotone ki-file-up fs-3x text-primary"><span class="path1"></span><span class="path2"></span></i>
-										<div class="ms-4">
-											<h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files here or click to upload.</h3>
-											<span class="fs-7 fw-semibold text-gray-500">Upload up to 1 files</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</form>
-						<div id="logo_image" class="d-none">
-							<div class="dropzone ">
-								<input type="hidden" id="logo_width">
-								<input type="hidden" id="logo_height">
-								<div class="dz-preview d-flex justify-content-center align-items-center bg-white">
-									<img data-dz-thumbnail="" alt="" src="" id="logo_image_src">
-									<a class="dz-remove" href="javascript:undefined;" data-dz-remove="" id="logo_delete">Remove file</a>
-								</div>
-								
-							</div>
-						</div>
-						
-					</div>
-                    <div class="col-md-6">
-                        <div class="d-flex justify-content-center row my-5">
-                            <div class="col-md-3 text-end">Size</div>
+                <label class="form-label mt-3">Logo Size & Position</label>
+                <div class="row rounded border-primary bg-light-primary border border-dashed  py-5 fw-semibold fs-4">
+                    <div class="col-md-6" >
+                        <div class="d-flex justify-content-center row my-2">
+                            <div class="col-md-3 text-end fs-6">Size</div>
                             <div id="logo_size_slider" class="noUi-sm col-md-9 mt-2 red"></div>
                         </div>
-                        <div class="d-flex justify-content-center row my-5">
-                            <div class="col-md-3 text-end">Pos X</div>
+					</div>
+                    <div class="col-md-6" ></div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-center row my-2">
+                            <div class="col-md-3 text-end fs-6">Pos X</div>
                             <div id="logo_x_slider" class="noUi-sm col-md-9 mt-2 blue"></div>
                         </div>
-                        <div class="d-flex justify-content-center row my-5">
-                            <div class="col-md-3 text-end">Pos Y</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-center row my-2">
+                            <div class="col-md-3 text-end fs-6">Pos Y</div>
                             <div id="logo_y_slider" class="noUi-sm col-md-9 mt-2 blue"></div>
                         </div>
+                    </div>
+                </div>
+                <label class="form-label mt-3">Layout</label>
+                <div class="row rounded border-primary bg-light-primary border border-dashed  py-5 fw-semibold fs-4">
+                    <div class="col-md-3 ">
+                        <div class="text-center">
+                            <img alt="" id="layout_left" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/left.svg">
+                          </div>
+					</div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <img alt="" id="layout_right" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/right.svg">
+                          </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <img alt="" id="layout_top" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/top.svg">
+                          </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <img alt="" id="layout_bottom" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/bottom.svg">
+                          </div>
                     </div>
                 </div>
                 <input type="hidden" id="selected_bg_color" value="#eeeeee">
                 <input type="hidden" id="selected_bg_pattern">
                 <input type="hidden" id="selected_logo">
+                <input type="hidden" id="logo_size">
+                <input type="hidden" id="logo_x">
+                <input type="hidden" id="logo_y">
+                <input type="hidden" id="logo_width" value="0">
+				<input type="hidden" id="logo_height" value="0">
+                <input type="hidden" id="card_layout" value="0">
                 <button type="button" class="btn btn-info mb-1 mt-3" id="clinic_setting_save"><i class="fa fa-save">&nbsp;</i>Save</button>
                 <!-- <button type="button" class="btn btn-success mb-1 mt-3 downloadqrbtn"><i class="fa fa-download">&nbsp;</i>Download QR Code</button> -->
             </div>
