@@ -55,9 +55,6 @@ $(document).ready(function () {
               <button class="btn btn-sm btn-danger userdeletebtn" type="button"data-toggle="tooltip" title="delete"><i class="fa fa-trash"></i></button>
               </div>
             `;
-
-
-            
           } 
         }
     ]
@@ -346,9 +343,7 @@ $(document).ready(function () {
   function vcard_clinic_fill(index){
     if(clinics[index]){
       var clinic_logo = ""
-      var logo_x = "5";
-      var logo_y = "35";
-      
+     
       var logo_info = clinics[index]['logo'].split(",");
       var logo_size = logo_info[3]?logo_info[3]:"20";
       if(logo_info[0]!=""){         
@@ -356,8 +351,11 @@ $(document).ready(function () {
       }else{
         clinic_logo = '<div class="fw-bold logo-text">'+clinics[index]['name']+'</div>';
       }
-      logo_x = logo_info[4]?logo_info[4]:"5";
-      logo_y = (logo_info[5] && logo_info[5]!="")?logo_info[5]:"35";
+      var logo_x = logo_info[4]?logo_info[4]:"5";
+      var logo_y = (logo_info[5] && logo_info[5]!="")?logo_info[5]:"35";
+      var qr_size = logo_info[6]?logo_info[6]:"0";
+      var qr_x = logo_info[7]?logo_info[7]:"0";
+      var qr_y = logo_info[8]?logo_info[8]:"0";
       
       
       var bg_color = clinics[index]['color']?clinics[index]['color']:"#eeeeee";
@@ -373,6 +371,15 @@ $(document).ready(function () {
       }
       $(".rccs__issuer").css("left", logo_x+'%');
       $(".rccs__issuer").css("top", logo_y+'%');
+
+      if(parseInt(qr_size)>0){
+        $("#qrcode img").css("width", qr_size+'px');
+        $("#qrcode img").css("height", qr_size+'px');
+        $("#qrcode").css("padding", (parseInt(qr_size)/10)+"px");
+        $("#qrcode").css("left", qr_x+'%');
+        $("#qrcode").css("top", qr_y+'%');
+      }
+      
       
       $(".rccs_clinic_name").html(clinics[index]['name']);
       $(".rccs_clinic_address").html(clinics[index]['address1']);
@@ -553,6 +560,9 @@ $(document).ready(function () {
         $(".rccs_front_expiry").css("width", "50%");
         break;
     }
+    $(".rccs__qr_code img").css("width", "80px");
+    $(".rccs__qr_code img").css("height", "80px");
+    $(".rccs__qr_code").css("padding", "8px");
 
   }
 
@@ -587,11 +597,16 @@ $(document).ready(function () {
     pdf.canvas.height = 72 * 6;
     pdf.canvas.width = 72 * 4;
 
-    $(".rccs__card").removeClass('rccs__card--flipped')
+    $(".rccs__card").removeClass('rccs__card--flipped');
+    var img = new Image();
+    img.src = $(".rccs__qr_code img").attr("src");
+    pdf.addImage(img, 'JPEG', 20, 20, 256, 256);
+
+
     const front=document.querySelector(".rccs__qr_code")
     await html2canvas(front,{allowTaint:true}).then(canvas => {
       var img = canvas.toDataURL("image/png");
-      pdf.addImage(img, 'SVG', 20, 40, 100, 100);
+      pdf.addImage(img, 'SVG', 20, 20, 256, 256);
     });
     pdf.save($('.rccs__name').html()+' QR.pdf');
 

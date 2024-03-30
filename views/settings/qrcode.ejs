@@ -126,6 +126,21 @@
                     </div>
                 </div>
             </div>
+            
+        </div>
+        <div class="mt-8 d-flex justify-content-center">
+            <div class="text-center" >
+                <div class="ps-8"><label class="text-gray-600 fs-6 fw-semibold">Download VCard</label></div>
+                <div class="ps-8">
+                  <img alt="" id="vcard_pdf" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/pdf.svg">
+                </div>
+              </div>
+              <div class="text-center">
+                <div class="ps-8"><label class="text-gray-600 fs-6 fw-semibold">Download QR Code</label></div>
+                <div class="ps-8">
+                  <img alt="" id="qr_pdf" class="w-50px me-3 cursor-pointer " src="/assets/media/svg/files/pdf.svg">
+                </div>
+              </div>
         </div>
     </div>
     <div class="col-md-6 no-print">
@@ -233,15 +248,25 @@
                     </div>
                 </div>
 
-                <label class="form-label mt-3">Logo Size & Position</label>
+                <label class="form-label mt-3">Size & Position</label>
                 <div class="row rounded border-primary bg-light-primary border border-dashed  py-5 fw-semibold fs-4">
+                    <div class="col-md-6" >
+                        <div class="d-flex justify-content-center row my-2">
+                            <div class="col-md-3 text-end fs-6"></div>
+                            <div  class=" col-md-9 ">
+                                <select class="form-select form-select-sm " id="selected_object" aria-hidden="true" data-kt-initialized="1">
+                                    <option value="1" >Logo</option>
+                                    <option value="2" >QR Code</option>
+                                </select>
+                            </div>
+                        </div>
+					</div>
                     <div class="col-md-6" >
                         <div class="d-flex justify-content-center row my-2">
                             <div class="col-md-3 text-end fs-6">Size</div>
                             <div id="logo_size_slider" class="noUi-sm col-md-9 mt-2 red"></div>
                         </div>
-					</div>
-                    <div class="col-md-6" ></div>
+                    </div>
                     <div class="col-md-6">
                         <div class="d-flex justify-content-center row my-2">
                             <div class="col-md-3 text-end fs-6">Pos X</div>
@@ -281,14 +306,18 @@
                 <input type="hidden" id="selected_bg_color" value="#eeeeee">
                 <input type="hidden" id="selected_bg_pattern">
                 <input type="hidden" id="selected_logo">
-                <input type="hidden" id="logo_size">
-                <input type="hidden" id="logo_x">
-                <input type="hidden" id="logo_y">
+                <input type="hidden" id="logo_size" value="0">
+                <input type="hidden" id="logo_x" value="0">
+                <input type="hidden" id="logo_y" value="0">
+                <input type="hidden" id="qr_size" value="0">
+                <input type="hidden" id="qr_x" value="0">
+                <input type="hidden" id="qr_y" value="0">
                 <input type="hidden" id="logo_width" value="0">
 				<input type="hidden" id="logo_height" value="0">
                 <input type="hidden" id="card_layout" value="0">
-                <button type="button" class="btn btn-info mb-1 mt-3" id="clinic_setting_save"><i class="fa fa-save">&nbsp;</i>Save</button>
-                <!-- <button type="button" class="btn btn-success mb-1 mt-3 downloadqrbtn"><i class="fa fa-download">&nbsp;</i>Download QR Code</button> -->
+                <div class="pt-4 d-flex justify-content-center">
+                    <button type="button" class="btn btn-info mb-1 mt-3" id="clinic_setting_save"><i class="fa fa-save">&nbsp;</i>Save</button>
+                </div>
             </div>
         </div>
     </div>

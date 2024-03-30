@@ -144,15 +144,14 @@ $(document).ready(function () {
         $('#clinic_logo')[0].dropzone.removeAllFiles();
         $("#logo_width").val("0");
         $("#logo_height").val("0");
-        if(result[0]['logo']){
-          var logo_info = result[0]['logo'].split(",");
+        var logo_info = result[0]['logo'].split(",");
+        if(logo_info[0]!=""){
           $("#logo_dropzone").addClass("d-none");
           $("#logo_image").removeClass("d-none");
           $("#logo_image_src").attr("src", "/uploads/logos/"+logo_info[0]);
           $("#logo_width").val(logo_info[1]?logo_info[1]:"120");
           $("#logo_height").val(logo_info[2]?logo_info[2]:"120");
           $("#logo_image_src").attr("width", parseInt($("#logo_width").val())>300?"300":"120");
-          
         }else{
           $("#logo_dropzone").removeClass("d-none");
           $("#logo_image").addClass("d-none");

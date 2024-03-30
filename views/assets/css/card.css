@@ -233,7 +233,7 @@
       font-weight: 700;
       opacity: 1 !important; }
     .rccs__qr_code img {
-      width: 80px !important;
-      height: 80px !important;
+      width: 80px;
+      height: 80px;
     }
   
