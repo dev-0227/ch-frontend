@@ -33,6 +33,9 @@
         top: 24px;
         transition: 0.5s;
     }
+    .col-auto {
+     padding-right: 0px !important;
+    }
     .colorinput-color {
         display: inline-block;
         width: 1.75rem;
@@ -101,28 +104,45 @@
     }
 </style>
 <div class="row row-cards justify-content-center">
-    <div class="col-lg-6 col-xl-6">
+    <div class="col-lg-7 col-xl-7">
         <div id="post-main">
             <div class="text-center postheader text-white">
                 <div class="mb-0 pt-5 fs-2x fw-bolder text-light-primary number-font clinic-name"></div>
                 <h5 class="mb-0 pt-3 text-light-primary clinic-address"></h5>
                 <h5 class="mb-0 pt-3 text-light-primary clinic-phone"></h5>
-                <h3 class="mb-0 pt-5 text-light-primary number-font">Scan the code below to visit our clinic site</h3>
+                <h3 class="mb-0 pt-5 text-light-primary number-font">Scan the code for clinic information.</h3>
             </div>
             <div id="wave"></div>
             <div class="text-center" id="qrcode"></div>
-            <div class="mt-20 mb-10" >
-                <div class="rccs__card rccs__card--dankort">
-                    <div class="rccs__card--front bg-white">
-                        <div class="rccs__card__background"></div>
-                        <div class="rccs__issuer "></div>
-                        <div class="rccs__name  rccs--filled d-none">John Smith</div>
-                        <div class="rccs__qr_code" id="qr_code"></div>
-                        <div class="rccs_front_expiry  rccs--filled">
-                            <div class="rccs_front_expiry_sub_item"><div id="rccs__number"></div></div>
-                            <div class="rccs_front_expiry_sub_item"><div id="rccs__email"></div></div>
+            <div class="mt-20 mb-10 row mx-0" >
+                <div class="col-md-6 text-end">
+                    <div class="rccs__card rccs__card--dankort">
+                        <div class="rccs__card--front bg-white">
+                            <div class="rccs__card__background"></div>
+                            <div class="rccs__issuer "></div>
+                            <div class="rccs__name  rccs--filled d-none">John Smith</div>
+                            <div class="rccs__qr_code" id="qr_code"></div>
+                            <div class="rccs_front_expiry  rccs--filled">
+                                <div class="rccs_front_expiry_sub_item"><div id="rccs__number"></div></div>
+                                <div class="rccs_front_expiry_sub_item"><div id="rccs__email"></div></div>
+                            </div>
+                            <div class="rccs__chip"></div>
                         </div>
-                        <div class="rccs__chip"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-start">
+                    <div class="rccs__card rccs__card--dankort">
+                        <div class="rccs_card_back">
+                            <div class="rccs__card__background"></div>
+                            <div class="rccs_clinic_name"></div>
+                            <div class="rccs__expiry  rccs--filled">
+                              <div class="rccs__expiry_sub_item"><span class="rccs_clinic_address"></span></div>
+                              <div class="rccs__expiry_sub_item">Phone: <span class="rccs_clinic_phone"></span></div>
+                              <div class="rccs__expiry_sub_item">Fax: <span class="rccs_clinic_fax"></span></div>
+                              <div class="rccs__expiry_sub_item">Email: <span class="rccs_clinic_email"></span></div>
+                              <div class="rccs__expiry_sub_item">Visit <span class="rccs_clinic_url"></span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,7 +163,7 @@
               </div>
         </div>
     </div>
-    <div class="col-md-6 no-print">
+    <div class="col-md-5 no-print">
         <div class="card">
             <div class="card-body">
                 <label class="form-label">Background Color</label>
@@ -269,13 +289,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="d-flex justify-content-center row my-2">
-                            <div class="col-md-3 text-end fs-6">Pos X</div>
+                            <div class="col-md-3 text-end fs-6">X</div>
                             <div id="logo_x_slider" class="noUi-sm col-md-9 mt-2 blue"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="d-flex justify-content-center row my-2">
-                            <div class="col-md-3 text-end fs-6">Pos Y</div>
+                            <div class="col-md-3 text-end fs-6">Y</div>
                             <div id="logo_y_slider" class="noUi-sm col-md-9 mt-2 blue"></div>
                         </div>
                     </div>

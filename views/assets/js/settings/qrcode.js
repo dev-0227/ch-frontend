@@ -82,6 +82,29 @@ $(document).ready(async function () {
     if (!err) {
       var result = JSON.parse(xhr.responseText)['data'];
       $(".clinic-name").html(result[0]['name']);
+      $(".rccs_clinic_name").html(result[0]['name']);
+      $(".rccs_clinic_address").html(result[0]['address1']);
+      $(".rccs_clinic_phone").html(result[0]['phone']);
+      $(".rccs_clinic_fax").html(result[0]['cel']);
+      if(result[0]['cel'].replace(/\s/g, '')==""){
+        $(".rccs_clinic_fax").parent().addClass("d-none");
+      }else{
+        $(".rccs_clinic_fax").parent().removeClass("d-none");
+      }
+      $(".rccs_clinic_email").html(result[0]['email']);
+      if(result[0]['email'].replace(/\s/g, '')==""){
+        $(".rccs_clinic_email").parent().addClass("d-none");
+      }else{
+        $(".rccs_clinic_email").parent().removeClass("d-none");
+      }
+      $(".rccs_clinic_url").html(result[0]['web']);
+      if(result[0]['web'].replace(/\s/g, '')==""){
+        $(".rccs_clinic_url").parent().addClass("d-none");
+      }else{
+        $(".rccs_clinic_url").parent().removeClass("d-none");
+      }
+      
+      
       $(".clinic-address").html(result[0]['address1']+" "+result[0]['city']+" "+result[0]['state']+" "+result[0]['zip']);
       $(".clinic-phone").html(result[0]['phone']);
       website = result['web'];
@@ -261,8 +284,12 @@ $(document).ready(async function () {
     $(".logo-text").css("color", fontColor);
     $("#rccs__number").css("color", fontColor);
     $("#rccs__email").css("color", fontColor);
-    
-    
+
+
+    $(".clinic-name").css("color", fontColor);
+    $(".rccs_clinic_name").css("color", fontColor);
+    $(".rccs__expiry_sub_item").css("color", fontColor);
+
   }
 
   $(".background-pattern").click(function(){
@@ -275,17 +302,17 @@ $(document).ready(async function () {
     set_background();
   });
 
-  $('.downloadqrbtn').click(function () {
-    var pdf = new jsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      format: [600, 400]
-    });
-    let base64Image = $('#qrcode img').attr('src');
-    pdf.addImage(base64Image, 'png', 200, 100, 200, 200);
+  // $('.downloadqrbtn').click(function () {
+  //   var pdf = new jsPDF({
+  //     orientation: "landscape",
+  //     unit: "mm",
+  //     format: [600, 400]
+  //   });
+  //   let base64Image = $('#qrcode img').attr('src');
+  //   pdf.addImage(base64Image, 'png', 200, 100, 200, 200);
     
-    pdf.save($(".clinic-name").html()+' QR Code.pdf');
-  });
+  //   pdf.save($(".clinic-name").html()+' QR Code.pdf');
+  // });
 
   
 
@@ -498,6 +525,12 @@ $(document).ready(async function () {
     await html2canvas(front,{allowTaint:true}).then(canvas => {
       var img = canvas.toDataURL("image/png");
       pdf.addImage(img, 'SVG', 20, 40, 290, 182);
+    });
+
+    const back=document.querySelector(".rccs_card_back")
+    await html2canvas(back,{allowTaint:true}).then(canvas => {
+      var img = canvas.toDataURL("image/png");
+      pdf.addImage(img, 'PNG', 20, 240, 290, 182);
     });
 
     pdf.save($('.rccs__name').html()+' VCard.pdf');
