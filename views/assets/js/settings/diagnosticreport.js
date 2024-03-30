@@ -15,7 +15,7 @@ $(document).ready(function () {
     "columns": [
         { data: "mid"},
         { data: 'name' },
-        { data: 'description'},
+        { data: 'observation'},
         { data: 'id',
           render: function (data, type, row) {
             return `
