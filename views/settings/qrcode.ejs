@@ -115,32 +115,36 @@
             <div id="wave"></div>
             <div class="text-center" id="qrcode"></div>
             <div class="mt-20 mb-10 row mx-0" >
-                <div class="col-md-6 text-end">
-                    <div class="rccs__card rccs__card--dankort">
-                        <div class="rccs__card--front bg-white">
-                            <div class="rccs__card__background"></div>
-                            <div class="rccs__issuer "></div>
-                            <div class="rccs__name  rccs--filled d-none">John Smith</div>
-                            <div class="rccs__qr_code" id="qr_code"></div>
-                            <div class="rccs_front_expiry  rccs--filled">
-                                <div class="rccs_front_expiry_sub_item d-none"><div id="rccs__number"></div></div>
-                                <div class="rccs_front_expiry_sub_item d-none"><div id="rccs__email"></div></div>
+                <div class="col-md-6 d-flex justify-content-center">
+                    <div class="border-dotted border-dark d-flex justify-content-center " id="vcard_front">
+                        <div class="rccs__card rccs__card--dankort">
+                            <div class="rccs__card--front bg-white">
+                                <div class="rccs__card__background"></div>
+                                <div class="rccs__issuer "></div>
+                                <div class="rccs__name  rccs--filled d-none">John Smith</div>
+                                <div class="rccs__qr_code" id="qr_code"></div>
+                                <div class="rccs_front_expiry  rccs--filled">
+                                    <div class="rccs_front_expiry_sub_item d-none"><div id="rccs__number"></div></div>
+                                    <div class="rccs_front_expiry_sub_item d-none"><div id="rccs__email"></div></div>
+                                </div>
+                                <div class="rccs__chip"></div>
                             </div>
-                            <div class="rccs__chip"></div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 text-start">
-                    <div class="rccs__card rccs__card--dankort">
-                        <div class="rccs_card_back">
-                            <div class="rccs__card__background"></div>
-                            <div class="rccs_clinic_name"></div>
-                            <div class="rccs__expiry  rccs--filled">
-                              <div class="rccs__expiry_sub_item"><span class="rccs_clinic_address"></span></div>
-                              <div class="rccs__expiry_sub_item">Phone: <span class="rccs_clinic_phone"></span></div>
-                              <div class="rccs__expiry_sub_item">Fax: <span class="rccs_clinic_fax"></span></div>
-                              <div class="rccs__expiry_sub_item">Email: <span class="rccs_clinic_email"></span></div>
-                              <div class="rccs__expiry_sub_item">Visit <span class="rccs_clinic_url"></span></div>
+                <div class="col-md-6 d-flex justify-content-center">
+                    <div class=" border-dotted d-flex justify-content-center " id="vcard_back">
+                        <div class="rccs__card rccs__card--dankort">
+                            <div class="rccs_card_back">
+                                <div class="rccs__card__background"></div>
+                                <div class="rccs_clinic_name"></div>
+                                <div class="rccs__expiry  rccs--filled">
+                                <div class="rccs__expiry_sub_item"><span class="rccs_clinic_address"></span></div>
+                                <div class="rccs__expiry_sub_item">Phone: <span class="rccs_clinic_phone"></span></div>
+                                <div class="rccs__expiry_sub_item">Fax: <span class="rccs_clinic_fax"></span></div>
+                                <div class="rccs__expiry_sub_item">Email: <span class="rccs_clinic_email"></span></div>
+                                <div class="rccs__expiry_sub_item">Visit <span class="rccs_clinic_url"></span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -299,6 +303,34 @@
                             <div id="logo_y_slider" class="noUi-sm col-md-9 mt-2 blue"></div>
                         </div>
                     </div>
+                </div>
+                <label class="form-label mt-3">Font</label>
+                <div class="row rounded border-primary bg-light-primary border border-dashed  py-2 fw-semibold fs-4">
+                    <div class="col-md-6" >
+                        <div class="d-flex justify-content-center row my-2">
+                            <div  class=" col-md-12">
+                                <select class="form-select form-select-sm " id="selected_font_object" aria-hidden="true" data-kt-initialized="1">
+                                    <option value="1" >Clinic Name</option>
+                                    <option value="2" >Other Information</option>
+                                </select>
+                            </div>
+                        </div>
+					</div>
+                    <div class="col-md-6" >
+                        <div class="d-flex justify-content-center row my-2">
+                            <div  class=" col-md-12 ">
+                                <select class="form-select form-select-sm " id="selected_font_family" aria-hidden="true" data-kt-initialized="1">
+                                    <option value="1" >auto</option>
+                                    <option value="'Inter'" >'Inter'</option>
+                                    <option value="cursive" >cursive</option>
+                                    <option value="emoji" >emoji</option>
+                                    <option value="serif" >serif</option>
+                                    <option value="'FontAwesome'" >'FontAwesome'</option>
+                                </select>
+                            </div>
+                        </div>
+					</div>
+                    
                 </div>
                 <label class="form-label mt-3">Layout</label>
                 <div class="row rounded border-primary bg-light-primary border border-dashed  py-5 fw-semibold fs-4">

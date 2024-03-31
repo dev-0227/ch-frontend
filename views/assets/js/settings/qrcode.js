@@ -394,6 +394,7 @@ $(document).ready(async function () {
     set_layout();
   });
 
+  
 
 
   function set_layout(){
@@ -521,19 +522,19 @@ $(document).ready(async function () {
     pdf.canvas.height = 72 * 6;
     pdf.canvas.width = 72 * 4;
 
-    const front=document.querySelector(".rccs__card--front")
+    const front=document.querySelector("#vcard_front")
     await html2canvas(front,{allowTaint:true}).then(canvas => {
       var img = canvas.toDataURL("image/png");
       pdf.addImage(img, 'SVG', 20, 40, 290, 182);
     });
 
-    const back=document.querySelector(".rccs_card_back")
+    const back=document.querySelector("#vcard_back")
     await html2canvas(back,{allowTaint:true}).then(canvas => {
       var img = canvas.toDataURL("image/png");
       pdf.addImage(img, 'PNG', 20, 240, 290, 182);
     });
 
-    pdf.save($('.rccs__name').html()+' VCard.pdf');
+    pdf.save($('.rccs_clinic_name').html()+'.pdf');
   });
 
   $(document).on("click","#qr_pdf",async function(e){
@@ -544,9 +545,21 @@ $(document).ready(async function () {
     var img = new Image();
     img.src = $(".rccs__qr_code img").attr("src");
     pdf.addImage(img, 'JPEG', 20, 20, 256, 256);
-    pdf.save($('.rccs__name').html()+' QR.pdf');
+    pdf.save($('.rccs_clinic_name').html()+' QR.pdf');
 
   });
+
+  $(document).on("click","#selected_font_family",function(e){
+    if($("#selected_font_object").val()=="1"){
+      $('.rccs_clinic_name').css("font-family", $(this).val())
+    }else{
+      $('.rccs__expiry_sub_item').css("font-family", $(this).val())
+    }
+    
+  });
+
+  
+
 
   
 

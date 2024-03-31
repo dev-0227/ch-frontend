@@ -4,7 +4,7 @@
     width: 290px; }
     .rccs__card {
       height: 182.873px;
-      margin: 0 auto;
+      margin: 6px;
       position: relative;
       transform-style: preserve-3d;
       transition: all 0.4s linear;
