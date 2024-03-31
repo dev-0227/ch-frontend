@@ -550,7 +550,9 @@ $(document).ready(async function () {
   });
 
   $(document).on("click","#selected_font_family",function(e){
-    if($("#selected_font_object").val()=="1"){
+    if($("#selected_font_object").val()=="0"){
+      $('.logo-text').css("font-family", $(this).val())
+    }else if($("#selected_font_object").val()=="1"){
       $('.rccs_clinic_name').css("font-family", $(this).val())
     }else{
       $('.rccs__expiry_sub_item').css("font-family", $(this).val())
