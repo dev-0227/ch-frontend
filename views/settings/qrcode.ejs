@@ -1,4 +1,5 @@
-<!-- ROW OPEN -->
+
+
 <style>
     #qrcode img{
         margin:50px auto;
@@ -145,6 +146,8 @@
                                 <div class="rccs__expiry_sub_item">Email: <span class="rccs_clinic_email"></span></div>
                                 <div class="rccs__expiry_sub_item">Visit <span class="rccs_clinic_url"></span></div>
                                 </div>
+                                <div class="rccs_clinic_web_qr d-none" id="clinic_web_qr"></div>
+                                
                             </div>
                         </div>
                     </div>
@@ -322,10 +325,14 @@
                             <div  class=" col-md-12 ">
                                 <select class="form-select form-select-sm " id="selected_font_family" aria-hidden="true" data-kt-initialized="1">
                                     <option value="auto" >auto</option>
-                                    <option value="'Inter'" >'Inter'</option>
-                                    <option value="cursive" >cursive</option>
-                                    <option value="emoji" >emoji</option>
-                                    <option value="serif" >serif</option>
+                                    <option value="Dinmi" >Dinmi</option>
+                                    <option value="DeltaItalic" >Delta Italic</option>
+                                    <option value="DeltaBold" >Delta Bold</option>
+                                    <option value="DeltaBoldItalic" >Delta Bold Italic</option>
+                                    <option value="DinGroteskLight" >DinGroteskLight</option>
+                                    <option value="DidotLH" >DidotLH</option>
+                                    <option value="DidotLHRoman" >DidotLHRoman</option>
+                                    <option value="Diotima" >Diotima</option>
                                     <option value="'FontAwesome'" >'FontAwesome'</option>
                                 </select>
                             </div>
@@ -368,8 +375,17 @@
                 <input type="hidden" id="logo_width" value="0">
 				<input type="hidden" id="logo_height" value="0">
                 <input type="hidden" id="card_layout" value="0">
-                <div class="pt-4 d-flex justify-content-center">
-                    <button type="button" class="btn btn-info mb-1 mt-3" id="clinic_setting_save"><i class="fa fa-save">&nbsp;</i>Save</button>
+                <div class="pt-4 row align-items-center">
+                    <div class="col-md-6">
+                        <input class="form-check-input" type="checkbox" value="" id="check_clinic_web_qr" />
+                        <label class="form-check-label" for="check_clinic_web_qr">
+                            Web Site QR
+                        </label>
+                        
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <button type="button" class="btn btn-info mb-1 mt-3" id="clinic_setting_save"><i class="fa fa-save">&nbsp;</i>Save</button>
+                    </div>
                 </div>
             </div>
         </div>

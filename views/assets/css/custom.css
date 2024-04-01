@@ -1,4 +1,38 @@
 
+@font-face{
+    font-family: Dinmi;
+    src: local('/assets/fonts/DINMI___.woff'), url('/assets/fonts/DINMI___.woff') format('woff');
+}
+@font-face{
+    font-family: DeltaBold;
+    src: local('/assets/fonts/DJB_____.woff'), url('/assets/fonts/DJB_____.woff') format('woff');
+}
+@font-face{
+    font-family: DeltaBoldItalic;
+    src: local('/assets/fonts/DJBI____.woff'), url('/assets/fonts/DJBI____.woff') format('woff');
+}
+@font-face{
+    font-family: DeltaItalic;
+    src: local('/assets/fonts/DJMI____.woff'), url('/assets/fonts/DJMI____.woff') format('woff');
+}
+@font-face{
+    font-family: DinGroteskLight;
+    src: local('/assets/fonts/DNGL____.woff'), url('/assets/fonts/DNGL____.woff') format('woff');
+}
+@font-face{
+    font-family: DidotLH;
+    src: local('/assets/fonts/DOBOS___.woff'), url('/assets/fonts/DOBOS___.woff') format('woff');
+}
+@font-face{
+    font-family: DidotLHRoman;
+    src: local('/assets/fonts/DORSC___.woff'), url('/assets/fonts/DORSC___.woff') format('woff');
+}
+@font-face{
+    font-family: Diotima;
+    src: local('/assets/fonts/DTI_____.woff'), url('/assets/fonts/DTI_____.woff') format('woff');
+}
+
+
 #loader {
     display: flex;
     align-items: center;

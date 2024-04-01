@@ -5,6 +5,22 @@ $(document).ready(async function () {
   "use strict";
 
   var clinic_info = {}
+  var qrcode = new QRCode(document.getElementById("qr_code"), {
+    width : 256,
+    height : 256,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.L
+  });
+
+  var clinic_qrcode = new QRCode(document.getElementById("clinic_web_qr"), {
+    width : 256,
+    height : 256,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.L
+  });
+
   var size_slider = document.querySelector("#logo_size_slider");
   noUiSlider.create(size_slider, {
       start: [20],
@@ -107,9 +123,8 @@ $(document).ready(async function () {
       
       $(".clinic-address").html(result[0]['address1']+" "+result[0]['city']+" "+result[0]['state']+" "+result[0]['zip']);
       $(".clinic-phone").html(result[0]['phone']);
-      website = result['web'];
+      website = result[0]['web'];
       conector = window.location.origin+"/connection?t="+btoa(unescape(encodeURIComponent(localStorage.getItem('chosen_clinic'))))+"&n="+btoa(unescape(encodeURIComponent(result[0]['name'])));
-      
       clinic_info = result[0];
       // $(".rccs__name").html(clinic_info['name']);
       $("#rccs__number").html('Phone: '+clinic_info['phone']);
@@ -147,13 +162,31 @@ $(document).ready(async function () {
     }
   });
 
-  var qrcode = new QRCode(document.getElementById("qr_code"), {
-    width : 256,
-    height : 256,
-    colorDark : "#000000",
-    colorLight : "#ffffff",
-    correctLevel : QRCode.CorrectLevel.L
+  await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getqrcodetype", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['result'];
+      // if(result.length > 0){
+      //   if(result[0]['age'] == 1)
+      //     clinic_qrcode.makeCode(conector);
+      //   else if(website == "" || website == null)
+      //     clinic_qrcode.makeCode(conector);
+      //   else
+      //     clinic_qrcode.makeCode(website);
+      // }
+      // else{
+        if(website == "" || website == null)
+          clinic_qrcode.makeCode(conector);
+        else{
+          clinic_qrcode.makeCode(website);
+        }
+          
+      // }
+    } else {
+      return toastr.error("Action Failed");
+    }
   });
+
+  
 
   function makeQRCode () {
     var value = "";
@@ -191,6 +224,10 @@ $(document).ready(async function () {
     }
     
   }
+
+
+
+  
 
   function hexToRgb(hex) {
     const normal = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
@@ -344,6 +381,8 @@ $(document).ready(async function () {
     $("#qr_code img").css("height", $("#qr_size").val()+"px");
     $("#qr_code").css("left", $("#qr_x").val()+"%")
     $("#qr_code").css("top", $("#qr_y").val()+"%");
+    $("#clinic_web_qr img").css("width", "60px");
+    $("#clinic_web_qr img").css("height", "60px");
 
  }
 
@@ -560,9 +599,15 @@ $(document).ready(async function () {
     
   });
 
+  $(document).on("change","#check_clinic_web_qr",function(e){
+    if($(this).prop("checked")){
+      $("#clinic_web_qr").removeClass("d-none");
+    }else{
+      $("#clinic_web_qr").addClass("d-none");
+    }
   
 
-
+  });
   
 
 });
