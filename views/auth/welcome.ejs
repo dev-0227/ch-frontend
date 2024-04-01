@@ -10,14 +10,29 @@
     top: 0; bottom: 0; left: 0; right: 0;
     }
 
+    .overlay-logincontainer {
+        position: absolute;
+        top: 25%;
+        left: 0;
+        width: 50%;
+        height: 75%;
+        overflow: hidden;
+        transition: transform 0.6s ease-in-out;
+        z-index: 100;
+    }
+
+    .loginoverlay {
+        color: #FFFFFF;
+        position: relative;
+        left: 0;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+    }
+
     
 </style>
-<div class="row position-absolute">
-    <div class="col-md-6">
-        <canvas  id="container" width="600" height="600"></canvas>
-    </div>
-    <div class="col-md-6"></div>
-</div>
 
 <div class="d-flex flex-column flex-lg-row-auto bg-primary w-xl-600px positon-xl-relative">
     <div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px ">
@@ -34,10 +49,18 @@
                 </div>
                 <div class="col-md-2"></div>
             </div>
-            
             <p class="d-lg-block fw-semibold fs-2 text-white"></p>
         </div>
         <div class="d-lg-block d-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain bgi-position-y-bottom min-h-100px min-h-lg-350px" style="background-image: url(assets/media/illustrations/sigma-1/17.png)"></div>
     </div>
     
+</div>
+
+<div class="overlay-logincontainer" id ="home">
+    <div class="loginoverlay">
+        <div class="overlay-panel overlay-right">
+            
+            
+        </div>
+    </div>
 </div>
