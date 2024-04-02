@@ -588,7 +588,7 @@ $(document).ready(async function () {
 
   });
 
-  $(document).on("click","#selected_font_family",function(e){
+  $(document).on("change","#selected_font_family",function(e){
     if($("#selected_font_object").val()=="0"){
       $('.logo-text').css("font-family", $(this).val())
     }else if($("#selected_font_object").val()=="1"){

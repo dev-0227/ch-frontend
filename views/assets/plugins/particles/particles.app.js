@@ -19,7 +19,7 @@ particlesJS('home',
         "value": 180,
         "density": {
           "enable": true,
-          "value_area": 800
+          "value_area": 600
         }
       },
       "color": {
@@ -109,7 +109,7 @@ particlesJS('home',
           "speed": 3
         },
         "repulse": {
-          "distance": 200
+          "distance": 50,   //200
         },
         "push": {
           "particles_nb": 4

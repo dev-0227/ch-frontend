@@ -1,7 +1,4 @@
 
-
-
-
 $(document).ready(function () {
   "use strict";
   $('#email').keypress(function(e){

@@ -31,6 +31,149 @@
     font-family: Diotima;
     src: local('/assets/fonts/DTI_____.woff'), url('/assets/fonts/DTI_____.woff') format('woff');
 }
+@font-face{
+    font-family: AntiqueOlive;
+    src: local('/assets/fonts/AQNRI___.woff'), url('/assets/fonts/AQNRI___.woff') format('woff');
+}
+@font-face{
+    font-family: AkzidenzGroteskBE;
+    src: local('/assets/fonts/GFI_____.woff'), url('/assets/fonts/GFI_____.woff') format('woff');
+}
+@font-face{
+    font-family: AkzidenzGroteskBELightO;
+    src: local('/assets/fonts/GFL_____.woff'), url('/assets/fonts/GFL_____.woff') format('woff');
+}
+@font-face{
+    font-family: AkzidenzGroteskBELight;
+    src: local('/assets/fonts/GFLOS___.woff'), url('/assets/fonts/GFLOS___.woff') format('woff');
+}
+/**************/
+@font-face{
+    font-family: AGBookRounded;
+    src: local('/assets/fonts/KDRG____.woff'), url('/assets/fonts/KDRG____.woff') format('woff');
+}
+@font-face{
+    font-family: AshleyScriptMT;
+    src: local('/assets/fonts/LE______.woff'), url('/assets/fonts/LE______.woff') format('woff');
+}
+@font-face{
+    font-family: AGSchoolbook;
+    src: local('/assets/fonts/OKRG____.woff'), url('/assets/fonts/OKRG____.woff') format('woff');
+}
+@font-face{
+    font-family: BauerBodoni;
+    src: local('/assets/fonts/BBB_____.woff'), url('/assets/fonts/BBB_____.woff') format('woff');
+}
+@font-face{
+    font-family: BauerBodoniBold;
+    src: local('/assets/fonts/BBBOF___.woff'), url('/assets/fonts/BBBOF___.woff') format('woff');
+}
+@font-face{
+    font-family: Banco;
+    src: local('/assets/fonts/BC______.woff'), url('/assets/fonts/BC______.woff') format('woff');
+}
+
+@font-face{
+    font-family: Copperplate;
+    src: local('/assets/fonts/CP29C___.woff'), url('/assets/fonts/CP29C___.woff') format('woff');
+}
+@font-face{
+    font-family: CantorianMT;
+    src: local('/assets/fonts/EOSBI___.woff'), url('/assets/fonts/EOSBI___.woff') format('woff');
+}
+@font-face{
+    font-family: Century;
+    src: local('/assets/fonts/ICWI____.woff'), url('/assets/fonts/ICWI____.woff') format('woff');
+}
+@font-face{
+    font-family: Coronet;
+    src: local('/assets/fonts/N_RG____.woff'), url('/assets/fonts/N_RG____.woff') format('woff');
+}
+@font-face{
+    font-family: ErasBook;
+    src: local('/assets/fonts/ERBK____.woff'), url('/assets/fonts/ERBK____.woff') format('woff');
+}
+@font-face{
+    font-family: European;
+    src: local('/assets/fonts/EUO_____.woff'), url('/assets/fonts/EUO_____.woff') format('woff');
+}
+@font-face{
+    font-family: Eurostic;
+    src: local('/assets/fonts/EURO1___.woff'), url('/assets/fonts/EURO1___.woff') format('woff');
+}
+@font-face{
+    font-family: EuropeanPi;
+    src: local('/assets/fonts/EURO2___.woff'), url('/assets/fonts/EURO2___.woff') format('woff');
+}
+@font-face{
+    font-family: AGaramond;
+    src: local('/assets/fonts/GDB_____.woff'), url('/assets/fonts/GDB_____.woff') format('woff');
+}
+@font-face{
+    font-family: AGaramondSemiBold;
+    src: local('/assets/fonts/GDSIS___.woff'), url('/assets/fonts/GDSIS___.woff') format('woff');
+}
+@font-face{
+    font-family: GaramondThreeBold;
+    src: local('/assets/fonts/GMB_____.woff'), url('/assets/fonts/GMB_____.woff') format('woff');
+}
+@font-face{
+    font-family: GaramondThreeItalic;
+    src: local('/assets/fonts/GMI_____.woff'), url('/assets/fonts/GMI_____.woff') format('woff');
+}
+@font-face{
+    font-family: GaramondThreeItalicO;
+    src: local('/assets/fonts/GMIO____.woff'), url('/assets/fonts/GMIO____.woff') format('woff');
+}
+@font-face{
+    font-family: Goudy;
+    src: local('/assets/fonts/GO______.woff'), url('/assets/fonts/GO______.woff') format('woff');
+}
+@font-face{
+    font-family: GrotesqueMT;
+    src: local('/assets/fonts/GQBL____.woff'), url('/assets/fonts/GQBL____.woff') format('woff');
+}
+@font-face{
+    font-family: GaramondBEBold;
+    src: local('/assets/fonts/GWBOF___.woff'), url('/assets/fonts/GWBOF___.woff') format('woff');
+}
+@font-face{
+    font-family: GaramondBEBoldExpert;
+    src: local('/assets/fonts/GWBXP___.woff'), url('/assets/fonts/GWBXP___.woff') format('woff');
+}
+@font-face{
+    font-family: HighlanderBold;
+    src: local('/assets/fonts/HHBI____.woff'), url('/assets/fonts/HHBI____.woff') format('woff');
+}
+
+@font-face{
+    font-family: HelveticaNeue;
+    src: local('/assets/fonts/HLHCO___.woff'), url('/assets/fonts/HLHCO___.woff') format('woff');
+}
+
+@font-face{
+    font-family: HorleyOldStyleItalic;
+    src: local('/assets/fonts/HSI_____.woff'), url('/assets/fonts/HSI_____.woff') format('woff');
+}
+@font-face{
+    font-family: HorleyOldStyleMT;
+    src: local('/assets/fonts/HSLI____.woff'), url('/assets/fonts/HSLI____.woff') format('woff');
+}
+@font-face{
+    font-family: KaufmannBold;
+    src: local('/assets/fonts/KFB_____.woff'), url('/assets/fonts/KFB_____.woff') format('woff');
+}
+@font-face{
+    font-family: MinionOrnaments;
+    src: local('/assets/fonts/MOOR____.woff'), url('/assets/fonts/MOOR____.woff') format('woff');
+}
+@font-face{
+    font-family: Minion;
+    src: local('/assets/fonts/MORG____.woff'), url('/assets/fonts/MORG____.woff') format('woff');
+}
+
+
+
 
 
 #loader {
