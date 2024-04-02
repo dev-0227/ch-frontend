@@ -573,13 +573,13 @@ $(document).ready(async function () {
     pdf.canvas.width = 72 * 4;
 
     const front=document.querySelector("#vcard_front")
-    await html2canvas(front,{allowTaint:true}).then(canvas => {
+    await html2canvas(front,{allowTaint:true, scale:4}).then(canvas => {
       var img = canvas.toDataURL("image/png");
       pdf.addImage(img, 'SVG', 20, 40, 290, 182);
     });
 
     const back=document.querySelector("#vcard_back")
-    await html2canvas(back,{allowTaint:true}).then(canvas => {
+    await html2canvas(back,{allowTaint:true, scale:4}).then(canvas => {
       var img = canvas.toDataURL("image/png");
       pdf.addImage(img, 'PNG', 20, 240, 290, 182);
     });

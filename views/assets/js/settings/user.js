@@ -622,13 +622,13 @@ $(document).ready(function () {
 
     $(".rccs__card").removeClass('rccs__card--flipped')
     const front=document.querySelector(".rccs__card--front")
-    await html2canvas(front,{allowTaint:true}).then(canvas => {
+    await html2canvas(front,{allowTaint:true, scale:4}).then(canvas => {
       var img = canvas.toDataURL("image/png");
       pdf.addImage(img, 'SVG', 20, 40, 290, 182);
     });
 
     const back=document.querySelector(".rccs_card_back")
-    await html2canvas(back,{allowTaint:true}).then(canvas => {
+    await html2canvas(back,{allowTaint:true, scale:4}).then(canvas => {
       var img = canvas.toDataURL("image/png");
       pdf.addImage(img, 'PNG', 20, 240, 290, 182);
     });
