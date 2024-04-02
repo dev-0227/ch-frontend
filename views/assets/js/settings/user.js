@@ -229,6 +229,16 @@ $(document).ready(function () {
         $("#rccs__email").html($("#eemail").val());
         vcard_clinic_fill(index);
         makeQRCode();
+        var website = result[0]['web'];
+        var conector = window.location.origin+"/connection?t="+btoa(unescape(encodeURIComponent(localStorage.getItem('chosen_clinic'))))+"&n="+btoa(unescape(encodeURIComponent(result[0]['name'])));
+        if(website == "" || website == null){
+          clinic_qrcode.makeCode(conector);
+          clinic_back_qrcode.makeCode(conector);
+        }else{
+          clinic_qrcode.makeCode(website);
+          clinic_back_qrcode.makeCode(website);
+        }
+
         $("#edit_user_modal").modal("show");
       } else {
         toastr.error('Credential is invalid');
@@ -264,6 +274,23 @@ $(document).ready(function () {
     colorLight : "#ffffff",
     correctLevel : QRCode.CorrectLevel.L
   });
+
+  var clinic_qrcode = new QRCode(document.getElementById("clinic_web_qr"), {
+    width : 256,
+    height : 256,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.L
+  });
+
+  var clinic_back_qrcode = new QRCode(document.getElementById("clinic_web_qr_back"), {
+    width : 256,
+    height : 256,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.L
+  });
+
 
   function makeQRCode () {
     var value = "";
@@ -357,9 +384,26 @@ $(document).ready(function () {
       var qr_x = logo_info[7]?logo_info[7]:"0";
       var qr_y = logo_info[8]?logo_info[8]:"0";
       
-      
       var bg_color = clinics[index]['color']?clinics[index]['color']:"#eeeeee";
       var bg_pattern = clinics[index]['pattern']?clinics[index]['pattern']:"";
+
+      var fonts = clinics[index]['fonts'].split(",");
+      if(fonts[0]){
+        if(fonts[0]=="0"){
+          $(".rccs_clinic_web_qr").addClass("d-none");
+        }else{
+          $(".rccs_clinic_web_qr").removeClass("d-none");
+        }
+      }
+      $(".rccs_clinic_web_qr img").css("width", "60px");
+      $(".rccs_clinic_web_qr img").css("height", "60px");
+      $('.logo-text').css("font-family", 'auto');
+      $('.rccs_clinic_name').css("font-family", 'auto');
+      $('.rccs__expiry_sub_item').css("font-family", 'auto');
+      if(fonts[1])$('.logo-text').css("font-family", fonts[1]);
+      if(fonts[2])$('.rccs_clinic_name').css("font-family", fonts[2]);
+      if(fonts[3])$('.rccs__expiry_sub_item').css("font-family", fonts[3]);
+
       $(".rccs__issuer").html(clinic_logo);
       var layout = clinics[index]['layout'].toString();
       set_layout(layout);

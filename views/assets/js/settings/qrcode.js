@@ -153,6 +153,16 @@ $(document).ready(async function () {
         $("#qr_y").val(logo_info[8]?logo_info[8]:22);
       }
       $("#selected_object").val("1");
+      if(result[0]['fonts'] && result[0]['fonts']!=""){
+        var fonts = result[0]['fonts'].split(",");
+        $("#check_clinic_web_qr").prop("checked", (fonts[0]=="1")?true:false);
+        $("#logo_font").val(fonts[1]?fonts[1]:"");
+        $("#name_font").val(fonts[2]?fonts[2]:"");
+        $("#other_font").val(fonts[3]?fonts[3]:"");
+        $("#selected_font_object").val("1");
+        $("#selected_font_family").val($("#name_font").val()==""?"auto":$("#name_font").val());
+        set_fonts();
+      }
       adjust_logo();
       set_background();
       makeQRCode();
@@ -225,9 +235,6 @@ $(document).ready(async function () {
     
   }
 
-
-
-  
 
   function hexToRgb(hex) {
     const normal = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
@@ -321,8 +328,7 @@ $(document).ready(async function () {
     $(".logo-text").css("color", fontColor);
     $("#rccs__number").css("color", fontColor);
     $("#rccs__email").css("color", fontColor);
-
-
+    
     $(".clinic-name").css("color", fontColor);
     $(".rccs_clinic_name").css("color", fontColor);
     $(".rccs__expiry_sub_item").css("color", fontColor);
@@ -396,9 +402,14 @@ $(document).ready(async function () {
     logo += "," + $("#qr_size").val();
     logo += "," + $("#qr_x").val();
     logo += "," + $("#qr_y").val();
+    var font = $("#check_clinic_web_qr").prop("checked")?"1":"0";
+    font += "," + $("#logo_font").val();
+    font += "," + $("#name_font").val();
+    font += "," + $("#other_font").val();
     var entry = {
       clinic_id: localStorage.getItem('chosen_clinic'),
       logo: logo,
+      fonts: font,
       color: $("#selected_bg_color").val(),
       pattern: $("#selected_bg_pattern").val(),
       layout: $("#card_layout").val(),
@@ -588,25 +599,42 @@ $(document).ready(async function () {
 
   });
 
-  $(document).on("change","#selected_font_family",function(e){
-    if($("#selected_font_object").val()=="0"){
-      $('.logo-text').css("font-family", $(this).val())
-    }else if($("#selected_font_object").val()=="1"){
-      $('.rccs_clinic_name').css("font-family", $(this).val())
-    }else{
-      $('.rccs__expiry_sub_item').css("font-family", $(this).val())
-    }
-    
-  });
-
-  $(document).on("change","#check_clinic_web_qr",function(e){
-    if($(this).prop("checked")){
+  function set_fonts(){
+    if($("#check_clinic_web_qr").prop("checked")){
       $("#clinic_web_qr").removeClass("d-none");
     }else{
       $("#clinic_web_qr").addClass("d-none");
     }
-  
+    $('.logo-text').css("font-family", ($("#logo_font").val()=="")?"auto":$("#logo_font").val());
+    $('.rccs_clinic_name').css("font-family", ($("#name_font").val()=="")?"auto":$("#name_font").val());
+    $('.rccs__expiry_sub_item').css("font-family", ($("#other_font").val()=="")?"auto":$("#other_font").val());
+  }
 
+  $(document).on("change","#selected_font_family",function(e){
+    if($("#selected_font_object").val()=="0"){
+      $("#logo_font").val($(this).val());
+    }else if($("#selected_font_object").val()=="1"){
+      $("#name_font").val($(this).val());
+    }else{
+      $("#other_font").val($(this).val());
+    }
+    set_fonts();
+  });
+
+  $(document).on("change","#selected_font_object",function(e){
+    if($("#selected_font_object").val()=="0"){
+      $("#selected_font_family").val($("#logo_font").val());
+    }else if($("#selected_font_object").val()=="1"){
+      $("#selected_font_family").val($("#name_font").val());
+    }else{
+      $("#selected_font_family").val($("#other_font").val());
+    }
+    set_fonts();
+  });
+
+
+  $(document).on("change","#check_clinic_web_qr",function(e){
+    set_fonts();
   });
   
 
