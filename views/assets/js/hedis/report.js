@@ -2090,5 +2090,5 @@ async function loadData(){
 
 
 
-document.write('<script src="/assets/js/hedis/encounter.js" type="text/javascript"></script>');
-document.write('<script src="/assets/js/hedis/appointment.js" type="text/javascript"></script>');
+document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
+document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
