@@ -29,10 +29,11 @@ $(document).ready(async function () {
             $("#doctor_list").html("");
             for(var i=0;i<doctors.length;i++){
                 html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
-                html += '<input class="form-check-input" type="checkbox" checked="checked" value="1"  name="payment_type">';
+                html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
                 html += '<span class="form-check-label text-gray-600 fw-semibold">';
                 html += doctors[i]['fname']+' '+doctors[i]['fname'];
                 html += '</span></label>';
+                doctors[i]['ch'] = "1";
                 $("#doctor_list").append(html);
             }
         }
@@ -48,9 +49,12 @@ $(document).ready(async function () {
         html = '<tr class="h-60px"><td class="w-150px border  ">';
         html += '</td>';
         for(var i=0;i<doctors.length;i++){
-            html += '<td class="border w-250px text-center fw-bold">';
-            html += doctors[i]['fname']+' '+doctors[i]['fname'];
-            html += '</td>';
+            if(doctors[i]['ch']=="1"){
+                html += '<td class="border w-250px text-center fw-bold">';
+                html += doctors[i]['fname']+' '+doctors[i]['fname'];
+                html += '</td>';
+            }
+            
         }
         html += '</tr>';
         while (currentTime <= endTime) {
@@ -59,28 +63,29 @@ $(document).ready(async function () {
             html += '<tr class=""><td class="text-end border pe-1">';
             html += fromTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             html += '</td>';
-            
             for(var j=0;j<doctors.length;j++){
-                html += '<td class="border">';
-                for(var i=0; i<data.length; i++){
-                    var start_time = new Date(data[i]['start_date']);
-                    if(start_time>=fromTime && start_time<currentTime && data[i]['pcp_id']==doctors[j]['id']){
-                        html += '<div class="btn btn-primary me-5 fs-8 fw-bold p-1">'
-                        html += '<div class=""><i class="fa fa-question-circle"></i> '
-                        html += data[i]['FNAME']+' '+data[i]['LNAME']+', ';
-                        html += new Date(data[i]['DOB']).toLocaleString("en-US").split(" ")[0];
-                        html += '<br />'
-                        html += data[i]['PHONE']+', '+data[i]['pt_participate_status'];
-                        html += "</div></div>"
+                if(doctors[j]['ch']=="1"){
+                    html += '<td class="border text-center">';
+                    for(var i=0; i<data.length; i++){
+                        var start_time = new Date(data[i]['start_date']);
+                        if(start_time>=fromTime && start_time<currentTime && data[i]['pcp_id']==doctors[j]['id']){
+                            html += '<div class="btn btn-primary mx-3 fs-8 fw-bold p-1 appt" data-id="'+data[i]['id']+'">'
+                            html += '<div class=""><i class="fa fa-question-circle"></i> '
+                            html += data[i]['FNAME']+' '+data[i]['LNAME']+', ';
+                            html += new Date(data[i]['DOB']).toLocaleString("en-US").split(" ")[0];
+                            html += '<br />'
+                            html += data[i]['PHONE']+', '+data[i]['pt_participate_status'];
+                            html += "</div></div>"
+                        }
                     }
+                    html += '</td>';
                 }
-                html += '</td>';
             }
-            
             html += '</tr>';
         }
         $("#appt_time_line").html(html);
     }
+    var appointments = [];
     
     function load_data(){
         var date = $("#selected_date_picker_value").val()?$("#selected_date_picker_value").val(): new Date();
@@ -90,9 +95,9 @@ $(document).ready(async function () {
         }
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/getAppointment", (xhr, err) => {
             if (!err) {
-              let result = JSON.parse(xhr.responseText)['data'];
+              appointments = JSON.parse(xhr.responseText)['data'];
               
-              load_html(result);
+              load_html(appointments);
             }
         });
     }
@@ -100,5 +105,18 @@ $(document).ready(async function () {
     load_data();
 
     
+    $(document).on("change",".doctor-check",function(){
+        for(var i=0;i<doctors.length;i++){
+            if(doctors[i]['id']==$(this).data("id")){
+                doctors[i]['ch']=$(this).prop("checked")?"1":"0";
+            }
+        }
+        load_html(appointments);
+    });
 
+    $(document).on("click",".appt",function(){
+        //alert($(this).data("id"));
+    });
 });
+
+//document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
