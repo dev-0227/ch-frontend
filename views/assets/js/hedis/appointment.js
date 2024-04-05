@@ -1,22 +1,42 @@
+function GetFormattedDate(date) {
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var day  = ("0" + (date.getDate())).slice(-2);
+    var year = date.getFullYear();
+    // var hour =  ("0" + (date.getHours())).slice(-2);
+    // var min =  ("0" + (date.getMinutes())).slice(-2);
+    // var seg = ("0" + (date.getSeconds())).slice(-2);
+    return year + "-" + month + "-" + day;
+  }
 
-
-$(document).ready(function () {
+$(document).ready(async function () {
 
     var selected_date = new tempusDominus.TempusDominus(document.getElementById("selected_date_picker_button"), {
         //put your config here
     });
-    
-
     $("#selected_date_picker_value").on("change", function (e) {
         $("#selected_date").html(new Date($(this).val()).toDateString());
         load_data();
       });
 
     $("#selected_date").html(new Date().toDateString());
-
-    
-
-    
+    var entry ={
+        clinic_id: localStorage.getItem('chosen_clinic'),
+    }
+    var doctors = []
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getDoctorsByClinic", (xhr, err) => {
+        if (!err) {
+            doctors = JSON.parse(xhr.responseText)['data'];
+            $("#doctor_list").html("");
+            for(var i=0;i<doctors.length;i++){
+                html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
+                html += '<input class="form-check-input" type="checkbox" checked="checked" value="1"  name="payment_type">';
+                html += '<span class="form-check-label text-gray-600 fw-semibold">';
+                html += doctors[i]['fname']+' '+doctors[i]['fname'];
+                html += '</span></label>';
+                $("#doctor_list").append(html);
+            }
+        }
+    });
 
     function load_html(data){
         let startTime = data[0]?new Date(data[0]['start_date']):new Date();
@@ -25,33 +45,39 @@ $(document).ready(function () {
         endTime.setHours(24, 0, 0, 0); // Set end time to 12:00
         let currentTime = new Date(startTime);
         var html = "";
-        html = '<div class="row"><div class="col-md-1 border">';
-        html += '</div>';
-        html += '<div class="col-md-4 border">';
-        html += '</div>';
-        html += '</div>';
-        
+        html = '<tr class="h-60px"><td class="w-150px border  ">';
+        html += '</td>';
+        for(var i=0;i<doctors.length;i++){
+            html += '<td class="border w-250px text-center fw-bold">';
+            html += doctors[i]['fname']+' '+doctors[i]['fname'];
+            html += '</td>';
+        }
+        html += '</tr>';
         while (currentTime <= endTime) {
             let fromTime = new Date(currentTime);
             currentTime.setMinutes(currentTime.getMinutes() + 15); // Increment by 15 minutes
-            html += '<div class="row"><div class="col-md-1 border text-end">';
+            html += '<tr class=""><td class="text-end border pe-1">';
             html += fromTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            html += '</div>';
-            html += '<div class="col-md-4 border">';
-            for(var i=0; i<data.length; i++){
-                var start_time = new Date(data[i]['start_date']);
-                if(start_time>=fromTime && start_time<currentTime){
-                    html += '<div class="btn btn-primary me-5 fs-7 fw-bold p-1">'
-                    html += '<div class=""><i class="fa fa-question-circle"></i> '
-                    html += data[i]['FNAME']+' '+data[i]['LNAME']+', ';
-                    html += new Date(data[i]['DOB']).toLocaleString("en-US").split(" ")[0];
-                    html += '<br />'
-                    html += data[i]['PHONE']+', '+data[i]['pt_participate_status'];
-                    html += "</div></div>"
+            html += '</td>';
+            
+            for(var j=0;j<doctors.length;j++){
+                html += '<td class="border">';
+                for(var i=0; i<data.length; i++){
+                    var start_time = new Date(data[i]['start_date']);
+                    if(start_time>=fromTime && start_time<currentTime && data[i]['pcp_id']==doctors[j]['id']){
+                        html += '<div class="btn btn-primary me-5 fs-8 fw-bold p-1">'
+                        html += '<div class=""><i class="fa fa-question-circle"></i> '
+                        html += data[i]['FNAME']+' '+data[i]['LNAME']+', ';
+                        html += new Date(data[i]['DOB']).toLocaleString("en-US").split(" ")[0];
+                        html += '<br />'
+                        html += data[i]['PHONE']+', '+data[i]['pt_participate_status'];
+                        html += "</div></div>"
+                    }
                 }
+                html += '</td>';
             }
-            html += '</div>';
-            html += '</div>';
+            
+            html += '</tr>';
         }
         $("#appt_time_line").html(html);
     }
@@ -59,7 +85,7 @@ $(document).ready(function () {
     function load_data(){
         var date = $("#selected_date_picker_value").val()?$("#selected_date_picker_value").val(): new Date();
         var entry ={
-            date: new Date(date).toISOString().split('T')[0],
+            date: GetFormattedDate(new Date(date)),
             clinic_id: localStorage.getItem('chosen_clinic'),
         }
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/getAppointment", (xhr, err) => {

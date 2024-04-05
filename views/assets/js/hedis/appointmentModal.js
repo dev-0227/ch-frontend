@@ -107,6 +107,16 @@ $(document).on("click",".apptbtn",function(){
   
 });
 
+function GetFormattedDate(date) {
+  var month = ("0" + (date.getMonth() + 1)).slice(-2);
+  var day  = ("0" + (date.getDate())).slice(-2);
+  var year = date.getFullYear();
+  var hour =  ("0" + (date.getHours())).slice(-2);
+  var min =  ("0" + (date.getMinutes())).slice(-2);
+  // var seg = ("0" + (date.getSeconds())).slice(-2);
+  return year + "-" + month + "-" + day + " " + hour + ":" +  min;
+}
+
 $(document).on("click",".appt_edit_btn",function(){
   observation_id = null;
   $("#appointment_id").val($(this).parent().attr("idkey"));
@@ -116,9 +126,17 @@ $(document).on("click",".appt_edit_btn",function(){
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/chosenAppointment", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
-
+      
+      var options = {
+       year: "numeric",
+        month: "2-digit",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false
+      };
       $("#appointment_participate_status").val(result[0]['pt_participate_status']);
-      $("#appointment_approve_date").val(result[0]['pt_part_approve_date'].replace("T"," ").substr(0,16));
+      $("#appointment_approve_date").val(GetFormattedDate(new Date(result[0]['pt_part_approve_date'])));
       $("#appointment_status").val(result[0]['status']);
       $("#appointment_cancel_reason").val(result[0]['cancel_reason']);
       $("#appointment_class").val(result[0]['class']);
@@ -127,9 +145,9 @@ $(document).on("click",".appt_edit_btn",function(){
       $("#appointment_reason").val(result[0]['reason']);
       $("#appointment_priority").val(result[0]['priority']);
       $("#appointment_description").val(result[0]['description']);
-      $("#appointment_start_date").val(result[0]['start_date'].replace("T"," ").substr(0,16));
-      $("#appointment_end_date").val(result[0]['end_date'].replace("T"," ").substr(0,16));
-      $("#appointment_cancel_date").val(result[0]['cancel_date'].replace("T"," ").substr(0,16));
+      $("#appointment_start_date").val(GetFormattedDate(new Date(result[0]['start_date'])));
+      $("#appointment_end_date").val(GetFormattedDate(new Date(result[0]['end_date'])));
+      $("#appointment_cancel_date").val(GetFormattedDate(new Date(result[0]['cancel_date'])));
       $("#appointment_notes").val(result[0]['notes']);
       $("#appointment_pt_instruction").val(result[0]['pt_instruction']);
       $("#appointment_pt_instruction_date").val(result[0]['pt_instruction_date'].split('T')[0]);
