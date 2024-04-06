@@ -42,11 +42,13 @@ $(document).ready(async function () {
     
 
     function load_html(data){
-        let startTime = data[0]?new Date(data[0]['start_date']):new Date();
+        
+        let startTime = data[0]?new Date(data[0]['approve_date']):new Date();
         startTime.setHours(8, 0, 0, 0); // Set start time to 8:00
-        let endTime = data[0]?new Date(data[0]['start_date']):new Date();
+        let endTime = data[0]?new Date(data[0]['approve_date']):new Date();
         endTime.setHours(24, 0, 0, 0); // Set end time to 12:00
         let currentTime = new Date(startTime);
+       
         var html = "";
         html = '<tr class="h-60px"><td class="w-150px border  ">';
         html += '</td>';
@@ -69,8 +71,8 @@ $(document).ready(async function () {
                 if(doctors[j]['ch']=="1"){
                     html += '<td class="border text-center">';
                     for(var i=0; i<data.length; i++){
-                        var start_time = new Date(data[i]['start_date']);
-                        if(start_time>=fromTime && start_time<currentTime && data[i]['pcp_id']==doctors[j]['id']){
+                        var start_time = new Date(data[i]['approve_date'].split('T')[0]+" "+data[i]['start_date']);
+                        if(start_time>=fromTime && start_time<currentTime && data[i]['provider_id']==doctors[j]['id']){
                             html += '<div class="btn btn-primary mx-3 fs-8 fw-bold p-1 appt" data-id="'+data[i]['id']+'">'
                             html += '<div class=""><i class="fa fa-question-circle"></i> '
                             html += data[i]['FNAME']+' '+data[i]['LNAME']+', ';
