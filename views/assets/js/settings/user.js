@@ -164,6 +164,7 @@ $(document).ready(function () {
     $("#eemail").val('');
     $("#ephone").val('');
     $("#eaddr").val('');
+    $("#emrid").val('');
     $("#ecity").val('');
     $("#estate").val('');
     $("#ezip").val('');
@@ -194,6 +195,7 @@ $(document).ready(function () {
         $("#ephone").val(result[0]['phone']);
         $("#eext").val(result[0]['ext']);
         $("#eaddr").val(result[0]['address']);
+        $("#emrid").val(result[0]['emrid']);
         $("#qr_phone").prop('checked', result[0]['qr_phone']=="1"?true:false);
         $("#ecity").val(result[0]['city']);
         $("#estate").val(result[0]['state']);
@@ -694,6 +696,7 @@ $(document).ready(function () {
       email: document.getElementById('eemail').value,
       phone: document.getElementById('ephone').value,
       addr: document.getElementById('eaddr').value,
+      emrid: document.getElementById('emrid').value,
       city: document.getElementById('ecity').value,
       state: document.getElementById('estate').value,
       zip: document.getElementById('ezip').value,
