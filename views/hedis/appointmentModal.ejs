@@ -100,7 +100,7 @@
 					<table class="table table-striped table-bordered text-nowrap w-100"  id="appointment_table" >
 					  <thead>
 						<tr >
-							<th width="30%">Doctor</th>
+							<th width="30%">Provider</th>
 							<th width="30%">Reason</th>
 							<th width="30%">Status</th>
 							<th width="20%">Date Time</th>
@@ -124,7 +124,10 @@
 		    <div class="modal-title" id="appointment_title">
 			  <div class="d-flex align-items-center ">
 				<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="appointment_modal_fullname"></a>
-				<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
+				<div  class="mx-3 mt-1" >
+					<i class="ki-outline ki-information-2 text-warning fs-2x">
+					</i>
+				</div>
 				<div class= "fw-semibold fs-6 m-1 pe-2">
 					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
 						<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
@@ -193,33 +196,29 @@
 					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="appointment_reason">
 				</div>
 			</div>
-            <div class="col-md-3">
-				<div class="form-group">
-					<label for="appointment_start_date" class="required  fs-6 my-2">Start DateTime:</label>
-					<input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="start_date" id="appointment_start_date">
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="appointment_end_date" class="fw-semibold fs-6 my-2">End DateTime:</label>
-					<input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="end_date" id="appointment_end_date">
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="appointment_participate_status" class="fw-semibold fs-6 my-2">Patient Participate Status:</label>
-                    <select  class="form-control select2 custom-select" id="appointment_participate_status" data-field="pt_participate_status">
-						<option value="needs-action">Needs Action</option>
-                        <option value="accepted">Accepted</option>
-                        <option value="declined">Declined</option>
-                        <option value="tentative">Tentative</option>
-                    </select>
-				</div>
-			</div>
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="appointment_approve_date" class="fw-semibold fs-6 my-2">Approval Date:</label>
-					<input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_part_approve_date" id="appointment_approve_date">
+					<input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="approve_date" id="appointment_approve_date">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="d-flex flex-column flex-wrap fw-semibold px-4 pt-6 pb-2" data-kt-customer-table-filter="appointment_provider_type">
+					<label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+						<input class="form-check-input provider-radio" type="radio" name="appointment_provider" value="0" checked="checked">
+						<span class="form-check-label text-gray-600">Clinic Name</span>
+					</label>
+					<label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+						<input class="form-check-input provider-radio" type="radio" name="appointment_provider" value="1">
+						<span class="form-check-label text-gray-600">Specialist Visit</span>
+					</label>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_priority" class="fw-semibold fs-6 my-2">Priority:</label>
+					<select  class="form-control select2 custom-select" id="appointment_priority" data-field="priority">
+					</select>
 				</div>
 			</div>
 			<div class="col-md-3">
@@ -240,13 +239,75 @@
 
 				</div>
 			</div>
+            <div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_start_date" class="required  fs-6 my-2">Start Time:</label>
+					<input type="time" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="start_date" id="appointment_start_date">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_end_date" class="fw-semibold fs-6 my-2">End Time:</label>
+					<input type="time" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="end_date" id="appointment_end_date">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_measure" class="fw-semibold fs-6 my-2">Related Measure:</label>
+                    <select  class="form-control select2 custom-select" id="appointment_measure" data-field="pt_measure">
+						
+                    </select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_assessment" class="fw-semibold fs-6 my-2">Assessment:</label>
+                    <select  class="form-control select2 custom-select" id="appointment_assessment" data-field="assessment">
+						
+                    </select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_clinic_provider" class="fw-semibold fs-6 my-2">Client Provider:</label>
+                    <select  class="form-control select2 custom-select" id="appointment_clinic_provider" data-field="clinic_provider">
+						
+                    </select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_specialist_provider" class="fw-semibold fs-6 my-2">External Medical Provider:</label>
+                    <select  class="form-control select2 custom-select" id="appointment_specialist_provider" data-field="specialist_provider">
+						
+                    </select>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="appointment_participate_status" class="fw-semibold fs-6 my-2">Patient Participate Status:</label>
+                    <select  class="form-control select2 custom-select" id="appointment_participate_status" data-field="pt_participate_status">
+						<option value="needs-action">Needs Action</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="declined">Declined</option>
+                        <option value="tentative">Tentative</option>
+                    </select>
+				</div>
+			</div>
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="appointment_class" class="fw-semibold fs-6 my-2">Class:</label>
 					<select  class="form-control select2 custom-select" id="appointment_class" data-field="class"></select>
 				</div>
 			</div>
-			
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="appointment_notes" class="fw-semibold fs-6 my-2">Notes:</label>
+                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="appointment_notes">
+                </div>
+			</div>
+            
             <div class="col-md-12">
 				<div class="form-group">
 					<label for="appointment_description" class="fw-semibold fs-6 my-2">Description:</label>
@@ -299,21 +360,14 @@
 				</div>
 			</div>
 			
-			<div class="col-md-3">
+			
+            <div class="col-md-9">
 				<div class="form-group">
-					<label for="appointment_priority" class="fw-semibold fs-6 my-2">Priority:</label>
-					<select  class="form-control select2 custom-select" id="appointment_priority" data-field="priority">
-					</select>
+					<label for="appointment_pt_instruction" class=" fw-semibold fs-6 my-2">Patient Instruction:</label>
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_instruction" id="appointment_pt_instruction">
 				</div>
 			</div>
-            <div class="col-md-6">
-				<div class="form-group">
-					<label for="appointment_notes" class="fw-semibold fs-6 my-2">Notes:</label>
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="appointment_notes">
-                </div>
-			</div>
-            
-            <div class="col-md-8">
+            <div class="col-md-9">
 				<div class="form-group">
 					<label for="appointment_cancel_reason" class="fw-semibold fs-6 my-2">Cancel Reason:</label>
 					<select  class="form-control select2 custom-select" id="appointment_cancel_reason" data-field="cancel_reason">
@@ -353,24 +407,19 @@
                     </select>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					<label for="appointment_cancel_date" class="fw-semibold fs-6 my-2">Cancel Date:</label>
 					<input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="cancel_date" id="appointment_cancel_date">
 				</div>
 			</div>
-            <div class="col-md-9">
-				<div class="form-group">
-					<label for="appointment_pt_instruction" class=" fw-semibold fs-6 my-2">Patient Instruction:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_instruction" id="appointment_pt_instruction">
-				</div>
-			</div>
-            <div class="col-md-3">
+            
+            <!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="appointment_pt_instruction_date" class=" fw-semibold fs-6 my-2">Patient Instruction Date:</label>
 					<input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_instruction_date" id="appointment_pt_instruction_date">
 				</div>
-			</div>
+			</div> -->
             <!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="participant_participant_actor" class="fw-semibold fs-6 my-2">Participant:</label>

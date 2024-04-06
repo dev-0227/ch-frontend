@@ -39,6 +39,8 @@ $(document).ready(async function () {
         }
     });
 
+    
+
     function load_html(data){
         let startTime = data[0]?new Date(data[0]['start_date']):new Date();
         startTime.setHours(8, 0, 0, 0); // Set start time to 8:00
