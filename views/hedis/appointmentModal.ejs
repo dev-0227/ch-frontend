@@ -1,3 +1,8 @@
+<style>
+    .table td{
+        vertical-align: middle;
+    }
+</style>
 <div class="modal fade" id="appointment_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-fullscreen p-9" role="document">
 		<div class="modal-content modal-rounded">
@@ -19,7 +24,10 @@
 									<span class="symbol-label fs-3 bg-primary text-inverse-primary fw-bold" id="appt_pt_name_icon">A</span>
 								</div>
 								<a class="text-gray-900 text-hover-primary fs-2 fw-bold mx-2" ><div class="" id="appt_pt_fullname"></div></a>
-								<a  class="btn btn-sm btn-light-success fw-bold ms-2 fs-8 py-1 px-3" ></a>
+								<div  class="mx-3 mt-1 cursor-pointer pt_info" >
+									<i class="ki-outline ki-information-2 text-warning fs-2x">
+									</i>
+								</div>
 								<div class="fw-semibold fs-6 m-1 pe-2">
 									<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
 										<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
@@ -35,7 +43,10 @@
 								<div class="d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
 									<div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
 									<div class="text-gray-500" id="appt_pt_dob"></div>
-									
+								</div>
+								<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+									<div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
+									<div class="text-gray-500" id="appt_pt_age"></div>
 								</div>
 							</div>
 							<div class="col-md-4 d-flex justify-content-end">
@@ -100,6 +111,7 @@
 					<table class="table table-striped table-bordered text-nowrap w-100"  id="appointment_table" >
 					  <thead>
 						<tr >
+							<th width="5%"></th>
 							<th width="30%">Provider</th>
 							<th width="30%">Reason</th>
 							<th width="30%">Status</th>
@@ -124,7 +136,7 @@
 		    <div class="modal-title" id="appointment_title">
 			  <div class="d-flex align-items-center ">
 				<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="appointment_modal_fullname"></a>
-				<div  class="mx-3 mt-1 cursor-pointer" id="pt_info">
+				<div  class="mx-3 mt-1 cursor-pointer pt_info" >
 					<i class="ki-outline ki-information-2 text-warning fs-2x">
 					</i>
 				</div>
@@ -413,51 +425,14 @@
 				</div>
 			</div>
             
-            <!-- <div class="col-md-3">
-				<div class="form-group">
-					<label for="appointment_pt_instruction_date" class=" fw-semibold fs-6 my-2">Patient Instruction Date:</label>
-					<input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_instruction_date" id="appointment_pt_instruction_date">
-				</div>
-			</div> -->
-            <!-- <div class="col-md-3">
-				<div class="form-group">
-					<label for="participant_participant_actor" class="fw-semibold fs-6 my-2">Participant:</label>
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="participant_actor" id="participant_participant_actor">
-                </div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="appointment_participant_type" class="fw-semibold fs-6 my-2">Participant Type:</label>
-					<select  class="form-control select2 custom-select" id="appointment_participant_type" data-field="participant_type"></select>
-				</div>
-			</div>
-            <div class="col-md-2">
-				<div class="form-group">
-					<label for="appointment_participant_start" class="fw-semibold fs-6 my-2">Start:</label>
-					<input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="participant_start" id="appointment_participant_start">
-				</div>
-			</div>
-			<div class="col-md-2">
-				<div class="form-group">
-					<label for="appointment_participant_end" class="fw-semibold fs-6 my-2">End:</label>
-					<input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="participant_end" id="appointment_participant_end">
-				</div>
-			</div>
-            <div class="col-md-2">
-				<div class="form-group">
-					<label for="appointment_participant_status" class="fw-semibold fs-6 my-2">Participant Status:</label>
-					<select  class="form-control select2 custom-select" id="appointment_participant_status" data-field="participant_status">
-                        <option value="needs-action">Needs Action</option>
-                        <option value="accepted">Accepted</option>
-                        <option value="declined">Declined</option>
-                        <option value="tentative">Tentative</option>
-                    </select>
-				</div>
-			</div> -->
 
 		  </div>
 		</div>
 		<div class="modal-footer">
+		  <label class="form-check form-check-custom form-check-sm form-check-solid mb-3 me-6">
+			<input class="form-control form-check-input p-4" type="checkbox" value="1"  id="appointment_attended" data-field="attended">
+			<span class="form-check-label text-gray-600 fw-semibold">Appointment Attended</span>
+		  </label>
 		  <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
 		  <button type="button" class="btn btn-primary" id="appt_save_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
 		</div>

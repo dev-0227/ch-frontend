@@ -26,6 +26,11 @@ var appointment_table = $('#appointment_table').DataTable({
   "order": [],
   "bAutoWidth": false, 
   "columns": [
+      { data: "attended",
+        render: function (data, type, row) {
+          return row.attended=="1"?'<i class="ki-duotone ki-verify fs-1 text-primary"><span class="path1"></span><span class="path2"></span></i>':'';
+        } 
+      },
       { data: "pcp_id",
         render: function (data, type, row) {
           return '<div class="mx-2">'+row.fname+' '+row.lname+'</div>';
@@ -73,7 +78,7 @@ $(document).on("click",".apptbtn",function(){
         $("#appt_pt_fullname").html(result[0]['FNAME'] + " " + result[0]['LNAME'])
         $("#appt_pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
         $("#appt_pt_dob").html(new Date(result[0]['DOB']).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})),
-        
+        $("#appt_pt_age").html(calculateAge(result[0]['DOB']));
         $("#appt_pt_telephone").html(result[0]['PHONE'])
         if(result[0]['PHONE']){
           $("#appt_pt_telephone").parent().parent().removeClass("d-none");
@@ -170,6 +175,7 @@ $(document).on("click",".appt_edit_btn",function(){
         $("#appointment_clinic_provider").val("");
         $("#appointment_specialist_provider").val(result[0]['provider_id']);
       }
+      $("#appointment_attended").prop('checked', result[0]['attended']=="1"?true:false);
       $("#appointment_status").val(result[0]['status']);
       $("#appointment_cancel_reason").val(result[0]['cancel_reason']);
       $("#appointment_class").val(result[0]['class']);
@@ -197,6 +203,7 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_id").val('');
   $("#appointment_participate_status").val('needs-action');
   $("#appointment_approve_date").val(t);
+  $("#appointment_attended").prop('checked', false);
   $("#appointment_status").val('');
   $("#appointment_cancel_reason").val('');
   $("#appointment_class").val('');
@@ -283,13 +290,15 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {clinic_id: local
   }
 });
 
+let appointmentType = []
+
 
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentType", (xhr, err) => {
   if (!err) {
-    let result = JSON.parse(xhr.responseText)['data'];
+    appointmentType = JSON.parse(xhr.responseText)['data'];
     var options = '';
-    for(var i=0; i<result.length; i++){
-      options += '<option value="'+result[i]['id']+'" >'+result[i]['name']+'</option>';
+    for(var i=0; i<appointmentType.length; i++){
+      options += '<option value="'+appointmentType[i]['id']+'" >'+appointmentType[i]['name']+'</option>';
     }
     $("#appointment_appt_type").html(options);
   }
@@ -349,6 +358,36 @@ $(document).on("change","#appointment_measure",function(){
   }
 
 });
+
+var duration_mins = 0;
+
+$(document).on("change","#appointment_appt_type",function(){
+  for(var i=0; i<appointmentType.length; i++){
+    if(appointmentType[i]['id'] == $(this).val()){
+      duration_mins = appointmentType[i]['duration'];
+      
+      setEndData();
+      
+    }
+  }
+});
+
+$(document).on("change","#appointment_start_date",function(){
+  setEndData();
+});
+
+function checkTime(i) {
+  return (i < 10) ? "0" + i : i;
+}
+
+function setEndData(){
+  let startTime = new Date();
+  let start_date = $("#appointment_start_date").val();
+  startTime.setHours(start_date.split(":")[0], start_date.split(":")[1], 0, 0);
+  let end_date = new Date(startTime);
+  end_date.setMinutes(end_date.getMinutes() + duration_mins);
+  $("#appointment_end_date").val(checkTime(end_date.getHours())+":"+checkTime(end_date.getMinutes()));
+}
 
 $("#appointment_specialist_provider").prop("disabled", true);
 $(document).on("change",".provider-radio",function(){
@@ -477,7 +516,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/
   }
 });
 
-$("#pt_info").click(function (e) {
+$(".pt_info").click(function (e) {
 
   sendRequestWithToken('POST', localStorage.getItem('authToken'), {emr_id:$("#appt_pt_emrid").val()}, "patientlist/get", (xhr, err) => {
     if (!err) {
