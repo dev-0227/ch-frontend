@@ -12,7 +12,7 @@
                     <div class=" tab-menu-heading">
                         <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
                             <li class="nav-item"><a href="#appt_type_tab" class="nav-link active" data-bs-toggle="tab">Appointment Type</a></li>
-                            
+                            <li class="nav-item"><a href="#appt_category_tab" class="nav-link " data-bs-toggle="tab">Category Type</a></li>
                         </ul>
                     </div>
                     <div class="panel-body tabs-menu-body tab_area">
@@ -38,13 +38,43 @@
                                                             <th width="20%">Name</th>
                                                             <th width="15%">Category</th>
                                                             <th width="15%">Visit Type</th>
-                                                            <th width="15%">OBGYN</th>
+                                                            <th width="15%">duration</th>
                                                             <th width="15%">Status</th>
                                                             <th width="20%">Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="appt_category_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 d-flex align-items-center">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Appointment Category Type</h3>
+                                                </div>
+                                                <div class="card-options">
+                                                    <button id="appt_category_add_btn" type="button" class="btn btn-md btn-primary"><i class="fa fa-plus mr-2"></i>Add Category</button>
+                                                    <input type="hidden" id="chosen_appt_category" />
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="appt_category_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="20%">Name</th>
+                                                            <th width="50%">Description</th>
+                                                            <th width="20%">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -82,8 +112,6 @@
                         <div class="form-group">
                             <label for="appt_type_category" class="required fw-semibold fs-6 mt-2">Category:</label>
                             <select  class="form-control select2 custom-select" id="appt_type_category" data-field="category">
-                                <option value="1">PCP</option>
-                                <option value="2">Specialty</option>
                             </select>
                         </div>
                     </div>
@@ -93,7 +121,7 @@
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_type_description" data-field="description">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="form-group">
                             <label for="appt_type_visit" class="required fw-semibold fs-6 mt-2">Visit Type:</label>
                             <select  class="form-control select2 custom-select" id="appt_type_visit" data-field="visit">
@@ -105,14 +133,11 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="appt_type_obgyn" class="required fw-semibold fs-6 mt-2">OBGYN:</label>
-                            <select  class="form-control select2 custom-select" id="appt_type_obgyn" data-field="obgyn">
-                                <option value="0">No</option>
-                                <option value="1">Yes</option>
-                            </select>
+                            <label for="appt_type_duration" class="required fw-semibold fs-6 mt-2">Duration:</label>
+                            <input type="number" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_type_duration" data-field="duration">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="form-group">
                             <label for="appt_type_status" class="required fw-semibold fs-6 mt-2">Status:</label>
                             <select  class="form-control select2 custom-select" id="appt_type_status" data-field="status">
@@ -121,7 +146,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="appt_type_color" class="required fw-semibold fs-6 mt-2">Color:</label>
                             <input type="color" class="form-control p-2 h-50px w-100px colorbtn" id="appt_type_color" value="#CCCCCC" title="Choose a color" data-field="color">
@@ -132,6 +157,39 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
                 <button type="button" class="btn btn-primary" id="appt_type_create"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="appt_category_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Appointment Category Type</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <input type="hidden" class="form-control" id="appt_category_id" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_category_name" class="required fw-semibold fs-6 mt-2">Name:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_category_name" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_category_description" class="fw-semibold fs-6 mt-2">Description:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_category_description" >
+                        </div>
+                    </div>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="appt_category_create"><i class="fa fa-save">&nbsp;</i> Save</button>
             </div>
 		</div>
 	</div>

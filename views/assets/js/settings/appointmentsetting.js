@@ -14,23 +14,9 @@ $(document).ready(async function () {
                 }  
             },
             { data: 'name' },
-            { data: 'category',
-              render: function (data, type, row) {
-                var category = "PCP";
-                var color = "primary";
-                switch(row.category){
-                  case 1: category = "PCP"; color="primary"; break;
-                  case 2: category = "Specialty"; color="info"; break;
-                }
-                return '<div class="badge badge-'+color+' fw-bold badge-lg">'+category+'</span>';
-              }  
-            },
+            { data: 'categoryName'},
             { data: 'visit' },
-            { data: 'obgyn',
-                render: function (data, type, row) {
-                return row.obgyn=="0"?"No":"Yes";
-              }  
-            },
+            { data: 'duration' },
             { data: 'status',
                 render: function (data, type, row) {
                 var status = "Active";
@@ -55,13 +41,24 @@ $(document).ready(async function () {
         ],
     });
 
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentCategory", (xhr, err) => {
+        if (!err) {
+          let result = JSON.parse(xhr.responseText)['data'];
+          var options = '';
+          for(var i=0; i<result.length; i++){
+            options += '<option value="'+result[i]['id']+'" >'+result[i]['name']+'</option>';
+          }
+          $("#appt_type_category").html(options);
+        }
+      });
+
     $(document).on("click","#appt_type_add_btn",function(){
         $("#appt_type_id").val('');
         $("#appt_type_name").val('');
         $("#appt_type_description").val('');
         $("#appt_type_category").val('1');
         $("#appt_type_visit").val('Physical Visit');
-        $("#appt_type_obgyn").val('0');
+        $("#appt_type_duration").val('15');
         $("#appt_type_status").val('1');
         $("#appt_type_color").val("#cccccc");
         $("#appt_type_modal").modal("show");
@@ -71,6 +68,11 @@ $(document).ready(async function () {
         if($("#appt_type_name").val() == ""){
             toastr.info('Please enter Name');
             $("#appt_type_name").focus();
+            return;
+        }
+        if(!$("#appt_type_category").val() || $("#appt_type_category").val() == ""){
+            toastr.info('Please select Category');
+            $("#appt_type_category").focus();
             return;
         }
         let entry = {}
@@ -117,7 +119,7 @@ $(document).ready(async function () {
             $("#appt_type_description").val(result[0]['description']);
             $("#appt_type_category").val(result[0]['category']);
             $("#appt_type_visit").val(result[0]['visit']);
-            $("#appt_type_obgyn").val(result[0]['obgyn']);
+            $("#appt_type_duration").val(result[0]['duration']);
             $("#appt_type_status").val(result[0]['status']);
             $("#appt_type_color").val(result[0]['color']);
             $("#appt_type_modal").modal("show");
@@ -156,6 +158,124 @@ $(document).ready(async function () {
               });	
             }
               });
+    });
+
+
+    /******************************* Appointment Category Type *************************************************** */
+
+    var appt_category_table = $('#appt_category_table').DataTable({
+        "ajax": {
+            "url": serviceUrl + "hedis/appointmentCategory",
+            "type": "GET",
+            "headers": { 'Authorization': localStorage.getItem('authToken') }
+        },
+        "columns": [
+            { data: 'name' },
+            { data: 'description' },
+            { data: 'id',
+              render: function (data, type, row) {
+                return `
+                  <div idkey="`+row.id+`">
+                  <button class="btn btn-sm btn-primary edit_appt_category_btn"><i class="fa fa-edit"></i> Edit</button>
+                  <button class="btn btn-sm btn-danger delete_appt_category_btn"><i class="fa fa-trash"></i> Delete</button>
+                  </div>
+                `
+              } 
+            }
+        ],
+    });
+
+
+    $(document).on("click","#appt_category_add_btn",function(){
+        $("#appt_category_id").val('');
+        $("#appt_category_name").val('');
+        $("#appt_category_description").val('');
+        $("#appt_category_modal").modal("show");
+    });
+
+    $(document).on("click","#appt_category_create",function(){
+        if($("#appt_category_name").val() == ""){
+            toastr.info('Please enter Name');
+            $("#appt_category_name").focus();
+            return;
+        }
+        let entry = {
+            id: $('#appt_category_id').val(),
+            name: $('#appt_category_name').val(),
+            description: $('#appt_category_description').val(),
+          }
+
+        if($("#appt_category_id").val() == ""){
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/create", (xhr, err) => {
+            if (!err) {
+            $("#appt_category_modal").modal("hide");
+            return toastr.success("Action successfully");
+            } else {
+            return toastr.error("Action Failed");
+            }
+        });
+        }else{
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/update", (xhr, err) => {
+            if (!err) {
+            $("#appt_category_modal").modal("hide");
+            return toastr.success("Action successfully");
+            } else {
+            return toastr.error("Action Failed");
+            }
+        });
+        }
+        
+        setTimeout( function () {
+        appt_category_table.ajax.reload();
+        }, 1000 );
+    });
+
+    $(document).on("click",".edit_appt_category_btn",function(){
+        $("#appt_category_id").val($(this).parent().attr("idkey"));
+        let entry = {
+          id: $("#appt_category_id").val(),
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/chosen", (xhr, err) => {
+          if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];
+            $("#appt_category_name").val(result[0]['name']);
+            $("#appt_category_description").val(result[0]['description']);
+            $("#appt_category_modal").modal("show");
+          } else {
+            return toastr.error("Action Failed");
+          }
+        });
+    });
+
+    $(document).on("click",".delete_appt_category_btn",function(){
+        $("#appt_category_id").val($(this).parent().attr("idkey"));
+        let entry = {
+          id: $("#appt_category_id").val(),
+        }
+        Swal.fire({
+            text: "Are you sure you would like to delete?",
+            icon: "error",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
+            }
+              }).then(function (result) {
+            if (result.value) {
+              sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/delete", (xhr, err) => {
+                if (!err) {
+                  setTimeout( function () {
+                    appt_category_table.ajax.reload();
+                  }, 1000 );
+                } else {
+                  toastr.error('Credential is invalid');
+                }
+              });	
+            }
+        });
     });
     
 
