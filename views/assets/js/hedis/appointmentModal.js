@@ -187,7 +187,6 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_cancel_reason").val('');
   $("#appointment_class").val('');
   $("#appointment_service_category").val('');
-  $("#appointment_appt_type").val('');
   $("#appointment_reason").val('');
   $("#appointment_priority").val('R');
   $("#appointment_description").val('');
@@ -257,6 +256,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
   }
 });
 
+
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "specialist", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
@@ -266,6 +266,18 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {clinic_id: local
     }
     $("#appointment_specialist_provider").html(options);
     $("#appointment_specialist_provider").val("");
+  }
+});
+
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentType", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['id']+'" >'+result[i]['name']+'</option>';
+    }
+    $("#appointment_appt_type").html(options);
   }
 });
 
