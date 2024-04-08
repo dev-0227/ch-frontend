@@ -125,7 +125,38 @@ $(document).ready(async function () {
             return toastr.error("Action Failed");
           }
         });
-      });
+    });
+
+    $(document).on("click",".deleteappttiypebtn",function(){
+        $("#appt_type_id").val($(this).parent().attr("idkey"));
+        let entry = {
+          id: $("#appt_type_id").val(),
+        }
+        Swal.fire({
+            text: "Are you sure you would like to delete?",
+            icon: "error",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
+            }
+              }).then(function (result) {
+            if (result.value) {
+              sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentType/delete", (xhr, err) => {
+                if (!err) {
+                  setTimeout( function () {
+                    appt_type_table.ajax.reload();
+                  }, 1000 );
+                } else {
+                  toastr.error('Credential is invalid');
+                }
+              });	
+            }
+              });
+    });
     
 
     
