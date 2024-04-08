@@ -1,6 +1,17 @@
 
 var patient_id = 0;
 
+function calculateAge(dateString) {
+  var today = new Date();
+  var birthDate = new Date(dateString);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+  }
+  return age;
+}
+
 var appointment_table = $('#appointment_table').DataTable({
   "ajax": {
       "url": serviceUrl + "hedis/encounter/appointment",
@@ -49,6 +60,7 @@ $(document).on("click",".apptbtn",function(){
   $("#appointment_pcp_id").val(localStorage.getItem('userid'));
   $("#appointment_patient_id").val('');
   $("#appointment_emr_id").val('');
+  $("#appointment_modal_age").html('');
   sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $("#chosen_item").val()}, "hedis/getPatient", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -61,6 +73,7 @@ $(document).on("click",".apptbtn",function(){
         $("#appt_pt_fullname").html(result[0]['FNAME'] + " " + result[0]['LNAME'])
         $("#appt_pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
         $("#appt_pt_dob").html(new Date(result[0]['DOB']).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})),
+        
         $("#appt_pt_telephone").html(result[0]['PHONE'])
         if(result[0]['PHONE']){
           $("#appt_pt_telephone").parent().parent().removeClass("d-none");
@@ -91,6 +104,7 @@ $(document).on("click",".apptbtn",function(){
           $("#appt_pt_insid").parent().parent().addClass("d-none");
         }
         $("#appointment_modal_fullname").html($("#appt_pt_fullname").html());
+        $("#appointment_modal_age").html(calculateAge(result[0]['DOB']));
         $("#appointment_modal_language").html($("#appt_pt_language").html());
         $("#appointment_modal_clinic").html($("#hedis_clinic_name").val());
         $("#appointment_modal_gender").html($("#appt_pt_gender").html());
