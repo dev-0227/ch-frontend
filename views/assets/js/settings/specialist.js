@@ -203,6 +203,7 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateclinics", (xhr, err) => {
         if (!err) {
+          $("#specialist-clinic-modal").modal("hide");
           return toastr.success('Clinics are updated successfully');
         } else {
           return toastr.error('Action Failed');
@@ -295,6 +296,7 @@ $(document).ready(function () {
       }
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updatepwd", (xhr, err) => {
         if (!err) {
+          $("#specialist-pwd-modal").modal("hide");
           return toastr.success('Password is updated successfully');
         } else {
           return toastr.error('Action Failed');
@@ -314,6 +316,7 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateanswer", (xhr, err) => {
       if (!err) {
+        $("#specialist-question-modal").modal("hide");
         return toastr.success('Security is updated successfully');
       } else {
         return toastr.error('Action Failed');

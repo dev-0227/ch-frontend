@@ -147,14 +147,6 @@ $(document).on("click",".appt_edit_btn",function(){
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       
-      var options = {
-       year: "numeric",
-        month: "2-digit",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: false
-      };
       $("#appointment_clinic_name").html($("#hedis_clinic_name").val());
       $("#appointment_participate_status").val(result[0]['pt_participate_status']);
       $("#appointment_approve_date").val(GetFormattedDate(new Date(result[0]['approve_date'])));
