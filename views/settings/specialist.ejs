@@ -7,13 +7,8 @@
           <span class="path1"></span>
           <span class="path2"></span>
         </i>
-        <input
-          id="table_search_input"
-          type="text"
-          data-kt-user-table-filter="search"
-          class="form-control form-control-solid w-250px ps-13"
-          placeholder="Search ..."
-        />
+        <input id="table_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"
+          placeholder="Search ..."/>
       </div>
     </div>
     <div class="card-toolbar">
@@ -21,137 +16,114 @@
         ><i class="fa fa-plus">&nbsp;</i>Add</a
       >
     </div>
-    <div class="card-body py-4">
-      <input type="hidden" id="chosen_manager" />
+  </div>
+  <div class="card-body py-4">
+    <input type="hidden" id="chosen_manager" />
 
-      <table
-        class="table table-striped table-bordered text-nowrap w-100"
-        id="specialisttable"
-      >
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Active</th>
-            <th class="text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <table
+      class="table table-striped table-bordered text-nowrap w-100"
+      id="specialisttable"
+    >
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Active</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 </div>
 <!-- ROW CLOSED -->
-<div
-  class="modal fade"
-  id="specialist-edit-modal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
+<div  class="modal fade"  id="specialist-edit-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="example-Modal3">Specialist Edit</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+      </div>
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="efname" class="form-control-label">First Name:</label>
-              <input type="text" class="form-control" id="efname" />
+              <label for="efname" class="form-control-label mt-2 p-1">First Name:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="efname" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="elname" class="form-control-label">Last Name:</label>
-              <input type="text" class="form-control" id="elname" />
+              <label for="elname" class="form-control-label mt-2 p-1">Last Name:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elname" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="emname" class="form-control-label"
-                >Middle Name:</label
-              >
-              <input type="text" class="form-control" id="emname" />
+              <label for="emname" class="form-control-label mt-2 p-1">Middle Name:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="eplocation" class="form-control-label"
-                >Primary Location:</label
-              >
-              <input type="text" class="form-control" id="eplocation" />
+              <label for="eplocation" class="form-control-label mt-2 p-1">Primary Location:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eplocation" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="especiality" class="form-control-label"
-                >Speciality:</label
-              >
-              <input type="text" class="form-control" id="especiality" />
+              <label for="especiality" class="form-control-label mt-2 p-1">Specialty:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="especiality" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="enpi" class="form-control-label">NPI:</label>
-              <input type="text" class="form-control" id="enpi" />
+              <label for="enpi" class="form-control-label mt-2 p-1">NPI:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="enpi" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="elicense" class="form-control-label">License:</label>
-              <input type="text" class="form-control" id="elicense" />
+              <label for="eemail" class="form-control-label mt-2 p-1">Email:</label>
+              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="eemail" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="eemail" class="form-control-label">Email:</label>
-              <input type="email" class="form-control" id="eemail" />
+              <label for="etel" class="form-control-label mt-2 p-1">Tel:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="etel" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="etel" class="form-control-label">Tel:</label>
-              <input type="text" class="form-control" id="etel" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="ecel" class="form-control-label">Cel:</label>
-              <input type="text" class="form-control" id="ecel" />
+              <label for="ecel" class="form-control-label mt-2 p-1">Cel:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecel" />
             </div>
           </div>
           <div class="col-md-12">
             <div class="form-group">
-              <label for="eaddress" class="form-control-label">Address:</label>
-              <input type="text" class="form-control" id="eaddress" />
+              <label for="eaddress" class="form-control-label mt-2 p-1">Address:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="efax" class="form-control-label">Fax:</label>
-              <input type="text" class="form-control" id="efax" />
+              <label for="efax" class="form-control-label mt-2 p-1">Fax:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="efax" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="ecity" class="form-control-label">City:</label>
-              <input type="text" class="form-control" id="ecity" />
+              <label for="ecity" class="form-control-label mt-2 p-1">City:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecity" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="estate" class="form-control-label">State:</label>
+              <label for="estate" class="form-control-label mt-2 p-1">State:</label>
               <select id="estate" class="form-control custom-select">
                 <optgroup label="Alaskan/Hawaiian Time Zone">
                   <option value="AK">Alaska</option>
@@ -216,37 +188,42 @@
               </select>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="ezip" class="form-control-label">Zip:</label>
-              <input type="text" class="form-control" id="ezip" />
+              <label for="ezip" class="form-control-label mt-2 p-1">Zip:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ezip" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="ecname" class="form-control-label"
+              <label for="elicense" class="form-control-label mt-2 p-1">License:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elicense" />
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="ecname" class="form-control-label mt-2 p-1"
                 >Contact Name:</label
               >
-              <input type="text" class="form-control" id="ecname" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecname" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="ecemail" class="form-control-label"
-                >Contact Email:</label
-              >
-              <input type="email" class="form-control" id="ecemail" />
+              <label for="ecemail" class="form-control-label mt-2 p-1" >Contact Email:</label>
+              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecemail" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="eccel" class="form-control-label">Contact Cel:</label>
-              <input type="text" class="form-control" id="eccel" />
+              <label for="eccel" class="form-control-label mt-2 p-1">Contact Cel:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eccel" />
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="estatus" class="form-control-label">Status:</label>
+              <label for="estatus" class="form-control-label mt-2 p-1">Status:</label>
               <select id="estatus" class="form-control custom-select">
                 <option value="1">Active</option>
                 <option value="2">Inactive</option>
@@ -256,128 +233,109 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-dismiss="modal"
-          id="meditbtn"
-        >
-          Done
-        </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="meditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
+      
     </div>
   </div>
 </div>
-<div
-  class="modal fade"
-  id="specialist-add-modal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
+<div  class="modal fade"  id="specialist-add-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="example-Modal3">Specialist Add</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+      </div>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="fname" class="form-control-label">First Name:</label>
-              <input type="text" class="form-control" id="fname" />
+              <label for="fname" class="form-control-label mt-2 p-1">First Name:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="fname" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="lname" class="form-control-label">Last Name:</label>
-              <input type="text" class="form-control" id="lname" />
+              <label for="lname" class="form-control-label mt-2 p-1">Last Name:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="lname" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="mname" class="form-control-label">Middle Name:</label>
-              <input type="text" class="form-control" id="mname" />
+              <label for="mname" class="form-control-label mt-2 p-1">Middle Name:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="mname" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="plocation" class="form-control-label"
+              <label for="plocation" class="form-control-label mt-2 p-1"
                 >Primary Location:</label
               >
-              <input type="text" class="form-control" id="plocation" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="plocation" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="speciality" class="form-control-label"
+              <label for="speciality" class="form-control-label mt-2 p-1"
                 >Speciality:</label
               >
-              <input type="text" class="form-control" id="speciality" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="speciality" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="npi" class="form-control-label">NPI:</label>
-              <input type="text" class="form-control" id="npi" />
+              <label for="npi" class="form-control-label mt-2 p-1">NPI:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="npi" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="license" class="form-control-label">License:</label>
-              <input type="text" class="form-control" id="license" />
+              <label for="license" class="form-control-label mt-2 p-1">License:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="license" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="email" class="form-control-label">Email:</label>
-              <input type="email" class="form-control" id="email" />
+              <label for="email" class="form-control-label mt-2 p-1">Email:</label>
+              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="email" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="tel" class="form-control-label">Tel:</label>
-              <input type="text" class="form-control" id="tel" />
+              <label for="tel" class="form-control-label mt-2 p-1">Tel:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="tel" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="cel" class="form-control-label">Cel:</label>
-              <input type="text" class="form-control" id="cel" />
+              <label for="cel" class="form-control-label mt-2 p-1">Cel:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="cel" />
             </div>
           </div>
           <div class="col-md-12">
             <div class="form-group">
-              <label for="address" class="form-control-label">Address:</label>
-              <input type="text" class="form-control" id="address" />
+              <label for="address" class="form-control-label mt-2 p-1">Address:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="address" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="fax" class="form-control-label">Fax:</label>
-              <input type="text" class="form-control" id="fax" />
+              <label for="fax" class="form-control-label mt-2 p-1">Fax:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="fax" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="city" class="form-control-label">City:</label>
-              <input type="text" class="form-control" id="city" />
+              <label for="city" class="form-control-label mt-2 p-1">City:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="city" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="state" class="form-control-label">State:</label>
+              <label for="state" class="form-control-label mt-2 p-1">State:</label>
               <select id="state" class="form-control custom-select">
                 <optgroup label="Alaskan/Hawaiian Time Zone">
                   <option value="AK">Alaska</option>
@@ -444,131 +402,93 @@
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="zip" class="form-control-label">Zip:</label>
-              <input type="text" class="form-control" id="zip" />
+              <label for="zip" class="form-control-label mt-2 p-1">Zip:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="zip" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="cname" class="form-control-label"
+              <label for="cname" class="form-control-label mt-2 p-1"
                 >Contact Name:</label
               >
-              <input type="text" class="form-control" id="cname" />
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="cname" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="cemail" class="form-control-label"
+              <label for="cemail" class="form-control-label mt-2 p-1"
                 >Contact Email:</label
               >
-              <input type="email" class="form-control" id="cemail" />
+              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="cemail" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="ccel" class="form-control-label">Contact Cel:</label>
-              <input type="text" class="form-control" id="ccel" />
+              <label for="ccel" class="form-control-label mt-2 p-1">Contact Cel:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ccel" />
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="maddbtn"
-          data-dismiss="modal"
-        >
-          Done
-        </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="maddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
+      
     </div>
   </div>
 </div>
-<div
-  class="modal fade"
-  id="specialist-pwd-modal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
+<div  class="modal fade"  id="specialist-pwd-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="example-Modal3">
           Specialist Password Setting
         </h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+      </div>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="pwd" class="form-control-label">New Password:</label>
-              <input type="password" class="form-control" id="pwd" />
+              <label for="pwd" class="form-control-label mt-2 p-1">New Password:</label>
+              <input type="password" class="form-control form-control-solid mb-3 mb-lg-0 " id="pwd" />
             </div>
           </div>
           <div class="col-md-12">
             <div class="form-group">
-              <label for="cpwd" class="form-control-label"
+              <label for="cpwd" class="form-control-label mt-2 p-1"
                 >Confirm Password:</label
               >
-              <input type="password" class="form-control" id="cpwd" />
+              <input type="password" class="form-control form-control-solid mb-3 mb-lg-0 " id="cpwd" />
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="mpwdbtn"
-          data-dismiss="modal"
-        >
-          Done
-        </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="mpwdbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
+      
     </div>
   </div>
 </div>
-<div
-  class="modal fade"
-  id="specialist-question-modal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
+<div  class="modal fade"  id="specialist-question-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="example-Modal3">Set Security Question</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+      </div>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="question" class="form-control-label"
+              <label for="question" class="form-control-label mt-2 p-1"
                 >Security Question:</label
               >
               <select id="question" class="form-control custom-select"></select>
@@ -576,47 +496,29 @@
           </div>
           <div class="col-md-12">
             <div class="form-group">
-              <label for="answer" class="form-control-label">Answer:</label>
-              <input type="text" class="form-control" id="answer" />
+              <label for="answer" class="form-control-label mt-2 p-1">Answer:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="answer" />
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="mquestionbtn"
-          data-dismiss="modal"
-        >
-          Done
-        </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="mquestionbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
+      
     </div>
   </div>
 </div>
 <div
-  class="modal fade"
-  id="specialist-clinic-modal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
+  class="modal fade"  id="specialist-clinic-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="example-Modal3">Set Clinics</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+      </div>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -632,18 +534,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="mclinicbtn"
-          data-dismiss="modal"
-        >
-          Done
-        </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="mclinicbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
+      
     </div>
   </div>
 </div>

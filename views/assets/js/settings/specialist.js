@@ -90,6 +90,7 @@ $(document).ready(function () {
                 <input type="checkbox" value = "`+result[i]['id']+`" name="clinickey" value="`+result[i]['name']+`" class="selectgroup-input clinickey" checked>
                 <span class="selectgroup-button">`+result[i]['name']+`</span>
               </label>
+              
             `);
           }
         }
@@ -115,9 +116,7 @@ $(document).ready(function () {
         }
         $("#specialist-clinic-modal").modal("show");
       } else {
-        return $.growl.error({
-        message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -134,9 +133,7 @@ $(document).ready(function () {
         }
         $("#specialist-question-modal").modal("show");
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
@@ -145,28 +142,31 @@ $(document).ready(function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
+      buttonsStyling: false,
       confirmButtonText: "Yes, delete it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/delete", (xhr, err) => {
+      cancelButtonText: "No, return",
+      customClass: {
+        confirmButton: "btn btn-danger",
+        cancelButton: "btn btn-primary"
+      }
+		}).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/delete", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               managertable.ajax.reload();
             }, 1000 );
           } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
+            return toastr.error('Action Failed');
           }
-        });
-			}
+        });	
+      }
 		});
+
   });
   $(document).on("click",".manageraddbtn",function(){
     $("#specialist-add-modal").modal("show");
@@ -186,13 +186,9 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateclinics", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Clinics are updated successfully"
-          });
+          return toastr.success('Clinics are updated successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
     });
     setTimeout( function () {
@@ -224,20 +220,15 @@ $(document).ready(function () {
         if (!err) {
           let result = JSON.parse(xhr.responseText)['data'];
           if(result == "existed"){
-            return $.growl.notice({
-              message: "This email is already existed so please try with another email"
-            });
+            return toastr.info('This email is already existed so please try with another email');
           }
           else{
-            return $.growl.notice({
-              message: "Specialist is added successfully"
-            });
+            $("#specialist-add-modal").modal("hide");
+            return toastr.success('Specialist is added successfully');
           }
           
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
     });
     setTimeout( function () {
@@ -269,13 +260,10 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Specialist is updated successfully"
-          });
+          $("#specialist-edit-modal").modal("hide");
+          return toastr.success('Specialist is updated successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
     });
     setTimeout( function () {
@@ -290,20 +278,15 @@ $(document).ready(function () {
       }
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updatepwd", (xhr, err) => {
         if (!err) {
-          return $.growl.notice({
-            message: "Password is updated successfully"
-          });
+          return toastr.success('Password is updated successfully');
         } else {
-          return $.growl.error({
-            message: "Action Failed"
-          });
+          return toastr.error('Action Failed');
         }
       });
     }
     else{
-      return $.growl.error({
-        message: "Please confirm password again."
-      });
+      return toastr.error('Please confirm password again');
+      
     }
   });
   $("#mquestionbtn").click(function (e) {
@@ -314,13 +297,9 @@ $(document).ready(function () {
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateanswer", (xhr, err) => {
       if (!err) {
-        return $.growl.notice({
-          message: "Security is updated successfully"
-        });
+        return toastr.success('Security is updated successfully');
       } else {
-        return $.growl.error({
-          message: "Action Failed"
-        });
+        return toastr.error('Action Failed');
       }
     });
   });
