@@ -131,6 +131,7 @@ $(document).ready(function () {
   sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "setting/getClinic", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText);
+      
       $(".hedis-title").html(result['clinic']+" Hedis Quality Tracking | Daily List | <span id='chosen-date'>"+DateFormat(new Date()))+"</span>";
       
     } else {

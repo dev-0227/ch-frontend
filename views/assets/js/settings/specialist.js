@@ -76,49 +76,66 @@ $(document).ready(function () {
       }
     });
   });
+
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "setting/clinic/getAll", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      for(var i = 0; i < result.length; i++){
+        $("#clinic-list-specialist").append(`
+          <a href="#" class="btn btn-secondary m-1 clinic_toggle " style="border: 2px solid #cccccc;" >
+              <input type="checkbox" value="`+result[i].id+`" value="`+result[i]['name']+`" class="clinickey" style="display: none;" >
+              <span class="selectgroup-button">`+result[i].name+`</span>
+          </a>
+        `);
+      }
+    }
+  });
+
+  $(document).on("click",".clinic_toggle",function(){
+    var checkbox = $(this).children().first();
+    if(checkbox.prop('checked')){
+      checkbox.prop('checked', false);
+      $(this).removeClass("btn-primary");
+      $(this).addClass("btn-secondary");
+    }else{
+      checkbox.prop('checked', true);
+      $(this).removeClass("btn-secondary");
+      $(this).addClass("btn-primary");
+    }
+  });
   $(document).on("click",".managerclinicbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/clinic/getAll", (xhr, err) => {
+    $(".clinickey").prop('checked', false);
+    $(".clinic_toggle").removeClass("btn-primary");
+    $(".clinic_toggle").addClass("btn-secondary");
+    
+    let entry = {
+      id: $(this).parent().attr("idkey"),
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/chosen", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
-        let clinics = $(this).attr("clinickey").split(",");
-        $("#clinic-list-specialist").empty();
-        if(clinics.length == 1 && clinics[0] == "0"){
-          for(var i = 0; i < result.length; i++){
-            $("#clinic-list-specialist").append(`
-              <label class="selectgroup-item">
-                <input type="checkbox" value = "`+result[i]['id']+`" name="clinickey" value="`+result[i]['name']+`" class="selectgroup-input clinickey" checked>
-                <span class="selectgroup-button">`+result[i]['name']+`</span>
-              </label>
-              
-            `);
-          }
-        }
-        else{
-          for(var i = 0; i < result.length; i++){
-            if(clinics.includes(result[i]['id'].toString())){
-              $("#clinic-list-specialist").append(`
-                <label class="selectgroup-item">
-                  <input type="checkbox" value = "`+result[i]['id']+`" name="clinickey" value="`+result[i]['name']+`" class="selectgroup-input clinickey" checked>
-                  <span class="selectgroup-button">`+result[i]['name']+`</span>
-                </label>
-              `);
+        if(result.length > 0)
+          if(result[0]['clinic']){
+          var clinics = result[0]['clinic'].split(',');
+        
+          $('.clinickey').each(function(i){
+              for(var i = 0; i < clinics.length; i++){
+              if(clinics[i] == $(this).val()){
+                $(this).prop('checked', true);
+                $(this).parent().removeClass("btn-secondary");
+                $(this).parent().addClass("btn-primary");
+              };
             }
-            else{
-              $("#clinic-list-specialist").append(`
-                <label class="selectgroup-item">
-                  <input type="checkbox" value = "`+result[i]['id']+`" name="clinickey" value="`+result[i]['name']+`" class="selectgroup-input clinickey">
-                  <span class="selectgroup-button">`+result[i]['name']+`</span>
-                </label>
-              `);
-            }
-          }
+          });
         }
+      
         $("#specialist-clinic-modal").modal("show");
       } else {
-        return toastr.error('Action Failed');
+        toastr.error('Credential is invalid');
       }
     });
+
   });
   $(document).on("click",".managerquestionbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));

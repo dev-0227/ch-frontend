@@ -73,6 +73,7 @@ $(document).on("click",".apptbtn",function(){
         $("#appointment_patient_id").val(result[0]['id']);
         $("#appointment_emr_id").val(result[0]['patientid']);
         
+        
         $("#appt_pt_gender").html(result[0]['GENDER']);
         $("#appt_pt_name_icon").html(result[0]['FNAME'].substring(0,1)+result[0]['LNAME'].substring(0,1));
         $("#appt_pt_fullname").html(result[0]['FNAME'] + " " + result[0]['LNAME'])
@@ -154,6 +155,7 @@ $(document).on("click",".appt_edit_btn",function(){
         minute: "numeric",
         hour12: false
       };
+      $("#appointment_clinic_name").html($("#hedis_clinic_name").val());
       $("#appointment_participate_status").val(result[0]['pt_participate_status']);
       $("#appointment_approve_date").val(GetFormattedDate(new Date(result[0]['approve_date'])));
       $("#appointment_start_date").val(result[0]['start_date']);
