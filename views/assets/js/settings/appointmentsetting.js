@@ -161,7 +161,7 @@ $(document).ready(async function () {
     });
 
 
-    /******************************* Appointment Category Type *************************************************** */
+/******************************* Appointment Category Type *************************************************** */
 
     var appt_category_table = $('#appt_category_table').DataTable({
         "ajax": {
@@ -278,6 +278,121 @@ $(document).ready(async function () {
         });
     });
     
+/******************************* Specialty Type *************************************************** */
 
+var appt_specialty_table = $('#appt_specialty_table').DataTable({
+  "ajax": {
+      "url": serviceUrl + "hedis/appointmentSpecialty",
+      "type": "GET",
+      "headers": { 'Authorization': localStorage.getItem('authToken') }
+  },
+  "columns": [
+      { data: 'name' },
+      { data: 'description' },
+      { data: 'id',
+        render: function (data, type, row) {
+          return `
+            <div idkey="`+row.id+`">
+            <button class="btn btn-sm btn-primary edit_appt_specialty_btn"><i class="fa fa-edit"></i> Edit</button>
+            <button class="btn btn-sm btn-danger delete_appt_specialty_btn"><i class="fa fa-trash"></i> Delete</button>
+            </div>
+          `
+        } 
+      }
+  ],
+});
+
+
+$(document).on("click","#appt_specialty_add_btn",function(){
+  $("#appt_specialty_id").val('');
+  $("#appt_specialty_name").val('');
+  $("#appt_specialty_description").val('');
+  $("#appt_specialty_modal").modal("show");
+});
+
+$(document).on("click","#appt_specialty_create",function(){
+  if($("#appt_specialty_name").val() == ""){
+      toastr.info('Please enter Name');
+      $("#appt_specialty_name").focus();
+      return;
+  }
+  let entry = {
+      id: $('#appt_specialty_id').val(),
+      name: $('#appt_specialty_name').val(),
+      description: $('#appt_specialty_description').val(),
+    }
+
+  if($("#appt_specialty_id").val() == ""){
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/create", (xhr, err) => {
+      if (!err) {
+      $("#appt_specialty_modal").modal("hide");
+      return toastr.success("Action successfully");
+      } else {
+      return toastr.error("Action Failed");
+      }
+  });
+  }else{
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/update", (xhr, err) => {
+      if (!err) {
+      $("#appt_specialty_modal").modal("hide");
+      return toastr.success("Action successfully");
+      } else {
+      return toastr.error("Action Failed");
+      }
+  });
+  }
+  
+  setTimeout( function () {
+  appt_specialty_table.ajax.reload();
+  }, 1000 );
+});
+
+$(document).on("click",".edit_appt_specialty_btn",function(){
+  $("#appt_specialty_id").val($(this).parent().attr("idkey"));
+  let entry = {
+    id: $("#appt_specialty_id").val(),
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/chosen", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      $("#appt_specialty_name").val(result[0]['name']);
+      $("#appt_specialty_description").val(result[0]['description']);
+      $("#appt_specialty_modal").modal("show");
+    } else {
+      return toastr.error("Action Failed");
+    }
+  });
+});
+
+$(document).on("click",".delete_appt_specialty_btn",function(){
+  $("#appt_specialty_id").val($(this).parent().attr("idkey"));
+  let entry = {
+    id: $("#appt_specialty_id").val(),
+  }
+  Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-primary"
+      }
+        }).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/delete", (xhr, err) => {
+          if (!err) {
+            setTimeout( function () {
+              appt_specialty_table.ajax.reload();
+            }, 1000 );
+          } else {
+            toastr.error('Credential is invalid');
+          }
+        });	
+      }
+  });
+});
     
 });
