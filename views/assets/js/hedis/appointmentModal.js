@@ -260,6 +260,17 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
   }
 });
 
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/measuresData", (xhr, err) => {
+  if (!err) {
+    let measure = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<measure.length; i++){
+      options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
+    }
+    $("#appointment_measure").html(options);
+  }
+});
+
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getDoctorsByClinic", (xhr, err) => {
   if (!err) {
     let doctors = JSON.parse(xhr.responseText)['data'];
@@ -272,7 +283,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 });
 
 
-sendRequestWithToken('GET', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "specialist", (xhr, err) => {
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "specialist/getSpecialistByClinic", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
     var options = '';

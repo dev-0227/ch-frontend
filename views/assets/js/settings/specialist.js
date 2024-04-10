@@ -4,7 +4,8 @@ $(document).ready(function () {
   var managertable = $('#specialisttable').DataTable({
     "ajax": {
         "url": serviceUrl + "specialist/",
-        "type": "GET"
+        "type": "GET",
+        "headers": { 'Authorization': localStorage.getItem('authToken') }
     },
     "columns": [
         { data: "fname",
