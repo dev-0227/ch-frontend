@@ -288,6 +288,7 @@ var appt_specialty_table = $('#appt_specialty_table').DataTable({
   },
   "columns": [
       { data: 'name' },
+      { data: 'mid' },
       { data: 'description' },
       { data: 'id',
         render: function (data, type, row) {
@@ -302,11 +303,23 @@ var appt_specialty_table = $('#appt_specialty_table').DataTable({
   ],
 });
 
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/measuresData", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['measureId']+'" >'+result[i]['measureId']+' - '+result[i]['title']+'</option>';
+    }
+    $("#appt_specialty_measures").html(options);
+  }
+});
+
 
 $(document).on("click","#appt_specialty_add_btn",function(){
   $("#appt_specialty_id").val('');
   $("#appt_specialty_name").val('');
   $("#appt_specialty_description").val('');
+  $("#appt_specialty_measures").val('');
   $("#appt_specialty_modal").modal("show");
 });
 
@@ -320,6 +333,7 @@ $(document).on("click","#appt_specialty_create",function(){
       id: $('#appt_specialty_id').val(),
       name: $('#appt_specialty_name').val(),
       description: $('#appt_specialty_description').val(),
+      mid: $('#appt_specialty_measures').val().toString(),
     }
 
   if($("#appt_specialty_id").val() == ""){
@@ -357,6 +371,7 @@ $(document).on("click",".edit_appt_specialty_btn",function(){
       let result = JSON.parse(xhr.responseText)['data'];
       $("#appt_specialty_name").val(result[0]['name']);
       $("#appt_specialty_description").val(result[0]['description']);
+      $("#appt_specialty_measures").val(result[0]['mid'].split(",")).trigger('change');
       $("#appt_specialty_modal").modal("show");
     } else {
       return toastr.error("Action Failed");

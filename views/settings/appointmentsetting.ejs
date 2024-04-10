@@ -101,7 +101,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th width="20%">Name</th>
-                                                            <th width="50%">Description</th>
+                                                            <th width="20%">Measures</th>
+                                                            <th width="40%">Description</th>
                                                             <th width="20%">Actions</th>
                                                         </tr>
                                                     </thead>
@@ -228,7 +229,7 @@
 </div>
 
 <div class="modal fade" id="appt_specialty_modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title">Specialty Type</h5>
@@ -247,8 +248,15 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="appt_specialty_description" class="fw-semibold fs-6 mt-2">Description:</label>
+                            <label for="appt_specialty_description" class="fw-semibold fs-6 mt-4">Description:</label>
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_specialty_description" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_specialty_measures" class="fw-semibold fs-6 mt-4">Related Measures:</label>
+                            <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="appt_specialty_measures">
+                            </select>
                         </div>
                     </div>
                 </div>
