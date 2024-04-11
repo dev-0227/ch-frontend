@@ -41,6 +41,10 @@ $(document).ready(async function () {
         ],
     });
 
+    $('#appt_type_table_search_input').on('keyup', function () {
+      appt_type_table.search(this.value).draw();
+    });
+
     sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentCategory", (xhr, err) => {
         if (!err) {
           let result = JSON.parse(xhr.responseText)['data'];
