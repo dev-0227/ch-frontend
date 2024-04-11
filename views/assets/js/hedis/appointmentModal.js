@@ -38,7 +38,7 @@ var appointment_table = $('#appointment_table').DataTable({
       },
       { data: "reason",
         render: function (data, type, row) {
-          return '<div class="w-500px overflow-hidden " style="white-space: nowrap; text-overflow: ellipsis;" >'+row.reason+'</div>';
+          return '<div class="w-450px overflow-hidden " style="white-space: nowrap; text-overflow: ellipsis;" >'+row.reason+'</div>';
         }
       },
       { data: 'pt_participate_status' },
