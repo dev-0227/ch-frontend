@@ -36,7 +36,11 @@ var appointment_table = $('#appointment_table').DataTable({
           return '<div class="mx-2">'+row.fname+' '+row.lname+'</div>';
         } 
       },
-      { data: "reason"},
+      { data: "reason",
+        render: function (data, type, row) {
+          return '<div class="w-500px overflow-hidden " style="white-space: nowrap; text-overflow: ellipsis;" >'+row.reason+'</div>';
+        }
+      },
       { data: 'pt_participate_status' },
       { data: 'start_date',
         render: function (data, type, row) {
@@ -199,10 +203,12 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_approve_date").val(t);
   $("#appointment_attended").prop('checked', false);
   $("#appointment_status").val('');
+  $("#appointment_measure").val($("#appointment_measure option:first").val());
+  $("#appointment_reason").val($("#appointment_measure option:first").text().split(" - ")[1]);
   $("#appointment_cancel_reason").val('');
   $("#appointment_class").val('');
   $("#appointment_service_category").val('');
-  $("#appointment_reason").val('');
+  
   $("#appointment_priority").val('R');
   $("#appointment_description").val('');
   $("#appointment_start_date").val("09:00");
@@ -248,15 +254,11 @@ $(document).on("click",".appt_delete_btn",function(){
 });
 
 var measure = []
+var observation = []
 
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getMeasureObservation", (xhr, err) => {
   if (!err) {
-    measure = JSON.parse(xhr.responseText)['data'];
-    var options = '<option value="0" ></option>';
-    for(var i=0; i<measure.length; i++){
-      options += '<option value="'+measure[i]['id']+'" >'+measure[i]['name']+'</option>'; //title
-    }
-    $("#appointment_measure").html(options);
+    observation = JSON.parse(xhr.responseText)['data'];
   }
 });
 
@@ -270,6 +272,17 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
     $("#appointment_measure").html(options);
   }
 });
+
+// new Tagify(input, {
+//   whitelist: ["Ada", "Adenine", "Agda", "Agilent VEE"],
+//   maxTags: 10,
+//   dropdown: {
+//       maxItems: 20,
+//       classname: "",
+//             enabled: 0,
+//       closeOnSelect: false
+//   }
+// });
 
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getDoctorsByClinic", (xhr, err) => {
   if (!err) {
@@ -346,11 +359,13 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
 
 
 $(document).on("change","#appointment_measure",function(){
+  $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
   $("#appointment_assessment").html("");
-  for(var i=0; i<measure.length; i++){
-    if(measure[i]['id'] == $(this).val()){
+  for(var i=0; i<observation.length; i++){
+    if(observation[i]['m_id'] == $(this).val()){
+      
       try{
-        var icd = JSON.parse(measure[i]['ICD']);
+        var icd = JSON.parse(observation[i]['ICD']);
         var options = '';
         for(var j=0; j<icd.length; j++){
           options += '<option value="'+icd[j]['value']+'" >'+icd[j]['code']+'</option>';
