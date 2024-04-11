@@ -4,6 +4,8 @@
 			<div class="modal-header">
 				<h3 class="modal-title" >Appointments </h3>
 				<input type="hidden" id="appt_pt_mid" />
+				<input type="hidden" id="appt_pt_inspcpid" />
+				<input type="hidden" id="appt_pt_cyear" />
 				<input type="hidden" id="appt_pt_emrid" />
 				<input type="hidden" id="appt_pt_insurance" />
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -83,6 +85,12 @@
 											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
 												<span class="symbol-label bg-success text-inverse-success fw-bold">I</span>
 											</div>Ins ID: <div id="appt_pt_insid"></div></a>
+									</div>
+									<div class= "fw-semibold fs-6 m-1 pe-2">
+										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+											<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+												<span class="symbol-label bg-info text-inverse-info fw-bold">M</span>
+											</div>MRN: <div id="appt_pt_mrnid" class="px-2"></div></a>
 									</div>
 									<!--end::Info-->
 								</div>

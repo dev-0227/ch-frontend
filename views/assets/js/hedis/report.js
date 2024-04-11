@@ -1772,7 +1772,9 @@ async function loadData(){
           data[i]['apptpcp'],
           data[i]['apptvisit'],
           data[i]['rstatus']==1?"Reported":"",
-          data[i]['email']
+          data[i]['email'],
+          data[i]['ins_pcp_id'],
+          data[i]['cyear']
         ];
         if(checkview == 1)
           hedisdata.push(tmpdata);
@@ -1995,6 +1997,18 @@ async function loadData(){
           {
             type: 'hidden',
             title:'email',
+            readOnly:true,
+            width:0
+          },
+          {
+            type: 'hidden',
+            title:'ins_pcp_id',
+            readOnly:true,
+            width:0
+          },
+          {
+            type: 'hidden',
+            title:'cyear',
             readOnly:true,
             width:0
           }
