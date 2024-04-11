@@ -13,7 +13,7 @@ $(document).ready(function () {
             return row.fname+" "+row.lname;
           } 
         },
-        { data: 'email' },
+        { data: 'speciality' },
         { data: 'phone',
           render: function (data, type, row) {
               return row.phone;
@@ -22,9 +22,9 @@ $(document).ready(function () {
         { data: 'status',
           render: function (data, type, row) {
             if(row.status == 1)
-              return "<span class='tag tag-green'>Active</span>";
+              return '<div class="badge badge-success fw-bold badge-lg">Active</span>';
             else
-              return "<span class='tag tag-red'>Inactive</span>";
+              return '<div class="badge badge-danger fw-bold badge-lg">Inactive</span>';
           } 
         },
         { data: 'id',

@@ -288,7 +288,11 @@ var appt_specialty_table = $('#appt_specialty_table').DataTable({
   },
   "columns": [
       { data: 'name' },
-      { data: 'mid' },
+      { data: 'mid',
+        render: function (data, type, row) {
+          return row.mid.replace(",", ", ");
+        } 
+     },
       { data: 'description' },
       { data: 'id',
         render: function (data, type, row) {
@@ -301,6 +305,10 @@ var appt_specialty_table = $('#appt_specialty_table').DataTable({
         } 
       }
   ],
+});
+
+$('#specialty_table_search_input').on('keyup', function () {
+  appt_specialty_table.search(this.value).draw();
 });
 
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/measuresData", (xhr, err) => {
