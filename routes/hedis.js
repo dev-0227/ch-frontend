@@ -15,6 +15,13 @@ router.get("/appointment", (req, res, next) => {
     });
 });
 
+router.get("/referral", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Referral Tracking",
+        pageKey: "../hedis/referral"
+    });
+});
+
 router.get("/report", (req, res, next) => {
     res.render("layout/jexcelblank", {
         pageTitle: "Hedis Report",

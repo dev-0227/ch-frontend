@@ -214,6 +214,7 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_status").val('');
   $("#appointment_measure").val($("#appt_pt_mid").val());
   $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
+  getSpecialty();
   $("#appointment_cancel_reason").val('');
   $("#appointment_class").val('');
   $("#appointment_service_category").val('');
@@ -370,6 +371,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
 $(document).on("change","#appointment_measure",function(){
   $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
   $("#appointment_assessment").html("");
+  getSpecialty();
   for(var i=0; i<observation.length; i++){
     if(observation[i]['m_id'] == $(this).val()){
       
@@ -380,13 +382,26 @@ $(document).on("change","#appointment_measure",function(){
           options += '<option value="'+icd[j]['value']+'" >'+icd[j]['code']+'</option>';
         }
         $("#appointment_assessment").html(options);
+        
       }catch(e){
         console.log(observation[i]['ICD'])
       }
     }
   }
 
+
 });
+
+function getSpecialty(){
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {measure_id: $("#appointment_measure").val()}, "hedis/appointmentSpecialty/getSpecialtyByMeasure", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      if(result.length>0){
+        $("#appointment_specialty").val(result[0]['id']);
+      }
+    }
+  });
+}
 
 var duration_mins = 0;
 

@@ -1742,7 +1742,7 @@ async function loadData(){
         var dob = DateFormat(new Date(data[i]['dob']));
         var tmpdata = [
           data[i]['id'],
-          data[i]['mid'],
+          data[i]['insid'],
           (data[i]['emr_id']!=0&&data[i]['emr_id']!="")?data[i]['emr_id']:null, 
           data[i]['ptfname'], 
           data[i]['ptlname'], 
