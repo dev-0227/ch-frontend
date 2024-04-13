@@ -211,7 +211,7 @@ $(document).ready(async function () {
             if(doctors[i]['ch']=="1"){
                 var bg_color = 'primary';
                 if(doctors[i]['type']=="3")bg_color = 'info';
-                html += '<td class="border bg-'+bg_color+' w-250px text-center fw-bold text-white">';
+                html += '<td class="border bg-'+bg_color+' w-200px text-center fw-bold text-white">';
                 html += doctors[i]['fname']+' '+doctors[i]['lname'];
                 html += '</td>';
             }

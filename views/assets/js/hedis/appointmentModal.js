@@ -487,8 +487,13 @@ $("#appt_save_btn").click(function (e) {
   if($("#appointment_id").val()==""){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/createAppointment", (xhr, err) => {
       if (!err) {
-        $("#appointment_edit_modal").modal("hide");
-        toastr.success("Appointment is added successfully");
+        if(JSON.parse(xhr.responseText)['message']=="exist"){
+          toastr.info("Appointment is exist");
+        }else{
+          $("#appointment_edit_modal").modal("hide");
+          toastr.success("Appointment is added successfully");
+        }
+        
       } else {
         return toastr.error("Action Failed");
       }
