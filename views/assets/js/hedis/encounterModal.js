@@ -136,6 +136,7 @@ $(document).on("click",".edit_btn",function(){
       $("#encounter_reason_use").val(result[0]['reason_use']);
       $("#encounter_reason_codes").val(result[0]['reason_codes']);
       $("#encounter_edit_modal").modal("show");
+      $("#encounter_modal").modal("hide");
     } else {
       return toastr.error("Action Failed");
     }

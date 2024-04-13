@@ -232,7 +232,6 @@ $(document).ready(async function () {
                 }
             }
         }
-        console.log(min_date);
         let currentTime = new Date(min_date.split("T")[0]+" 00:00:00");
         while (currentTime <= new Date(max_date)) {
             var day = currentTime.toISOString().split("T")[0];

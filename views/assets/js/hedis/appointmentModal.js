@@ -131,7 +131,7 @@ $(document).on("click",".apptbtn",function(){
         $("#appointment_modal_email").html($("#appt_pt_email").html());
         patient_id = result[0]['id'];
         appointment_table.ajax.reload();
-        $("#appointment_modal").modal("show");
+        // $("#appointment_modal").modal("show");
         $("#appt_add_btn").click();
         
       }
@@ -139,6 +139,14 @@ $(document).on("click",".apptbtn",function(){
   });
   
 });
+
+$(document).on("click",".appt-list",function(){
+  
+  $("#appointment_edit_modal").modal("hide");
+  $("#appointment_modal").modal("show");
+});
+
+
 
 function GetFormattedDate(date) {
   var month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -194,11 +202,8 @@ $(document).on("click",".appt_edit_btn",function(){
       $("#appointment_cancel_date").val(GetFormattedDate(new Date(result[0]['cancel_date'])));
       $("#appointment_notes").val(result[0]['notes']);
       $("#appointment_pt_instruction").val(result[0]['pt_instruction']);
-
-      
-
-
       $("#appointment_edit_modal").modal("show");
+      $("#appointment_modal").modal("hide");
     } else {
       return toastr.error("Action Failed");
     }
