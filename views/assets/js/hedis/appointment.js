@@ -23,7 +23,7 @@ $(document).ready(async function () {
         clinic_id: localStorage.getItem('chosen_clinic'),
     }
     var doctors = []
-    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getDoctorsByClinic", (xhr, err) => {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getAllDoctorsByClinic", (xhr, err) => {
         if (!err) {
             doctors = JSON.parse(xhr.responseText)['data'];
             $("#doctor_list").html("");

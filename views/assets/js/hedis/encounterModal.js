@@ -224,7 +224,7 @@ $(document).on("click",".delete_btn",function(){
 
 });
 
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getDoctorsByClinic", (xhr, err) => {
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getAllDoctorsByClinic", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
     var options = '';

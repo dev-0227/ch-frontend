@@ -80,7 +80,7 @@ $(document).ready(async function () {
     });
     
 
-    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getDoctorsByClinic", (xhr, err) => {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getAllDoctorsByClinic", (xhr, err) => {
         if (!err) {
             doctors = JSON.parse(xhr.responseText)['data'];
             $("#doctor_list").html("");
