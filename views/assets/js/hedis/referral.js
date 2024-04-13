@@ -1,5 +1,30 @@
 
 $(document).ready(async function () {
+    var doctors = []
+    var data = [];
+    var selected_doctor= "";
+    var selected_date="";
+    const date_picker = document.querySelector('#referral_flatpickr');
+    flatpickr = $(date_picker).flatpickr({
+        altInput: true,
+        altFormat: "d/m/Y",
+        dateFormat: "Y-m-d",
+        mode: "range",
+        onChange: function (selectedDates, dateStr, instance) {
+            if(selectedDates.length==2){
+                selected_date = new Date(selectedDates[0]).toISOString().split("T")[0];
+                selected_date += ",";
+                selected_date += new Date(selectedDates[1]).toISOString().split("T")[0];
+                reload_data_table();
+            }
+        },
+    });
+
+    $(document).on("click","#referral_flatpickr_clear",function(){
+        flatpickr.clear();
+        selected_date="";
+        reload_data_table();
+    });
 
     
 
@@ -7,27 +32,16 @@ $(document).ready(async function () {
     var entry ={
         clinic_id: localStorage.getItem('chosen_clinic'),
     }
-    var doctors = []
-    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getDoctorsByClinic", (xhr, err) => {
-        if (!err) {
-            doctors = JSON.parse(xhr.responseText)['data'];
-            $("#doctor_list").html("");
-            for(var i=0;i<doctors.length;i++){
-                html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
-                html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
-                html += '<span class="form-check-label text-gray-600 fw-semibold">';
-                html += doctors[i]['fname']+' '+doctors[i]['fname'];
-                html += '</span></label>';
-                doctors[i]['ch'] = "1";
-                $("#doctor_list").append(html);
-            }
-        }
-    });
+    
+    
 
-    var referral_tracking_table = $('#referral_tracking_table').DataTable({
+    var referral_tracking_table = await $('#referral_tracking_table').DataTable({
         "ajax": {
             "url": serviceUrl + "hedis/referral",
             "type": "GET",
+            "data": {
+                clinic_id: localStorage.getItem('chosen_clinic')
+            },
             "headers": { 'Authorization': localStorage.getItem('authToken') }
         },
         "columns": [
@@ -45,25 +59,12 @@ $(document).ready(async function () {
             { data: 'm_id' },
             { data: 'rt_date',
                 render: function (data, type, row) {
-                    var date = "";
-                    if(row.rt_date){
-                        var ds = row.rt_date.split(",");
-                        date = ds[0]
-
-                    }
-                    return date.substr(0, 16);
+                    return row.rt_date.replace("T", " ").substr(0, 16);
                 }
             },
             { data: 'rt_type',
                 render: function (data, type, row) {
-                var color = "success";
-                var type = "0";
-                if(row.rt_type){
-                    var rt = row.rt_type.split(",");
-                    type = rt[0];
-                }
-                
-                return '<div class="badge badge-'+getColorBytype(type)+' fw-bold badge-lg">'+row.referral_type+'</span>';
+                return '<div class="badge badge-'+getColorBytype(row.rt_type.toString())+' fw-bold badge-lg">'+row.referral_type+'</span>';
                 }  
             },
             { data: 'id',
@@ -77,6 +78,36 @@ $(document).ready(async function () {
             }
         ],
     });
+    
+
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getDoctorsByClinic", (xhr, err) => {
+        if (!err) {
+            doctors = JSON.parse(xhr.responseText)['data'];
+            $("#doctor_list").html("");
+            for(var i=0;i<doctors.length;i++){
+                html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
+                html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
+                html += '<span class="form-check-label text-gray-600 fw-semibold">';
+                html += doctors[i]['fname']+' '+doctors[i]['lname'];
+                html += '</span></label>';
+                doctors[i]['ch'] = "1";
+                $("#doctor_list").append(html);
+            }
+        }
+    });
+
+    function reload_data_table(){
+        var base_url = serviceUrl + "hedis/referral?";
+        if(selected_doctor!="")base_url += "&doctors="+selected_doctor;
+        if(selected_date!="")base_url += "&range="+selected_date;
+        referral_tracking_table.ajax.url(base_url).load();
+
+        setTimeout( function () {
+            data = referral_tracking_table.rows().data().toArray();
+            load_time_line();
+        }, 1000 );
+        
+    }
 
     function getColorBytype(type){
         var color="primary";
@@ -138,10 +169,106 @@ $(document).ready(async function () {
     });
 
     $('#referral_table_search_input').on('keyup', function () {
-        referral_tracking_table.search(this.value).draw();
-      });
+    referral_tracking_table.search(this.value).draw();
+    });
 
+    $(document).on("change",".doctor-check",function(){
+        selected_doctor= "";
+        for(var i=0;i<doctors.length;i++){
+            if(doctors[i]['id']==$(this).data("id")){
+                doctors[i]['ch']=$(this).prop("checked")?"1":"0";
+            }
+            if(doctors[i]['ch']=="1"){
+                if(selected_doctor!="")selected_doctor += ","
+                selected_doctor += doctors[i]['id'];
+            }
+        }
+        if(selected_doctor=="")selected_doctor="0";
+        
+        reload_data_table();
+        
+    });
 
+    $(document).on("change",".view-radio",function(){
+        var value = $('input[name="referral_view"]:checked').val();
+        if(value=="0"){
+            $("#view_table").removeClass("d-none");
+            $("#view_timeline").addClass("d-none");
+        }else{
+            $("#view_table").addClass("d-none");
+            $("#view_timeline").removeClass("d-none");
+            
+        }
+        $(".menu-sub-dropdown").removeClass("show");
+
+    });
+
+    function load_time_line(){
+        var html = "";
+        html = '<tr class="h-60px"><td class="w-150px border  ">';
+        html += '</td>';
+        for(var i=0;i<doctors.length;i++){
+            if(doctors[i]['ch']=="1"){
+                html += '<td class="border w-250px text-center fw-bold">';
+                html += doctors[i]['fname']+' '+doctors[i]['lname'];
+                html += '</td>';
+            }
+            
+        }
+        html += '</tr>';
+        var min_date='';
+        var max_date='';
+        for(var i=0;i<data.length;i++){
+            var d = data[i]['rt_date'];
+            if(i==0){
+                min_date=d;
+                max_date=d;
+            }else{
+                if(new Date(min_date) > new Date(d)){
+                    min_date=d;
+                }
+                if(new Date(max_date) < new Date(d)){
+                    max_date=d;
+                }
+            }
+        }
+        let currentTime = new Date(min_date);
+        while (currentTime <= new Date(max_date)) {
+            var day = currentTime.toISOString().split("T")[0];
+            html += '<tr class=""><td class="text-end border pe-1">';
+            html += currentTime.toLocaleDateString();
+            html += '</td>';
+            for(var j=0;j<doctors.length;j++){
+                if(doctors[j]['ch']=="1"){
+                    html += '<td class="border text-center">';
+                    for(var i=0; i<data.length; i++){
+                        d = data[i]['rt_date'].split(",")[0];
+                        if(day==new Date(d).toISOString().split("T")[0] && data[i]['doctor_id']==doctors[j]['id']){
+                            html += '<div idkey="'+data[i]['id']+'"><div class="btn btn-'+getColorBytype(data[i]['rt_type'].toString())+' mx-3 fs-8 fw-bold p-1 view_referral_btn m-1" data-id="'+data[i]['id']+'">'
+                            html += '<div class="w-100px fs-9" style="white-space: nowrap; text-overflow: ellipsis;"> '
+                            html += data[i]['pt_fname']+' '+data[i]['pt_lname']+' ';
+                            html += "</div><div>"
+                            html += data[i]['insurance'];
+                            html += "</div></div></div>"
+                        }
+                    }
+                    html += '</td>';
+                }
+            }
+            html += '</tr>';
+            currentTime.setHours(currentTime.getHours() + 24);
+        }
+
+        
+        $("#referral_time_line").html(html);
+    }
+
+    setTimeout( function () {
+        data = referral_tracking_table.rows().data().toArray();
+        load_time_line();
+    }, 1000 );
+
+    
 
 
 });

@@ -31,7 +31,7 @@ $(document).ready(async function () {
                 html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
                 html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
                 html += '<span class="form-check-label text-gray-600 fw-semibold">';
-                html += doctors[i]['fname']+' '+doctors[i]['fname'];
+                html += doctors[i]['fname']+' '+doctors[i]['lname'];
                 html += '</span></label>';
                 doctors[i]['ch'] = "1";
                 $("#doctor_list").append(html);
@@ -42,7 +42,6 @@ $(document).ready(async function () {
     
 
     function load_html(data){
-        
         let startTime = data[0]?new Date(data[0]['approve_date']):new Date();
         startTime.setHours(8, 0, 0, 0); // Set start time to 8:00
         let endTime = data[0]?new Date(data[0]['approve_date']):new Date();
@@ -55,7 +54,7 @@ $(document).ready(async function () {
         for(var i=0;i<doctors.length;i++){
             if(doctors[i]['ch']=="1"){
                 html += '<td class="border w-250px text-center fw-bold">';
-                html += doctors[i]['fname']+' '+doctors[i]['fname'];
+                html += doctors[i]['fname']+' '+doctors[i]['lname'];
                 html += '</td>';
             }
             

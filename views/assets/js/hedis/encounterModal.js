@@ -15,13 +15,12 @@ var encounter_table = $('#encounter_table').DataTable({
   "order": [],
   "bAutoWidth": false, 
   "columns": [
-      { data: "comleted",
-      render: function (data, type, row) {
-        var icon = "unlock";
-        if(row.completed == "1")icon = "lock";
-        return `<div class="text-center d-flex align-items-center mt-2"><i class="fa fa-`+icon+` fs-3 text-success"  aria-hidden="true"></i></div>`;
-      } 
-    },
+
+      { data: "completed",
+        render: function (data, type, row) {
+          return row.completed=="1"?'<i class="ki-duotone ki-verify fs-1 text-primary"><span class="path1"></span><span class="path2"></span></i>':'';
+        } 
+      },
       { data: "reason"},
       { data: "enc_type"},
       { data: 'status' },
@@ -146,24 +145,24 @@ $(document).on("click",".edit_btn",function(){
 
 
 $(document).on("click","#add_btn",function(){
-  $("#encounter_id").val('');
-  $("#encounter_completed").prop("checked", false);
-  $("#encounter_enc_type").val('phone call');
-  $("#encounter_status").val('in-progress');
-  $("#encounter_team_member").val(localStorage.getItem('username'));
-  $("#encounter_assigned").val('');
-  $("#encounter_total_mins").val('1');
-  $("#encounter_notes").val('');
-  $("#encounter_action_taken").val('');
-  $("#encounter_enc_start").val(new Date().toLocaleString());
-  $("#encounter_reason").val('');
-  $("#encounter_participant_type").val('CALLBCK');
-  $("#encounter_service_type").val('Medical Service');
-  $("#encounter_reason_use").val('HM');
-  $("#timer_diplay").html("00 : 00");
+  // $("#encounter_id").val('');
+  // $("#encounter_completed").prop("checked", false);
+  // $("#encounter_enc_type").val('phone call');
+  // $("#encounter_status").val('in-progress');
+  // $("#encounter_team_member").val(localStorage.getItem('username'));
+  // $("#encounter_assigned").val('');
+  // $("#encounter_total_mins").val('1');
+  // $("#encounter_notes").val('');
+  // $("#encounter_action_taken").val('');
+  // $("#encounter_enc_start").val(new Date().toLocaleString());
+  // $("#encounter_reason").val('');
+  // $("#encounter_participant_type").val('CALLBCK');
+  // $("#encounter_service_type").val('Medical Service');
+  // $("#encounter_reason_use").val('HM');
+  // $("#timer_diplay").html("00 : 00");
   
 
-  $("#encounter_edit_modal").modal("show");
+  // $("#encounter_edit_modal").modal("show");
 });
 
 function pad(val) {
@@ -225,7 +224,7 @@ $(document).on("click",".delete_btn",function(){
 
 });
 
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: localStorage.getItem('chosen_clinic')}, "user/getUsersByClinic", (xhr, err) => {
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getDoctorsByClinic", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
     var options = '';
@@ -367,6 +366,8 @@ $("#update_btn").click(function (e) {
         }
     }
   });
+
+  entry["id"] = $("#encounter_id").val();
 
   
 
