@@ -48,7 +48,7 @@ $(document).ready(async function () {
         let currentTime = new Date(startTime);
        
         var html = "";
-        html = '<tr class="h-60px"><td class="w-150px border  ">';
+        html = '<tr class="h-60px"><td class="w-150px bg-primary border  ">';
         html += '</td>';
         for(var i=0;i<doctors.length;i++){
             var bg_color = 'primary';

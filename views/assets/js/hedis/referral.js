@@ -205,7 +205,7 @@ $(document).ready(async function () {
 
     function load_time_line(){
         var html = "";
-        html = '<tr class="h-60px"><td class="w-150px border  ">';
+        html = '<tr class="h-60px"><td class="bg-primary w-150px border  ">';
         html += '</td>';
         for(var i=0;i<doctors.length;i++){
             if(doctors[i]['ch']=="1"){
