@@ -39,7 +39,6 @@ $(document).ready(async function () {
         }
     });
 
-    
 
     function load_html(data){
         let startTime = data[0]?new Date(data[0]['approve_date']):new Date();
@@ -52,8 +51,10 @@ $(document).ready(async function () {
         html = '<tr class="h-60px"><td class="w-150px border  ">';
         html += '</td>';
         for(var i=0;i<doctors.length;i++){
+            var bg_color = 'primary';
+            if(doctors[i]['type']=="3")bg_color = 'info';
             if(doctors[i]['ch']=="1"){
-                html += '<td class="border w-250px text-center fw-bold">';
+                html += '<td class="border bg-'+bg_color+' w-250px text-center fw-bold text-white">';
                 html += doctors[i]['fname']+' '+doctors[i]['lname'];
                 html += '</td>';
             }

@@ -209,7 +209,9 @@ $(document).ready(async function () {
         html += '</td>';
         for(var i=0;i<doctors.length;i++){
             if(doctors[i]['ch']=="1"){
-                html += '<td class="border w-250px text-center fw-bold">';
+                var bg_color = 'primary';
+                if(doctors[i]['type']=="3")bg_color = 'info';
+                html += '<td class="border bg-'+bg_color+' w-250px text-center fw-bold text-white">';
                 html += doctors[i]['fname']+' '+doctors[i]['lname'];
                 html += '</td>';
             }
