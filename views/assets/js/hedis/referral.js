@@ -244,7 +244,7 @@ $(document).ready(async function () {
                 if(doctors[j]['ch']=="1"){
                     bg_color = 'primary';
                     if(doctors[j]['type']=="3")bg_color = 'info';
-                    html += '<td class="border bg-light-'+bg_color+' text-center border-primary">';
+                    html += '<td class="border bg-light-'+bg_color+' text-center border-primary bg-light-success">';
                     for(var i=0; i<data.length; i++){
                         d = data[i]['rt_date'].split(",")[0];
                         if(day==new Date(d).toISOString().split("T")[0] && data[i]['doctor_id']==doctors[j]['id']){
