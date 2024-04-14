@@ -44,6 +44,13 @@ $(document).ready(async function () {
             },
             "headers": { 'Authorization': localStorage.getItem('authToken') }
         },
+        "buttons": [
+            {extend: "pdf",
+               "className": "d-none",
+               "title":    function () { return 'Referral Tracking - '+$("#chosen_clinics option:selected").text(); },
+               "filename": function () { return 'Referral Tracking '+$("#chosen_clinics option:selected").text(); }
+            },
+        ],
         "columns": [
             { data: 'insurance' },
             { data: 'patient_id',
@@ -123,6 +130,10 @@ $(document).ready(async function () {
         }
         return color;
     }
+
+    $("#export_pdf").on("click", function() {
+        referral_tracking_table.button( '.buttons-pdf' ).trigger();
+    }); 
 
     $(document).on("click",".view_referral_btn",function(){
         $("#referral_id").val($(this).parent().attr("idkey"));
