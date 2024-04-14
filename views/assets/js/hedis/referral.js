@@ -237,12 +237,14 @@ $(document).ready(async function () {
         let currentTime = new Date(min_date.split("T")[0]+" 00:00:00");
         while (currentTime <= new Date(max_date)) {
             var day = currentTime.toISOString().split("T")[0];
-            html += '<tr class=""><td class="text-end border pe-1">';
+            html += '<tr class=""><td class="text-end border pe-1 border-primary">';
             html += currentTime.toLocaleDateString();
             html += '</td>';
             for(var j=0;j<doctors.length;j++){
                 if(doctors[j]['ch']=="1"){
-                    html += '<td class="border text-center">';
+                    bg_color = 'primary';
+                    if(doctors[j]['type']=="3")bg_color = 'info';
+                    html += '<td class="border bg-light-'+bg_color+' text-center border-primary">';
                     for(var i=0; i<data.length; i++){
                         d = data[i]['rt_date'].split(",")[0];
                         if(day==new Date(d).toISOString().split("T")[0] && data[i]['doctor_id']==doctors[j]['id']){

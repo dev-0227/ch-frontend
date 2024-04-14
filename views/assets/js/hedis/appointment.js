@@ -64,12 +64,14 @@ $(document).ready(async function () {
         while (currentTime <= endTime) {
             let fromTime = new Date(currentTime);
             currentTime.setMinutes(currentTime.getMinutes() + 15); // Increment by 15 minutes
-            html += '<tr class=""><td class="text-end border pe-1">';
+            html += '<tr class=""><td class="text-end border pe-1 border-primary">';
             html += fromTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             html += '</td>';
             for(var j=0;j<doctors.length;j++){
                 if(doctors[j]['ch']=="1"){
-                    html += '<td class="border text-center">';
+                    bg_color = 'primary';
+                    if(doctors[j]['type']=="3")bg_color = 'info';
+                    html += '<td class="border text-center bg-light-'+bg_color+' border-primary">';
                     for(var i=0; i<data.length; i++){
                         var start_time = new Date(data[i]['approve_date'].split('T')[0]+" "+data[i]['start_date']);
                         if(start_time>=fromTime && start_time<currentTime && data[i]['provider_id']==doctors[j]['id']){
