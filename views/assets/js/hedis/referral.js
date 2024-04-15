@@ -111,6 +111,8 @@ $(document).ready(async function () {
             doctors = JSON.parse(xhr.responseText)['data'];
             $("#pcp_list").html("");
             $("#specialist_list").html("");
+            $("#pcp_select_button").removeClass("d-none");
+            $("#specialist_select_button").removeClass("d-none");
             for(var i=0;i<doctors.length;i++){
                 html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
                 html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
@@ -122,6 +124,8 @@ $(document).ready(async function () {
                 if(doctors[i]['type']=="5") $("#pcp_list").append(html);
                 if(doctors[i]['type']=="3") $("#specialist_list").append(html);
             }
+            if($("#pcp_list").html()=="")$("#pcp_select_button").addClass("d-none");
+            if($("#specialist_list").html()=="")$("#specialist_select_button").addClass("d-none");
         }
     });
 
