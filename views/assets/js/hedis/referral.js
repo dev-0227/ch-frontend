@@ -50,6 +50,25 @@ $(document).ready(async function () {
                "title":    function () { return 'Referral Tracking - '+$("#chosen_clinics option:selected").text(); },
                "filename": function () { return 'Referral Tracking '+$("#chosen_clinics option:selected").text(); }
             },
+            { extend: 'excel',
+                text: 'Export Current Page',
+                exportOptions: {
+                    modifier: {
+                        page: 'current'
+                    }
+                },
+                customize: function (xlsx)
+                {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    var loop = 0;
+                    $('row', sheet).each(function () {
+                        if (loop % 2 == 0 && loop > 1) {
+                            $(this).find("c").attr('s', '5');
+                        }
+                        loop++;
+                    });
+                }
+            }
         ],
         "columns": [
             { data: 'insurance' },
@@ -90,15 +109,18 @@ $(document).ready(async function () {
     await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getAllDoctorsByClinic", (xhr, err) => {
         if (!err) {
             doctors = JSON.parse(xhr.responseText)['data'];
-            $("#doctor_list").html("");
+            $("#pcp_list").html("");
+            $("#specialist_list").html("");
             for(var i=0;i<doctors.length;i++){
                 html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
                 html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
                 html += '<span class="form-check-label text-gray-600 fw-semibold">';
                 html += doctors[i]['fname']+' '+doctors[i]['lname'];
+                if(doctors[i]['type']=="3") html += ' ('+doctors[i]['speciality']+") ";
                 html += '</span></label>';
                 doctors[i]['ch'] = "1";
-                $("#doctor_list").append(html);
+                if(doctors[i]['type']=="5") $("#pcp_list").append(html);
+                if(doctors[i]['type']=="3") $("#specialist_list").append(html);
             }
         }
     });

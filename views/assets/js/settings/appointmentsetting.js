@@ -391,6 +391,10 @@ $(document).on("click",".edit_appt_specialty_btn",function(){
   });
 });
 
+
+
+
+
 $(document).on("click",".delete_appt_specialty_btn",function(){
   $("#appt_specialty_id").val($(this).parent().attr("idkey"));
   let entry = {
@@ -420,6 +424,32 @@ $(document).on("click",".delete_appt_specialty_btn",function(){
         });	
       }
   });
+});
+
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, "setting/appointment/doctor/type", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    for(var i=0; i<result.length; i++){
+      $("#appointment_calendar_"+result[i]['item']).prop('checked', result[i]['value']==""?false:true)
+    }
+  } else {
+    toastr.error('Credential is invalid');
+  }
+});	
+
+$(document).on("change",".calendar-view",function(){
+  var entry={
+    item: $(this).data("type"),
+    value: $(this).prop("checked")?$(this).data("value"):""
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/appointment/doctor/type/set", (xhr, err) => {
+    if (!err) {
+      
+    } else {
+      toastr.error('Credential is invalid');
+    }
+  });	
+
 });
     
 });
