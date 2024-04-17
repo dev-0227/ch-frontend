@@ -27,14 +27,13 @@ $(document).ready(async function () {
     });
 
     
+    $("#referral_status_date").val(moment().format("YYYY-MM-DD"));
 
     $("#selected_date").html(new Date().toDateString());
     var entry ={
         clinic_id: localStorage.getItem('chosen_clinic'),
     }
     
-    
-
     var referral_tracking_table = await $('#referral_tracking_table').DataTable({
         "ajax": {
             "url": serviceUrl + "hedis/referral",
@@ -145,13 +144,15 @@ $(document).ready(async function () {
     function getColorBytype(type){
         var color="primary";
         switch(type){
-            case "1": color="success"; break;
+            case "1": color="secondary"; break;
             case "2": color="danger"; break;
             case "3": color="primary"; break;
-            case "4": color="secondary"; break;
+            case "4": color="success"; break;
             case "5": color="info"; break;
             case "6": color="danger"; break;
             case "7": color="success"; break;
+            case "8": color="info"; break;
+            case "9": color="success"; break;
             default: color="primary"; break;
         }
         return color;
@@ -197,7 +198,18 @@ $(document).ready(async function () {
                 html += result[i]['referral_type'];
                 html += '</div></div></div>';
                 $("#referral_history").append(html);
+                $('input[name="referral_status"]').filter('[value="0"]').prop("checked", result[i]['rt_type']=="0"?true:false);
+                $('input[name="referral_status"]').filter('[value="1"]').prop("checked", result[i]['rt_type']=="1"?true:false);
+                $('input[name="referral_status"]').filter('[value="2"]').prop("checked", result[i]['rt_type']=="2"?true:false);
+                $('input[name="referral_status"]').filter('[value="3"]').prop("checked", result[i]['rt_type']=="3"?true:false);
+                $('input[name="referral_status"]').filter('[value="4"]').prop("checked", result[i]['rt_type']=="4"?true:false);
+                $('input[name="referral_status"]').filter('[value="5"]').prop("checked", result[i]['rt_type']=="5"?true:false);
+                $('input[name="referral_status"]').filter('[value="6"]').prop("checked", result[i]['rt_type']=="6"?true:false);
+                $('input[name="referral_status"]').filter('[value="7"]').prop("checked", result[i]['rt_type']=="7"?true:false);
+                $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
+                $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
             }
+            
           } else {
             return toastr.error("Action Failed");
           }
@@ -307,6 +319,31 @@ $(document).ready(async function () {
         data = referral_tracking_table.rows().data().toArray();
         load_time_line();
     }, 1000 );
+
+    $(document).on("click","#referral_tracking_create",function(){
+        var entry = {
+            referral_id: $("#referral_id").val(),
+            referral_type_id: $('input[name="referral_status"]:checked').val(),
+            referral_category_id: $('input[name="referral_status"]:checked').data('category'),
+            date: $("#referral_status_date").val()+" 15:00:00"
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/tracking/create", (xhr, err) => {
+            if (!err) {
+                $("#referral_view_modal").modal("hide");
+                toastr.success("Referral Status is updated successfully");
+                setTimeout( function () {
+                    referral_tracking_table.ajax.reload();
+                    data = referral_tracking_table.rows().data().toArray();
+                    load_time_line();
+                }, 1000 );
+            } else {
+              return toastr.error("Action Failed");
+            }
+          });
+        
+    });
+
+    
 
     
 
