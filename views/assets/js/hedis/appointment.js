@@ -6,19 +6,131 @@ function GetFormattedDate(date) {
     // var min =  ("0" + (date.getMinutes())).slice(-2);
     // var seg = ("0" + (date.getSeconds())).slice(-2);
     return year + "-" + month + "-" + day;
+}
+
+function calculateAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
   }
 
 $(document).ready(async function () {
 
-    var selected_date = new tempusDominus.TempusDominus(document.getElementById("selected_date_picker_button"), {
-        //put your config here
-    });
-    $("#selected_date_picker_value").on("change", function (e) {
-        $("#selected_date").html(new Date($(this).val()).toDateString());
-        load_data();
-      });
+    var selected_doctor= "";
+    var selected_date= "";
 
-    $("#selected_date").html(new Date().toDateString());
+    var calendarEl = document.getElementById('kt_calendar_app');
+    var todayDate = moment().startOf('day');
+    var YM = todayDate.format('YYYY-MM');
+    var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
+    var TODAY = todayDate.format('YYYY-MM-DD');
+    var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+    
+
+    var app_calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        initialDate: TODAY,
+        navLinks: true,
+        selectable: true,
+        selectMirror: true,
+        select: function (arg) {
+            handleNewEvent(arg);
+        },
+
+        eventClick: function (arg) {
+            handleViewEvent(arg);
+        },
+
+        editable: true,
+        dayMaxEvents: true,
+        events: [
+            
+        ],
+        datesSet: function(){
+            selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
+            load_data();
+        }
+    });
+
+    app_calendar.render();
+
+    const handleViewEvent = (data) => {
+        // console.log(data.event.id);
+        observation_id = null;
+        var appointment = appointments[data.event.id];
+        $("#appointment_id").val(data.event.id);
+        $("#appointment_clinic_id").val(appointment['clinic_id']);
+        $("#appointment_patient_id").val(appointment['patient_id']);
+        $("#appointment_emr_id").val(appointment['emr_id']);
+        $("#appointment_pcp_id").val(appointment['pcp_id']);
+
+        $("#appointment_modal_fullname").html(appointment['FNAME']+" "+appointment['LNAME']);
+        $("#appointment_modal_age").html(calculateAge(appointment['DOB']));
+        $("#appointment_modal_language").html(appointment['Language']);
+        $("#appointment_modal_clinic").html($("#chosen_clinics option:selected").text());
+        $("#appointment_modal_gender").html(appointment['GENDER'].charAt(0).toUpperCase() + appointment['GENDER'].slice(1));
+        $("#appointment_modal_dob").html(moment(appointment['DOB']).format('Do MMM, YYYY'));
+        $("#appointment_modal_telephone").html(appointment['MOBILE']);
+        $("#appointment_modal_phone").html(appointment['PHONE']);
+        $("#appointment_modal_email").html(appointment['EMAIL']);
+        
+        $(".pt_info").addClass('d-none');
+        $(".appt-list").addClass('d-none');
+
+        $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
+        $("#appointment_participate_status").val(appointment['pt_participate_status']);
+        $("#appointment_approve_date").val(GetFormattedDate(new Date(appointment['approve_date'])));
+        $("#appointment_start_date").val(appointment['start_date']);
+        $("#appointment_end_date").val(appointment['end_date']);
+        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", appointment['provider']=="0"?true:false);
+        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", appointment['provider']=="1"?true:false);
+        $("#appointment_measure").val(appointment['measure']);
+        $("#appointment_assessment").val(appointment['assessment']);
+       
+        if(appointment['provider']=="0"){
+            $("#appointment_specialist_provider").prop("disabled", true);
+            $("#appointment_clinic_provider").prop("disabled", false);
+            $("#appointment_clinic_provider").val(appointment['provider_id']);
+            $("#appointment_specialist_provider").val("");
+        }else{
+            $("#appointment_specialist_provider").prop("disabled", false);
+            $("#appointment_clinic_provider").prop("disabled", true);
+            $("#appointment_clinic_provider").val("");
+            $("#appointment_specialist_provider").val(appointment['provider_id']);
+        }
+        $("#appointment_attended").prop('checked', appointment['attended']=="1"?true:false);
+        $("#appointment_status").val(appointment['status']);
+        $("#appointment_cancel_reason").val(appointment['cancel_reason']);
+        $("#appointment_class").val(appointment['class']);
+        $("#appointment_service_category").val(appointment['service_category']);
+        $("#appointment_appt_type").val(appointment['appt_type']);
+        $("#appointment_reason").val(appointment['reason']);
+        $("#appointment_priority").val(appointment['priority']);
+        $("#appointment_description").val(appointment['description']);
+        $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
+        $("#appointment_notes").val(appointment['notes']);
+        $("#appointment_pt_instruction").val(appointment['pt_instruction']);
+        $("#appointment_edit_modal").modal("show");
+        $("#appointment_modal").modal("hide");
+
+
+        // startDateMod = moment(data.event.startStr).format('Do MMM, YYYY - h:mm a');
+    }
+
+    $("#appt_save_btn").click(function (e) {
+        
+        load_data();
+    });
+
     var entry ={
         clinic_id: localStorage.getItem('chosen_clinic'),
     }
@@ -47,82 +159,63 @@ $(document).ready(async function () {
     });
 
 
-    function load_html(data){
-        let startTime = data[0]?new Date(data[0]['approve_date']):new Date();
-        startTime.setHours(8, 0, 0, 0); // Set start time to 8:00
-        let endTime = data[0]?new Date(data[0]['approve_date']):new Date();
-        endTime.setHours(24, 0, 0, 0); // Set end time to 12:00
-        let currentTime = new Date(startTime);
+    function add_event(){
+        app_calendar.removeAllEvents();
+        for(var i in appointments){
+            var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
+            var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
+            var bg = 'info'
+            if(appointments[i]['attended']=="1")bg = 'success';
+            events = {
+                id: appointments[i]['id'],
+                title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                start: s,
+                end: e,
+                className: "border border-danger border-0 bg-"+bg+" text-inverse-primary",
+            }
+            app_calendar.addEvent(events);
+        }
        
-        var html = "";
-        html = '<tr class="h-60px"><td class="w-150px bg-primary border  ">';
-        html += '</td>';
-        for(var i=0;i<doctors.length;i++){
-            var bg_color = 'primary';
-            if(doctors[i]['type']=="3")bg_color = 'info';
-            if(doctors[i]['ch']=="1"){
-                html += '<td class="border bg-'+bg_color+' w-200px text-center fw-bold text-white">';
-                html += doctors[i]['fname']+' '+doctors[i]['lname'];
-                html += '</td>';
-            }
-        }
-        html += '</tr>';
-        while (currentTime <= endTime) {
-            let fromTime = new Date(currentTime);
-            currentTime.setMinutes(currentTime.getMinutes() + 15); // Increment by 15 minutes
-            html += '<tr class=""><td class="text-end border pe-1 border-primary bg-light-success">';
-            html += fromTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            html += '</td>';
-            for(var j=0;j<doctors.length;j++){
-                if(doctors[j]['ch']=="1"){
-                    bg_color = 'primary';
-                    if(doctors[j]['type']=="3")bg_color = 'info';
-                    html += '<td class="border text-center bg-light-'+bg_color+' border-primary ">';
-                    for(var i=0; i<data.length; i++){
-                        var start_time = new Date(data[i]['approve_date'].split('T')[0]+" "+data[i]['start_date']);
-                        if(start_time>=fromTime && start_time<currentTime && data[i]['provider_id']==doctors[j]['id']){
-                            html += '<div class="btn btn-primary mx-3 fs-8 fw-bold m-1 p-1 appt " data-id="'+data[i]['id']+'">'
-                            html += '<div class=""><i class="fa fa-question-circle"></i> '
-                            html += data[i]['FNAME']+' '+data[i]['LNAME']+', ';
-                            html += new Date(data[i]['DOB']).toLocaleString("en-US").split(" ")[0];
-                            html += '<br />'
-                            html += data[i]['PHONE']+', '+data[i]['pt_participate_status'];
-                            html += "</div></div>"
-                        }
-                    }
-                    html += '</td>';
-                }
-            }
-            html += '</tr>';
-        }
-        $("#appt_time_line").html(html);
     }
     var appointments = [];
     
     function load_data(){
-        var date = $("#selected_date_picker_value").val()?$("#selected_date_picker_value").val(): new Date();
         var entry ={
-            date: GetFormattedDate(new Date(date)),
+            date: selected_date,
             clinic_id: localStorage.getItem('chosen_clinic'),
         }
+        if(selected_doctor!="")entry['doctors'] = selected_doctor;
+        appointments = []
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/getAppointment", (xhr, err) => {
             if (!err) {
-              appointments = JSON.parse(xhr.responseText)['data'];
+              var result = JSON.parse(xhr.responseText)['data'];
+              for(var i=0; i<result.length; i++){
+                appointments[result[i]['id']] = result[i];
+              }
               
-              load_html(appointments);
+              add_event();
+            //   load_html(appointments);
             }
         });
     }
-    load_html([]);
-    load_data();
+    // load_html([]);
+    
     
     $(document).on("change",".doctor-check",function(){
+        selected_doctor= "";
         for(var i=0;i<doctors.length;i++){
             if(doctors[i]['id']==$(this).data("id")){
                 doctors[i]['ch']=$(this).prop("checked")?"1":"0";
             }
+            if(doctors[i]['ch']=="1"){
+                if(selected_doctor!="")selected_doctor += ","
+                selected_doctor += doctors[i]['id'];
+            }
         }
-        load_html(appointments);
+        if(selected_doctor=="")selected_doctor="0";
+        
+        load_data()
+        // load_html(appointments);
     });
 
     $(document).on("click",".appt",function(){
@@ -130,4 +223,4 @@ $(document).ready(async function () {
     });
 });
 
-//document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
+document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');

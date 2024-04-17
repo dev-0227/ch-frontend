@@ -115,7 +115,7 @@
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Referral Tracking View</h5>
+				<h5 class="modal-title" id="referral_patient"></h5>
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                     <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                 </div>
@@ -123,6 +123,19 @@
 			<div class="modal-body">
                 <input type="hidden" class="form-control" id="appt_category_id" >
                 <div class="row">
+                    <div class="col-md-12 d-flex mt-2">
+                        
+                        <label class="fw-semibold text-muted me-2">Gender:</label>
+                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_gender"></label>
+                        <label class="fw-semibold text-muted me-2">DOB:</label>
+                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_dob"></label>
+                        <label class="fw-semibold text-muted me-2">Phone:</label>
+                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_phone"></label>
+                    </div><div class="col-md-12 d-flex mt-2">
+                        <label class="fw-semibold text-muted me-2">Address:</label>
+                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_address"></label>
+                        
+                    </div>
                     <div class="col-md-6 d-flex mt-2">
                         <label class="fw-semibold text-muted me-2">Insurance:</label>
                         <label class="fw-bold fs-6 text-gray-800" id="referral_insurance"></label>
@@ -130,22 +143,6 @@
                     <div class="col-md-6 d-flex mt-2">
                         <label class="fw-semibold text-muted me-2">Measure:</label>
                         <label class="fw-bold fs-6 text-gray-800" id="referral_measure"></label>
-                    </div>
-                    <div class="col-md-5 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Patient:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_patient"></label>
-                    </div><div class="col-md-7 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Gender:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_gender"></label>
-                        <label class="fw-semibold text-muted me-2">DOB:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_dob"></label>
-                        <label class="fw-semibold text-muted me-2">Phone:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_phone"></label>
-                    </div><div class="col-md-5 d-flex mt-2">
-                    </div><div class="col-md-7 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Address:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_address"></label>
-                        
                     </div>
                     <div class="col-md-6 d-flex mt-2">
                         <label class="fw-semibold text-muted me-2">Subscriber No:</label>
@@ -179,14 +176,9 @@
                                     </i>
                                 </div>
                                 <div class="timeline-content m-0">
-                                    <!--begin::Title-->
-                                    <span class="fs-6 text-gray-500 fw-semibold d-block">Messina Harbor</span>
-                                    <!--end::Title-->
-                                    <!--begin::Title-->
-                                    <span class="fs-6 fw-bold text-gray-800">Sicily, Italy</span>
-                                    <!--end::Title-->
+                                    <span class="fs-6 text-gray-500 fw-semibold d-block"></span>
+                                    <span class="fs-6 fw-bold text-gray-800"></span>
                                 </div>
-                                <!--end::Timeline content-->
                             </div>
                         </div>
                     </div>

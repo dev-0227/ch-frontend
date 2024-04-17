@@ -172,8 +172,8 @@ $(document).ready(async function () {
             $("#referral_insurance").html(result[0]['insurance']);
             $("#referral_measure").html(result[0]['m_id']);
             $("#referral_patient").html(result[0]['pt_fname']+" "+result[0]['pt_lname']);
-            $("#referral_pt_gender").html(result[0]['pt_gender']);
-            $("#referral_pt_dob").html(new Date(result[0]['pt_dob']).toISOString().split("T")[0]);
+            $("#referral_pt_gender").html(result[0]['pt_gender'].charAt(0).toUpperCase() + result[0]['pt_gender'].slice(1));
+            $("#referral_pt_dob").html(moment(result[0]['pt_dob']).format('Do MMM, YYYY'));
             $("#referral_pt_address").html(result[0]['pt_address']);
             $("#referral_pt_phone").html(result[0]['pt_phone']);
             $("#referral_subscriber").html(result[0]['subscrber_no']);
@@ -221,7 +221,6 @@ $(document).ready(async function () {
             }
         }
         if(selected_doctor=="")selected_doctor="0";
-        
         reload_data_table();
         
     });
