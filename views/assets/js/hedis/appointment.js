@@ -9,6 +9,7 @@ function GetFormattedDate(date) {
 }
 
 function calculateAge(dateString) {
+    if(!dateString)return "-";
     var today = new Date();
     var birthDate = new Date(dateString);
     var age = today.getFullYear() - birthDate.getFullYear();
@@ -19,10 +20,20 @@ function calculateAge(dateString) {
     return age;
   }
 
+function getGender(gender, short=true) {
+    var str="-"
+    if(gender){
+        str = gender;
+    }
+    return short?str.charAt(0).toUpperCase():str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 $(document).ready(async function () {
 
     var selected_doctor= "";
     var selected_date= "";
+    var appointments = [];
+    var specialties = "0";
 
     var calendarEl = document.getElementById('kt_calendar_app');
     var todayDate = moment().startOf('day');
@@ -50,7 +61,7 @@ $(document).ready(async function () {
             handleViewEvent(arg);
         },
 
-        editable: true,
+        editable: false,
         dayMaxEvents: true,
         events: [
             
@@ -79,12 +90,31 @@ $(document).ready(async function () {
         $("#appointment_modal_clinic").html($("#chosen_clinics option:selected").text());
         $("#appointment_modal_gender").html(appointment['GENDER'].charAt(0).toUpperCase() + appointment['GENDER'].slice(1));
         $("#appointment_modal_dob").html(moment(appointment['DOB']).format('Do MMM, YYYY'));
-        $("#appointment_modal_telephone").html(appointment['MOBILE']);
-        $("#appointment_modal_phone").html(appointment['PHONE']);
-        $("#appointment_modal_email").html(appointment['EMAIL']);
+        if(appointment['PHONE']){
+            $("#appointment_modal_telephone").html(appointment['PHONE']);
+            $("#appointment_modal_telephone").parent().removeClass("d-none");
+        }else{
+            $("#appointment_modal_telephone").parent().addClass("d-none");
+        }
+
+        if(appointment['MOBILE']){
+            $("#appointment_modal_phone").html(appointment['MOBILE']);
+            $("#appointment_modal_phone").parent().removeClass("d-none");
+        }else{
+            $("#appointment_modal_phone").parent().addClass("d-none");
+        }
+
+        if(appointment['EMAIL']){
+            $("#appointment_modal_email").html(appointment['EMAIL']);
+            $("#appointment_modal_email").parent().removeClass("d-none");
+        }else{
+            $("#appointment_modal_email").parent().addClass("d-none");
+        }
+       
         
-        $(".pt_info").addClass('d-none');
         $(".appt-list").addClass('d-none');
+        $("#appointment_patient_info").removeClass('d-none');
+        $("#appointment_patient_find").addClass('d-none');
 
         $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
         $("#appointment_participate_status").val(appointment['pt_participate_status']);
@@ -126,9 +156,178 @@ $(document).ready(async function () {
         // startDateMod = moment(data.event.startStr).format('Do MMM, YYYY - h:mm a');
     }
 
-    $("#appt_save_btn").click(function (e) {
+    $("#appt_new_button").click(function (e) {
+
+        $(".appt-list").addClass('d-none');
+        $("#appointment_patient_info").addClass('d-none');
+        $("#appointment_patient_find").removeClass('d-none');
+        $("#appointment_patient_id").val("");
+        $("#appointment_emr_id").val("");
+        $("#appointment_modal_fullname").html("");
+        $("#appointment_modal_language").html("");
+        $("#appointment_modal_language").parent().removeClass("d-none");
+        $("#appointment_modal_clinic").html("");
+        $("#appointment_modal_gender").html("");
+        $("#appointment_modal_dob").html("");
+        $("#appointment_modal_dob").parent().removeClass("d-none");
+        $("#appointment_modal_age").html("");
+        $("#appointment_modal_age").parent().removeClass("d-none");
+        $("#appointment_modal_telephone").html("");
+        $("#appointment_modal_telephone").parent().removeClass("d-none");
+        $("#appointment_modal_phone").html("");
+        $("#appointment_modal_phone").parent().removeClass("d-none");
+        $("#appointment_modal_email").html("");
+        $("#appointment_modal_email").parent().removeClass("d-none");
+
+        var t = new Date().toISOString().split('T')[0];
+        $("#appointment_id").val('');
+        $("#appointment_participate_status").val('needs-action');
+        $("#appointment_approve_date").val(t);
+        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
+        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
+        $("#appointment_specialist_provider").prop("disabled", false);
+        $("#appointment_clinic_provider").prop("disabled", true);
+        $("#appointment_clinic_provider").val("");
+        $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
+        $("#appointment_attended").prop('checked', false);
+        $("#appointment_status").val('proposed');
+        $("#appointment_measure").val($("#appointment_measure option:first").val());
+        $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
+        getSpecialty();
+        $("#appointment_cancel_reason").val('');
+        $("#appointment_class").val('VR');
+        $("#appointment_service_category").val('');
         
-        load_data();
+        $("#appointment_priority").val('R');
+        $("#appointment_description").val('');
+        $("#appointment_start_date").val("09:00");
+        $("#appointment_end_date").val('09:15');
+        $("#appointment_cancel_date").val('');
+        $("#appointment_notes").val('');
+        $("#appointment_pt_instruction").val('');
+        $("#appointment_pt_instruction_date").val('');
+        $("#appointment_edit_modal").modal("show");
+        $("#appointment_modal").modal("hide");
+    });
+
+    var patient_search_item = "name";
+    $(".menu-item").click(function (e) {
+        patient_search_item = $(this).children().data("item");
+        $("#pt_search_item").html($(this).children().html());
+        $("#search_patient").val("");
+        $(".menu-sub-dropdown").removeClass("show");
+    });
+    $(document).on("click","#search_patient",function(){
+        $("#searched_patient_list").removeClass("show");
+    }) 
+    $(document).on("click",".search-reset",function(){
+        $("#searched_patient_list").removeClass("show");
+        $("#appointment_patient_info").addClass('d-none');
+        $("#searched_patient_list").html("");
+        $("#search_patient").val("");
+    }) 
+    var patients = []
+    $(document).on("keyup","#search_patient",function(){
+        $("#searched_patient_list").removeClass("show");
+        $("#appointment_patient_info").addClass('d-none');
+        if($(this).val().length > 2){
+            $("#searched_patient_list").addClass("show");
+            var entry = {
+                text: $(this).val(),
+                item: patient_search_item,
+                clinic_id: localStorage.getItem('chosen_clinic')
+            }
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/search", (xhr, err) => {
+                if (!err) {
+                  patients = JSON.parse(xhr.responseText)['data'];
+                  $("#searched_patient_list").empty();
+                  for(var i = 0; i < patients.length; i++){
+                    var html = '<div class="menu-item px-3 pt-info " data-id="'+patients[i]['id']+'">';
+                    html += '<div class="menu-link px-3 py-1 d-block">';
+                    html += '<div class="text-primary">'
+                    html += patients[i]['FNAME']+" "+patients[i]['LNAME']+" (";
+                    html += patients[i]['DOB']?calculateAge(patients[i]['DOB'])+"Y":" - ";
+                    html += getGender(patients[i]['GENDER'])==""?"":", "+getGender(patients[i]['GENDER']);
+                    html += ')</div>';
+                    html += '<div class="p-1 fs-7">A/C No: '
+                    html += patients[i]['patientid'];
+                    if(patients[i]['PHONE']){
+                        html += ' | <i class="fa fa-phone"></i> '
+                        html += patients[i]['PHONE'];
+                    }
+                    if(patients[i]['DOB']){
+                        html += ' | DOB: '
+                        html += moment(patients[i]['DOB']).format("MM/DD/YYYY");
+                    }
+                    html += '</div>';
+                    html += '</div></div>';
+                    $("#searched_patient_list").append(html);
+                  }
+                }
+              });
+        }
+    });
+
+
+    $(document).on("click",".pt-info",function(){
+        for(var i = 0; i<patients.length; i++){
+            if(patients[i]['id']==$(this).data("id")){
+                $("#appointment_patient_id").val(patients[i]['id']);
+                $("#appointment_emr_id").val(patients[i]['patientid']);
+                $("#appt_pt_emrid").val(patients[i]['patientid']);
+                $("#appointment_clinic_id").val(localStorage.getItem('chosen_clinic'));
+                $("#appointment_pcp_id").val(localStorage.getItem('userid'));
+                $("#appointment_modal_fullname").html(patients[i]['FNAME']+" "+patients[i]['LNAME']);
+                $("#appointment_modal_age").html(calculateAge(patients[i]['DOB']));
+                $("#appt_pt_insurance").val();
+                if(patients[i]['Language']){
+                    $("#appointment_modal_language").html(patients[i]['Language']);
+                    $("#appointment_modal_language").parent().removeClass("d-none");
+                }else{
+                    $("#appointment_modal_language").parent().addClass("d-none");
+                }
+                $("#appointment_modal_clinic").html($("#chosen_clinics option:selected").text());
+                $("#appointment_modal_gender").html(patients[i]['GENDER'].charAt(0).toUpperCase() + patients[i]['GENDER'].slice(1));
+                if(patients[i]['DOB']){
+                    $("#appointment_modal_dob").html(moment(patients[i]['DOB']).format('Do MMM, YYYY'));
+                    $("#appointment_modal_dob").parent().removeClass("d-none");
+                    $("#appointment_modal_age").html(calculateAge(patients[i]['DOB']));
+                    $("#appointment_modal_age").parent().removeClass("d-none");
+                }else{
+                    $("#appointment_modal_dob").parent().addClass("d-none");
+                    $("#appointment_modal_age").parent().addClass("d-none");
+                }
+                if(patients[i]['PHONE']){
+                    $("#appointment_modal_telephone").html(patients[i]['PHONE']);
+                    $("#appointment_modal_telephone").parent().removeClass("d-none");
+                }else{
+                    $("#appointment_modal_telephone").parent().addClass("d-none");
+                }
+
+                if(patients[i]['MOBILE']){
+                    $("#appointment_modal_phone").html(patients[i]['MOBILE']);
+                    $("#appointment_modal_phone").parent().removeClass("d-none");
+                }else{
+                    $("#appointment_modal_phone").parent().addClass("d-none");
+                }
+
+                if(patients[i]['EMAIL']){
+                    $("#appointment_modal_email").html(patients[i]['EMAIL']);
+                    $("#appointment_modal_email").parent().removeClass("d-none");
+                }else{
+                    $("#appointment_modal_email").parent().addClass("d-none");
+                }
+                $("#search_patient").val("");
+            }
+        }
+        $("#appointment_patient_info").removeClass('d-none');
+    });
+    
+
+    $("#appt_save_btn").click(function (e) {
+        setTimeout( function () {
+            load_data();
+        }, 1000 );
     });
 
     var entry ={
@@ -158,6 +357,22 @@ $(document).ready(async function () {
         }
     });
 
+    var specialty = []
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentSpecialty", (xhr, err) => {
+        if (!err) {
+            specialty = JSON.parse(xhr.responseText)['data'];
+            for(var i=0;i<specialty.length;i++){
+                html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
+                html += '<input class="form-check-input specialty-check" type="checkbox" checked="checked" data-id="'+specialty[i]['id']+'" >';
+                html += '<span class="form-check-label text-gray-600 fw-semibold">';
+                html += specialty[i]['name'];
+                html += '</span></label>';
+                specialty[i]['ch'] = "1";
+                $("#specialty_list").append(html);
+            }
+        }
+    });
+
 
     function add_event(){
         app_calendar.removeAllEvents();
@@ -177,12 +392,12 @@ $(document).ready(async function () {
         }
        
     }
-    var appointments = [];
     
     function load_data(){
         var entry ={
             date: selected_date,
             clinic_id: localStorage.getItem('chosen_clinic'),
+            specialties: specialties
         }
         if(selected_doctor!="")entry['doctors'] = selected_doctor;
         appointments = []
@@ -194,13 +409,26 @@ $(document).ready(async function () {
               }
               
               add_event();
-            //   load_html(appointments);
             }
         });
     }
-    // load_html([]);
     
     
+    $(document).on("change",".specialty-check",function(){
+        if($(this).data("id")=="0"){
+            $(".specialty-check").prop("checked", $(this).prop("checked"));
+        }
+        if(!$(this).prop("checked"))$("#specialty_check_all").prop("checked", false);
+        var specialty = $(".specialty-check").map(function() {
+            if($(this).prop("checked")){
+                return $(this).data("id")
+            }
+        }).get();
+        specialties = specialty.join();
+        specialties = specialties.split(",")[0]=="0"?"0":specialties;
+        load_data()
+        
+    });
     $(document).on("change",".doctor-check",function(){
         selected_doctor= "";
         for(var i=0;i<doctors.length;i++){

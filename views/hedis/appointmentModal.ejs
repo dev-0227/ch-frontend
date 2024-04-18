@@ -139,56 +139,114 @@
 	  <div class="modal-content">
 		<div class="modal-header pb-1">
 		    <div class="modal-title" id="appointment_title">
-			  <div class="d-flex align-items-center ">
-				<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="appointment_modal_fullname"></a>
-				<div class= "fw-semibold fs-6 m-1 pe-2">
-					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
-						<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
-							<span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
-						</div><div id="appointment_modal_language"></div></a>
-				</div>
-				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-					<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
-						<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
-						<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
-						</div><div class="" id="appointment_modal_gender"></div></a>
-				</div>
-				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-					<div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
-					<div class="text-gray-500" id="appointment_modal_dob"></div>
-				</div>
-				<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-					<div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
-					<div class="text-gray-500" id="appointment_modal_age"></div>
-				</div>
-				<div  class="mx-3 mt-1 cursor-pointer pt_info ms-20" >
-					<i class="ki-outline ki-information-2 text-warning fs-2x">
-					</i>
-				</div>
-				<div  class="mx-3 mt-1 cursor-pointer appt-list ms-4 d-flex align-items-center fs-6" >
-					<i class="ki-outline ki-time text-primary fs-2x me-1 ">
-					</i> Appointments
-				</div>
+			  <div class="d-flex align-items-center d-none mb-3" id="appointment_patient_find">
+					<span class="fs-6  pe-2">Patient: </span>
+					<div  class="header-search d-flex align-items-center w-100 w-lg-500px" >
+						<div class="w-lg-500px">
+							<div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+								<i class="ki-duotone ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5">
+									<span class="path1"></span>
+									<span class="path2"></span>
+								</i>
+								<input type="text" class="search-input form-control form-control-solid ps-13" id="search_patient" value="" placeholder="Search..." data-kt-search-element="input" autocomplete="off">
+								<span class="search-spinner position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-5" data-kt-search-element="spinner">
+									<span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+								</span>
+								<span class="search-reset btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0  me-4" data-kt-search-element="clear">
+									<i class="ki-duotone ki-cross fs-2 fs-lg-1 me-0">
+										<span class="path1"></span>
+										<span class="path2"></span>
+									</i>
+								</span>
+							</div>
+							<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded  menu-gray-800 menu-state-bg-light-primary fw-semibold w-lg-500px py-3 mt-sm-2" data-kt-menu="true" id="searched_patient_list" >
+									<div class="menu-item px-3">
+										<span class="menu-link px-3 py-1" data-item="name">Name</span>
+									</div>
+							</div>
+						</div>
+					</div>
+					<div class="me-0 ms-2 w" id="search_item_select_button">
+						<button class="btn btn-outline  btn-outline-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+							<span id="pt_search_item">Name</span>
+							<i class="ki-duotone ki-down fs-2 ms-3 pe-0"></i>
+						</button>
+						<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-150px py-3 mt-sm-2" data-kt-menu="true" >
+							<div class="p-1 cursor-pointer" id="search_item_list">
+								<div class="menu-item px-3">
+									<span class="menu-link px-3 py-1" data-item="name">Name</span>
+								</div>
+								<div class="menu-item px-3 ">
+									<span class="menu-link px-3 py-1" data-item="dob">DOB</span>
+								</div>
+								<div class="menu-item px-3">
+									<span class="menu-link px-3 py-1" data-item="emr_id">Account No</span>
+								</div>
+								<div class="menu-item px-3">
+									<span class="menu-link px-3 py-1" data-item="phone">Phone No</span>
+								</div>
+								<div class="menu-item px-3">
+									<span class="menu-link px-3 py-1" data-item="Insurance">Subscriber No</span>
+								</div>
+							</div>
+							
+						</div>
+					</div>
 			  </div>
-			  <div class="d-flex flex-wrap fw-semibold fs-6 my-2 pe-2">
-				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-					<i class="ki-duotone ki-safe-home fs-4 me-1">
+			  <div class="" id="appointment_patient_info">
+				<div class="d-flex align-items-center ">
+					<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="appointment_modal_fullname"></a>
+					<div class= "fw-semibold fs-6 m-1 pe-2">
+						<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
+							<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+								<span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
+							</div><div id="appointment_modal_language"></div></a>
+					</div>
+					<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+						<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
+							<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+							<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
+							</div><div class="" id="appointment_modal_gender"></div></a>
+					</div>
+					<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+						<div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
+						<div class="text-gray-500" id="appointment_modal_dob"></div>
+					</div>
+					<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+						<div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
+						<div class="text-gray-500" id="appointment_modal_age"></div>
+					</div>
+					<div  class="mx-3 mt-1 cursor-pointer pt_info ms-20" >
+						<i class="ki-outline ki-information-2 text-warning fs-2x">
+						</i>
+					</div>
+					<div  class="mx-3 mt-1 cursor-pointer appt-list ms-4 d-flex align-items-center fs-6" >
+						<i class="ki-outline ki-time text-primary fs-2x me-1 ">
+						</i> Appointments
+					</div>
+				</div>
+				<div class="d-flex flex-wrap fw-semibold fs-6 my-2 pe-2">
+					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+						<i class="ki-duotone ki-safe-home fs-4 me-1">
+							<span class="path1"></span>
+							<span class="path2"></span>
+						</i><div id="appointment_modal_clinic"></div></a>
+					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+					<i class="fa fa-phone me-2"></i><div id="appointment_modal_telephone" class="calling cursor-pointer"></div></a>
+					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+						<i class="ki-duotone ki-phone fs-4 me-1">
+							<span class="path1"></span>
+							<span class="path2"></span>
+						</i><div id="appointment_modal_phone" class="calling cursor-pointer"></div></a>
+						<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
+					<i class="ki-duotone ki-sms fs-4 me-1">
 						<span class="path1"></span>
 						<span class="path2"></span>
-					</i><div id="appointment_modal_clinic"></div></a>
-				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-				<i class="fa fa-phone me-2"></i><div id="appointment_modal_telephone" class="calling cursor-pointer"></div></a>
-				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-					<i class="ki-duotone ki-phone fs-4 me-1">
-						<span class="path1"></span>
-						<span class="path2"></span>
-					</i><div id="appointment_modal_phone" class="calling cursor-pointer"></div></a>
-					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
-				<i class="ki-duotone ki-sms fs-4 me-1">
-					<span class="path1"></span>
-					<span class="path2"></span>
-				</i><div id="appointment_modal_email"></div></a>
+					</i><div id="appointment_modal_email"></div></a>
+				  </div>
 			  </div>
+			  
+			  
 		    </div>
 			
 			

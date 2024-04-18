@@ -91,16 +91,18 @@ $(document).on("click",".apptbtn",function(){
         $("#appt_pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
         $("#appt_pt_dob").html(new Date(result[0]['DOB']).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})),
         $("#appt_pt_age").html(calculateAge(result[0]['DOB']));
-        $("#appt_pt_telephone").html(result[0]['PHONE'])
+        
         if(result[0]['PHONE']){
           $("#appt_pt_telephone").parent().parent().removeClass("d-none");
+          $("#appt_pt_telephone").html(result[0]['PHONE'])
         }else{
           $("#appt_pt_telephone").parent().parent().addClass("d-none");
         }
-        $("#appt_pt_phone").html(result[0]['MOBILE'])
+        
         if(result[0]['MOBILE']){
           $("#appt_pt_phone").parent().parent().removeClass("d-none");
           $("#appointment_modal_phone").parent().removeClass("d-none");
+          $("#appt_pt_phone").html(result[0]['MOBILE'])
         }else{
           $("#appt_pt_phone").parent().parent().addClass("d-none");
           $("#appointment_modal_phone").parent().addClass("d-none");
@@ -216,18 +218,18 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_participate_status").val('needs-action');
   $("#appointment_approve_date").val(t);
   $("#appointment_attended").prop('checked', false);
-  $("#appointment_status").val('');
+  $("#appointment_status").val('proposed');
   $("#appointment_measure").val($("#appt_pt_mid").val());
   $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
   getSpecialty();
   $("#appointment_cancel_reason").val('');
-  $("#appointment_class").val('');
+  $("#appointment_class").val('VR');
   $("#appointment_service_category").val('');
   
   $("#appointment_priority").val('R');
   $("#appointment_description").val('');
   $("#appointment_start_date").val("09:00");
-  $("#appointment_end_date").val('');
+  $("#appointment_end_date").val('09:15');
   $("#appointment_cancel_date").val('');
   $("#appointment_notes").val('');
   $("#appointment_pt_instruction").val('');
@@ -455,6 +457,10 @@ $(document).on("change",".provider-radio",function(){
 });
 
 $("#appt_save_btn").click(function (e) {
+  if($("#appointment_patient_id").val() == ""){
+    toastr.info('Please select Patient');
+    return;
+  }
   if($("#appointment_reason").val() == ""){
     toastr.info('Please enter Reason');
     $("#appointment_reason").focus();
@@ -578,7 +584,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/
 
 $(".pt_info").click(function (e) {
 
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), {emr_id:$("#appt_pt_emrid").val()}, "patientlist/get", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {emr_id:$("#appt_pt_emrid").val(), pt_id:$("#appointment_patient_id").val()}, "patientlist/get", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       if(result.length>0){
@@ -610,6 +616,7 @@ $(".pt_info").click(function (e) {
           $("#deceased_at").prop("disabled", true);
         }
         $("#patient-add-modal").modal("show");
+        $("#appointment_edit_modal").modal("hide");
       }else{
         
       }
