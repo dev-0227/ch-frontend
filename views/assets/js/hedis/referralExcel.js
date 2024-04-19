@@ -13,6 +13,7 @@ function DateFormat(date) {
   return month+'/'+dt+'/'+year;
 }
 function load_excel(data){
+  console.log(data);
   referral_data = [];
   let more_class = "";
   for(var i=0;i<data.length;i++){
@@ -20,13 +21,13 @@ function load_excel(data){
     view += "<i class='fa fa-file-text text-success referral-view cursor-pointer"+more_class+"'></i></span> ";
     view += data[i]['encounter_id']?"<span idkey='"+data[i]['encounter_id']+"'><i class='fa fa-sticky-note text-primary cursor-pointer"+(data[i]['notecheck'] != null?"":"")+" encounter_edit_btn "+more_class+" '></i></span> ":"";
     view += data[i]['appointment_id']?"<span idkey='"+data[i]['appointment_id']+"'><i class='fa-solid fa-a appt_edit_btn text-info cursor-pointer'></i></span> ":"";
-    view += "<i class='fa fa-trash referral-delete text-danger' > ";
+    view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-trash referral-delete text-danger' ></span>";
     var contact = "<i class='fa fa-print referral-print text-success cursor-pointer "+more_class+"'></i> "
     contact += data[i]['pt_email']?"<i class='fa fa-envelope referral-mail "+more_class+" text-warning cursor-pointer'></i> ":"";
     contact += data[i]['pt_mobile']?"<i class='fa fa-mobile referral-mobile "+more_class+" text-info cursor-pointer' ></i> ":"";
     contact += data[i]['pt_phone']?"<i class='fa fa-phone referral-phone text-primary cursor-pointer' aria-hidden='true' value = 'dragon' style='cursor: pointer;'></i>":"";
     var status = "<i class='fa fa-eye referral-status text-success cursor-pointer'></i>&nbsp;<i class='fa fa-history referral-log text-primary cursor-pointer'></i>";
-    var tmpdata = [
+    var tmp = [
       data[i]['id'],
       data[i]['insurance'],
       data[i]['patient_id'],
@@ -47,9 +48,8 @@ function load_excel(data){
       data[i]['anticipated'],
       data[i]['overdue']=="1"?"<i class='fa fa-calendar-times  text-warning cursor-pointer'></i>":""
     ];
-    referral_data.push(tmpdata);
-    
-    
+    referral_data.push(tmp);
+
   }
   $("#referral_excel").empty();
     mySpreadsheet = jexcel(document.getElementById('referral_excel'), {

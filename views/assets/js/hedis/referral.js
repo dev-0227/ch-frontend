@@ -32,13 +32,9 @@ function getUrlVars() {
     }
     return year+'-'+month+'-'+dt;
   }
-  var data = [];
 $(document).ready(async function () {
     var doctors = []
     
-    var options = [];
-    var optioncheck = 1;
-    var checkview = 3;
     var selected_doctor= "";
     var selected_date="";
     $("#kt_body").attr("data-kt-aside-minimize", "on");
@@ -68,6 +64,11 @@ $(document).ready(async function () {
         reload_data_table();
     });
 
+    function refresh_data(data){
+        load_excel(data);
+        load_time_line(data);
+    }
+
     
     $("#referral_status_date").val(moment().format("YYYY-MM-DD"));
 
@@ -83,7 +84,11 @@ $(document).ready(async function () {
             "data": {
                 clinic_id: localStorage.getItem('chosen_clinic')
             },
-            "headers": { 'Authorization': localStorage.getItem('authToken') }
+            "headers": { 'Authorization': localStorage.getItem('authToken') },
+            "dataSrc": function ( json ) {
+                refresh_data(json.data);
+                return json.data;
+            }  
         },
         "buttons": [
             {extend: "pdf",
@@ -175,12 +180,6 @@ $(document).ready(async function () {
         if(selected_doctor!="")base_url += "&doctors="+selected_doctor;
         if(selected_date!="")base_url += "&range="+selected_date;
         referral_tracking_table.ajax.url(base_url).load();
-
-        setTimeout( function () {
-            data = referral_tracking_table.rows().data().toArray();
-            load_time_line();
-            load_excel(data);
-        }, 1000 );
         
     }
 
@@ -302,7 +301,7 @@ $(document).ready(async function () {
 
     
 
-    function load_time_line(){
+    function load_time_line(data){
         var html = "";
         html = '<tr class="h-60px"><td class="bg-primary w-150px border  ">';
         html += '</td>';
@@ -366,11 +365,9 @@ $(document).ready(async function () {
         $("#referral_time_line").html(html);
     }
 
-    setTimeout( function () {
-        data = referral_tracking_table.rows().data().toArray();
-        load_time_line();
-        load_excel(data);
-    }, 1500 );
+    
+
+    
 
     $(document).on("click","#referral_tracking_create",function(){
         var entry = {
@@ -385,9 +382,6 @@ $(document).ready(async function () {
                 toastr.success("Referral Status is updated successfully");
                 setTimeout( function () {
                     referral_tracking_table.ajax.reload();
-                    data = referral_tracking_table.rows().data().toArray();
-                    load_time_line();
-                    load_excel(data);
                 }, 1000 );
             } else {
               return toastr.error("Action Failed");
@@ -395,6 +389,39 @@ $(document).ready(async function () {
           });
         
     });
+
+    $(document).on("click",".referral-delete",function(){
+        let entry = {
+          id: $(this).parent().attr("idkey"),
+        }
+        Swal.fire({
+          text: "Are you sure you would like to delete?",
+          icon: "error",
+          showCancelButton: true,
+          buttonsStyling: false,
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, return",
+          customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: "btn btn-primary"
+          }
+        }).then(function (result) {
+          if (result.value) {
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/delete", (xhr, err) => {
+              if (!err) {
+                setTimeout( function () {
+                    referral_tracking_table.ajax.reload();
+                }, 1000 );
+              } else {
+                return toastr.error("Action Failed");
+              }
+            });
+          }
+        });
+      
+      });
+
+    
 
 });
 
