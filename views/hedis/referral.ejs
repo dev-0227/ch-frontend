@@ -1,5 +1,8 @@
-<div class="row">
-    <div class="col-md-4">
+<link href="/assets/plugins/jexcel/jexcel.css" rel="stylesheet">
+<link href="/assets/plugins/jexcel/jsuites.css" rel="stylesheet">
+
+<div class="row ">
+    <div class="col-md-4 d-flex align-items-center">
         <h3 class="card-title">Referral Tracking</h3>
     </div>
     <div class="col-md-8  d-flex justify-content-end">
@@ -15,10 +18,14 @@
                 <div class="p-4" id="view_list">
                     <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
 						<input class="form-check-input view-radio" type="radio" name="referral_view" value="0" checked="checked">
+						<span class="form-check-label text-gray-600" >Excel</span>
+					</label>
+					<label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+						<input class="form-check-input view-radio" type="radio" name="referral_view" value="1" >
 						<span class="form-check-label text-gray-600" >List</span>
 					</label>
 					<label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-						<input class="form-check-input view-radio" type="radio" name="referral_view" value="1">
+						<input class="form-check-input view-radio" type="radio" name="referral_view" value="2">
 						<span class="form-check-label text-gray-600">Table</span>
 					</label>
                 </div>
@@ -71,7 +78,7 @@
     </div>
 </div>
 
-<div class="card mt-6 " id="view_table">
+<div class="card mt-6 d-none" id="view_table">
     <div class="card-header border-0 d-flex align-items-center">
         <div class="card-title">
             
@@ -104,9 +111,14 @@
       </table>
     </div>
   </div>
+  <div class="card mt-6 " id="view_excel">
+    <div class="card-body py-4 px-2">
+        <div id="referral_excel" class="jexcel_modern w-100 overflow-auto"></div>
+    </div>
+  </div>
   <div class="card mt-6  d-none" id="view_timeline">
     <div class="card-body py-4 px-2">
-        <table class="" id="referral_time_line">
+        <table  id="referral_time_line">
         </table>
     </div>
   </div>
@@ -241,3 +253,6 @@
 		</div>
 	</div>
 </div>
+
+<%- include("encounterModal"); %>
+<%- include("appointmentModal"); %>

@@ -34,7 +34,7 @@ var encounter_table = $('#encounter_table').DataTable({
         render: function (data, type, row) {
           return `
             <div class="btn-group align-top " idkey="`+row.id+`">
-              <button class="btn  btn-primary badge edit_btn"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+              <button class="btn  btn-primary badge encounter_edit_btn"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
               <button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
             </div>
           `
@@ -110,7 +110,7 @@ $(document).on("click",".notesbtn",function(){
   
 });
 
-$(document).on("click",".edit_btn",function(){
+$(document).on("click",".encounter_edit_btn",function(){
   observation_id = null;
   $("#encounter_id").val($(this).parent().attr("idkey"));
   let entry = {
@@ -119,6 +119,21 @@ $(document).on("click",".edit_btn",function(){
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
+
+      $("#encounter_modal_fullname").html(result[0]['FNAME']+" "+result[0]['LNAME']);
+      $("#encounter_modal_language").html(result[0]['Language']);
+      $("#encounter_modal_clinic").html(result[0]['clinic_name']);
+      $("#encounter_modal_gender").html(result[0]['GENDER']);
+      $("#encounter_modal_dob").html(moment(result[0]['DOB']).format("Do MMM YYYY"));
+      $("#encounter_modal_telephone").html(result[0]['PHONE']);
+      $("#encounter_modal_phone").html(result[0]['MOBILE']);
+      $("#encounter_modal_email").html(result[0]['EMAIL']);
+
+      $("#encounter_patient_id").val(result[0]['patient_id']);
+      $("#encounter_emr_id").val(result[0]['patientid']);
+      $("#encounter_clinic_id").val(localStorage.getItem('chosen_clinic'));
+      $("#encounter_pcp_id").val(localStorage.getItem('userid'));
+
       $("#encounter_completed").prop("checked", result[0]['completed']);
       $("#encounter_enc_type").val(result[0]['enc_type']);
       $("#encounter_status").val(result[0]['status']);
@@ -190,7 +205,6 @@ $(document).on("click","#timer_start",function(){
 
 $(document).on("click","#timer_end",function(){
   clearInterval(timer)
-  console.log(Math.ceil(timer_diff/60));
   $("#encounter_total_mins").val(Math.ceil(timer_diff/60));
 });
 
@@ -344,7 +358,7 @@ new tempusDominus.TempusDominus(document.getElementById("encounter_enc_start"), 
 });
 
 
-$("#update_btn").click(function (e) {
+$("#encounter_update_btn").click(function (e) {
   if($("#encounter_enc_start").val() == ""){
     toastr.info('Please enter Start Time');
     $("#encounter_enc_start").focus();
@@ -357,20 +371,27 @@ $("#update_btn").click(function (e) {
   }
   let entry = {}
 
-  $('.form-control').each(function() {
-    if($(this).data('field')!==undefined){
-        
-        if($(this).attr('type')=='checkbox'){
-          entry[$(this).data('field')] = $(this).prop("checked")?"1":"0";
-        }else{
-          entry[$(this).data('field')] = $(this).val();
-        }
-    }
-  });
-
   entry["id"] = $("#encounter_id").val();
+  entry["clinic_id"] = $("#encounter_clinic_id").val();
+  entry["patient_id"] = $("#encounter_patient_id").val();
+  entry["emr_id"] = $("#encounter_emr_id").val();
+  entry["pcp_id"] = $("#encounter_pcp_id").val();
 
-  
+  entry["reason"] = $("#encounter_reason").val();
+  entry["team_member"] = $("#encounter_team_member").val();
+  entry["status"] = $("#encounter_status").val();
+  entry["assigned"] = $("#encounter_assigned").val();
+  entry["reason_use"] = $("#encounter_reason_use").val();
+  entry["service_type"] = $("#encounter_service_type").val();
+  entry["participant_type"] = $("#encounter_participant_type").val();
+  entry["priority"] = $("#encounter_priority").val();
+  entry["class"] = $("#encounter_class").val();
+  entry["enc_type"] = $("#encounter_enc_type").val();
+  entry["enc_start"] = $("#encounter_enc_start").val();
+  entry["total_mins"] = $("#encounter_total_mins").val();
+  entry["notes"] = $("#encounter_notes").val();
+  entry["action_taken"] = $("#encounter_action_taken").val();
+  entry["completed"] = $("#encounter_completed").prop("checked")?"1":"0";
 
   if($("#encounter_id").val()==""){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/create", (xhr, err) => {

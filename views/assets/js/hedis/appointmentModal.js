@@ -161,16 +161,31 @@ function GetFormattedDate(date) {
 }
 
 $(document).on("click",".appt_edit_btn",function(){
-  observation_id = null;
+
   $("#appointment_id").val($(this).parent().attr("idkey"));
   let entry = {
-    id: $("#appointment_id").val(),
+    id: $(this).parent().attr("idkey"),
   }
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/chosenAppointment", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
+
+      $("#appointment_modal_fullname").html(result[0]['FNAME']+" "+result[0]['LNAME']);
+      $("#appointment_modal_age").html(calculateAge(result[0]['DOB']));
+      $("#appointment_modal_language").html(result[0]['Language']);
+      $("#appointment_modal_clinic").html(result[0]['clinic_name']);
+      $("#appointment_modal_gender").html(result[0]['GENDER']);
+      $("#appointment_modal_dob").html(moment(result[0]['DOB']).format("Do MMM YYYY"));
+      $("#appointment_modal_telephone").html(result[0]['PHONE']);
+      $("#appointment_modal_phone").html(result[0]['MOBILE']);
+      $("#appointment_modal_email").html(result[0]['EMAIL']);
+      $("#appointment_patient_id").val(result[0]['patient_id']);
+      $("#appointment_emr_id").val(result[0]['emr_id']);
+      $("#appointment_clinic_id").val(localStorage.getItem('chosen_clinic'));
+      $("#appointment_pcp_id").val(localStorage.getItem('userid'));
+     
       
-      $("#appointment_clinic_name").html($("#hedis_clinic_name").val());
+      $("#appointment_clinic_name").html(result[0]['clinic_name']);
       $("#appointment_participate_status").val(result[0]['pt_participate_status']);
       $("#appointment_approve_date").val(GetFormattedDate(new Date(result[0]['approve_date'])));
       $("#appointment_start_date").val(result[0]['start_date']);
@@ -179,8 +194,7 @@ $(document).on("click",".appt_edit_btn",function(){
       $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", result[0]['provider']=="1"?true:false);
       $("#appointment_measure").val(result[0]['measure']);
       $("#appointment_assessment").val(result[0]['assessment']);
-      
-      
+
       if(result[0]['provider']=="0"){
         $("#appointment_specialist_provider").prop("disabled", true);
         $("#appointment_clinic_provider").prop("disabled", false);
@@ -206,6 +220,7 @@ $(document).on("click",".appt_edit_btn",function(){
       $("#appointment_pt_instruction").val(result[0]['pt_instruction']);
       $("#appointment_edit_modal").modal("show");
       $("#appointment_modal").modal("hide");
+
     } else {
       return toastr.error("Action Failed");
     }
@@ -290,16 +305,6 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
   }
 });
 
-// new Tagify(input, {
-//   whitelist: ["Ada", "Adenine", "Agda", "Agilent VEE"],
-//   maxTags: 10,
-//   dropdown: {
-//       maxItems: 20,
-//       classname: "",
-//             enabled: 0,
-//       closeOnSelect: false
-//   }
-// });
 
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getDoctorsByClinic", (xhr, err) => {
   if (!err) {
@@ -485,7 +490,6 @@ $("#appt_save_btn").click(function (e) {
   });
   entry['provider'] = $('input[name="appointment_provider"]:checked').val();
   entry['ins_id'] = $("#appt_pt_insurance").val();
-  entry['emr_id'] = $("#appt_pt_emrid").val();
   entry['subscrber_no'] = $("#appt_pt_inspcpid").val();
   entry['year'] = $("#appt_pt_cyear").val();
 

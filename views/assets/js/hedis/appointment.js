@@ -34,6 +34,7 @@ $(document).ready(async function () {
     var selected_date= "";
     var appointments = [];
     var specialties = "0";
+    
 
     var calendarEl = document.getElementById('kt_calendar_app');
     var todayDate = moment().startOf('day');

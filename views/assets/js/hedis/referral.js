@@ -1,9 +1,51 @@
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+  }
 
+  function DateFormat(serial) {
+    let year = serial.getFullYear();
+    let month = serial.getMonth() + 1;
+    let dt = serial.getDate();
+  
+    if (dt < 10) {
+        dt = '0' + dt;
+    }
+    if (month < 10) {
+        month = '0' + month;
+    }
+    return month+'/'+dt+'/'+year;
+  }
+  function deDateFormat(serial) {
+    let year = serial.getFullYear();
+    let month = serial.getMonth() + 1;
+    let dt = serial.getDate();
+  
+    if (dt < 10) {
+        dt = '0' + dt;
+    }
+    if (month < 10) {
+        month = '0' + month;
+    }
+    return year+'-'+month+'-'+dt;
+  }
+  var data = [];
 $(document).ready(async function () {
     var doctors = []
-    var data = [];
+    
+    var options = [];
+    var optioncheck = 1;
+    var checkview = 3;
     var selected_doctor= "";
     var selected_date="";
+    $("#kt_body").attr("data-kt-aside-minimize", "on");
+    
+    $(".content").addClass("p-2");
+    $(".container-xxl").addClass("mw-100");
+    $(".container-xxl").addClass("p-4");
     const date_picker = document.querySelector('#referral_flatpickr');
     flatpickr = $(date_picker).flatpickr({
         altInput: true,
@@ -96,7 +138,7 @@ $(document).ready(async function () {
               render: function (data, type, row) {
                 return `
                   <div idkey="`+row.id+`">
-                  <button class="btn btn-sm btn-primary view_referral_btn"><i class="fa fa-eye"></i> view</button>
+                  <button class="btn btn-sm btn-primary referral-view"><i class="fa fa-eye"></i> view</button>
                   </div>
                 `
               } 
@@ -137,6 +179,7 @@ $(document).ready(async function () {
         setTimeout( function () {
             data = referral_tracking_table.rows().data().toArray();
             load_time_line();
+            load_excel(data);
         }, 1000 );
         
     }
@@ -162,7 +205,7 @@ $(document).ready(async function () {
         referral_tracking_table.button( '.buttons-pdf' ).trigger();
     }); 
 
-    $(document).on("click",".view_referral_btn",function(){
+    $(document).on("click",".referral-view",function(){
         $("#referral_id").val($(this).parent().attr("idkey"));
         let entry = {
           id: $("#referral_id").val(),
@@ -240,9 +283,15 @@ $(document).ready(async function () {
     $(document).on("change",".view-radio",function(){
         var value = $('input[name="referral_view"]:checked').val();
         if(value=="0"){
+            $("#view_excel").removeClass("d-none");
+            $("#view_timeline").addClass("d-none");
+            $("#view_table").addClass("d-none");
+        }else if(value=="1"){
+            $("#view_excel").addClass("d-none");
             $("#view_table").removeClass("d-none");
             $("#view_timeline").addClass("d-none");
         }else{
+            $("#view_excel").addClass("d-none");
             $("#view_table").addClass("d-none");
             $("#view_timeline").removeClass("d-none");
             
@@ -250,6 +299,8 @@ $(document).ready(async function () {
         $(".menu-sub-dropdown").removeClass("show");
 
     });
+
+    
 
     function load_time_line(){
         var html = "";
@@ -296,7 +347,7 @@ $(document).ready(async function () {
                     for(var i=0; i<data.length; i++){
                         d = data[i]['rt_date'].split(",")[0];
                         if(day==new Date(d).toISOString().split("T")[0] && data[i]['doctor_id']==doctors[j]['id']){
-                            html += '<div idkey="'+data[i]['id']+'"><div class="btn btn-'+getColorBytype(data[i]['rt_type'].toString())+' mx-3 fs-8 fw-bold p-1 view_referral_btn m-1" data-id="'+data[i]['id']+'">'
+                            html += '<div idkey="'+data[i]['id']+'"><div class="btn btn-'+getColorBytype(data[i]['rt_type'].toString())+' mx-3 fs-8 fw-bold p-1 referral-view m-1" data-id="'+data[i]['id']+'">'
                             html += '<div class="w-100px fs-9" style="white-space: nowrap; text-overflow: ellipsis;"> '
                             html += data[i]['pt_fname']+' '+data[i]['pt_lname']+' ';
                             html += "</div><div>"
@@ -318,7 +369,8 @@ $(document).ready(async function () {
     setTimeout( function () {
         data = referral_tracking_table.rows().data().toArray();
         load_time_line();
-    }, 1000 );
+        load_excel(data);
+    }, 1500 );
 
     $(document).on("click","#referral_tracking_create",function(){
         var entry = {
@@ -335,6 +387,7 @@ $(document).ready(async function () {
                     referral_tracking_table.ajax.reload();
                     data = referral_tracking_table.rows().data().toArray();
                     load_time_line();
+                    load_excel(data);
                 }, 1000 );
             } else {
               return toastr.error("Action Failed");
@@ -343,10 +396,8 @@ $(document).ready(async function () {
         
     });
 
-    
-
-    
-
-
 });
 
+document.write('<script src="/assets/js/hedis/referralExcel.js" type="text/javascript"></script>');
+document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
+document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');

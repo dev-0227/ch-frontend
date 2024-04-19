@@ -177,7 +177,7 @@
 			</div>
 			<div class="border border-gray-300 border-dashed rounded min-w-125px py-2 px-4 me-6 mb-3 d-flex align-items-center">
 				<div class="d-flex justify-content-center align-items-center ">
-					<input type="checkbox" class="form-control form-check-input h-30px mt-0" id="encounter_completed" data-field="completed" />
+					<input type="checkbox" class="form-control form-check-input h-30px mt-0" id="encounter_completed" data-enc-field="completed" />
 					<label for="encounter_completed" class=" ps-2 fw-semibold fs-6 ">Completed</label>
 				</div>
 				
@@ -185,81 +185,81 @@
 		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 		  </div>
-		  <input type="hidden" class="form-control" id="encounter_id" data-field="id">
-		  <input type="hidden" class="form-control" id="encounter_clinic_id" data-field="clinic_id">
-		  <input type="hidden" class="form-control" id="encounter_patient_id" data-field="patient_id">
-		  <input type="hidden" class="form-control" id="encounter_emr_id" data-field="emr_id">
-		  <input type="hidden" class="form-control" id="encounter_pcp_id" data-field="pcp_id">
+		  <input type="hidden" class="form-control" id="encounter_id" data-enc-field="id">
+		  <input type="hidden" class="form-control" id="encounter_clinic_id" data-enc-field="clinic_id">
+		  <input type="hidden" class="form-control" id="encounter_patient_id" data-enc-field="patient_id">
+		  <input type="hidden" class="form-control" id="encounter_emr_id" data-enc-field="emr_id">
+		  <input type="hidden" class="form-control" id="encounter_pcp_id" data-enc-field="pcp_id">
 		</div>
 		<div class="modal-body pt-2">
 		  <div class="row">
-			<div class="col-md-3">
+			<div class="col-md-6">
 				<div class="form-group">
 					<label for="encounter_reason" class="fw-semibold fs-6 my-2">Reason:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="encounter_reason">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="reason" id="encounter_reason">
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="form-group">
+			<div class="col-md-3 d-none">
+				<div class="form-group ">
 					<label for="encounter_team_member" class="fw-semibold fs-6 my-2">Created By:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="team_member" id="encounter_team_member">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="team_member" id="encounter_team_member">
 				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_status" class="fw-semibold fs-6 my-2">Status:</label>
-					<select  class="form-control select2 custom-select" id="encounter_status" data-field="status"></select>
+					<select  class="form-control select2 custom-select" id="encounter_status" data-enc-field="status"></select>
 				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_assigned" class="fw-semibold fs-6 my-2">Assigned To:</label>
-					<select  class="form-control select2 custom-select" id="encounter_assigned" data-field="assigned"></select>
+					<select  class="form-control select2 custom-select" id="encounter_assigned" data-enc-field="assigned"></select>
 				</div>
 			</div>
 			
 			<!-- <div class="col-md-2">
 				<div class="form-group">
 					<label for="encounter_visit_type" class="fw-semibold fs-6 my-2">Visit Type:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="visit_typ" id="encounter_visit_type">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="visit_typ" id="encounter_visit_type">
 				</div>
 			</div> -->
 			<!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_icd" class="fw-semibold fs-6 my-2">ICD:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="icd" id="encounter_icd">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="icd" id="encounter_icd">
 				</div>
 			</div> -->
 			
 			<!-- <div class="col-md-4">
 				<div class="form-group">
 					<label for="encounter_transition_care" class="fw-semibold fs-6 my-2">Transition Of Care:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="transition_care" id="encounter_transition_care">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="transition_care" id="encounter_transition_care">
 				</div>
 			</div> -->
 			<!-- <div class="col-md-5">
 				<div class="form-group">
 					<label for="encounter_participant" class="fw-semibold fs-6 my-2">Participant:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="participant" id="encounter_participant">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="participant" id="encounter_participant">
 				</div>
 			</div> -->
 			
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_reason_use" class="fw-semibold fs-6 my-2">Reason Use:</label>
-					<select  class="form-control select2 custom-select" id="encounter_reason_use" data-field="reason_use"></select>
+					<select  class="form-control select2 custom-select" id="encounter_reason_use" data-enc-field="reason_use"></select>
 				</div>
 			</div>
 			<!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_reason_codes" class="fw-semibold fs-6 my-2">Reason Codes:</label>
-					<select  class="form-control select2 custom-select" id="encounter_reason_codes" data-field="reason_codes"></select>
+					<select  class="form-control select2 custom-select" id="encounter_reason_codes" data-enc-field="reason_codes"></select>
 				</div>
 			</div> -->
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_service_type" class="fw-semibold fs-6 my-2">Service Type:</label>
-					<select  class="form-control select2 custom-select" id="encounter_service_type" data-field="service_type">
+					<select  class="form-control select2 custom-select" id="encounter_service_type" data-enc-field="service_type">
 						<option value="Immunization">Immunization</option>
 						<option value="Health Information/Referral">Health Information/Referral</option>
 						<option value="Obstetrics & Gynaecology">Obstetrics & Gynaecology</option>
@@ -293,7 +293,7 @@
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_participant_type" class="fw-semibold fs-6 my-2">Participant Type:</label>
-					<select  class="form-control select2 custom-select" id="encounter_participant_type" data-field="participant_type"></select>
+					<select  class="form-control select2 custom-select" id="encounter_participant_type" data-enc-field="participant_type"></select>
 				</div>
 			</div>
 
@@ -301,26 +301,26 @@
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_priority" class="fw-semibold fs-6 my-2">Priority:</label>
-					<select  class="form-control select2 custom-select" id="encounter_priority" data-field="priority"></select>
+					<select  class="form-control select2 custom-select" id="encounter_priority" data-enc-field="priority"></select>
 				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_class" class="fw-semibold fs-6 my-2">Class:</label>
-					<select  class="form-control select2 custom-select" id="encounter_class" data-field="class"></select>
+					<select  class="form-control select2 custom-select" id="encounter_class" data-enc-field="class"></select>
 				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_enc_type" class="fw-semibold fs-6 my-2">Type:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_type" id="encounter_enc_type">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="enc_type" id="encounter_enc_type">
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group" >
 					<label for="encounter_enc_start" class="required  fs-6 my-2">Date:</label>
 					<div class="input-group"  data-td-target-input="nearest" data-td-target-toggle="nearest" >
-						<input id="encounter_enc_start" type="text" class="form-control" data-field="enc_start" />
+						<input id="encounter_enc_start" type="text" class="form-control" data-enc-field="enc_start" />
 						<span class="input-group-text" data-td-target="#kt_td_picker_basic" data-td-toggle="datetimepicker">
 							<i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
 						</span>
@@ -330,41 +330,41 @@
 			<div class="col-md-2">
 				<div class="form-group">
 					<label for="encounter_total_mins" class="required fw-semibold fs-6 my-2">Total Mins:</label>
-					<input type="number" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="total_mins" id="encounter_total_mins">
+					<input type="number" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="total_mins" id="encounter_total_mins">
 				</div>
 			</div>
 			
 			<!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_enc_end" class="fw-semibold fs-6 my-2">End Time:</label>
-					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="enc_end" id="encounter_enc_end">
+					<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-enc-field="enc_end" id="encounter_enc_end">
 				</div>
 			</div> -->
 			
 			<!-- <div class="col-md-3">
 				<div class="form-group">
 					<label for="encounter_subject_status" class="fw-semibold fs-6 my-2">Subject Status:</label>
-					<select  class="form-control select2 custom-select" id="encounter_subject_status" data-field="subject_status"></select>
+					<select  class="form-control select2 custom-select" id="encounter_subject_status" data-enc-field="subject_status"></select>
 				</div>
 			</div> -->
 			
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="encounter_notes" class="fw-semibold fs-6 my-2">Notes:</label>
-					<textarea rows="3" class="form-control" id="encounter_notes" data-field="notes"></textarea>
+					<textarea rows="3" class="form-control" id="encounter_notes" data-enc-field="notes"></textarea>
 			</div>
 			
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="encounter_action_taken" class="fw-semibold fs-6 my-2">Action Taken:</label>
-					<textarea rows="3" class="form-control" id="encounter_action_taken" data-field="action_taken"></textarea>
+					<textarea rows="3" class="form-control" id="encounter_action_taken" data-enc-field="action_taken"></textarea>
 				</div>
 			</div>
 		  </div>
 		</div>
 		<div class="modal-footer">
 		  <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-		  <button type="button" class="btn btn-primary" id="update_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
+		  <button type="button" class="btn btn-primary" id="encounter_update_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
 		</div>
 	  </div>
 	</div>
