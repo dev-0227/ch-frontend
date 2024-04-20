@@ -63,25 +63,28 @@ $(document).on("click",".notesbtn",function(){
         $("#pt_name_icon").html(result[0]['FNAME'].substring(0,1)+result[0]['LNAME'].substring(0,1));
         $("#pt_fullname").html(result[0]['FNAME'] + " " + result[0]['LNAME'])
         $("#pt_address").html(result[0]['ADDRESS'] + ", " + result[0]['CITY'])
-        $("#pt_dob").html(new Date(result[0]['DOB']).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'})),
-        $("#pt_telephone").html(result[0]['PHONE'])
+        $("#pt_dob").html(new Date(result[0]['DOB']).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}));
+        
         if(result[0]['PHONE']){
           $("#pt_telephone").parent().parent().removeClass("d-none");
+          $("#pt_telephone").html(result[0]['PHONE']);
         }else{
           $("#pt_telephone").parent().parent().addClass("d-none");
         }
-        $("#pt_phone").html(result[0]['MOBILE'])
+        
         if(result[0]['MOBILE']){
           $("#pt_phone").parent().parent().removeClass("d-none");
           $("#encounter_modal_phone").parent().removeClass("d-none");
+          $("#pt_phone").html(result[0]['MOBILE'])
         }else{
           $("#pt_phone").parent().parent().addClass("d-none");
           $("#encounter_modal_phone").parent().addClass("d-none");
         }
-        $("#pt_email").html(result[0]['EMAIL']);
+        
         if(result[0]['EMAIL']){
           $("#pt_email").parent().parent().removeClass("d-none");
           $("#encounter_modal_email").parent().removeClass("d-none");
+          $("#pt_email").html(result[0]['EMAIL']);
         }else{
           $("#pt_email").parent().parent().addClass("d-none");
           $("#encounter_modal_email").parent().addClass("d-none");
@@ -416,4 +419,68 @@ $("#encounter_update_btn").click(function (e) {
   setTimeout( function () {
     encounter_table.ajax.reload();
   }, 1000 );
+
+  
+
 });
+
+function open_calling_modal(pt_id, emr_id, type){
+  var entry = {
+    clinic_id: localStorage.getItem('chosen_clinic'),
+    pt_id,
+    emr_id
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/communications/checkcalltime", (xhr, err) => {
+    if (!err) {
+
+      let result = JSON.parse(xhr.responseText);
+
+      if(result['status'] == "success"){
+        $("#callcounts").html(result['counts']);  
+        
+        if(result['counts'] < 5){
+          $('.callringbtn').prop('disabled', true);
+          $('.callringbtn').addClass('bclicked');
+          return toastr.info('You have to charge call time');
+        }else{
+          $('.callringbtn').prop('disabled', false);
+          $('.callringbtn').addClass('btn-success');
+        }
+      }
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/get", (xhr, err) => {
+        if (!err) {
+    
+          let pt = JSON.parse(xhr.responseText)['data'];
+          if(pt.length>0){
+            $("#patient-name").html(pt[0]['FNAME']+" "+pt[0]['LNAME']);
+            if(type == 'phone'){
+              $("#patient-num").html(pt[0]['PHONE']);
+            }else{
+              $("#patient-num").html(pt[0]['MOBILE']);
+            }
+            $("#calling_language").html(pt[0]['Language']) 
+            $("#calling_gender").html(pt[0]['GENDER'].charAt(0).toUpperCase() + pt[0]['GENDER'].slice(1).toLowerCase()) 
+            $("#calling_dob").html(moment(pt[0]['DOB']).format("Do MMM YYYY")) 
+
+            $("#call-patient-modal").modal("show");
+          }
+        }
+      });
+
+
+    } else {
+      return toastr.error('Getting Available call time error');
+    }
+  });
+}
+
+$(document).on("click",".calling",function(){
+
+  var pt_id = $("#encounter_patient_id").val();
+  var emr_id = $("#encounter_emr_id").val();
+  var type = $(this).data("type");
+
+  open_calling_modal(pt_id, emr_id, type);
+
+})
+

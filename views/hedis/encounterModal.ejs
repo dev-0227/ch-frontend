@@ -56,14 +56,14 @@
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2 d-flex align-items-center">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-											<i class="fa fa-phone ms-1 me-3 " aria-hidden="true"></i> <div id="pt_telephone" class="calling cursor-pointer"></div></a>
+											<i class="fa fa-phone ms-1 me-3 " aria-hidden="true"></i> <div id="pt_telephone" data-type="phone" class="calling cursor-pointer"></div></a>
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2 d-flex align-items-center">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 											<i class="ki-duotone ki-phone fs-1 me-1">
 											<span class="path1"></span>
 											<span class="path2"></span>
-											</i> <div id="pt_phone" class="calling cursor-pointer"></div></a>
+											</i> <div id="pt_phone" data-type="mobile" class="calling cursor-pointer"></div></a>
 									</div>
 									<div class= "fw-semibold fs-6 m-1 pe-2">
 										<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
@@ -151,7 +151,7 @@
 						<span class="path2"></span>
 					</i><div id="encounter_modal_clinic"></div></a>
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-				<i class="fa fa-phone me-2"></i><div id="encounter_modal_telephone" class="calling cursor-pointer"></div></a>
+					<i class="fa fa-phone me-2"></i><div id="encounter_modal_telephone" class="calling cursor-pointer"></div></a>
 				<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
 					<i class="ki-duotone ki-phone fs-4 me-1">
 						<span class="path1"></span>
@@ -379,13 +379,11 @@
 					<h5 class="modal-title" id="patient-name" style="cursor: pointer;"> </h5>
 					<!-- <h5 class="modal-title" id="othernumber" style="color: blue; cursor: pointer;"> <i class="fa fa-phone-square" aria-hidden="true" style="font-size: 25px;"></i> Call number </h5> -->
 					<span class="fs-7  text-gray-600 d-flex">
+						<div class="mx-1" id="calling_gender">Male</div>.
+						<div class="mx-1" id="calling_dob">DOB: 12/12/2222</div>.
 						<div class="mx-1" id="calling_language">English</div>
-						<div class="mx-1" id="calling_gender">Male</div>
-						<div class="mx-1" id="calling_dob">DOB: 12/12/2222</div>
 					</span>
-					
 				</div>
-				
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 				</div>

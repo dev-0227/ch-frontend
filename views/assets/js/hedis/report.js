@@ -1245,69 +1245,14 @@ $('#eshowalleducation').click(function(){
 
 
   $(document).on("click",".phonecallbtn",function(){
-
-    let ptname = $(this).parent().parent().children().eq(4).html() + " " +$(this).parent().parent().children().eq(5).html()
-    let ptnum = $(this).parent().parent().children().eq(7).html()
-    document.getElementById('patient-name').innerHTML = ptname
-    document.getElementById('patient-num').innerHTML = ptnum
-
-    let measureid = $(this).parent().parent().children().eq(24).html()
-    $("#callmid").val( measureid) 
-
-    patientemrid = $(this).parent().parent().children().eq(3).html()
-    patientinsid = $(this).parent().parent().children().eq(2).html()
-    // $("#calling_language").html($(this).parent().parent().children().eq(3).html()) 
-    // $("#calling_gender").html($(this).parent().parent().children().eq(3).html()) 
-    $("#calling_dob").html($(this).parent().parent().children().eq(6).html()) 
-    open_calling_modal();
-
-  })
-
-  $(document).on("click",".calling",function(){
-
-    let ptname = $("#pt_fullname").html();
-    let ptnum = $(this).html()
-    document.getElementById('patient-name').innerHTML = ptname
-    document.getElementById('patient-num').innerHTML = ptnum
-    let measureid = $("#pt_mid").val()
-    $("#callmid").val( measureid) 
-    patientemrid = $("#pt_emrid").val();
-    patientinsid = $("#pt_insurance").val();
-
-    $("#calling_language").html($("#pt_language").html()) 
-    $("#calling_gender").html($("#pt_gender").html()) 
-    $("#calling_dob").html($("#pt_dob").html()) 
-    open_calling_modal();
+    var emr_id = $(this).parent().parent().children().eq(3).html();
+    open_calling_modal("", emr_id, 'phone');
 
   })
 
   
 
-  function open_calling_modal(){
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic')}, "hedis/communications/checkcalltime", (xhr, err) => {
-      if (!err) {
-
-        let result = JSON.parse(xhr.responseText);
-        if(result['status'] == "success"){
-          $("#callcounts").html(result['counts']);  
-          
-          if(result['counts'] < 5){
-            $('.callringbtn').prop('disabled', true);
-            $('.callringbtn').addClass('bclicked');
-            return toastr.info('You have to charge call time');
-          }else{
-            $('.callringbtn').prop('disabled', false);
-            $('.callringbtn').addClass('btn-success');
-          }
-        }  
-        $("#call-patient-modal").modal("show");
-
-
-      } else {
-        return toastr.error('Getting Available call time error');
-      }
-    });
-  }
+  
 
   $(document).on("click",".delrowbtn",function(){
     
