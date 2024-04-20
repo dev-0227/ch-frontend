@@ -365,16 +365,13 @@ $(document).ready(async function () {
         $("#referral_time_line").html(html);
     }
 
-    
-
-    
 
     $(document).on("click","#referral_tracking_create",function(){
         var entry = {
             referral_id: $("#referral_id").val(),
             referral_type_id: $('input[name="referral_status"]:checked').val(),
             referral_category_id: $('input[name="referral_status"]:checked').data('category'),
-            date: $("#referral_status_date").val()+" 15:00:00"
+            date: $(".referral_status_date").val()+" 15:00:00"
         }
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/tracking/create", (xhr, err) => {
             if (!err) {

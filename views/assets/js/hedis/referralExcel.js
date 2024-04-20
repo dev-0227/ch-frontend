@@ -26,14 +26,18 @@ function load_excel(data){
     contact += data[i]['pt_mobile']?"<i class='fa fa-mobile referral-calling "+more_class+" text-info cursor-pointer' data-type='mobile'></i> ":"";
     contact += data[i]['pt_phone']?"<i class='fa fa-phone referral-calling text-primary cursor-pointer' data-type='phone' ></i>":"";
     contact += "</span>";
-    var status = "<i class='fa fa-eye referral-status text-success cursor-pointer'></i>&nbsp;<i class='fa fa-history referral-log text-primary cursor-pointer'></i>";
+    var status = "<span idkey='"+data[i]['id']+"'><i class='fa fa-eye referral-status text-success cursor-pointer'></i> ";
+    status += "<i class='fa fa-history referral-log text-primary cursor-pointer'></i></span>";
+    var anticipated_date = new Date(data[i]['appt_date']);
+    anticipated_date.setDate(anticipated_date.getDate() + 30)
     var tmp = [
       data[i]['id'],
-      data[i]['insurance'],
+      data[i]['ins_id'],
       data[i]['patient_id'],
       (data[i]['emr_id']!=0&&data[i]['emr_id']!="")?data[i]['emr_id']:null, 
       data[i]['subscrber_no'],
       data[i]['pt_fname']+" "+data[i]['pt_lname'], 
+      data[i]['pt_dob']?moment(data[i]['pt_dob']).format("MM/DD/YYYY"):"",
       data[i]['pt_phone'], 
       view, 
       contact, 
@@ -42,10 +46,10 @@ function load_excel(data){
       "<div class='text-truncate'>"+data[i]['specialty_name']?data[i]['specialty_name']:""+"</div>",
       data[i]['doctor_fname']+" "+data[i]['doctor_lname'],
       data[i]['initiated'],
-      data[i]['appt_date']?moment(data[i]['appt_date']).format("YYYY-MM-DD"):"",
+      data[i]['appt_date']?moment(data[i]['appt_date']).format("MM/DD/YYYY"):"",
       data[i]['received_date']?moment(data[i]['received_date']).format("YYYY-MM-DD"):"",
       data[i]['dos']?moment(data[i]['dos']).format("YYYY-MM-DD"):"",
-      data[i]['anticipated'],
+      data[i]['anticipated']?moment(data[i]['anticipated']).format("YYYY-MM-DD"):data[i]['appt_date']?moment(anticipated_date).format("YYYY-MM-DD"):"",
       data[i]['overdue']=="1"?"<i class='fa fa-calendar-times  text-warning cursor-pointer'></i>":""
     ];
     referral_data.push(tmp);
@@ -65,7 +69,7 @@ function load_excel(data){
           width:0
       },
       {
-        type: 'text',
+        type: 'hidden',
         title:'INS ID',
         readOnly:true,
         width:100
@@ -77,28 +81,34 @@ function load_excel(data){
           width:100
       },
       {
-        type: 'hidden',
+        type: 'text',
         title:'EMR ID',
         readOnly:true,
         width:100
       },
       {
-        type: 'hidden',
+        type: 'text',
         title:'Subscriber No',
         readOnly:true,
         width:100
       },
       {
-          type: 'text',
-          title:'Patient Name',
-          readOnly:true,
-          width:200
+        type: 'text',
+        title:'Patient Name',
+        readOnly:true,
+        width:200
       },
       {
-          type: 'hidden',
+        type: 'text',
+        title:'DOB',
+        readOnly:true,
+        width:100
+      },
+      {
+          type: 'text',
           title:'Phone',
           readOnly:true,
-          width:100
+          width:120
       },
     
       {
@@ -162,16 +172,21 @@ function load_excel(data){
         width:100
       },
       {
-        type: 'text',
+        type: 'calendar',
         title:'Anticipated',
+        options: {format:'MM/DD/YYYY'},
         width:100
       },
-    
       {
           type: 'html',
           title:'Overdue',
           width:60
-      }
+      },
+      {
+        type: 'text',
+        title:' ',
+        width:100
+    }
     ],
     filters: true,
     allowComments:true,
@@ -231,14 +246,47 @@ $(document).ready(function () {
 });
 
 $(document).on("click",".referral-calling",function(){
-
   var pt_id = $(this).parent().attr("idkey");
   var emr_id = "";
   var type = $(this).data("type");
-
   open_calling_modal(pt_id, emr_id, type);
 
 })
+
+$(document).on("click",".referral-status",function(){
+
+  $("#referral_id").val($(this).parent().attr("idkey"));
+  let entry = {
+    id: $("#referral_id").val(),
+  }
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+
+      $("#referral_status_view_patient").html(result[0]['pt_fname']+" "+result[0]['pt_lname']);
+      $(".referral_status_date").val(moment().format("YYYY-MM-DD"));
+      
+      for(var i=0; i<result.length; i++){
+          $('input[name="referral_status"]').filter('[value="0"]').prop("checked", result[i]['rt_type']=="0"?true:false);
+          $('input[name="referral_status"]').filter('[value="1"]').prop("checked", result[i]['rt_type']=="1"?true:false);
+          $('input[name="referral_status"]').filter('[value="2"]').prop("checked", result[i]['rt_type']=="2"?true:false);
+          $('input[name="referral_status"]').filter('[value="3"]').prop("checked", result[i]['rt_type']=="3"?true:false);
+          $('input[name="referral_status"]').filter('[value="4"]').prop("checked", result[i]['rt_type']=="4"?true:false);
+          $('input[name="referral_status"]').filter('[value="5"]').prop("checked", result[i]['rt_type']=="5"?true:false);
+          $('input[name="referral_status"]').filter('[value="6"]').prop("checked", result[i]['rt_type']=="6"?true:false);
+          $('input[name="referral_status"]').filter('[value="7"]').prop("checked", result[i]['rt_type']=="7"?true:false);
+          $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
+          $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
+      }
+      $("#referral_status_view_modal").modal("show");
+    }
+  });
+  
+
+})
+
+
 
 
 document.write('<script src="/assets/plugins/jexcel/jexcel.js"></script>');
