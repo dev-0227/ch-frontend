@@ -259,13 +259,19 @@ $(document).on("click",".referral-status",function(){
   let entry = {
     id: $("#referral_id").val(),
   }
-
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
 
-      $("#referral_status_view_patient").html(result[0]['pt_fname']+" "+result[0]['pt_lname']);
-      $(".referral_status_date").val(moment().format("YYYY-MM-DD"));
+      $("#referral_patient").html(result[0]['pt_fname']+" "+result[0]['pt_lname']);
+      $("#referral_status_date").val(moment().format("YYYY-MM-DD"));
+      $("#referral_info").addClass("d-none");
+      $("#referral_history_area").addClass("d-none");
+      $("#referral_status_area").removeClass("d-none");
+      $("#referral_status_area").removeClass("col-md-6");
+      $("#referral_status_area").addClass("col-md-12");
+      $("#referral_view_modal").children().removeClass("modal-lg");
+      $("#referral_view_modal_footer").removeClass("d-none");
       
       for(var i=0; i<result.length; i++){
           $('input[name="referral_status"]').filter('[value="0"]').prop("checked", result[i]['rt_type']=="0"?true:false);
@@ -279,7 +285,50 @@ $(document).on("click",".referral-status",function(){
           $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
           $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
       }
-      $("#referral_status_view_modal").modal("show");
+      $("#referral_view_modal").modal("show");
+    }
+  });
+  
+
+})
+
+$(document).on("click",".referral-log",function(){
+
+  $("#referral_id").val($(this).parent().attr("idkey"));
+  let entry = {
+    id: $("#referral_id").val(),
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+
+      $("#referral_patient").html(result[0]['pt_fname']+" "+result[0]['pt_lname']);
+      $("#referral_status_date").val(moment().format("YYYY-MM-DD"));
+      $("#referral_info").addClass("d-none");
+      $("#referral_history_area").removeClass("d-none");
+      $("#referral_status_area").addClass("d-none");
+      $("#referral_history_area").removeClass("col-md-6");
+      $("#referral_history_area").addClass("col-md-12");
+      $("#referral_view_modal").children().removeClass("modal-lg");
+      $("#referral_view_modal_footer").addClass("d-none");
+      
+      
+      $("#referral_history").html("");
+      for(var i=0; i<result.length; i++){
+        var html = '';
+        html += '<div class="timeline-item align-items-center mb-7">';
+        html += '<div class="timeline-line mt-1 mb-n6 mb-sm-n7"></div>';
+        html += '<div class="timeline-icon">';
+        html += '<i class="ki-duotone ki-cd fs-2 text-danger"><span class="path1"></span><span class="path2"></span></i>';
+        html += '</div><div class="timeline-content m-0">';
+        html += '<span class="fs-6 text-gray-500 fw-semibold ">';
+        html += result[i]['rt_date']?result[i]['rt_date'].replace("T", " ").substr(0, 16):"";
+        html += '</span><div class="ms-3 badge badge-lg badge-'+getColorBytype(result[i]['rt_type'].toString())+' fw-bold my-2 fs-6">';
+        html += result[i]['referral_type'];
+        html += '</div></div></div>';
+        $("#referral_history").append(html);
+    }
+      $("#referral_view_modal").modal("show");
     }
   });
   

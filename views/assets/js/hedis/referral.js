@@ -32,6 +32,23 @@ function getUrlVars() {
     }
     return year+'-'+month+'-'+dt;
   }
+
+  function getColorBytype(type){
+    var color="primary";
+    switch(type){
+        case "1": color="secondary"; break;
+        case "2": color="danger"; break;
+        case "3": color="primary"; break;
+        case "4": color="success"; break;
+        case "5": color="info"; break;
+        case "6": color="danger"; break;
+        case "7": color="success"; break;
+        case "8": color="info"; break;
+        case "9": color="success"; break;
+        default: color="primary"; break;
+    }
+    return color;
+}
 $(document).ready(async function () {
     var doctors = []
     
@@ -183,22 +200,7 @@ $(document).ready(async function () {
         
     }
 
-    function getColorBytype(type){
-        var color="primary";
-        switch(type){
-            case "1": color="secondary"; break;
-            case "2": color="danger"; break;
-            case "3": color="primary"; break;
-            case "4": color="success"; break;
-            case "5": color="info"; break;
-            case "6": color="danger"; break;
-            case "7": color="success"; break;
-            case "8": color="info"; break;
-            case "9": color="success"; break;
-            default: color="primary"; break;
-        }
-        return color;
-    }
+    
 
     $("#export_pdf").on("click", function() {
         referral_tracking_table.button( '.buttons-pdf' ).trigger();
@@ -251,6 +253,16 @@ $(document).ready(async function () {
                 $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
                 $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
             }
+
+            $("#referral_info").removeClass("d-none");
+            $("#referral_history_area").removeClass("d-none");
+            $("#referral_status_area").removeClass("d-none");
+            $("#referral_history_area").addClass("col-md-6");
+            $("#referral_history_area").removeClass("col-md-12");
+            $("#referral_status_area").addClass("col-md-6");
+            $("#referral_status_area").removeClass("col-md-12");
+            $("#referral_view_modal").children().addClass("modal-lg");
+            $("#referral_view_modal_footer").removeClass("d-none");
             
           } else {
             return toastr.error("Action Failed");
@@ -371,7 +383,7 @@ $(document).ready(async function () {
             referral_id: $("#referral_id").val(),
             referral_type_id: $('input[name="referral_status"]:checked').val(),
             referral_category_id: $('input[name="referral_status"]:checked').data('category'),
-            date: $(".referral_status_date").val()+" 15:00:00"
+            date: $("#referral_status_date").val()+" 15:00:00"
         }
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/tracking/create", (xhr, err) => {
             if (!err) {
