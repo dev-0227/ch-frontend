@@ -12,6 +12,69 @@ function DateFormat(date) {
   }
   return month+'/'+dt+'/'+year;
 }
+
+function getColorBytype(type){
+  var color="primary";
+  switch(type){
+      case "1": color="secondary"; break;
+      case "2": color="danger"; break;
+      case "3": color="primary"; break;
+      case "4": color="success"; break;
+      case "5": color="info"; break;
+      case "6": color="danger"; break;
+      case "7": color="success"; break;
+      case "8": color="info"; break;
+      case "9": color="success"; break;
+      default: color="primary"; break;
+  }
+  return color;
+}
+$("#referral_clinic_name").html("")
+
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),insid:"0"}, "setting/getClinicins", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText);
+    $("#referral_clinic_name").html(result['clinic']);
+    
+}
+});
+
+
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id:localStorage.getItem('chosen_clinic')}, "hedis/appointmentSpecialty/getReferralSpecialtyByClinic", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    for(var i in result){
+      var html='<li class="nav-item mt-2 mh-30px">';
+      html+= ' <a class="nav-link text-active-primary ms-0 me-10 py-5 referral-specialty-tab cursor-pointer';
+      if(i==0){
+        $("#referral_selected_specialty").val(result[i]['id']);
+        html+= ' active';
+      }
+      html+= '" data-id="'+result[i]['id']+'">';
+      html+= result[i]['name'];
+      html+= '</a></li>';
+      $("#referral_specialty_tabs").append(html)
+    }
+    reload_referral();
+
+}
+});
+
+function reload_referral(){
+  var params = "clinic_id="+localStorage.getItem('chosen_clinic');
+  params += "&specialty="+$("#referral_selected_specialty").val();
+
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/referral?"+params, (xhr, err) => {
+    if (!err) {
+        var data = JSON.parse(xhr.responseText)['data'];
+        load_excel(data);
+        $("#referral_clinic_name").html("")
+    }
+  });
+}
+
+
+
 function load_excel(data){
    referral_data = [];
   let more_class = "";
@@ -36,7 +99,8 @@ function load_excel(data){
       data[i]['patient_id'],
       (data[i]['emr_id']!=0&&data[i]['emr_id']!="")?data[i]['emr_id']:null, 
       data[i]['subscrber_no'],
-      data[i]['pt_fname']+" "+data[i]['pt_lname'], 
+      data[i]['pt_fname'], 
+      data[i]['pt_lname'], 
       data[i]['pt_dob']?moment(data[i]['pt_dob']).format("MM/DD/YYYY"):"",
       data[i]['pt_phone'], 
       view, 
@@ -69,7 +133,7 @@ function load_excel(data){
           width:0
       },
       {
-        type: 'hidden',
+        type: 'text',
         title:'INS ID',
         readOnly:true,
         width:100
@@ -87,16 +151,22 @@ function load_excel(data){
         width:100
       },
       {
-        type: 'text',
+        type: 'hidden',
         title:'Subscriber No',
         readOnly:true,
         width:100
       },
       {
         type: 'text',
-        title:'Patient Name',
+        title:'First Name',
         readOnly:true,
-        width:200
+        width:100
+      },
+      {
+        type: 'text',
+        title:'Last Name',
+        readOnly:true,
+        width:100
       },
       {
         type: 'text',
@@ -181,12 +251,7 @@ function load_excel(data){
           type: 'html',
           title:'Overdue',
           width:60
-      },
-      {
-        type: 'text',
-        title:' ',
-        width:100
-    }
+      }
     ],
     filters: true,
     allowComments:true,
@@ -233,9 +298,9 @@ let changed = function(instance, cell, x, y, value) {
 let selectionActive = function(instance, x1, y1, x2, y2, origin) {
 }
 
-$(document).ready(function () {
+$(document).ready(async function () {
 
-  $(document).on("click","#referral_encounter",function(){
+    $(document).on("click","#referral_encounter",function(){
     
   });
 
@@ -244,6 +309,73 @@ $(document).ready(function () {
   });
 
 });
+
+$(document).on("click",".referral-view",function(){
+  $("#referral_id").val($(this).parent().attr("idkey"));
+  let entry = {
+    id: $("#referral_id").val(),
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      $("#referral_insurance").html(result[0]['insurance']);
+      $("#referral_measure").html(result[0]['m_id']);
+      $("#referral_patient").html(result[0]['pt_fname']+" "+result[0]['pt_lname']);
+      $("#referral_pt_gender").html(result[0]['pt_gender'].charAt(0).toUpperCase() + result[0]['pt_gender'].slice(1));
+      $("#referral_pt_dob").html(moment(result[0]['pt_dob']).format('Do MMM, YYYY'));
+      $("#referral_pt_age").html(calculateAge(result[0]['pt_dob']));
+      $("#referral_pt_address").html(result[0]['pt_address']);
+      $("#referral_pt_phone").html(result[0]['pt_phone']);
+      $("#referral_subscriber").html(result[0]['subscrber_no']);
+      $("#referral_specialty").html(result[0]['doctor_specialty']);
+      $("#referral_ref_to").html(result[0]['doctor_fname']+" "+result[0]['doctor_lname']);
+      $("#referral_spe_npi").html(result[0]['spe_npi']);
+      $("#referral_reason").html(result[0]['reason']);
+      $("#referral_view_modal").modal("show");
+      var html = "";
+      $("#referral_history").html("");
+      for(var i=0; i<result.length; i++){
+          html = '';
+          html += '<div class="timeline-item align-items-center mb-7">';
+          html += '<div class="timeline-line mt-1 mb-n6 mb-sm-n7"></div>';
+          html += '<div class="timeline-icon">';
+          html += '<i class="ki-duotone ki-cd fs-2 text-danger"><span class="path1"></span><span class="path2"></span></i>';
+          html += '</div><div class="timeline-content m-0">';
+          html += '<span class="fs-6 text-gray-500 fw-semibold ">';
+          html += result[i]['rt_date']?result[i]['rt_date'].replace("T", " ").substr(0, 16):"";
+          html += '</span><div class="ms-3 badge badge-lg badge-'+getColorBytype(result[i]['rt_type'].toString())+' fw-bold my-2 fs-6">';
+          html += result[i]['referral_type'];
+          html += '</div></div></div>';
+          $("#referral_history").append(html);
+          $('input[name="referral_status"]').filter('[value="0"]').prop("checked", result[i]['rt_type']=="0"?true:false);
+          $('input[name="referral_status"]').filter('[value="1"]').prop("checked", result[i]['rt_type']=="1"?true:false);
+          $('input[name="referral_status"]').filter('[value="2"]').prop("checked", result[i]['rt_type']=="2"?true:false);
+          $('input[name="referral_status"]').filter('[value="3"]').prop("checked", result[i]['rt_type']=="3"?true:false);
+          $('input[name="referral_status"]').filter('[value="4"]').prop("checked", result[i]['rt_type']=="4"?true:false);
+          $('input[name="referral_status"]').filter('[value="5"]').prop("checked", result[i]['rt_type']=="5"?true:false);
+          $('input[name="referral_status"]').filter('[value="6"]').prop("checked", result[i]['rt_type']=="6"?true:false);
+          $('input[name="referral_status"]').filter('[value="7"]').prop("checked", result[i]['rt_type']=="7"?true:false);
+          $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
+          $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
+      }
+
+      $("#referral_info").removeClass("d-none");
+      $("#referral_history_area").removeClass("d-none");
+      $("#referral_status_area").removeClass("d-none");
+      $("#referral_history_area").addClass("col-md-6");
+      $("#referral_history_area").removeClass("col-md-12");
+      $("#referral_status_area").addClass("col-md-6");
+      $("#referral_status_area").removeClass("col-md-12");
+      $("#referral_view_modal").children().addClass("modal-lg");
+      $("#referral_view_modal_footer").removeClass("d-none");
+      
+    } else {
+      return toastr.error("Action Failed");
+    }
+  });
+  
+});
+
 
 $(document).on("click",".referral-calling",function(){
   var pt_id = $(this).parent().attr("idkey");
@@ -272,7 +404,7 @@ $(document).on("click",".referral-status",function(){
       $("#referral_status_area").addClass("col-md-12");
       $("#referral_view_modal").children().removeClass("modal-lg");
       $("#referral_view_modal_footer").removeClass("d-none");
-      
+
       for(var i=0; i<result.length; i++){
           $('input[name="referral_status"]').filter('[value="0"]').prop("checked", result[i]['rt_type']=="0"?true:false);
           $('input[name="referral_status"]').filter('[value="1"]').prop("checked", result[i]['rt_type']=="1"?true:false);
@@ -335,9 +467,51 @@ $(document).on("click",".referral-log",function(){
 
 })
 
+$(document).on("click",".referral-delete",function(){
+  let entry = {
+    id: $(this).parent().attr("idkey"),
+  }
+  Swal.fire({
+    text: "Are you sure you would like to delete?",
+    icon: "error",
+    showCancelButton: true,
+    buttonsStyling: false,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, return",
+    customClass: {
+      confirmButton: "btn btn-danger",
+      cancelButton: "btn btn-primary"
+    }
+  }).then(function (result) {
+    if (result.value) {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/delete", (xhr, err) => {
+        if (!err) {
+          setTimeout( function () {
+              referral_tracking_table.ajax.reload();
+          }, 1000 );
+        } else {
+          return toastr.error("Action Failed");
+        }
+      });
+    }
+  });
+
+});
+
+$(document).on("click",".referral-specialty-tab",function(){
+
+  $('.referral-specialty-tab').removeClass('active');
+  $(this).addClass('active');
+  $("#referral_selected_specialty").val($(this).data("id"));
+  reload_referral()
+
+})
 
 
 
-document.write('<script src="/assets/plugins/jexcel/jexcel.js"></script>');
-document.write('<script src="/assets/plugins/jexcel/jsuites.js"></script>');
+
+
+document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
+document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
+
 

@@ -1,127 +1,25 @@
-<link href="/assets/plugins/jexcel/jexcel.css" rel="stylesheet">
-<link href="/assets/plugins/jexcel/jsuites.css" rel="stylesheet">
+
 
 <div class="row ">
-    <div class="col-md-4 d-flex align-items-center">
-        <h3 class="card-title">Referral Tracking</h3>
+    <div class="col-md-4  p-6 pb-0">
+        <div class="fs-2 fw-bold">Referral Tracking</div>
+        <div class="fs-4 fw-semibold text-gray-500 " id="referral_clinic_name"></div>
     </div>
-    <div class="col-md-8  d-flex justify-content-end">
-        <div class="me-0 me-2">
-            <button class="btn  btn-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                View
-                <i class="ki-duotone ki-eye fs-2">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                    <span class="path3"></span></i>
-            </button>
-            <div  class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-150px py-3 mt-sm-2" data-kt-menu="true" >
-                <div class="p-4" id="view_list">
-                    <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-						<input class="form-check-input view-radio" type="radio" name="referral_view" value="0" checked="checked">
-						<span class="form-check-label text-gray-600" >Excel</span>
-					</label>
-					<label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-						<input class="form-check-input view-radio" type="radio" name="referral_view" value="1" >
-						<span class="form-check-label text-gray-600" >List</span>
-					</label>
-					<label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-						<input class="form-check-input view-radio" type="radio" name="referral_view" value="2">
-						<span class="form-check-label text-gray-600">Table</span>
-					</label>
-                </div>
-            </div>
-        </div>
-        
-        <div class="me-0 me-2" id="pcp_select_button">
-            <button class="btn  btn-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                PCP
-                <i class="ki-duotone ki-user-edit fs-2 ms-3 pe-0">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                    <span class="path3"></span></i>
-            </button>
-            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-300px py-3 mt-sm-2" data-kt-menu="true" >
-                <div class="p-4" id="pcp_list">
-                    
-                </div>
-            </div>
-        </div>
-        <div class="me-0 me-2" id="specialist_select_button">
-            <button class="btn  btn-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                Specialist
-                <i class="ki-duotone ki-user-edit fs-2 ms-3 pe-0">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                    <span class="path3"></span></i>
-            </button>
-            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-400px py-3 mt-sm-2" data-kt-menu="true" >
-                <div class="p-4" id="specialist_list">
-                    
-                </div>
-            </div>
-        </div>
-        <div class="input-group w-300px">
-            <input class="form-control form-control-solid rounded rounded-end-0 border-primary" placeholder="Pick date range" id="referral_flatpickr" />
-            <button class="btn btn-icon btn-primary" id="referral_flatpickr_clear">
-                <i class="ki-duotone ki-cross fs-2">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                </i>
-            </button>
-        </div>
-        <button type="button" class="btn btn-primary mx-2 d-none" id="export_pdf">
-            <i class="ki-duotone ki-exit-up fs-2">
-                <span class="path1"></span>
-                <span class="path2"></span>
-            </i>Export</button>
-        
+    <div class="mx-4">
+        <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold" id="referral_specialty_tabs">
+            
+        </ul>
     </div>
+    <input type="hidden" id="referral_id" />
+    <input type="hidden" id="referral_selected_specialty" />
 </div>
 
-<div class="card mt-6 d-none" id="view_table">
-    <div class="card-header border-0 d-flex align-items-center">
-        <div class="card-title">
-            
-        </div>
-        <div class="card-options d-flex">
-            <div class="d-flex align-items-center position-relative my-1 me-4">
-                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                <span class="path1"></span>
-                <span class="path2"></span>
-                </i>
-                <input id="referral_table_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"  placeholder="Search referral" />
-            </div>
-            
-        </div>
-    </div>
-    <div class="card-body py-4">
-      <table class="table table-striped table-bordered text-nowrap w-100"  id="referral_tracking_table" >
-        <thead>
-          <tr >
-              <th width="15%">Insurance</th>
-              <th width="25%">Patient</th>
-              <th width="25%">Referral To</th>
-              <th width="20%">measure</th>
-              <th width="15%">Date</th>
-              <th width="10%">status</th>
-              <th width="15%" class="text-center col-md-3"></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+  <div class="row mt-2 " id="view_excel">
+    <div class="col-md-12 py-4 px-2">
+        <div id="referral_excel" class="jexcel_modern "></div>
     </div>
   </div>
-  <div class="card mt-6 " id="view_excel">
-    <div class="card-body py-4 px-2">
-        <div id="referral_excel" class="jexcel_modern w-100 overflow-auto min-h-500px"></div>
-    </div>
-  </div>
-  <div class="card mt-6  d-none" id="view_timeline">
-    <div class="card-body py-4 px-2 ">
-        <table  id="referral_time_line">
-        </table>
-    </div>
-  </div>
+ 
 
   <div class="modal fade" id="referral_view_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document" >
@@ -258,6 +156,5 @@
 	</div>
 </div>
 
-
-
-
+<%- include("appointmentModal"); %>
+<%- include("encounterModal"); %>

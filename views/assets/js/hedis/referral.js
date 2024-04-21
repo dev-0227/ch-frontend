@@ -33,32 +33,16 @@ function getUrlVars() {
     return year+'-'+month+'-'+dt;
   }
 
-  function getColorBytype(type){
-    var color="primary";
-    switch(type){
-        case "1": color="secondary"; break;
-        case "2": color="danger"; break;
-        case "3": color="primary"; break;
-        case "4": color="success"; break;
-        case "5": color="info"; break;
-        case "6": color="danger"; break;
-        case "7": color="success"; break;
-        case "8": color="info"; break;
-        case "9": color="success"; break;
-        default: color="primary"; break;
-    }
-    return color;
-}
+
 $(document).ready(async function () {
     var doctors = []
     
     var selected_doctor= "";
     var selected_date="";
-    $("#kt_body").attr("data-kt-aside-minimize", "on");
-    
-    $(".content").addClass("p-2");
-    $(".container-xxl").addClass("mw-100");
-    $(".container-xxl").addClass("p-4");
+    // $("#kt_body").attr("data-kt-aside-minimize", "on");
+    // $(".content").addClass("p-2");
+    // $(".container-xxl").addClass("mw-100");
+    // $(".container-xxl").addClass("p-4");
     const date_picker = document.querySelector('#referral_flatpickr');
     flatpickr = $(date_picker).flatpickr({
         altInput: true,
@@ -206,71 +190,7 @@ $(document).ready(async function () {
         referral_tracking_table.button( '.buttons-pdf' ).trigger();
     }); 
 
-    $(document).on("click",".referral-view",function(){
-        $("#referral_id").val($(this).parent().attr("idkey"));
-        let entry = {
-          id: $("#referral_id").val(),
-        }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
-          if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];
-            $("#referral_insurance").html(result[0]['insurance']);
-            $("#referral_measure").html(result[0]['m_id']);
-            $("#referral_patient").html(result[0]['pt_fname']+" "+result[0]['pt_lname']);
-            $("#referral_pt_gender").html(result[0]['pt_gender'].charAt(0).toUpperCase() + result[0]['pt_gender'].slice(1));
-            $("#referral_pt_dob").html(moment(result[0]['pt_dob']).format('Do MMM, YYYY'));
-            $("#referral_pt_address").html(result[0]['pt_address']);
-            $("#referral_pt_phone").html(result[0]['pt_phone']);
-            $("#referral_subscriber").html(result[0]['subscrber_no']);
-            $("#referral_specialty").html(result[0]['doctor_specialty']);
-            $("#referral_ref_to").html(result[0]['doctor_fname']+" "+result[0]['doctor_lname']);
-            $("#referral_spe_npi").html(result[0]['spe_npi']);
-            $("#referral_reason").html(result[0]['reason']);
-            $("#referral_view_modal").modal("show");
-            var html = "";
-            $("#referral_history").html("");
-            for(var i=0; i<result.length; i++){
-                html = '';
-                html += '<div class="timeline-item align-items-center mb-7">';
-                html += '<div class="timeline-line mt-1 mb-n6 mb-sm-n7"></div>';
-                html += '<div class="timeline-icon">';
-                html += '<i class="ki-duotone ki-cd fs-2 text-danger"><span class="path1"></span><span class="path2"></span></i>';
-                html += '</div><div class="timeline-content m-0">';
-                html += '<span class="fs-6 text-gray-500 fw-semibold ">';
-                html += result[i]['rt_date']?result[i]['rt_date'].replace("T", " ").substr(0, 16):"";
-                html += '</span><div class="ms-3 badge badge-lg badge-'+getColorBytype(result[i]['rt_type'].toString())+' fw-bold my-2 fs-6">';
-                html += result[i]['referral_type'];
-                html += '</div></div></div>';
-                $("#referral_history").append(html);
-                $('input[name="referral_status"]').filter('[value="0"]').prop("checked", result[i]['rt_type']=="0"?true:false);
-                $('input[name="referral_status"]').filter('[value="1"]').prop("checked", result[i]['rt_type']=="1"?true:false);
-                $('input[name="referral_status"]').filter('[value="2"]').prop("checked", result[i]['rt_type']=="2"?true:false);
-                $('input[name="referral_status"]').filter('[value="3"]').prop("checked", result[i]['rt_type']=="3"?true:false);
-                $('input[name="referral_status"]').filter('[value="4"]').prop("checked", result[i]['rt_type']=="4"?true:false);
-                $('input[name="referral_status"]').filter('[value="5"]').prop("checked", result[i]['rt_type']=="5"?true:false);
-                $('input[name="referral_status"]').filter('[value="6"]').prop("checked", result[i]['rt_type']=="6"?true:false);
-                $('input[name="referral_status"]').filter('[value="7"]').prop("checked", result[i]['rt_type']=="7"?true:false);
-                $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
-                $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
-            }
-
-            $("#referral_info").removeClass("d-none");
-            $("#referral_history_area").removeClass("d-none");
-            $("#referral_status_area").removeClass("d-none");
-            $("#referral_history_area").addClass("col-md-6");
-            $("#referral_history_area").removeClass("col-md-12");
-            $("#referral_status_area").addClass("col-md-6");
-            $("#referral_status_area").removeClass("col-md-12");
-            $("#referral_view_modal").children().addClass("modal-lg");
-            $("#referral_view_modal_footer").removeClass("d-none");
-            
-          } else {
-            return toastr.error("Action Failed");
-          }
-        });
-        
-    });
-
+    
     $('#referral_table_search_input').on('keyup', function () {
     referral_tracking_table.search(this.value).draw();
     });
@@ -399,41 +319,11 @@ $(document).ready(async function () {
         
     });
 
-    $(document).on("click",".referral-delete",function(){
-        let entry = {
-          id: $(this).parent().attr("idkey"),
-        }
-        Swal.fire({
-          text: "Are you sure you would like to delete?",
-          icon: "error",
-          showCancelButton: true,
-          buttonsStyling: false,
-          confirmButtonText: "Yes, delete it!",
-          cancelButtonText: "No, return",
-          customClass: {
-            confirmButton: "btn btn-danger",
-            cancelButton: "btn btn-primary"
-          }
-        }).then(function (result) {
-          if (result.value) {
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/delete", (xhr, err) => {
-              if (!err) {
-                setTimeout( function () {
-                    referral_tracking_table.ajax.reload();
-                }, 1000 );
-              } else {
-                return toastr.error("Action Failed");
-              }
-            });
-          }
-        });
-      
-      });
+    
 
     
 
 });
 
 document.write('<script src="/assets/js/hedis/referralExcel.js" type="text/javascript"></script>');
-document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
-document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
+
