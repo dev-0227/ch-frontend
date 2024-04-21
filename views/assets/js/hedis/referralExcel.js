@@ -205,7 +205,7 @@ function load_excel(data){
           width:200
       },
       {
-          type: 'html',
+          type: 'hidden',
           title:'Specialty',
           readOnly:true,
           width:150

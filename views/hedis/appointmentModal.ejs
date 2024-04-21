@@ -139,7 +139,23 @@
 	  <div class="modal-content">
 		<div class="modal-header pb-1">
 		    <div class="modal-title" id="appointment_title">
-			  <div class="d-flex align-items-center d-none mb-3" id="appointment_patient_find">
+				<div class="text-gray-900 text-hover-primary fs-2 fw-bold m-3" >Appointment </div>
+		    </div>
+			
+		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+		  </div>
+		  <input type="hidden" class="form-control" id="appointment_id" data-field="id">
+		  <input type="hidden" class="form-control" id="appointment_specialty" data-field="specialty">
+		  <input type="hidden" class="form-control" id="appointment_clinic_id" data-field="clinic_id">
+		  <input type="hidden" class="form-control" id="appointment_patient_id" data-field="patient_id">
+		  <input type="hidden" class="form-control" id="appointment_emr_id" data-field="emr_id">
+		  <input type="hidden" class="form-control" id="appointment_pcp_id" data-field="pcp_id">
+		</div>
+		<div class="modal-body pt-2">
+		  <div class="row">
+			<div class="col-md-12">
+				<div class="d-flex align-items-center d-none mb-3" id="appointment_patient_find">
 					<span class="fs-6  pe-2">Patient: </span>
 					<div  class="header-search d-flex align-items-center w-100 w-lg-500px" >
 						<div class="w-lg-500px">
@@ -192,76 +208,60 @@
 							
 						</div>
 					</div>
-			  </div>
-			  <div class="" id="appointment_patient_info">
-				<div class="d-flex align-items-center ">
-					<a  class="text-gray-900 text-hover-primary fs-2 fw-bold me-1" id="appointment_modal_fullname"></a>
-					<div class= "fw-semibold fs-6 m-1 pe-2">
-						<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
-							<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
-								<span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
-							</div><div id="appointment_modal_language"></div></a>
+				</div>
+				<div class="" id="appointment_patient_info">
+					<div class="d-flex align-items-center ">
+						<a  class="text-gray-900 text-hover-primary fs-4 fw-bold me-1" id="appointment_modal_fullname"></a>
+						<div class= "fw-semibold fs-6 m-1 pe-2">
+							<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
+								<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+									<span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
+								</div><div id="appointment_modal_language"></div></a>
+						</div>
+						<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+							<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
+								<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+								<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
+								</div><div class="" id="appointment_modal_gender"></div></a>
+						</div>
+						<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+							<div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
+							<div class="text-gray-500" id="appointment_modal_dob"></div>
+						</div>
+						<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+							<div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
+							<div class="text-gray-500" id="appointment_modal_age"></div>
+						</div>
+						<div  class="mx-3 mt-1 cursor-pointer pt_info ms-20" >
+							<i class="ki-outline ki-information-2 text-warning fs-2x">
+							</i>
+						</div>
+						<div  class="mx-3 mt-1 cursor-pointer appt-list ms-4 d-flex align-items-center fs-6" >
+							<i class="ki-outline ki-time text-primary fs-2x me-1 ">
+							</i> Appointments
+						</div>
 					</div>
-					<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-						<a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
-							<div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
-							<span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
-							</div><div class="" id="appointment_modal_gender"></div></a>
-					</div>
-					<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-						<div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
-						<div class="text-gray-500" id="appointment_modal_dob"></div>
-					</div>
-					<div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-						<div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
-						<div class="text-gray-500" id="appointment_modal_age"></div>
-					</div>
-					<div  class="mx-3 mt-1 cursor-pointer pt_info ms-20" >
-						<i class="ki-outline ki-information-2 text-warning fs-2x">
-						</i>
-					</div>
-					<div  class="mx-3 mt-1 cursor-pointer appt-list ms-4 d-flex align-items-center fs-6" >
-						<i class="ki-outline ki-time text-primary fs-2x me-1 ">
-						</i> Appointments
+					<div class="d-flex flex-wrap fw-semibold fs-6 my-2 pe-2">
+						<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+							<i class="ki-duotone ki-safe-home fs-4 me-1">
+								<span class="path1"></span>
+								<span class="path2"></span>
+							</i><div id="appointment_modal_clinic"></div></a>
+						<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+						<i class="fa fa-phone me-2"></i><div id="appointment_modal_telephone" class="calling cursor-pointer"></div></a>
+						<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+							<i class="ki-duotone ki-phone fs-4 me-1">
+								<span class="path1"></span>
+								<span class="path2"></span>
+							</i><div id="appointment_modal_phone" class="calling cursor-pointer"></div></a>
+							<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
+						<i class="ki-duotone ki-sms fs-4 me-1">
+							<span class="path1"></span>
+							<span class="path2"></span>
+						</i><div id="appointment_modal_email"></div></a>
 					</div>
 				</div>
-				<div class="d-flex flex-wrap fw-semibold fs-6 my-2 pe-2">
-					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-						<i class="ki-duotone ki-safe-home fs-4 me-1">
-							<span class="path1"></span>
-							<span class="path2"></span>
-						</i><div id="appointment_modal_clinic"></div></a>
-					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-					<i class="fa fa-phone me-2"></i><div id="appointment_modal_telephone" class="calling cursor-pointer"></div></a>
-					<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-						<i class="ki-duotone ki-phone fs-4 me-1">
-							<span class="path1"></span>
-							<span class="path2"></span>
-						</i><div id="appointment_modal_phone" class="calling cursor-pointer"></div></a>
-						<a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
-					<i class="ki-duotone ki-sms fs-4 me-1">
-						<span class="path1"></span>
-						<span class="path2"></span>
-					</i><div id="appointment_modal_email"></div></a>
-				  </div>
-			  </div>
-			  
-			  
-		    </div>
-			
-			
-		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-		  </div>
-		  <input type="hidden" class="form-control" id="appointment_id" data-field="id">
-		  <input type="hidden" class="form-control" id="appointment_specialty" data-field="specialty">
-		  <input type="hidden" class="form-control" id="appointment_clinic_id" data-field="clinic_id">
-		  <input type="hidden" class="form-control" id="appointment_patient_id" data-field="patient_id">
-		  <input type="hidden" class="form-control" id="appointment_emr_id" data-field="emr_id">
-		  <input type="hidden" class="form-control" id="appointment_pcp_id" data-field="pcp_id">
-		</div>
-		<div class="modal-body pt-2">
-		  <div class="row">
+			</div>
             <div class="col-md-3">
 				<div class="form-group">
 					<label for="appointment_appt_type" class="fw-semibold fs-6 my-2">Appointment Type:</label>
