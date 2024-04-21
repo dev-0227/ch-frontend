@@ -68,7 +68,6 @@ function reload_referral(){
     if (!err) {
         var data = JSON.parse(xhr.responseText)['data'];
         load_excel(data);
-        $("#referral_clinic_name").html("")
     }
   });
 }
@@ -506,10 +505,6 @@ $(document).on("click",".referral-specialty-tab",function(){
   reload_referral()
 
 })
-
-
-
-
 
 document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
 document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
