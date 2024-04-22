@@ -450,7 +450,7 @@ $(document).on("click",".referral-log",function(){
         html += '<i class="ki-duotone ki-cd fs-2 text-danger"><span class="path1"></span><span class="path2"></span></i>';
         html += '</div><div class="timeline-content m-0">';
         html += '<span class="fs-6 text-gray-500 fw-semibold ">';
-        html += result[i]['rt_date']?result[i]['rt_date'].replace("T", " ").substr(0, 16):"";
+        html += result[i]['rt_date']?moment(result[i]['rt_date']).format("LLL"):"";
         html += '</span><div class="ms-3 badge badge-lg badge-'+getColorBytype(result[i]['rt_type'].toString())+' fw-bold my-2 fs-6">';
         html += result[i]['referral_type'];
         html += '</div></div></div>';
