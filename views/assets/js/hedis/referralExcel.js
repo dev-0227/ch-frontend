@@ -484,7 +484,7 @@ $(document).on("click",".referral-delete",function(){
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/delete", (xhr, err) => {
         if (!err) {
           setTimeout( function () {
-              referral_tracking_table.ajax.reload();
+            reload_referral();
           }, 1000 );
         } else {
           return toastr.error("Action Failed");
