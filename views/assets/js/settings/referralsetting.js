@@ -154,7 +154,7 @@ $(document).ready(async function () {
             "headers": { 'Authorization': localStorage.getItem('authToken') }
         },
         "columns": [
-            { data: 'code' },
+            { data: 'id', visible: false},
             { data: 'display' },
             { data: 'id',
               render: function (data, type, row) {
@@ -178,11 +178,6 @@ $(document).ready(async function () {
     });
 
     $(document).on("click","#referral_category_create",function(){
-        if($("#referral_category_code").val() == ""){
-            toastr.info('Please enter Code');
-            $("#referral_category_code").focus();
-            return;
-        }
         if($("#referral_category_display").val() == ""){
           toastr.info('Please enter Display');
           $("#referral_category_display").focus();
@@ -190,7 +185,6 @@ $(document).ready(async function () {
       }
         let entry = {
             id: $('#referral_category_id').val(),
-            code: $('#referral_category_code').val(),
             display: $('#referral_category_display').val(),
           }
 
@@ -227,7 +221,6 @@ $(document).ready(async function () {
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/category/chosen", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
-            $("#referral_category_code").val(result[0]['code']);
             $("#referral_category_display").val(result[0]['display']);
             $("#referral_category_modal").modal("show");
           } else {
