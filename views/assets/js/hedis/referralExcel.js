@@ -337,7 +337,7 @@ $(document).on("click",".referral-view",function(){
           html += '<i class="ki-duotone ki-cd fs-2 text-danger"><span class="path1"></span><span class="path2"></span></i>';
           html += '</div><div class="timeline-content m-0">';
           html += '<span class="fs-6 text-gray-500 fw-semibold ">';
-          html += result[i]['rt_date']?result[i]['rt_date'].replace("T", " ").substr(0, 16):"";
+          html += result[i]['rt_date']?moment(result[i]['rt_date']).format("LLL"):"";
           html += '</span><div class="ms-3 badge badge-lg badge-'+getColorBytype(result[i]['rt_type'].toString())+' fw-bold my-2 fs-6">';
           html += result[i]['referral_type'];
           html += '</div></div></div>';
@@ -357,9 +357,9 @@ $(document).on("click",".referral-view",function(){
       $("#referral_info").removeClass("d-none");
       $("#referral_history_area").removeClass("d-none");
       $("#referral_status_area").removeClass("d-none");
-      $("#referral_history_area").addClass("col-md-6");
+      $("#referral_history_area").addClass("col-md-7");
       $("#referral_history_area").removeClass("col-md-12");
-      $("#referral_status_area").addClass("col-md-6");
+      $("#referral_status_area").addClass("col-md-5");
       $("#referral_status_area").removeClass("col-md-12");
       $("#referral_view_modal").children().addClass("modal-lg");
       $("#referral_view_modal_footer").removeClass("d-none");
@@ -395,7 +395,7 @@ $(document).on("click",".referral-status",function(){
       $("#referral_info").addClass("d-none");
       $("#referral_history_area").addClass("d-none");
       $("#referral_status_area").removeClass("d-none");
-      $("#referral_status_area").removeClass("col-md-6");
+      $("#referral_status_area").removeClass("col-md-5");
       $("#referral_status_area").addClass("col-md-12");
       $("#referral_view_modal").children().removeClass("modal-lg");
       $("#referral_view_modal_footer").removeClass("d-none");
@@ -435,7 +435,7 @@ $(document).on("click",".referral-log",function(){
       $("#referral_info").addClass("d-none");
       $("#referral_history_area").removeClass("d-none");
       $("#referral_status_area").addClass("d-none");
-      $("#referral_history_area").removeClass("col-md-6");
+      $("#referral_history_area").removeClass("col-md-7");
       $("#referral_history_area").addClass("col-md-12");
       $("#referral_view_modal").children().removeClass("modal-lg");
       $("#referral_view_modal_footer").addClass("d-none");
