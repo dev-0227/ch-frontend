@@ -137,11 +137,8 @@
 <div class="modal fade" id="appointment_edit_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
 	  <div class="modal-content">
-		<div class="modal-header pb-1">
-		    <div class="modal-title" id="appointment_title">
-				<div class="text-gray-900 text-hover-primary fs-2 fw-bold m-3" >Appointment </div>
-		    </div>
-			
+		<div class="modal-header pb-1 border-gray-400">
+		  <div class="fs-1 fw-bold text-gray-900 my-3" >Appointment </div>
 		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 		  </div>
@@ -152,7 +149,7 @@
 		  <input type="hidden" class="form-control" id="appointment_emr_id" data-field="emr_id">
 		  <input type="hidden" class="form-control" id="appointment_pcp_id" data-field="pcp_id">
 		</div>
-		<div class="modal-body pt-2">
+		<div class="modal-body pt-4">
 		  <div class="row">
 			<div class="col-md-12">
 				<div class="d-flex align-items-center d-none mb-3" id="appointment_patient_find">
@@ -232,9 +229,9 @@
 							<div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
 							<div class="text-gray-500" id="appointment_modal_age"></div>
 						</div>
-						<div  class="mx-3 mt-1 cursor-pointer pt_info ms-20" >
-							<i class="ki-outline ki-information-2 text-warning fs-2x">
-							</i>
+						<div  class="mx-3 mt-1 cursor-pointer pt_info ms-20 d-flex align-items-center fs-6 " >
+							<i class="ki-outline ki-information-2 text-primary fs-2x me-2">
+							</i> Patient Information
 						</div>
 						<div  class="mx-3 mt-1 cursor-pointer appt-list ms-4 d-flex align-items-center fs-6" >
 							<i class="ki-outline ki-time text-primary fs-2x me-1 ">

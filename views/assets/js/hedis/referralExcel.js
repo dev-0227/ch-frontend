@@ -78,18 +78,19 @@ function load_excel(data){
    referral_data = [];
   let more_class = "";
   for(var i=0;i<data.length;i++){
-    var view="<span idkey='"+data[i]['id']+"'>";
-    view += "<i class='fa fa-file-text text-success referral-view cursor-pointer"+more_class+"'></i></span> ";
-    view += data[i]['encounter_id']?"<span idkey='"+data[i]['encounter_id']+"'><i class='fa fa-sticky-note text-primary cursor-pointer"+(data[i]['notecheck'] != null?"":"")+" encounter_edit_btn "+more_class+" '></i></span> ":"";
-    view += data[i]['appointment_id']?"<span idkey='"+data[i]['appointment_id']+"'><i class='fa-solid fa-a appt_edit_btn text-info cursor-pointer'></i></span> ":"";
-    view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-trash referral-delete text-danger' ></span>";
+    var view = "<span idkey='"+data[i]['id']+"'><i class='fa fa-eye referral-status text-success cursor-pointer' title='Status'></i></span> ";
+    view += "<span idkey='"+data[i]['id']+"'>";
+    view += "<i class='fa-solid fa-s text-info referral-view cursor-pointer"+more_class+"' title='Status Trajectory'></i></span> ";
+    view += data[i]['encounter_id']?"<span idkey='"+data[i]['encounter_id']+"'><i class='fa-solid fa-e text-primary cursor-pointer"+(data[i]['notecheck'] != null?"":"")+" encounter_edit_btn "+more_class+" ' title='Encounter'></i></span> ":"";
+    view += data[i]['appointment_id']?"<span idkey='"+data[i]['appointment_id']+"'><i class='fa-solid fa-a appt_edit_btn text-info cursor-pointer' title='Appointment'></i></span> ":"";
+    view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-history referral-log text-primary cursor-pointer' title='log'></i></span></span> ";
+    view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-trash referral-delete text-danger' title='delete'></span>";
     var contact = "<span idkey='"+data[i]['patient_id']+"'><i class='fa fa-print referral-print text-success cursor-pointer "+more_class+"'></i> "
     contact += data[i]['pt_email']?"<i class='fa fa-envelope referral-mail "+more_class+" text-warning cursor-pointer' ></i> ":"";
     contact += data[i]['pt_mobile']?"<i class='fa fa-mobile referral-calling "+more_class+" text-info cursor-pointer' data-type='mobile'></i> ":"";
     contact += data[i]['pt_phone']?"<i class='fa fa-phone referral-calling text-primary cursor-pointer' data-type='phone' ></i>":"";
     contact += "</span>";
-    var status = "<span idkey='"+data[i]['id']+"'><i class='fa fa-eye referral-status text-success cursor-pointer'></i> ";
-    status += "<i class='fa fa-history referral-log text-primary cursor-pointer'></i></span>";
+
     var anticipated_date = new Date(data[i]['appt_date']);
     anticipated_date.setDate(anticipated_date.getDate() + 30)
     var tmp = [
@@ -104,7 +105,6 @@ function load_excel(data){
       data[i]['pt_phone'], 
       view, 
       contact, 
-      status,
       "<div class='text-truncate'>"+data[i]['m_id'] + " "+ data[i]['measure']+"</div>",
       "<div class='text-truncate'>"+data[i]['specialty_name']?data[i]['specialty_name']:""+"</div>",
       data[i]['doctor_fname']+" "+data[i]['doctor_lname'],
@@ -182,19 +182,13 @@ function load_excel(data){
     
       {
           type: 'html',
-          title:'View & Notes',
+          title:'Actions',
           readOnly:true,
-          width:80
+          width:120
       },
       {
           type: 'html',
           title:'Contact',
-          readOnly:true,
-          width:80
-      },
-      {
-          type: 'html',
-          title:'Status & Log',
           readOnly:true,
           width:80
       },
@@ -230,7 +224,7 @@ function load_excel(data){
       },
       {
         type: 'calendar',
-        title:'Received Date',
+        title:'Received',
         options: {format:'MM/DD/YYYY'},
         width:100
       },
@@ -330,6 +324,8 @@ $(document).on("click",".referral-view",function(){
       $("#referral_ref_to").html(result[0]['doctor_fname']+" "+result[0]['doctor_lname']);
       $("#referral_spe_npi").html(result[0]['spe_npi']);
       $("#referral_reason").html(result[0]['reason']);
+
+      $(".pt_info").data("id", result[0]['patient_id']);
       $("#referral_view_modal").modal("show");
       var html = "";
       $("#referral_history").html("");
@@ -416,6 +412,7 @@ $(document).on("click",".referral-status",function(){
           $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
           $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
       }
+      $(".pt_info").data("id", result[0]['patient_id']);
       $("#referral_view_modal").modal("show");
     }
   });
@@ -458,7 +455,8 @@ $(document).on("click",".referral-log",function(){
         html += result[i]['referral_type'];
         html += '</div></div></div>';
         $("#referral_history").append(html);
-    }
+      }
+      $(".pt_info").data("id", result[0]['patient_id']);
       $("#referral_view_modal").modal("show");
     }
   });
@@ -505,6 +503,10 @@ $(document).on("click",".referral-specialty-tab",function(){
   reload_referral()
 
 })
+
+$(".pt_info").click(function (e) {
+  $("#referral_view_modal").modal("hide");
+});
 
 document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
 document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');

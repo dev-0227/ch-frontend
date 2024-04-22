@@ -587,8 +587,13 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/
 });
 
 $(".pt_info").click(function (e) {
+  if($(this).data("id"))$("#appointment_patient_id").val($(this).data("id"));
+  let entry = {
+    pt_id: $("#appointment_patient_id").val(),
+    emr_id:$("#appt_pt_emrid").val()
+  }
 
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), {emr_id:$("#appt_pt_emrid").val(), pt_id:$("#appointment_patient_id").val()}, "patientlist/get", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/get", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       if(result.length>0){
