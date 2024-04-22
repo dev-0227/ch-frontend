@@ -40,7 +40,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localS
 });
 
 
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id:localStorage.getItem('chosen_clinic')}, "hedis/appointmentSpecialty/getReferralSpecialtyByClinic", (xhr, err) => {
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id:localStorage.getItem('chosen_clinic')}, "referral/appointmentSpecialty/getReferralSpecialtyByClinic", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
     for(var i in result){
@@ -64,7 +64,7 @@ function reload_referral(){
   var params = "clinic_id="+localStorage.getItem('chosen_clinic');
   params += "&specialty="+$("#referral_selected_specialty").val();
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/referral?"+params, (xhr, err) => {
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/referral?"+params, (xhr, err) => {
     if (!err) {
         var data = JSON.parse(xhr.responseText)['data'];
         load_excel(data);
@@ -278,7 +278,7 @@ let changed = function(instance, cell, x, y, value) {
     clinic_id:localStorage.getItem('chosen_clinic')
   };
   console.log(entry);
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/update", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/update", (xhr, err) => {
     if (!err) {
       
     } else {
@@ -308,7 +308,7 @@ $(document).on("click",".referral-view",function(){
   let entry = {
     id: $("#referral_id").val(),
   }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       $("#referral_insurance").html(result[0]['insurance']);
@@ -386,7 +386,7 @@ $(document).on("click",".referral-status",function(){
   let entry = {
     id: $("#referral_id").val(),
   }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
 
@@ -426,7 +426,7 @@ $(document).on("click",".referral-log",function(){
   let entry = {
     id: $("#referral_id").val(),
   }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/chosen", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
 
@@ -481,7 +481,7 @@ $(document).on("click",".referral-delete",function(){
     }
   }).then(function (result) {
     if (result.value) {
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/delete", (xhr, err) => {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/delete", (xhr, err) => {
         if (!err) {
           setTimeout( function () {
             reload_referral();

@@ -359,7 +359,7 @@ $(document).ready(async function () {
     });
 
     var specialty = []
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentSpecialty", (xhr, err) => {
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
         if (!err) {
             specialty = JSON.parse(xhr.responseText)['data'];
             for(var i=0;i<specialty.length;i++){
@@ -402,7 +402,7 @@ $(document).ready(async function () {
         }
         if(selected_doctor!="")entry['doctors'] = selected_doctor;
         appointments = []
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/getAppointment", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
             if (!err) {
               var result = JSON.parse(xhr.responseText)['data'];
               for(var i=0; i<result.length; i++){

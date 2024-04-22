@@ -3,7 +3,7 @@ var patient_id = 0;
 
 var encounter_table = $('#encounter_table').DataTable({
   "ajax": {
-      "url": serviceUrl + "hedis/encounter",
+      "url": serviceUrl + "referral/encounter",
       "type": "POST",
       "headers": { 'Authorization': localStorage.getItem('authToken') },
       "data":function (d) {
@@ -119,7 +119,7 @@ $(document).on("click",".encounter_edit_btn",function(){
   let entry = {
     id: $("#encounter_id").val(),
   }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/chosen", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/encounter/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
 
@@ -228,7 +228,7 @@ $(document).on("click",".delete_btn",function(){
     }
   }).then(function (result) {
     if (result.value) {
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/delete", (xhr, err) => {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/encounter/delete", (xhr, err) => {
         if (!err) {
           setTimeout( function () {
             encounter_table.ajax.reload();
@@ -397,7 +397,7 @@ $("#encounter_update_btn").click(function (e) {
   entry["completed"] = $("#encounter_completed").prop("checked")?"1":"0";
 
   if($("#encounter_id").val()==""){
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/create", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/encounter/create", (xhr, err) => {
       if (!err) {
         $("#encounter_edit_modal").modal("hide");
         toastr.success("Encounter is added successfully");
@@ -406,7 +406,7 @@ $("#encounter_update_btn").click(function (e) {
       }
     });
   }else{
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/update", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/encounter/update", (xhr, err) => {
       if (!err) {
         $("#encounter_edit_modal").modal("hide");
         toastr.success("Encounter is updated successfully");

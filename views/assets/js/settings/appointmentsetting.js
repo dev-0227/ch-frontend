@@ -3,7 +3,7 @@ $(document).ready(async function () {
 
     var appt_type_table = $('#appt_type_table').DataTable({
         "ajax": {
-            "url": serviceUrl + "hedis/appointmentType",
+            "url": serviceUrl + "referral/appointmentType",
             "type": "GET",
             "headers": { 'Authorization': localStorage.getItem('authToken') }
         },
@@ -45,7 +45,7 @@ $(document).ready(async function () {
       appt_type_table.search(this.value).draw();
     });
 
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentCategory", (xhr, err) => {
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentCategory", (xhr, err) => {
         if (!err) {
           let result = JSON.parse(xhr.responseText)['data'];
           var options = '';
@@ -87,7 +87,7 @@ $(document).ready(async function () {
         }
         });
         if($("#appt_type_id").val() == ""){
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentType/create", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentType/create", (xhr, err) => {
             if (!err) {
             $("#appt_type_modal").modal("hide");
             return toastr.success("Action successfully");
@@ -96,7 +96,7 @@ $(document).ready(async function () {
             }
         });
         }else{
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentType/update", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentType/update", (xhr, err) => {
             if (!err) {
             $("#appt_type_modal").modal("hide");
             return toastr.success("Action successfully");
@@ -116,7 +116,7 @@ $(document).ready(async function () {
         let entry = {
           id: $("#appt_type_id").val(),
         }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentType/chosen", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentType/chosen", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
             $("#appt_type_name").val(result[0]['name']);
@@ -151,7 +151,7 @@ $(document).ready(async function () {
             }
               }).then(function (result) {
             if (result.value) {
-              sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentType/delete", (xhr, err) => {
+              sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentType/delete", (xhr, err) => {
                 if (!err) {
                   setTimeout( function () {
                     appt_type_table.ajax.reload();
@@ -169,7 +169,7 @@ $(document).ready(async function () {
 
     var appt_category_table = $('#appt_category_table').DataTable({
         "ajax": {
-            "url": serviceUrl + "hedis/appointmentCategory",
+            "url": serviceUrl + "referral/appointmentCategory",
             "type": "GET",
             "headers": { 'Authorization': localStorage.getItem('authToken') }
         },
@@ -210,7 +210,7 @@ $(document).ready(async function () {
           }
 
         if($("#appt_category_id").val() == ""){
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/create", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentCategory/create", (xhr, err) => {
             if (!err) {
             $("#appt_category_modal").modal("hide");
             return toastr.success("Action successfully");
@@ -219,7 +219,7 @@ $(document).ready(async function () {
             }
         });
         }else{
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/update", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentCategory/update", (xhr, err) => {
             if (!err) {
             $("#appt_category_modal").modal("hide");
             return toastr.success("Action successfully");
@@ -239,7 +239,7 @@ $(document).ready(async function () {
         let entry = {
           id: $("#appt_category_id").val(),
         }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/chosen", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentCategory/chosen", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
             $("#appt_category_name").val(result[0]['name']);
@@ -269,7 +269,7 @@ $(document).ready(async function () {
             }
               }).then(function (result) {
             if (result.value) {
-              sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentCategory/delete", (xhr, err) => {
+              sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentCategory/delete", (xhr, err) => {
                 if (!err) {
                   setTimeout( function () {
                     appt_category_table.ajax.reload();
@@ -286,7 +286,7 @@ $(document).ready(async function () {
 
 var appt_specialty_table = $('#appt_specialty_table').DataTable({
   "ajax": {
-      "url": serviceUrl + "hedis/appointmentSpecialty",
+      "url": serviceUrl + "referral/appointmentSpecialty",
       "type": "GET",
       "headers": { 'Authorization': localStorage.getItem('authToken') }
   },
@@ -349,7 +349,7 @@ $(document).on("click","#appt_specialty_create",function(){
     }
 
   if($("#appt_specialty_id").val() == ""){
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/create", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentSpecialty/create", (xhr, err) => {
       if (!err) {
       $("#appt_specialty_modal").modal("hide");
       return toastr.success("Action successfully");
@@ -358,7 +358,7 @@ $(document).on("click","#appt_specialty_create",function(){
       }
   });
   }else{
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/update", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentSpecialty/update", (xhr, err) => {
       if (!err) {
       $("#appt_specialty_modal").modal("hide");
       return toastr.success("Action successfully");
@@ -378,7 +378,7 @@ $(document).on("click",".edit_appt_specialty_btn",function(){
   let entry = {
     id: $("#appt_specialty_id").val(),
   }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/chosen", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentSpecialty/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       $("#appt_specialty_name").val(result[0]['name']);
@@ -413,7 +413,7 @@ $(document).on("click",".delete_appt_specialty_btn",function(){
       }
         }).then(function (result) {
       if (result.value) {
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/appointmentSpecialty/delete", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentSpecialty/delete", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               appt_specialty_table.ajax.reload();

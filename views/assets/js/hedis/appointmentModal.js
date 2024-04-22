@@ -14,7 +14,7 @@ function calculateAge(dateString) {
 
 var appointment_table = $('#appointment_table').DataTable({
   "ajax": {
-      "url": serviceUrl + "hedis/encounter/appointment",
+      "url": serviceUrl + "referral/appointment",
       "type": "POST",
       "headers": { 'Authorization': localStorage.getItem('authToken') },
       "data":function (d) {
@@ -166,7 +166,7 @@ $(document).on("click",".appt_edit_btn",function(){
   let entry = {
     id: $(this).parent().attr("idkey"),
   }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/chosenAppointment", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
 
@@ -271,7 +271,7 @@ $(document).on("click",".appt_delete_btn",function(){
     }
   }).then(function (result) {
     if (result.value) {
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/deleteAppointment", (xhr, err) => {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/delete", (xhr, err) => {
         if (!err) {
           setTimeout( function () {
             appointment_table.ajax.reload();
@@ -333,7 +333,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 let appointmentType = []
 
 
-sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedis/appointmentType", (xhr, err) => {
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentType", (xhr, err) => {
   if (!err) {
     appointmentType = JSON.parse(xhr.responseText)['data'];
     var options = '';
@@ -405,7 +405,7 @@ $(document).on("change","#appointment_measure",function(){
 });
 
 function getSpecialty(){
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), {measure_id: $("#appointment_measure").val()}, "hedis/appointmentSpecialty/getSpecialtyByMeasure", (xhr, err) => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {measure_id: $("#appointment_measure").val()}, "referral/appointmentSpecialty/getSpecialtyByMeasure", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       if(result.length>0){
@@ -495,7 +495,7 @@ $("#appt_save_btn").click(function (e) {
 
   
   if($("#appointment_id").val()==""){
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/createAppointment", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/create", (xhr, err) => {
       if (!err) {
         if(JSON.parse(xhr.responseText)['message']=="exist"){
           toastr.info("Appointment is exist");
@@ -509,7 +509,7 @@ $("#appt_save_btn").click(function (e) {
       }
     });
   }else{
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/encounter/updateAppointment", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/update", (xhr, err) => {
       if (!err) {
         $("#appointment_edit_modal").modal("hide");
         toastr.success("Appointment is updated successfully");

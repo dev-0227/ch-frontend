@@ -80,7 +80,7 @@ $(document).ready(async function () {
     
     var referral_tracking_table = await $('#referral_tracking_table').DataTable({
         "ajax": {
-            "url": serviceUrl + "hedis/referral",
+            "url": serviceUrl + "referral/referral",
             "type": "GET",
             "data": {
                 clinic_id: localStorage.getItem('chosen_clinic')
@@ -177,7 +177,7 @@ $(document).ready(async function () {
     });
 
     function reload_data_table(){
-        var base_url = serviceUrl + "hedis/referral?";
+        var base_url = serviceUrl + "referral/referral?";
         if(selected_doctor!="")base_url += "&doctors="+selected_doctor;
         if(selected_date!="")base_url += "&range="+selected_date;
         referral_tracking_table.ajax.url(base_url).load();
@@ -305,7 +305,7 @@ $(document).ready(async function () {
             referral_category_id: $('input[name="referral_status"]:checked').data('category'),
             date: $("#referral_status_date").val()+" 15:00:00"
         }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedis/referral/tracking/create", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/tracking/create", (xhr, err) => {
             if (!err) {
                 $("#referral_view_modal").modal("hide");
                 toastr.success("Referral Status is updated successfully");

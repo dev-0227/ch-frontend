@@ -62,6 +62,13 @@ router.get("/hedissetting", (req, res, next) => {
     });
 });
 
+router.get("/referralsetting", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Referral Settings",
+        pageKey: "../settings/referralsetting",
+    });
+});
+
 router.get("/appointmentsetting", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Appointment Settings",
