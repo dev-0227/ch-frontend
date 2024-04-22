@@ -269,7 +269,7 @@ function load_excel(data){
         width:60
       },
       {
-        type: 'text',
+        type: 'hidden',
         title:'status',
         width:60
       }
