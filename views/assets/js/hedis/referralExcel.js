@@ -355,7 +355,7 @@ var referral_appointment_table = $('#referral_pt_appt_table').DataTable({
       },
       { data: "reason",
         render: function (data, type, row) {
-          return '<div class="w-450px overflow-hidden " style="white-space: nowrap; text-overflow: ellipsis;" >'+row.reason+'</div>';
+          return '<div class="w-350px overflow-hidden " style="white-space: nowrap; text-overflow: ellipsis;" >'+row.reason+'</div>';
         }
       },
       { data: 'status', 
@@ -467,13 +467,15 @@ $(document).on("click",".referral-patient-info",function(){
 
   $(".pt_info").data("id", $(this).parent().attr("idkey"));
   $(".pt_info").trigger("click");
+  $("#patient-add-modal").addClass("d-none");
   referral_patient_id = $(".pt_info").data("id");
   referral_appointment_table.ajax.reload();
   referral_encounter_table.ajax.reload();
-  
-
-
   $("#patient-referral-modal").modal("show");
+  setTimeout( function () {
+    $("#patient-add-modal").modal("hide");
+    $("#patient-add-modal").removeClass("d-none");
+  }, 1000 );
   
 });
 
@@ -625,7 +627,7 @@ $(document).on("click",".referral-log",function(){
         html += '</div><div class="timeline-content m-0">';
         html += '<span class="fs-6 text-gray-500 fw-semibold ">';
         html += result[i]['rt_date']?moment(result[i]['rt_date']).format("LLL"):"";
-        html += '</span><div class="ms-3 badge badge-lg badge-'+getColorByType(result[i]['rt_type'].toString())+' fw-bold my-2 fs-6">';
+        html += '</span><div class="ms-3 badge badge-lg  fw-bold my-2 fs-6" style="background-color: '+getColorByType(result[i]['rt_type'].toString())+'; color:'+ContrastColor(getColorByType(result[i]['rt_type'].toString()))+' "> ';
         html += result[i]['referral_type'];
         html += '</div></div></div>';
         $("#referral_history").append(html);
