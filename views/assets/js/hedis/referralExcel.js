@@ -316,7 +316,7 @@ let selectionActive = function(instance, x1, y1, x2, y2, origin) {
 }
 
 $(document).ready(async function () {
-
+  $(".pt_info").addClass("d-none");
   $(document).on("click","#referral_encounter",function(){
     
   });
@@ -467,7 +467,7 @@ $(document).on("click",".referral-patient-info",function(){
 
   $(".pt_info").data("id", $(this).parent().attr("idkey"));
   $(".pt_info").trigger("click");
-  $(".pt_info").addClass("d-none");
+  
   $("#patient-add-modal").addClass("d-none");
   referral_patient_id = $(".pt_info").data("id");
   referral_appointment_table.ajax.reload();
