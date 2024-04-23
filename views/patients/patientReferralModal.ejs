@@ -1,0 +1,77 @@
+<div class="modal fade" id="patient-referral-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="fs-2 fw-bold text-gray-900 my-3" >Patient Information </div>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body p-0">
+				<div class="d-flex p-0 w-100">
+					<div class="w-100px bg-gray-200 p-0">
+						<ul class="nav nav-tabs nav-pills border-0 flex-row flex-md-column p-2 fs-4">
+							<li class="nav-item w-100 mt-2">
+								<a class="nav-link active w-100 h-75px  text-center align-content-center border-primary border-3" data-bs-toggle="tab" href="#kt_tab_pane_1">INFO</a>
+							</li>
+							<li class="nav-item w-100 mt-2">
+								<a class="nav-link w-100 h-75px text-center align-content-center border-primary border-3" data-bs-toggle="tab" href="#kt_tab_pane_2">APPT</a>
+							</li>
+							<li class="nav-item w-100 mt-2">
+								<a class="nav-link w-100 h-75px text-center align-content-center border-primary border-3" data-bs-toggle="tab" href="#kt_tab_pane_3">ENC</a>
+							</li>
+							<li class="nav-item w-100 mt-2">
+								<a class="nav-link w-100 h-75px text-center align-content-center border-primary border-3 p-0" data-bs-toggle="tab" href="#kt_tab_pane_4">POP H</a>
+							</li>
+							<div class="h-200px">
+							</div>
+						</ul>
+					</div>
+					<div class="w-100 tab-content p-6" id="myTabContent">
+						<div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
+							<%- include("patientModalBody"); %>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+								<button type="button" class="btn btn-primary" id="save_patient_btn" data-bs-dismiss="modal"><i class="fa fa-save">&nbsp;</i> Save</button>
+							 </div>
+						</div>
+						<div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
+							<table class="table table-striped table-bordered text-nowrap w-100"  id="referral_pt_appt_table" >
+								<thead>
+								  <tr >
+									  <th width="5%"></th>
+									  <th width="30%">Provider</th>
+									  <th width="30%">Reason</th>
+									  <th width="30%">Status</th>
+									  <th width="20%">Date Time</th>
+									  <th width="15%" class="text-center col-md-3"></th>
+								  </tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel">
+							<table class="table table-striped table-bordered text-nowrap w-100"  id="referral_pt_encounter_table" >
+								<thead>
+								<tr >
+									<th width="3%"></th>
+									<th width="25%">Reason</th>
+									<th width="15%">Type</th>
+									<th width="10%">Status</th>
+									<th width="20%">Date Time</th>
+									<th width="10%">Mins</th>
+									<th width="15%" class="text-center col-md-3"></th>
+								</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+                
+			</div>
+			
+		</div>
+	</div>
+</div>
+

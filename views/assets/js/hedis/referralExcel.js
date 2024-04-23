@@ -33,7 +33,6 @@ function ContrastColor(color)
 {
     var d = 0;
     var rgb = hexToRgb(color);
-    console.log(rgb);
     if(!rgb)return "#000000";
     var luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2])/255;
     if (luminance > 0.5)
@@ -96,19 +95,19 @@ function reload_referral(){
 
 function load_excel(data){
    referral_data = [];
-  let more_class = "";
   for(var i=0;i<data.length;i++){
     var color = ContrastColor(getColorByType(data[i]['rt_type'].toString()));
-    var view = "<span idkey='"+data[i]['id']+"'><i class='fa fa-eye referral-status  cursor-pointer' title='Status' style='color: "+color+";'></i></span> ";
+    var view = "<span idkey='"+data[i]['patient_id']+"'><i class='fa fa-info-circle referral-patient-info  cursor-pointer' title='Status' style='color: "+color+";'></i></span> ";
+    view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-eye referral-status  cursor-pointer' title='Status' style='color: "+color+";'></i></span> ";
     view += "<span idkey='"+data[i]['id']+"'>";
-    view += "<i class='fa-solid fa-s referral-view cursor-pointer"+more_class+"' title='Status Trajectory' style='color: "+color+";'></i></span> ";
-    view += data[i]['encounter_id']?"<span idkey='"+data[i]['encounter_id']+"'><i class='fa-solid fa-e  cursor-pointer"+(data[i]['notecheck'] != null?"":"")+" encounter_edit_btn "+more_class+" ' title='Encounter' style='color: "+color+";'></i></span> ":"";
+    view += "<i class='fa-solid fa-s referral-view cursor-pointer' title='Status Trajectory' style='color: "+color+";'></i></span> ";
+    view += data[i]['encounter_id']?"<span idkey='"+data[i]['encounter_id']+"'><i class='fa-solid fa-e  cursor-pointer"+(data[i]['notecheck'] != null?"":"")+" encounter_edit_btn  ' title='Encounter' style='color: "+color+";'></i></span> ":"";
     view += data[i]['appointment_id']?"<span idkey='"+data[i]['appointment_id']+"'><i class='fa-solid fa-a appt_edit_btn  cursor-pointer' title='Appointment' style='color: "+color+";'></i></span> ":"";
     view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-history referral-log  cursor-pointer' title='log' style='color: "+color+";'></i></span></span> ";
     view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-trash referral-delete  title='delete' style='color: "+color+";'></span>";
-    var contact = "<span idkey='"+data[i]['patient_id']+"'><i class='fa fa-print referral-print s cursor-pointer "+more_class+"' style='color: "+color+";'></i> "
-    contact += data[i]['pt_email']?"<i class='fa fa-envelope referral-mail "+more_class+"  cursor-pointer' style='color: "+color+";'></i> ":"";
-    contact += data[i]['pt_mobile']?"<i class='fa fa-mobile referral-calling "+more_class+"  cursor-pointer' data-type='mobile' style='color: "+color+";'></i> ":"";
+    var contact = "<span idkey='"+data[i]['patient_id']+"'><i class='fa fa-print referral-print s cursor-pointer ' style='color: "+color+";'></i> "
+    contact += data[i]['pt_email']?"<i class='fa fa-envelope referral-mail   cursor-pointer' style='color: "+color+";'></i> ":"";
+    contact += data[i]['pt_mobile']?"<i class='fa fa-mobile referral-calling   cursor-pointer' data-type='mobile' style='color: "+color+";'></i> ":"";
     contact += data[i]['pt_phone']?"<i class='fa fa-phone referral-calling  cursor-pointer' data-type='phone' style='color: "+color+";'></i>":"";
     contact += "</span>";
 
@@ -326,6 +325,120 @@ $(document).ready(async function () {
     $(".appt-list").addClass("d-none");
   });
 
+});
+
+
+
+var referral_appointment_table = $('#referral_pt_appt_table').DataTable({
+  "ajax": {
+      "url": serviceUrl + "referral/appointment",
+      "type": "POST",
+      "headers": { 'Authorization': localStorage.getItem('authToken') },
+      "data":function (d) {
+        d.clinic_id = localStorage.getItem('chosen_clinic'),
+        d.patient_id = referral_patient_id
+      },
+  },
+  "pageLength": 10,
+  "order": [],
+  "bAutoWidth": false, 
+  "columns": [
+      { data: "attended",
+        render: function (data, type, row) {
+          return row.attended=="1"?'<i class="ki-duotone ki-verify fs-1 text-primary"><span class="path1"></span><span class="path2"></span></i>':'';
+        } 
+      },
+      { data: "pcp_id",
+        render: function (data, type, row) {
+          return '<div class="mx-2">'+row.fname+' '+row.lname+'</div>';
+        } 
+      },
+      { data: "reason",
+        render: function (data, type, row) {
+          return '<div class="w-450px overflow-hidden " style="white-space: nowrap; text-overflow: ellipsis;" >'+row.reason+'</div>';
+        }
+      },
+      { data: 'status', 
+        render: function (data, type, row) {
+          return row.status?row.status[0].toUpperCase() + row.status.slice(1).toLowerCase():"";
+        }
+      },
+      { data: 'start_date',
+        render: function (data, type, row) {
+          return new Date(row.approve_date).toLocaleString().split(',')[0]+" "+row.start_date.substring(0,5);
+        } 
+      },
+      { data: 'id',
+        render: function (data, type, row) {
+          return `
+            <div class="btn-group align-top " idkey="`+row.id+`">
+              <button class="btn  btn-primary badge appt_edit_btn"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+              <button class="btn  btn-danger badge appt_delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
+            </div>
+          `
+        } 
+      }
+  ]
+});
+
+
+
+var referral_encounter_table = $('#referral_pt_encounter_table').DataTable({
+  "ajax": {
+      "url": serviceUrl + "referral/encounter",
+      "type": "POST",
+      "headers": { 'Authorization': localStorage.getItem('authToken') },
+      "data":function (d) {
+        d.clinic_id = localStorage.getItem('chosen_clinic'),
+        d.patient_id = referral_patient_id
+      },
+  },
+  "pageLength": 10,
+  "order": [],
+  "bAutoWidth": false, 
+  "columns": [
+
+      { data: "completed",
+        render: function (data, type, row) {
+          return row.completed=="1"?'<i class="ki-duotone ki-verify fs-1 text-primary"><span class="path1"></span><span class="path2"></span></i>':'';
+        } 
+      },
+      { data: "reason"},
+      { data: "enc_type"},
+      { data: 'status' },
+      { data: 'enc_start',
+        render: function (data, type, row) {
+          return new Date(row.enc_start).toLocaleString();;
+        } 
+      },
+      { data: 'total_mins' },
+      { data: 'id',
+        render: function (data, type, row) {
+          return `
+            <div class="btn-group align-top " idkey="`+row.id+`">
+              <button class="btn  btn-primary badge encounter_edit_btn"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+              <button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
+            </div>
+          `
+        } 
+      }
+  ]
+});
+
+var referral_patient_id="0";
+$(document).on("click",".referral-patient-info",function(){
+
+
+  $(".pt_info").data("id", $(this).parent().attr("idkey"));
+  $(".pt_info").trigger("click");
+  referral_patient_id = $(".pt_info").data("id");
+  referral_appointment_table.ajax.reload();
+  referral_encounter_table.ajax.reload();
+  
+
+
+  $("#patient-referral-modal").modal("show");
+  
 });
 
 $(document).on("click",".referral-view",function(){
