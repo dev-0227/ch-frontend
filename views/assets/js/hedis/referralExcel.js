@@ -467,6 +467,7 @@ $(document).on("click",".referral-patient-info",function(){
 
   $(".pt_info").data("id", $(this).parent().attr("idkey"));
   $(".pt_info").trigger("click");
+  $(".pt_info").addClass("d-none");
   $("#patient-add-modal").addClass("d-none");
   referral_patient_id = $(".pt_info").data("id");
   referral_appointment_table.ajax.reload();
