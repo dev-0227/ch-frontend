@@ -317,7 +317,7 @@ let selectionActive = function(instance, x1, y1, x2, y2, origin) {
 
 $(document).ready(async function () {
 
-    $(document).on("click","#referral_encounter",function(){
+  $(document).on("click","#referral_encounter",function(){
     
   });
 
@@ -424,6 +424,42 @@ var referral_encounter_table = $('#referral_pt_encounter_table').DataTable({
       }
   ]
 });
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/referral/category", (xhr, err) => {
+  if (!err) {
+    let category = JSON.parse(xhr.responseText)['data'];
+      sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/referral/status", (xhr, err) => {
+        if (!err) {
+          let result = JSON.parse(xhr.responseText)['data'];
+          var html = '';
+          for(var i=0; i<category.length; i++){
+            if(i>0){
+              html += '<span class="fs-4 text-gray-500 fw-bolder pe-2">';
+              html += category[i]['display'];
+              html += '</span>';
+            }
+            for(var j=0; j<result.length; j++){
+              if(category[i]['id']==result[j]['category']){
+                html += '<label class="form-check form-check-sm form-check-custom form-check-solid m-3">';
+                html += '<input class="form-check-input provider-radio" type="radio" name="referral_status" ';
+                html += 'value='+result[j]['id'];
+                html += j==0?' checked="checked"':'';
+                html += ' data-category="0">';
+                html += '<span class="form-check-label text-gray-600" >';
+                html += result[j]['display'];
+                html += '</span></label>';
+              }
+            }
+            
+          }
+          
+          $("#referral_status_area").html(html);
+        }
+      });
+  }
+});
+
+
 
 var referral_patient_id="0";
 $(document).on("click",".referral-patient-info",function(){
