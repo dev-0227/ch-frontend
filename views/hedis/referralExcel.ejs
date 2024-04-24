@@ -105,53 +105,56 @@
                         </div>
                     </div>
                     <div class="col-md-5 mt-4" id="referral_status_area">
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="10" checked="checked"  data-category="0">
-                            <span class="form-check-label text-gray-600" >None</span>
-                        </label>
-                        <span class="fs-4 text-gray-500 fw-bolder pe-2">Referral Status</span>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="1" data-category="1">
-                            <span class="form-check-label text-gray-600" >No Referral</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="2" data-category="1">
-                            <span class="form-check-label text-gray-600">Open Referral</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="3" data-category="1">
-                            <span class="form-check-label text-gray-600" >Given to Patient</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="4" data-category="1">
-                            <span class="form-check-label text-gray-600">Sent to Specialist</span>
-                        </label>
-                        <span class="fs-4 text-gray-500 fw-bolder pe-2">Appointment Status</span>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="5" data-category="2">
-                            <span class="form-check-label text-gray-600" >Waiting Appointment</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="6" data-category="2">
-                            <span class="form-check-label text-gray-600">Appointment Scheduled</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="7" data-category="2" >
-                            <span class="form-check-label text-gray-600" >Patient Seen</span>
-                        </label>
-                        <span class="fs-4 text-gray-500 fw-bolder pe-2">Consult Status</span>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="8" data-category="3">
-                            <span class="form-check-label text-gray-600" >Consult Pending</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="9" data-category="3">
-                            <span class="form-check-label text-gray-600">Obtained Consult</span>
-                        </label>
+                        <div id="referral_status_list">
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="10" checked="checked"  data-category="0">
+                                <span class="form-check-label text-gray-600" >None</span>
+                            </label>
+                            <span class="fs-4 text-gray-500 fw-bolder pe-2">Referral Status</span>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="1" data-category="1">
+                                <span class="form-check-label text-gray-600" >No Referral</span>
+                            </label>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="2" data-category="1">
+                                <span class="form-check-label text-gray-600">Open Referral</span>
+                            </label>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="3" data-category="1">
+                                <span class="form-check-label text-gray-600" >Given to Patient</span>
+                            </label>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="4" data-category="1">
+                                <span class="form-check-label text-gray-600">Sent to Specialist</span>
+                            </label>
+                            <span class="fs-4 text-gray-500 fw-bolder pe-2">Appointment Status</span>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="5" data-category="2">
+                                <span class="form-check-label text-gray-600" >Waiting Appointment</span>
+                            </label>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="6" data-category="2">
+                                <span class="form-check-label text-gray-600">Appointment Scheduled</span>
+                            </label>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="7" data-category="2" >
+                                <span class="form-check-label text-gray-600" >Patient Seen</span>
+                            </label>
+                            <span class="fs-4 text-gray-500 fw-bolder pe-2">Consult Status</span>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="8" data-category="3">
+                                <span class="form-check-label text-gray-600" >Consult Pending</span>
+                            </label>
+                            <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                                <input class="form-check-input provider-radio" type="radio" name="referral_status" value="9" data-category="3">
+                                <span class="form-check-label text-gray-600">Obtained Consult</span>
+                            </label>
+                        </div>
                         <div class="form-group">
                             <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 card-front card-name " id="referral_status_date" />
                         </div>
                     </div>
+                    
                     
                 </div>
 			</div>

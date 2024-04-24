@@ -328,7 +328,6 @@ $(document).ready(async function () {
 });
 
 
-
 var referral_appointment_table = $('#referral_pt_appt_table').DataTable({
   "ajax": {
       "url": serviceUrl + "referral/appointment",
@@ -453,7 +452,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/ref
             
           }
           
-          $("#referral_status_area").html(html);
+          $("#referral_status_list").html(html);
         }
       });
   }
@@ -529,6 +528,7 @@ $(document).on("click",".referral-view",function(){
           $('input[name="referral_status"]').filter('[value="7"]').prop("checked", result[i]['rt_type']=="7"?true:false);
           $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
           $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
+          $("#referral_status_date").val(moment(result[i]['rt_date']).format("YYYY-MM-DD"));
       }
 
       $("#referral_info").removeClass("d-none");
@@ -588,6 +588,7 @@ $(document).on("click",".referral-status",function(){
           $('input[name="referral_status"]').filter('[value="7"]').prop("checked", result[i]['rt_type']=="7"?true:false);
           $('input[name="referral_status"]').filter('[value="8"]').prop("checked", result[i]['rt_type']=="8"?true:false);
           $('input[name="referral_status"]').filter('[value="9"]').prop("checked", result[i]['rt_type']=="9"?true:false);
+          $("#referral_status_date").val(moment(result[i]['rt_date']).format("YYYY-MM-DD"));
       }
       $(".pt_info").data("id", result[0]['patient_id']);
       $("#referral_view_modal").modal("show");
@@ -684,6 +685,13 @@ $(document).on("click",".referral-specialty-tab",function(){
 $(".pt_info").click(function (e) {
   $("#referral_view_modal").modal("hide");
 });
+
+$(document).on("click",".referral-pt-info-tab",function(){
+  $(".referral-pt-info-title").html($(this).data("details"));
+  
+});
+
+
 
 document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
 document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
