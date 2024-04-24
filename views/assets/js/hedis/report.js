@@ -1694,7 +1694,7 @@ async function loadData(){
           moment(data[i]['ptlname']).format("MM/DD/YYYY"), 
           data[i]['phone'], 
           "<i class='fa fa-file-text viewresultbtn "+tmpclass+"'>&nbsp;</i><i class='fa fa-sticky-note"+(data[i]['notecheck'] != null?"":"")+" notesbtn "+tmpclass+" "+tmpnoteclass+"'></i> <i class='fa fa-trash delrowbtn' ></i> <i class='fa-solid fa-a apptbtn '></i>", 
-          "<i class='fa fa-printer printletter "+tmpclass+"'></i>&nbsp;"+((data[i]['email']!=null&&data[i]['email']!="")?"<i class='fa fa-envelope sendemail '></i>":"")+"&nbsp;<i class='ti-mobile sendsms "+tmpclass+"'></i>&nbsp; <i class='fa fa-phone phonecallbtn' aria-hidden='true' value = 'dragon' style='cursor: pointer;'></i>", 
+          "<i class='fa fa-printer printletter "+tmpclass+"'></i>&nbsp;"+((data[i]['email']!=null&&data[i]['email']!="")?"<i class='fa fa-envelope0 sendemail '></i>":"")+"&nbsp;<i class='ti-mobile sendsms "+tmpclass+"'></i>&nbsp; <i class='fa fa-phone phonecallbtn' aria-hidden='true' value = 'dragon' style='cursor: pointer;'></i>", 
           data[i]['mlob'], 
           "<i class='fa fa-eye statusbtn'></i>&nbsp;<i class='mdi mdi-apps viewmlogbtn'></i>", 
           tmpmeasure, 

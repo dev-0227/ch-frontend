@@ -46,10 +46,10 @@ $(document).ready(function () {
                 
               }
               html += '<div class="row p-1 mt-3" style="border-bottom: solid 1px #eeeccc; ">';
-              html += '<div class="col-md-3 cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-inverse" data-bs-placement="top"  title="'+row.description+'">';
+              html += '<div class="col-md-4 cursor-pointer" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-inverse" data-bs-placement="top"  title="'+row.description+'">';
               html += row.name;
               html += '</div>';
-              html += '<di class="col-md-7">';
+              html += '<di class="col-md-6">';
               html += assignRoles;
               html += '</di>';
               html += '<div class="col-md-2">';
