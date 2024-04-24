@@ -106,9 +106,9 @@ function load_excel(data){
     view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-history referral-log  cursor-pointer' title='log' style='color: "+color+";'></i></span></span> ";
     view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-trash referral-delete  title='delete' style='color: "+color+";'></span>";
     var contact = "<span idkey='"+data[i]['patient_id']+"'><i class='fa fa-print referral-print s cursor-pointer ' style='color: "+color+";'></i> "
-    contact += data[i]['pt_email']?"<i class='fa fa-envelope referral-mail   cursor-pointer' style='color: "+color+";'></i> ":"";
-    contact += data[i]['pt_mobile']?"<i class='fa fa-mobile referral-calling   cursor-pointer' data-type='mobile' style='color: "+color+";'></i> ":"";
-    contact += data[i]['pt_phone']?"<i class='fa fa-phone referral-calling  cursor-pointer' data-type='phone' style='color: "+color+";'></i>":"";
+    contact += data[i]['pt_email']?"<i class='fa fa-envelope referral-email cursor-pointer' style='color: "+color+";'></i> ":"";
+    contact += data[i]['pt_mobile']?"<i class='fa fa-mobile referral-calling cursor-pointer' data-type='mobile' style='color: "+color+";'></i> ":"";
+    contact += data[i]['pt_phone']?"<i class='fa fa-phone referral-calling cursor-pointer' data-type='phone' style='color: "+color+";'></i>":"";
     contact += "</span>";
 
     var anticipated_date = new Date(data[i]['appt_date']);
@@ -554,6 +554,14 @@ $(document).on("click",".referral-calling",function(){
   var emr_id = "";
   var type = $(this).data("type");
   open_calling_modal(pt_id, emr_id, type);
+
+})
+
+$(document).on("click",".referral-email",function(){
+  var pt_id = $(this).parent().attr("idkey");
+  var emr_id = "";
+  var type = $(this).data("type");
+  open_email_modal(pt_id, emr_id, type);
 
 })
 
