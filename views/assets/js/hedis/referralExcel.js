@@ -463,11 +463,11 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/ref
 var referral_patient_id="0";
 $(document).on("click",".referral-patient-info",function(){
 
-
+  
   $(".pt_info").data("id", $(this).parent().attr("idkey"));
   $(".pt_info").trigger("click");
-  
   $("#patient-add-modal").addClass("d-none");
+  
   referral_patient_id = $(".pt_info").data("id");
   referral_appointment_table.ajax.reload();
   referral_encounter_table.ajax.reload();
@@ -475,7 +475,7 @@ $(document).on("click",".referral-patient-info",function(){
   setTimeout( function () {
     $("#patient-add-modal").modal("hide");
     $("#patient-add-modal").removeClass("d-none");
-  }, 1000 );
+  }, 2000 );
   
 });
 
