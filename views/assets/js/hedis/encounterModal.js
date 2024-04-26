@@ -33,8 +33,8 @@ var encounter_table = $('#encounter_table').DataTable({
       { data: 'id',
         render: function (data, type, row) {
           return `
-            <div class="btn-group align-top " idkey="`+row.id+`">
-              <button class="btn  btn-primary badge encounter_edit_btn"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+            <div class="btn-group align-top " >
+              <button class="btn  btn-primary badge encounter_edit_btn"  data-toggle="modal" type="button" data-id="`+row.id+`"><i class="fa fa-edit"></i> Edit</button>
               <button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
             </div>
           `
@@ -115,7 +115,7 @@ $(document).on("click",".notesbtn",function(){
 
 $(document).on("click",".encounter_edit_btn",function(){
   observation_id = null;
-  $("#encounter_id").val($(this).parent().attr("idkey"));
+  $("#encounter_id").val($(this).data("id"));
   let entry = {
     id: $("#encounter_id").val(),
   }

@@ -54,8 +54,8 @@ var appointment_table = $('#appointment_table').DataTable({
       { data: 'id',
         render: function (data, type, row) {
           return `
-            <div class="btn-group align-top " idkey="`+row.id+`">
-              <button class="btn  btn-primary badge appt_edit_btn"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+            <div class="btn-group align-top " >
+              <button class="btn  btn-primary badge appt_edit_btn" data-id="`+row.id+`"  data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
               <button class="btn  btn-danger badge appt_delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
             </div>
           `
@@ -162,9 +162,9 @@ function GetFormattedDate(date) {
 
 $(document).on("click",".appt_edit_btn",function(){
 
-  $("#appointment_id").val($(this).parent().attr("idkey"));
+  $("#appointment_id").val($(this).data("id"));
   let entry = {
-    id: $(this).parent().attr("idkey"),
+    id: $(this).data("id"),
   }
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/chosen", (xhr, err) => {
     if (!err) {
