@@ -107,6 +107,7 @@ $(document).on("click",".notesbtn",function(){
         patient_id = result[0]['id'];
         encounter_table.ajax.reload();
         $("#encounter_modal").modal("show");
+        
       }
     }
   });
@@ -163,25 +164,23 @@ $(document).on("click",".encounter_edit_btn",function(){
 
 
 
-$(document).on("click","#add_btn",function(){
-  // $("#encounter_id").val('');
-  // $("#encounter_completed").prop("checked", false);
-  // $("#encounter_enc_type").val('phone call');
-  // $("#encounter_status").val('in-progress');
-  // $("#encounter_team_member").val(localStorage.getItem('username'));
-  // $("#encounter_assigned").val('');
-  // $("#encounter_total_mins").val('1');
-  // $("#encounter_notes").val('');
-  // $("#encounter_action_taken").val('');
-  // $("#encounter_enc_start").val(new Date().toLocaleString());
-  // $("#encounter_reason").val('');
-  // $("#encounter_participant_type").val('CALLBCK');
-  // $("#encounter_service_type").val('Medical Service');
-  // $("#encounter_reason_use").val('HM');
-  // $("#timer_diplay").html("00 : 00");
-  
-
-  // $("#encounter_edit_modal").modal("show");
+$(document).on("click","#enc_add_btn",function(){
+  $("#encounter_id").val('');
+  $("#encounter_completed").prop("checked", false);
+  $("#encounter_enc_type").val('phone call');
+  $("#encounter_status").val('in-progress');
+  $("#encounter_team_member").val(localStorage.getItem('username'));
+  $("#encounter_assigned").val('');
+  $("#encounter_total_mins").val('1');
+  $("#encounter_notes").val('');
+  $("#encounter_action_taken").val('');
+  $("#encounter_enc_start").val(new Date().toLocaleString());
+  $("#encounter_reason").val('');
+  $("#encounter_participant_type").val('CALLBCK');
+  $("#encounter_service_type").val('Medical Service');
+  $("#encounter_reason_use").val('HM');
+  $("#timer_diplay").html("00 : 00");
+  $("#encounter_edit_modal").modal("show");
 });
 
 function pad(val) {

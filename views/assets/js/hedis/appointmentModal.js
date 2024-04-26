@@ -133,7 +133,7 @@ $(document).on("click",".apptbtn",function(){
         $("#appointment_modal_email").html($("#appt_pt_email").html());
         patient_id = result[0]['id'];
         appointment_table.ajax.reload();
-        // $("#appointment_modal").modal("show");
+
         $("#appt_add_btn").click();
         
       }
