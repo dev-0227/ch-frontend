@@ -134,7 +134,10 @@ $(document).on("click",".apptbtn",function(){
         patient_id = result[0]['id'];
         appointment_table.ajax.reload();
 
+        $("#appointment_title").html("New Appointment");
         $("#appt_add_btn").click();
+
+        
         
       }
     }

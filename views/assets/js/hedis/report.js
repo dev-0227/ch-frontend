@@ -1691,7 +1691,7 @@ async function loadData(){
           (data[i]['emr_id']!=0&&data[i]['emr_id']!="")?data[i]['emr_id']:null, 
           data[i]['ptfname'], 
           data[i]['ptlname'], 
-          moment(data[i]['ptlname']).format("MM/DD/YYYY"), 
+          moment(data[i]['dob']).format("MM/DD/YYYY"), 
           data[i]['phone'], 
           "<i class='fa fa-file-text viewresultbtn "+tmpclass+"'>&nbsp;</i> <i class='fa fa-e notesbtn '></i> <i class='fa-solid fa-a apptbtn '></i> <i class='fa fa-trash delrowbtn' ></i>", 
           "<i class='fa fa-printer printletter "+tmpclass+"'></i>&nbsp;"+((data[i]['email']!=null&&data[i]['email']!="")?"<i class='fa fa-envelope0 sendemail '></i>":"")+"&nbsp;<i class='ti-mobile sendsms "+tmpclass+"'></i>&nbsp; <i class='fa fa-phone phonecallbtn' aria-hidden='true' value = 'dragon' style='cursor: pointer;'></i>", 
