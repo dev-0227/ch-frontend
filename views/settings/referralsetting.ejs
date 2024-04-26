@@ -40,7 +40,8 @@
                                                             <th width="0%">ID</th>
                                                             <th width="15%">Category</th>
                                                             <th width="20%">Status</th>
-                                                            <th width="10%" ></th>
+                                                            <th width="10%" >Text</th>
+                                                            <th width="10%" >Background</th>
                                                             <th width="20%">Actions</th>
                                                         </tr>
                                                     </thead>
@@ -117,10 +118,16 @@
                             <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="referral_type_display" data-field="description">
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="referral_type_color" class="fw-semibold fs-6 mt-3">Color:</label>
-                            <input type="color" class="form-control p-2 h-50px w-100px colorbtn" id="referral_type_color" value="#ffffff" title="Choose a color" data-field="color">
+                            <label for="referral_type_color" class="fw-semibold fs-6 mt-3">Text Color:</label>
+                            <input type="color" class="form-control p-2 h-50px w-100px colorbtn" id="referral_type_text_color" value="#000000" title="Choose a color" >
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="referral_type_color" class="fw-semibold fs-6 mt-3">Background Color:</label>
+                            <input type="color" class="form-control p-2 h-50px w-100px colorbtn" id="referral_type_color" value="#ffffff" title="Choose a color">
                         </div>
                     </div>
                 </div>

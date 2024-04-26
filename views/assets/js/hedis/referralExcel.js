@@ -13,34 +13,46 @@ function DateFormat(date) {
   return month+'/'+dt+'/'+year;
 }
 
-function getColorByType(type){
+function getBgColorByType(type){
   var color="#ffffff";
   for(var i in referral_status){
     if(referral_status[i]['id']== type){
-      color = referral_status[i]['color'];
+      var colors = referral_status[i]['color']?referral_status[i]['color'].split(","):[];
+      color = colors.length>0?colors[0]:"#ffffff";
     }
   }
   return color;
 }
-function hexToRgb(hex) {
-  const normal = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-  if (normal) return normal.slice(1).map(e => parseInt(e, 16));
-  const shorthand = hex.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i);
-  if (shorthand) return shorthand.slice(1).map(e => 0x11 * parseInt(e, 16));
-  return null;
+function getTextColorByType(type){
+  var color="#000000";
+  for(var i in referral_status){
+    if(referral_status[i]['id']== type){
+      var colors = referral_status[i]['color']?referral_status[i]['color'].split(","):[];
+      color = colors.length>1?colors[1]:"#000000";
+    }
+  }
+  return color;
 }
-function ContrastColor(color)
-{
-    var d = 0;
-    var rgb = hexToRgb(color);
-    if(!rgb)return "#000000";
-    var luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2])/255;
-    if (luminance > 0.5)
-       d = "#000000"; // bright colors - black font
-    else
-       d = "#FFFFFF"; // dark colors - white font
-    return  d;
-}
+// function hexToRgb(hex) {
+//   const normal = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+//   if (normal) return normal.slice(1).map(e => parseInt(e, 16));
+//   const shorthand = hex.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i);
+//   if (shorthand) return shorthand.slice(1).map(e => 0x11 * parseInt(e, 16));
+//   return null;
+// }
+// function ContrastColor(color)
+// {
+//     var d = 0;
+//     var rgb = hexToRgb(color);
+//     if(!rgb)return "#000000";
+//     var luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2])/255;
+//     if (luminance > 0.5)
+//        d = "#000000"; // bright colors - black font
+//     else
+//        d = "#FFFFFF"; // dark colors - white font
+//     return  d;
+// }
+
 $("#referral_clinic_name").html("")
 
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),insid:"0"}, "setting/getClinicins", (xhr, err) => {
@@ -96,7 +108,7 @@ function reload_referral(){
 function load_excel(data){
    referral_data = [];
   for(var i=0;i<data.length;i++){
-    var color = ContrastColor(getColorByType(data[i]['rt_type'].toString()));
+    var color = getTextColorByType(data[i]['rt_type'].toString());
     var view = "<span idkey='"+data[i]['patient_id']+"'><i class='fa fa-info-circle referral-patient-info  cursor-pointer' title='Status' style='color: "+color+";'></i></span> ";
     view += "<span idkey='"+data[i]['id']+"'><i class='fa fa-eye referral-status  cursor-pointer' title='Status' style='color: "+color+";'></i></span> ";
     view += "<span idkey='"+data[i]['id']+"'>";
@@ -277,8 +289,8 @@ function load_excel(data){
     allowComments:true,
     updateTable:function(instance, cell, col, row, val, label, cellName) {
       if (col=='20') {
-        cell.parentNode.style.color = ContrastColor(getColorByType(val.toString()));
-        cell.parentNode.style.backgroundColor = getColorByType(val.toString());
+        cell.parentNode.style.color = getTextColorByType(val.toString());
+        cell.parentNode.style.backgroundColor = getBgColorByType(val.toString());
       }
       
     },
@@ -514,7 +526,7 @@ $(document).on("click",".referral-view",function(){
           html += '</div><div class="timeline-content m-0">';
           html += '<span class="fs-6 text-gray-500 fw-semibold ">';
           html += result[i]['rt_date']?moment(result[i]['rt_date']).format("LLL"):"";
-          html += '</span><div class="ms-3 badge badge-lg  fw-bold my-2 fs-6" style="background-color: '+getColorByType(result[i]['rt_type'].toString())+'; color:'+ContrastColor(getColorByType(result[i]['rt_type'].toString()))+' "> ';
+          html += '</span><div class="ms-3 badge badge-lg  fw-bold my-2 fs-6" style="background-color: '+getBgColorByType(result[i]['rt_type'].toString())+'; color:'+getTextColorByType(result[i]['rt_type'].toString())+' "> ';
           html += result[i]['referral_type'];
           html += '</div></div></div>';
           $("#referral_history").append(html);
@@ -637,7 +649,7 @@ $(document).on("click",".referral-log",function(){
         html += '</div><div class="timeline-content m-0">';
         html += '<span class="fs-6 text-gray-500 fw-semibold ">';
         html += result[i]['rt_date']?moment(result[i]['rt_date']).format("LLL"):"";
-        html += '</span><div class="ms-3 badge badge-lg  fw-bold my-2 fs-6" style="background-color: '+getColorByType(result[i]['rt_type'].toString())+'; color:'+ContrastColor(getColorByType(result[i]['rt_type'].toString()))+' "> ';
+        html += '</span><div class="ms-3 badge badge-lg  fw-bold my-2 fs-6" style="background-color: '+getBgColorByType(result[i]['rt_type'].toString())+'; color:'+getTextColorByType(result[i]['rt_type'].toString())+' "> ';
         html += result[i]['referral_type'];
         html += '</div></div></div>';
         $("#referral_history").append(html);

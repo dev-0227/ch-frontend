@@ -13,8 +13,16 @@ $(document).ready(async function () {
             { data: 'display' },
             { data: 'color',
                 render: function (data, type, row) {
-                var color = row.color?row.color:"#ffffff";
+                var colors = row.color?row.color.split(","):[]
+                var color = colors.length>1?colors[1]:"#000000";
                 return '<div style="background:'+color+'" class="w-50px h-30px border "></div>';
+                }  
+            },
+            { data: 'color',
+                render: function (data, type, row) {
+                var colors = row.color?row.color.split(","):[]
+                var bg = colors.length>0?colors[0]:"#ffffff";
+                return '<div style="background:'+bg+'" class="w-50px h-30px border "></div>';
                 }  
             },
             { data: 'id',
@@ -48,6 +56,7 @@ $(document).ready(async function () {
     $(document).on("click","#referral_type_add_btn",function(){
         $("#referral_type_id").val('');
         $("#referral_type_display").val('');
+        $("#referral_type_text_color").val("#000000");
         $("#referral_type_color").val("#ffffff");
         $("#referral_type_modal").modal("show");
     });
@@ -68,7 +77,7 @@ $(document).ready(async function () {
           id: $('#referral_type_id').val(),
           category: $('#referral_type_category').val(),
           display: $('#referral_type_display').val(),
-          color: $('#referral_type_color').val()
+          color: $('#referral_type_color').val()+","+$('#referral_type_text_color').val()
         }
         if($("#referral_type_id").val() == ""){
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/referral/status/create", (xhr, err) => {
@@ -105,7 +114,11 @@ $(document).ready(async function () {
             let result = JSON.parse(xhr.responseText)['data'];
             $("#referral_type_display").val(result[0]['display']);
             $("#referral_type_category").val(result[0]['category']);
-            $("#referral_type_color").val(result[0]['color']);
+            var colors = result[0]['color']?result[0]['color'].split(","):[]
+            var bg = colors.length>0?colors[0]:"#ffffff";
+            var color = colors.length>1?colors[1]:"#000000";
+            $("#referral_type_text_color").val(color);
+            $("#referral_type_color").val(bg);
             $("#referral_type_modal").modal("show");
           } else {
             return toastr.error("Action Failed");

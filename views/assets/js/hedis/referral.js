@@ -225,10 +225,8 @@ $(document).ready(async function () {
             $("#view_excel").addClass("d-none");
             $("#view_table").addClass("d-none");
             $("#view_timeline").removeClass("d-none");
-            
         }
         $(".menu-sub-dropdown").removeClass("show");
-
     });
 
     
