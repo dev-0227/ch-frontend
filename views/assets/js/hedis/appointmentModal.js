@@ -389,7 +389,6 @@ $(document).on("change","#appointment_measure",function(){
   getSpecialty();
   for(var i=0; i<observation.length; i++){
     if(observation[i]['m_id'] == $(this).val()){
-      
       try{
         var icd = JSON.parse(observation[i]['ICD']);
         var options = '';
@@ -397,7 +396,7 @@ $(document).on("change","#appointment_measure",function(){
           options += '<option value="'+icd[j]['value']+'" >'+icd[j]['code']+'</option>';
         }
         $("#appointment_assessment").html(options);
-        
+
       }catch(e){
         console.log(observation[i]['ICD'])
       }

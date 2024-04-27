@@ -17,15 +17,12 @@
                 <div class="panel panel-primary">
                     <div class=" tab-menu-heading">
                         <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
-                            <li class="nav-item"><a href="#sqtab" class="nav-link active" data-bs-toggle="tab">Security Question</a></li>
-                            <li class="nav-item"><a href="#vkeytab" class="nav-link" data-bs-toggle="tab">ECW Log Validations</a></li>
-                            <li class="nav-item"><a href="#roletab" class="nav-link" data-bs-toggle="tab">Roles</a></li>
-                            <li class="nav-item"><a href="#workpctab" class="nav-link" data-bs-toggle="tab">Work Computers</a></li>
+                            <li class="nav-item"><a href="#security_question_tab" class="nav-link active" data-bs-toggle="tab">Security Question</a></li>
                         </ul>
                     </div>
                     <div class="panel-body tabs-menu-body">
                         <div class="tab-content">
-                            <div class="tab-pane active " id="sqtab">
+                            <div class="tab-pane active " id="security_question_tab">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card">
@@ -34,7 +31,7 @@
                                                     <h3 class="card-title ">Security Questions</h3>
                                                 </div>
                                                 <div class="card-toolbar">
-                                                    <button id="questionaddbtn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fe fe-plus mr-2"></i>Add a new Question</button>
+                                                    <button id="questionaddbtn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus mr-2"></i>Add Question</button>
                                                     <input type="hidden" id="chosen_sq" />
                                                 </div>
                                             </div>
@@ -62,98 +59,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane " id="vkeytab">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6">
-                                                <div class="card-title">
-                                                    <h3 class="card-title ">Validation Keys</h3>
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="vkeyadd-btn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fe fe-plus mr-2"></i>Add a new Key</button>
-                                                    <input type="hidden" id="chosen_vkey" />
-                                                </div>    
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="vkeytable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Key Value</th>
-                                                            <th scope="col">Active</th>
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane " id="roletab">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6">
-                                                <div class="card-title">
-                                                    <h3 class="card-title ">Roles</h3>
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="roleadd-btn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fe fe-plus mr-2"></i>Add a new Role</button>
-                                                    <input type="hidden" id="chosen_role" />
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="roletable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Role</th>
-                                                            <th scope="col">Active</th>
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane " id="workpctab">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6">
-                                                <div class="card-title">
-                                                    <h3 class="card-title ">Work Computers</h3>
-                                                </div>
-                                                <div class="card-options">
-                                                    <button id="workpcadd-btn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fe fe-plus mr-2"></i>Add a new computer</button>
-                                                    <input type="hidden" id="chosen_workpc" />
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="workpctable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Computer</th>
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
+
                         </div>
                     </div>
                 </div>
@@ -232,11 +139,14 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="vkey-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+
+
+
+<div class="modal fade" id="user_type_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Add Validation Key</h5>
+				<h5 class="modal-title" id="example-Modal3">User Role</h5>
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                     <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                 </div>
@@ -245,119 +155,20 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="vkey" class="form-control-label">Key:</label>
-                            <input type="text" class="form-control" id="vkey">
+                            <label for="user_type_code" class="required fw-semibold fs-6 my-2">Code:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="user_type_code">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="vkeystatus" class="form-control-label">Status:</label>
-                            <select id="vkeystatus" class="form-control custom-select">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-			</div>
-			<div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="vkeyaddbtn"><i class="fa fa-save">&nbsp;</i> Done</button>
-            </div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="vkey-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Edit Validation Key</h5>
-				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-                </div>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="evkey" class="form-control-label">Key:</label>
-                            <input type="text" class="form-control" id="evkey">
+                            <label for="user_type_name" class="required fw-semibold fs-6 my-2">User Type:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="user_type_name">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="evkeystatus" class="form-control-label">Status:</label>
-                            <select id="evkeystatus" class="form-control custom-select">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-			</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="vkeyeditbtn"><i class="fa fa-save">&nbsp;</i> Done</button>
-            </div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="role-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Add Role</h5>
-				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-                </div>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="role" class="form-control-label">Role:</label>
-                            <input type="text" class="form-control" id="role">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="rolestatus" class="form-control-label">Status:</label>
-                            <select id="rolestatus" class="form-control custom-select">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-			</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="roleaddbtn"><i class="fa fa-save">&nbsp;</i> Done</button>
-            </div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="role-edit-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Edit Role</h5>
-				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-                </div>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="erole" class="form-control-label">Role:</label>
-                            <input type="text" class="form-control" id="erole">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="erolestatus" class="form-control-label">Status:</label>
-                            <select id="erolestatus" class="form-control custom-select">
+                            <label for="user_type_status" class="required fw-semibold fs-6 my-2">Status:</label>
+                            <select id="user_type_status" class="form-control form-control-solid mb-3 mb-lg-0">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
@@ -368,32 +179,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
                 <button type="button" class="btn btn-primary" id="roleeditbtn"><i class="fa fa-save">&nbsp;</i> Done</button>
-            </div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="workpc-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-sm" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Add Computer</h5>
-				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-                </div>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="workpc" class="form-control-label">Computer:</label>
-                            <input type="text" class="form-control" id="workpc">
-                        </div>
-                    </div>
-                </div>
-			</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="workpcaddbtn"><i class="fa fa-save">&nbsp;</i> Done</button>
             </div>
 		</div>
 	</div>

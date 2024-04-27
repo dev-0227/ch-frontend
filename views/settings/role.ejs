@@ -13,8 +13,9 @@
       <table class="table table-striped table-bordered text-nowrap w-100"  id="role_table" >
         <thead>
           <tr >
+            <th class="col-md-2">Code</th>
             <th class="col-md-2">Name</th>
-            <th class="col-md-5">Description</th>
+            <th class="col-md-3">Description</th>
             <th class="col-md-3">Created Date</th>
             <th class="text-center col-md-2">Actions</th>
           </tr>
@@ -34,33 +35,38 @@
         </div>
 			</div>
 			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uname" class="form-control-label">Role Name:</label>
-                            <input type="text" class="form-control" id="uname">
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <label for="udescription" class="form-control-label">Description:</label>
-                            <input type="text" class="form-control" id="udescription">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            
-                            <div class="col-md-12 my-3">
-                                <label for="udescription" class="form-control-label">Role Permissions:</label>
-                            </div>
-                            <div id="permission-list">
-                                <div class="panel-group" id="accordion">
-                          
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+                <label for="ucode" class="required fw-semibold fs-6 mb-2">Code:</label>
+                <input type="number" class="form-control form-control-solid mb-3 mb-lg-0" id="ucode">
+            </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="uname" class="required fw-semibold fs-6 mb-2">Role Name:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uname">
+              </div>
+          </div>
+          <div class="col-md-6">
+              <div class="form-group">
+                  <label for="udescription" class="fw-semibold fs-6 mb-2">Description:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="udescription">
+              </div>
+          </div>
+          <div class="col-md-12">
+              <div class="form-group">
+                  <div class="col-md-12 my-3">
+                      <label for="udescription" class="required fw-semibold fs-6 mb-2">Role Permissions:</label>
+                  </div>
+                  <div id="permission-list">
+                      <div class="panel-group" id="accordion">
+                
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
 			</div>
 			<div class="modal-footer">
         <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
@@ -79,21 +85,26 @@
                 </div>
 			</div>
 			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="aname" class="form-control-label">Role Name:</label>
-                            <input type="text" class="form-control" id="aname">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="adescription" class="form-control-label">Description:</label>
-                            <input type="text" class="form-control" id="adescription">
-                        </div>
-                    </div>
-                    
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                  <label for="acode" class="required fw-semibold fs-6 mb-2">Code:</label>
+                  <input type="number" class="form-control form-control-solid mb-3 mb-lg-0" id="acode">
+              </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="aname" class="required fw-semibold fs-6 mb-2">Role Name:</label>
+                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aname">
                 </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="adescription" class="fw-semibold fs-6 mb-2">Description:</label>
+                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="adescription">
+                </div>
+            </div>
+          </div>
 			</div>
 			<div class="modal-footer">
                 <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>

@@ -27,9 +27,11 @@ $(document).ready(function () {
               case 0: color = "danger"; break;
               case 1: color = "dark"; break;
               case 2: color = "primary"; break;
-              case 3: color = "success"; break;
+              case 3: color = "danger"; break;
               case 4: color = "info"; break;
               case 5: color = "warning"; break;
+              case 6: color = "success"; break;
+              default: color = "secondary"; break;
             }
             return '<div class="badge badge-'+color+' fw-bold badge-lg">'+row.role_name+'</span>';
           }  
@@ -70,7 +72,7 @@ $(document).ready(function () {
       let result = JSON.parse(xhr.responseText)['data'];
       var data = "";
       for(var i = 0; i < result.length; i++){
-        data += '<option value="'+result[i].id+'">'+result[i].name+'</option>';
+        data += '<option value="'+result[i].code+'">'+result[i].name+'</option>';
       }
       $(".role_list").html(data);
     }

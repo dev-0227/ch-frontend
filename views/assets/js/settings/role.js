@@ -9,7 +9,8 @@ $(document).ready(function () {
     "pageLength": 10,
     "order": [],
     "columns": [
-        { data: "fname",
+        { data: 'code' },
+        { data: "name",
           render: function (data, type, row) {
             return row.name;
           } 
@@ -94,6 +95,11 @@ $(document).ready(function () {
   });
 
   $("#create_btn").click(function (e) {
+    if($("#acode").val() == ""){
+      toastr.info('Please enter Code');
+      $("#acode").focus();
+      return;
+    }
     if($("#aname").val() == ""){
       toastr.info('Please enter Role Name');
       $("#aname").focus();
@@ -105,6 +111,7 @@ $(document).ready(function () {
       return;
     }
     let entry = {
+      code: document.getElementById('acode').value,
       name: document.getElementById('aname').value,
       description: document.getElementById('adescription').value
     }
@@ -133,6 +140,7 @@ $(document).ready(function () {
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/chosen", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
+        $("#ucode").val(result[0]['code']);
         $("#uname").val(result[0]['name']);
         $("#udescription").val(result[0]['description']);
         $("#role-edit-modal").modal("show");
@@ -157,6 +165,11 @@ $(document).ready(function () {
   });
 
   $("#update_btn").click(function (e) {
+    if($("#ucode").val() == ""){
+      toastr.info('Please enter Code');
+      $("#ucode").focus();
+      return;
+    }
     if($("#uname").val() == ""){
       toastr.info('Please enter Role Name');
       $("#uname").focus();
@@ -175,6 +188,7 @@ $(document).ready(function () {
     });
     let entry = {
       id: document.getElementById('chosen_user').value,
+      code: document.getElementById('ucode').value,
       name: document.getElementById('uname').value,
       description: document.getElementById('udescription').value,
       permission: p

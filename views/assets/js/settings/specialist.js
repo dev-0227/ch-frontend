@@ -14,6 +14,7 @@ $(document).ready(function () {
           } 
         },
         { data: 'speciality' },
+        { data: 'email' },
         { data: 'phone',
           render: function (data, type, row) {
               return row.phone;
