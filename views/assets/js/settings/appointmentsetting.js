@@ -332,6 +332,7 @@ $(document).on("click","#appt_specialty_add_btn",function(){
   $("#appt_specialty_name").val('');
   $("#appt_specialty_description").val('');
   $("#appt_specialty_measures").val('');
+  $("#appt_specialty_map").val('');
   $("#appt_specialty_modal").modal("show");
 });
 
@@ -345,6 +346,7 @@ $(document).on("click","#appt_specialty_create",function(){
       id: $('#appt_specialty_id').val(),
       name: $('#appt_specialty_name').val(),
       description: $('#appt_specialty_description').val(),
+      map: $('#appt_specialty_map').val(),
       mid: $('#appt_specialty_measures').val().toString(),
     }
 
@@ -384,6 +386,7 @@ $(document).on("click",".edit_appt_specialty_btn",function(){
       $("#appt_specialty_name").val(result[0]['name']);
       $("#appt_specialty_description").val(result[0]['description']);
       $("#appt_specialty_measures").val(result[0]['mid'].split(",")).trigger('change');
+      $("#appt_specialty_map").val(result[0]['map']);
       $("#appt_specialty_modal").modal("show");
     } else {
       return toastr.error("Action Failed");
