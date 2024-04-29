@@ -297,7 +297,11 @@ var appt_specialty_table = $('#appt_specialty_table').DataTable({
           return row.mid.replace(",", ", ");
         } 
      },
-      { data: 'description' },
+      { data: "map",
+        render: function (data, type, row) {
+          return row.map?'<div class="w-450px overflow-hidden " style="white-space: nowrap; text-overflow: ellipsis;" >'+row.map+'</div>':'';
+        }
+      },
       { data: 'id',
         render: function (data, type, row) {
           return `

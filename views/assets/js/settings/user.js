@@ -72,6 +72,7 @@ $(document).ready(function () {
       let result = JSON.parse(xhr.responseText)['data'];
       var data = "";
       for(var i = 0; i < result.length; i++){
+        if(result[i].code=='3')continue; //specialist
         data += '<option value="'+result[i].code+'">'+result[i].name+'</option>';
       }
       $(".role_list").html(data);
