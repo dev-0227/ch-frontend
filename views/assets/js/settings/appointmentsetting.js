@@ -291,6 +291,7 @@ var appt_specialty_table = $('#appt_specialty_table').DataTable({
       "headers": { 'Authorization': localStorage.getItem('authToken') }
   },
   "columns": [
+      { data: 'id' },
       { data: 'name' },
       { data: 'mid',
         render: function (data, type, row) {
@@ -333,6 +334,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
 
 $(document).on("click","#appt_specialty_add_btn",function(){
   $("#appt_specialty_id").val('');
+  $("#appt_specialty_id_").html('');
   $("#appt_specialty_name").val('');
   $("#appt_specialty_description").val('');
   $("#appt_specialty_measures").val('');
@@ -387,6 +389,7 @@ $(document).on("click",".edit_appt_specialty_btn",function(){
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentSpecialty/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
+      $("#appt_specialty_id_").html(result[0]['id']);
       $("#appt_specialty_name").val(result[0]['name']);
       $("#appt_specialty_description").val(result[0]['description']);
       $("#appt_specialty_measures").val(result[0]['mid'].split(",")).trigger('change');

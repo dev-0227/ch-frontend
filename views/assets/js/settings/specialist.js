@@ -12,7 +12,7 @@ $(document).ready(async function () {
         sp[result[i]['id']] = result[i]['name'];
       }
       $("#specialty_id").html(options);
-      managertable.ajax.reload();
+      // managertable.ajax.reload();
     }
   });
 
