@@ -9,6 +9,7 @@
                         <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
                             <li class="nav-item"><a href="#referral_type_tab" class="nav-link active" data-bs-toggle="tab">Referral Status</a></li>
                             <li class="nav-item"><a href="#referral_category_tab" class="nav-link " data-bs-toggle="tab">Referral Category</a></li>
+                            <li class="nav-item"><a href="#referral_specialty_tab" class="nav-link " data-bs-toggle="tab">Specialty Type</a></li>
                         </ul>
                     </div>
                     <div class="panel-body tabs-menu-body tab_area">
@@ -84,6 +85,46 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane " id="referral_specialty_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 d-flex align-items-center">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Specialty Type</h3>
+                                                </div>
+                                                <div class="card-options d-flex">
+                                                    <div class="d-flex align-items-center position-relative my-1 me-4">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        </i>
+                                                        <input id="specialty_table_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"  placeholder="Search specialty" />
+                                                    </div>
+                                                    <button id="appt_specialty_add_btn" type="button" class="btn btn-md btn-primary"><i class="fa fa-plus mr-2"></i>Add Specialty</button>
+                                                    <input type="hidden" id="chosen_appt_specialty" />
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="appt_specialty_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="20%">ID</th>
+                                                            <th width="20%">Name</th>
+                                                            <th width="20%">Measures</th>
+                                                            <th width="40%">Map</th>
+                                                            <th width="20%">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                     
@@ -163,6 +204,59 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
                 <button type="button" class="btn btn-primary" id="referral_category_create"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="appt_specialty_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Specialty Type</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <input type="hidden" class="form-control" id="appt_specialty_id" >
+                <div class="row">
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label for="appt_specialty_id" class=" fw-semibold fs-6 mt-2">ID:</label>
+                            <div  class=" m-3 mb-lg-0 text-end" id="appt_specialty_id_" ></div>
+                        </div>
+                    </div>
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <label for="appt_specialty_name" class="required fw-semibold fs-6 mt-2">Name:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_specialty_name" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_specialty_description" class="fw-semibold fs-6 mt-4">Description:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_specialty_description" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_specialty_measures" class="fw-semibold fs-6 mt-4">Related Measures:</label>
+                            <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="appt_specialty_measures">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_specialty_map" class="fw-semibold fs-6 mt-4">Specialty Map  (Separated by comma):</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_specialty_map" >
+                        </div>
+                    </div>
+                </div>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="appt_specialty_create"><i class="fa fa-save">&nbsp;</i> Save</button>
             </div>
 		</div>
 	</div>
