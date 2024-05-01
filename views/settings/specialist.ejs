@@ -12,9 +12,9 @@
       </div>
     </div>
     <div class="card-toolbar">
-      <a class="btn btn-primary manageraddbtn" id="add_btn"
-        ><i class="fa fa-plus">&nbsp;</i>Add</a
-      >
+      <button id="specialist_import_btn" type="button" class="btn btn-md btn-primary " style="margin-right: 10px;">
+        <i class="fa fa-upload mr-2"></i> Import</button>
+      <a class="btn btn-primary manageraddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>Add</a>
     </div>
   </div>
   <div class="card-body py-4">
@@ -40,10 +40,10 @@
 </div>
 <!-- ROW CLOSED -->
 <div  class="modal fade"  id="specialist-edit-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="example-Modal3">Specialist Edit</h5>
+        <h5 class="modal-title" id="specialist_title">Specialist</h5>
         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
           <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
       </div>
@@ -68,19 +68,39 @@
               <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="specialty_id" class="form-control-label mt-2 p-1">Specialty:</label>
+              <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="specialty_id">
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="especiality" class="form-control-label mt-2 p-1">Specialty Text:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="especiality" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="insurance_id" class="form-control-label mt-2 p-1">Insurance:</label>
+              <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="insurance_id">
+              </select>
+            </div>
+          </div>
           <div class="col-md-4">
+            <div class="form-group">
+              <label for="taxonomy" class="form-control-label mt-2 p-1">Taxonomy Code:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="taxonomy" />
+            </div>
+          </div>
+          <div class="col-md-4 d-none">
             <div class="form-group">
               <label for="eplocation" class="form-control-label mt-2 p-1">Primary Location:</label>
               <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eplocation" />
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="especiality" class="form-control-label mt-2 p-1">Specialty:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="especiality" />
-            </div>
-          </div>
-          <div class="col-md-4">
+          <div class="col-md-2">
             <div class="form-group">
               <label for="enpi" class="form-control-label mt-2 p-1">NPI:</label>
               <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="enpi" />
@@ -241,204 +261,7 @@
     </div>
   </div>
 </div>
-<div  class="modal fade"  id="specialist-add-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="example-Modal3">Specialist Add</h5>
-        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-      </div>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="fname" class="form-control-label mt-2 p-1">First Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="fname" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="lname" class="form-control-label mt-2 p-1">Last Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="lname" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="mname" class="form-control-label mt-2 p-1">Middle Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="mname" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="plocation" class="form-control-label mt-2 p-1"
-                >Primary Location:</label
-              >
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="plocation" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="speciality" class="form-control-label mt-2 p-1"
-                >Speciality:</label
-              >
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="speciality" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="npi" class="form-control-label mt-2 p-1">NPI:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="npi" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="license" class="form-control-label mt-2 p-1">License:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="license" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="email" class="form-control-label mt-2 p-1">Email:</label>
-              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="email" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="tel" class="form-control-label mt-2 p-1">Tel:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="tel" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="cel" class="form-control-label mt-2 p-1">Cel:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="cel" />
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="address" class="form-control-label mt-2 p-1">Address:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="address" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="fax" class="form-control-label mt-2 p-1">Fax:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="fax" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="city" class="form-control-label mt-2 p-1">City:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="city" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="state" class="form-control-label mt-2 p-1">State:</label>
-              <select id="state" class="form-control custom-select">
-                <optgroup label="Alaskan/Hawaiian Time Zone">
-                  <option value="AK">Alaska</option>
-                  <option value="HI">Hawaii</option>
-                </optgroup>
-                <optgroup label="Pacific Time Zone">
-                  <option value="CA">California</option>
-                  <option value="NV">Nevada</option>
-                  <option value="OR">Oregon</option>
-                  <option value="WA">Washington</option>
-                </optgroup>
-                <optgroup label="Mountain Time Zone">
-                  <option value="AZ">Arizona</option>
-                  <option value="CO">Colorado</option>
-                  <option value="ID">Idaho</option>
-                  <option value="MT">Montana</option>
-                  <option value="NE">Nebraska</option>
-                  <option value="NM">New Mexico</option>
-                  <option value="ND">North Dakota</option>
-                  <option value="UT">Utah</option>
-                  <option value="WY">Wyoming</option>
-                </optgroup>
-                <optgroup label="Central Time Zone">
-                  <option value="AL">Alabama</option>
-                  <option value="AR">Arkansas</option>
-                  <option value="IL">Illinois</option>
-                  <option value="IA">Iowa</option>
-                  <option value="KS">Kansas</option>
-                  <option value="KY">Kentucky</option>
-                  <option value="LA">Louisiana</option>
-                  <option value="MN">Minnesota</option>
-                  <option value="MS">Mississippi</option>
-                  <option value="MO">Missouri</option>
-                  <option value="OK">Oklahoma</option>
-                  <option value="SD">South Dakota</option>
-                  <option value="TX">Texas</option>
-                  <option value="TN">Tennessee</option>
-                  <option value="WI">Wisconsin</option>
-                </optgroup>
-                <optgroup label="Eastern Time Zone">
-                  <option value="CT">Connecticut</option>
-                  <option value="DE">Delaware</option>
-                  <option value="FL">Florida</option>
-                  <option value="GA">Georgia</option>
-                  <option value="IN">Indiana</option>
-                  <option value="ME">Maine</option>
-                  <option value="MD">Maryland</option>
-                  <option value="MA">Massachusetts</option>
-                  <option value="MI">Michigan</option>
-                  <option value="NH">New Hampshire</option>
-                  <option value="NJ">New Jersey</option>
-                  <option value="NY" selected>New York</option>
-                  <option value="NC">North Carolina</option>
-                  <option value="OH">Ohio</option>
-                  <option value="PA">Pennsylvania</option>
-                  <option value="RI">Rhode Island</option>
-                  <option value="SC">South Carolina</option>
-                  <option value="VT">Vermont</option>
-                  <option value="VA">Virginia</option>
-                  <option value="WV">West Virginia</option>
-                </optgroup>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="zip" class="form-control-label mt-2 p-1">Zip:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="zip" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="cname" class="form-control-label mt-2 p-1"
-                >Contact Name:</label
-              >
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="cname" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="cemail" class="form-control-label mt-2 p-1"
-                >Contact Email:</label
-              >
-              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="cemail" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="ccel" class="form-control-label mt-2 p-1">Contact Cel:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ccel" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-        <button type="button" class="btn btn-primary" id="maddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
-      </div>
-      
-    </div>
-  </div>
-</div>
+
 <div  class="modal fade"  id="specialist-pwd-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -541,4 +364,51 @@
       
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="specialist_import_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Import Specialist</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+        </div>
+			</div>
+        <div class="progress-bar progress-load d-none">
+            <div class="progress-bar-value "></div>
+        </div>
+			<div class="modal-body">
+        <div class="col-md-12">
+          <h6>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>clinicID</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>measureID</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>doctorID</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>speciality</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>ufname</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>uminitial</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>ulname</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>upPhone</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>FaxNo</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>umobileno</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>uemail</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>upaddress</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>upcity</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>upstate</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>zipcode</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>NPI</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>Licenseid</span>
+            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>Taxonomy</span>
+          </h6>
+        </div>
+        <div class="my-4">
+            <input id="specialist_file" type="file" class="dropify" accept=".csv" data-height="150" />
+        </div>
+			</div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+          <button type="button" class="btn btn-primary" id="specialist_import_action"><i class="fa fa-upload">&nbsp;</i> Import</button>
+      </div>
+		</div>
+	</div>
 </div>
