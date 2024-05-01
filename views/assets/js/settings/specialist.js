@@ -34,6 +34,7 @@ $(document).ready(async function () {
         "type": "GET",
         "headers": { 'Authorization': localStorage.getItem('authToken') }
     },
+    serverSide: true,
     "columns": [
         { data: "fname",
           render: function (data, type, row) {

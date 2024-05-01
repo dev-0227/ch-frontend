@@ -12,6 +12,7 @@ $(document).ready(function () {
         "type": "GET",
         "headers": { 'Authorization': localStorage.getItem('authToken') }
     },
+    serverSide: true,
     "columns": [
         { data: "fname",
           render: function (data, type, row) {
@@ -392,7 +393,8 @@ $(document).ready(function () {
       var bg_color = clinics[index]['color']?clinics[index]['color']:"#eeeeee";
       var bg_pattern = clinics[index]['pattern']?clinics[index]['pattern']:"";
 
-      var fonts = clinics[index]['fonts'].split(",");
+      var fonts = "0";
+      if(clinics[index]['fonts'])fonts = clinics[index]['fonts'].split(",");
       if(fonts[0]){
         if(fonts[0]=="0"){
           $(".rccs_clinic_web_qr").addClass("d-none");
