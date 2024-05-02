@@ -108,7 +108,7 @@
 				
 				$('.pq-menu').addClass("d-none");
 				if(localStorage.getItem('usertype')=="0")$("#menu_setting").removeClass("d-none");
-				
+				var data_loaders = ["LOADERS_EMRPT_LOADER", "LOADERS_HEDIS_LOADER", "LOADERS_REFERRAL_LOADER", "LOADERS_PAYMENT_LOADER"]
 
 				let entry = {
 					id: localStorage.getItem('usertype'),
@@ -132,10 +132,15 @@
 
 							}
 						}
+						
 						var permission_items = []
 						for(var pid in permissions){
 							if(permissions[pid]!="000" && permission_names[pid]){
 								permission_items[permission_names[pid]] = permissions[pid];
+								for(var dl in data_loaders){
+									if(permission_names[pid]==data_loaders[dl])permission_items["DATA_LOADERS"]= permissions[pid];
+								}
+								
 								
 							}
 						}
