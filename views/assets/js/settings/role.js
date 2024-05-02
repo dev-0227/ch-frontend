@@ -25,7 +25,7 @@ $(document).ready(function () {
           render: function (data, type, row) {
             return `
               <div class="btn-group align-top " idkey="`+row.id+`">
-                <button class="btn  btn-primary badge edit_btn" data-target="#user-form-modal" data-toggle="modal" type="button"><i class="fa fa-edit"></i> Edit</button>
+                <button class="btn  btn-primary badge edit_btn" data-target="#user-form-modal" data-toggle="modal" type="button" data-type="`+row.code+`"><i class="fa fa-edit"></i> Edit</button>
                 <button class="btn  btn-danger badge delete_btn" type="button"><i class="fa fa-trash"></i> Delete</button>
               </div>
             `
@@ -133,11 +133,9 @@ $(document).ready(function () {
     $(".ch_permission").each(function() {
       $(this).prop('checked', false);
     });
-    $("#chosen_user").val($(this).parent().attr("idkey"));
-    let entry = {
-      id: $(this).parent().attr("idkey"),
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/chosen", (xhr, err) => {
+    $("#chosen_role").val($(this).data("type"));
+
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $(this).parent().attr("idkey")}, "role/chosen", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         $("#ucode").val(result[0]['code']);
@@ -149,7 +147,7 @@ $(document).ready(function () {
       }
     });
 
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/getPermission", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $(this).data("type")}, "role/getPermission", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         for(var i=0; i<result.length; i++){
@@ -187,7 +185,7 @@ $(document).ready(function () {
       p += $(this).prop('checked')?'1':'0';
     });
     let entry = {
-      id: document.getElementById('chosen_user').value,
+      id: document.getElementById('chosen_role').value,
       code: document.getElementById('ucode').value,
       name: document.getElementById('uname').value,
       description: document.getElementById('udescription').value,

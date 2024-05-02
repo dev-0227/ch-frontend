@@ -78,6 +78,7 @@
           			localStorage.removeItem("lastActivity");
           			localStorage.removeItem("loginid");
 					localStorage.removeItem("authToken");
+					localStorage.removeItem("permission");
 					window.location.replace("../");
 				}
 			}
@@ -103,6 +104,51 @@
 				if (localStorage.getItem('userid') == '' || localStorage.getItem('userid') == undefined) {
 					window.location.replace("../");
 				}
+				var permissions = []
+				
+				$('.pq-menu').addClass("d-none");
+				if(localStorage.getItem('usertype')=="0")$("#menu_setting").removeClass("d-none");
+				
+
+				let entry = {
+					id: localStorage.getItem('usertype'),
+				}
+				await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "role/getPermission", (xhr, err) => {
+					if (!err) {
+						let result = JSON.parse(xhr.responseText)['data'];
+						let permission_names = [];
+						for(var i=0; i<result.length; i++){
+							permissions[result[i].perm_id] = result[i].value
+							permission_names[result[i].perm_id] = result[i].pname
+						}
+						var more = localStorage.getItem('permission')
+						if(more){
+							var diff = more.split(",");
+							for(var j=0; j<diff.length; j++){
+								let diff_data = diff[j].split('_');
+								if(diff_data.length>1){
+									permissions[diff_data[0]] = diff_data[1]
+								}
+
+							}
+						}
+						var permission_items = []
+						for(var pid in permissions){
+							if(permissions[pid]!="000" && permission_names[pid]){
+								permission_items[permission_names[pid]] = permissions[pid];
+								
+							}
+						}
+						$('.pq-menu').each(function(i, obj) {
+							if($(this).data("permit")){
+								if(permission_items[$(this).data("permit")])
+									$(this).removeClass("d-none");
+							}
+						})
+						
+
+					}
+				});
 
 				await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/getchosenclinics", (xhr, err) => {
 					let result = JSON.parse(xhr.responseText)['data'];
@@ -142,9 +188,9 @@
           			localStorage.removeItem("usertype");
           			localStorage.removeItem("username");
           			localStorage.removeItem("email");
-          			localStorage.removeItem("redirectkey");
           			localStorage.removeItem("loginid");
 					localStorage.removeItem("authToken");
+					localStorage.removeItem("permission");
 					window.location.replace("../");
 				});
 				

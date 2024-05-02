@@ -7,7 +7,7 @@ $(document).ready(function () {
         localStorage.removeItem("userid");
         localStorage.removeItem("usertype");
         localStorage.removeItem('username');
-        localStorage.removeItem("redirectkey");
+        localStorage.removeItem("permission");
         window.location.replace("./");
       }
       else{
@@ -59,21 +59,17 @@ $(document).ready(function () {
         if(result.status == "success"){
           localStorage.setItem("chosen_clinic",result.chosen_clinic);
           localStorage.setItem("loginid",result.loginid);
-          if(localStorage.getItem('redirectkey') == 1){
-            window.location.replace("./pages/hedisdaily");
-          }
-          else if(localStorage.getItem('redirectkey') == 2){
-            window.location.replace("./pages/hedismonthreport");
-          }
-          else{
-            window.location.replace("./pages/dash");
-          }
+          
+          // /getPermission
+
+          window.location.replace("./pages/dash");
+          
         }
         else{
           localStorage.removeItem("userid");
           localStorage.removeItem("usertype");
           localStorage.removeItem('username');
-          localStorage.removeItem("redirectkey");
+          localStorage.removeItem("permission");
           window.location.replace("./");
         }
       }
@@ -81,7 +77,7 @@ $(document).ready(function () {
         localStorage.removeItem("userid");
         localStorage.removeItem("usertype");
         localStorage.removeItem('username');
-        localStorage.removeItem("redirectkey");
+        localStorage.removeItem("permission");
         window.location.replace("./");
       }
     });
