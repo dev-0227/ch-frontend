@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
+router.get('/ddd', (req, res, next) => {
+    res.render("layout/dddd", {
+        pageTitle: "ddd"
+    });
+});
+
 router.get("/", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Database",
