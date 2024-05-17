@@ -12,5 +12,5 @@ var fs = require('fs');
 const server = https.createServer(app);
 
 server.listen(port, () => {
-  console.log('Start to listening port:' + port);
+  console.log('Started on :' + port);
 });
