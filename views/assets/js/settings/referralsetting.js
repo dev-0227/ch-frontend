@@ -1,28 +1,22 @@
 $(document).ready(async function () {
     "use strict";
-
     var referral_type_table = $('#referral_type_table').DataTable({
-        "ajax": {
-            "url": serviceUrl + "referral/referral/status",
-            "type": "GET",
-            "headers": { 'Authorization': localStorage.getItem('authToken') }
+        searchSide: true,
+        ajax: {
+            url: serviceUrl + "referral/referral/status",
+            type: "GET",
+            headers: { 'Authorization': localStorage.getItem('authToken') }
         },
-        "columns": [
+        columns: [
             { data: 'id', visible: false},
             { data: 'categoryName'},
+            { data: 'code'},
             { data: 'display' },
             { data: 'color',
                 render: function (data, type, row) {
                 var colors = row.color?row.color.split(","):[]
                 var color = colors.length>1?colors[1]:"#000000";
                 return '<div style="background:'+color+'" class="w-50px h-30px border "></div>';
-                }  
-            },
-            { data: 'color',
-                render: function (data, type, row) {
-                var colors = row.color?row.color.split(","):[]
-                var bg = colors.length>0?colors[0]:"#ffffff";
-                return '<div style="background:'+bg+'" class="w-50px h-30px border "></div>';
                 }  
             },
             { data: 'id',
