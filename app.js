@@ -11,6 +11,7 @@ const hedis = require('./routes/hedis');
 const patients = require('./routes/patients');
 const insurance = require('./routes/insurance');
 const database = require('./routes/database');
+const cors = require('cors');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -20,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.disable("x-powered-by");
-//app.use(cors());
+app.use(cors());
 
 
 
