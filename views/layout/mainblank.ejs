@@ -177,7 +177,7 @@
 				// setTimeout(function(){$(".clinic-name").html($("#chosen_clinics option:checked").text())}, 1000);
 				$("#chosen_clinics").change(function(){
 					localStorage.setItem('chosen_clinic', $(this).val());
-					location.reload();
+					// location.reload();
 				});
 				$(".app_user_name").html(localStorage.getItem('username'));
 				$(".app_user_email").html(localStorage.getItem('email'));

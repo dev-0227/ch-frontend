@@ -43,21 +43,26 @@ $(document).ready(async function () {
         },
         { data: 'specialty_id' ,
           render: function (data, type, row) {
-            var str = "";
-            if(row.specialty_id){
-              var specialties = row.specialty_id.toString().split(",");
+            // var str = "";
+            // if(row.specialty_id){
+            //   var specialties = row.specialty_id.toString().split(",");
               
-              for(var i=0; i<specialties.length; i++){
-                if(sp[specialties[i]]=="")continue;
-                if(i>0) str+= ", ";
-                str += sp[specialties[i]];
-              }
-            }
+            //   for(var i=0; i<specialties.length; i++){
+            //     if(sp[specialties[i]]=="")continue;
+            //     if(i>0) str+= ", ";
+            //     str += sp[specialties[i]];
+            //   }
+            // }
               
-            return str;
+            // return str;
+            return row.sname;
           } 
         },
-        { data: 'email' },
+        { data: 'email',
+          render: function(data, type, row) {
+            return row.email;
+          }
+         },
         { data: 'phone',
           render: function (data, type, row) {
               return row.phone;
@@ -77,15 +82,18 @@ $(document).ready(async function () {
               <div class="btn-group align-top" idkey="`+row.id+`">
                 <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
                 <button class="btn btn-sm btn-primary managereditbtn" type="button"><i class="fa fa-edit"></i></button>
-                <button class="btn btn-sm btn-info managerpwdbtn" type="button"><i class="fa fa-key"></i></button>
-                <button class="btn btn-sm btn-warning managerquestionbtn" type="button"><i class="fa fa-question-circle"></i></button>
                 <button class="btn btn-sm btn-danger managerdeletebtn" type="button"><i class="fa fa-trash"></i></button>
               </div>
             `
           } 
         }
-    ]
+    ],
+    "clinicid": $("#chosen_clinics").val(),
   });
+
+  // <button class="btn btn-sm btn-info managerpwdbtn" type="button"><i class="fa fa-key"></i></button>
+  // <button class="btn btn-sm btn-warning managerquestionbtn" type="button"><i class="fa fa-question-circle"></i></button>
+
 
   $('#table_search_input').on('keyup', function () {
     managertable.search(this.value).draw();
