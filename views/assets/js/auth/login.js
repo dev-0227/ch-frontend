@@ -29,7 +29,7 @@ $(document).ready(function () {
       $("#password").focus();
       return;
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "login/login", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "login/test", (xhr, err) => {
       let result = JSON.parse(xhr.responseText);
       if (!err) {
         if(result.status == "success"){
