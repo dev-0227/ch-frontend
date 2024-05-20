@@ -37,9 +37,9 @@ app.use('/hedis', hedis);
 app.use('/insurance', insurance);
 app.use('/database', database);
 
-app.use('*', (req, res) => {
-    //res.status(404).render('pages-404');
-    res.redirect('../');
-});
+// app.use('*', (req, res) => {
+//     //res.status(404).render('pages-404');
+//     res.redirect('../');
+// });
 
 module.exports = app;
