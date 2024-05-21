@@ -20,6 +20,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// disable cors error
 // app.disable("x-powered-by");
 // app.use(cors());
 
