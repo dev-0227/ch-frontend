@@ -17,14 +17,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Config middlewares
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// disable cors error
-// app.disable("x-powered-by");
-// app.use(cors());
-
-
+app.disable("x-powered-by");
+app.use(cors());
 
 // Static Pages
 app.use('/assets', express.static(path.join(__dirname, 'views/assets')));
