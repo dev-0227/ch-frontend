@@ -17,11 +17,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Config middlewares
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.disable("x-powered-by");
-app.use(cors());
+// app.disable("x-powered-by");
+// app.use(cors());
 
 
 
@@ -37,9 +37,9 @@ app.use('/hedis', hedis);
 app.use('/insurance', insurance);
 app.use('/database', database);
 
-// app.use('*', (req, res) => {
-//     //res.status(404).render('pages-404');
-//     res.redirect('../');
-// });
+app.use('*', (req, res) => {
+    //res.status(404).render('pages-404');
+    res.redirect('../');
+});
 
 module.exports = app;
