@@ -105,7 +105,7 @@ $(document).ready(async function () {
     $("#elname").val("");
     $("#emname").val("");
     $("#eplocation").val("");
-    $("#especiality").val("");
+    // $("#especiality").val("");
     $("#enpi").val("");
     $("#elicense").val("");
     $("#eemail").val("");
@@ -139,7 +139,7 @@ $(document).ready(async function () {
         $("#elname").val(result[0]['lname']);
         $("#emname").val(result[0]['mname']);
         $("#eplocation").val(result[0]['plocation']);
-        $("#especiality").val(result[0]['speciality']);
+        // $("#especiality").val(result[0]['speciality']);
         $("#enpi").val(result[0]['npi']);
         $("#elicense").val(result[0]['license']);
         $("#eemail").val(result[0]['email']);
