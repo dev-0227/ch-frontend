@@ -342,7 +342,7 @@ $(document).ready(async function () {
       lname: document.getElementById('elname').value,
       mname: document.getElementById('emname').value,
       plocation: document.getElementById('eplocation').value,
-      speciality: document.getElementById('especiality').value,
+      // speciality: document.getElementById('especiality').value,
       npi: document.getElementById('enpi').value,
       license: document.getElementById('elicense').value,
       email: document.getElementById('eemail').value,
