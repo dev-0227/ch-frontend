@@ -210,7 +210,7 @@ $(document).ready(async function () {
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/chosen", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/chosen", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         if(result.length > 0)
