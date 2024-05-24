@@ -14,12 +14,14 @@ router.get("/specialist", (req, res, next) => {
         pageKey: "../settings/specialist"
     });
 });
+
 router.get("/manager", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "User List",
         pageKey: "../settings/manager"
     });
 });
+
 router.get("/users", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "User List",
@@ -33,12 +35,21 @@ router.get("/role", (req, res, next) => {
         pageKey: "../settings/role"
     });
 });
+
 router.get("/permission", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Permission List",
         pageKey: "../settings/permission"
     });
 });
+
+router.get("/organization", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Organization List",
+        pageKey: "../settings/organization"
+    })
+})
+
 router.post("/logger", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Audit Event",
@@ -82,30 +93,35 @@ router.get("/paymentsetting", (req, res, next) => {
         pageKey: "../settings/paymentsetting"
     });
 });
+
 router.get("/communicationsetting", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Communication Settings",
         pageKey: "../settings/communicationsetting"
     });
 });
+
 router.get("/contactsetting", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Contact Settings",
         pageKey: "../settings/contactsetting"
     });
 });
+
 router.get("/diagnosisgroup", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Diagnosis Group",
         pageKey: "../settings/diagnosisgroup"
     });
 });
+
 router.get("/vital", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Vitals",
         pageKey: "../settings/vital"
     });
 });
+
 router.get("/diagnosticreport", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Diagnostic Report",
