@@ -22,7 +22,7 @@ $(document).ready(function () {
                 return `<a href="` + row.system + `" class="btn btn-link btn-color-primary btn-active-color-danger" target="blank" style="margin: -5px;">` + row.system + `</a>`;
               } 
             },
-            { data: 'Display', 
+            { data: 'display', 
                 render: function(data, type, row) {
                     return row.display;
                 }
@@ -89,7 +89,6 @@ $(document).ready(function () {
     });
   
     $(document).on("click",".edit_btn",function(){
-      $("#chosen_user").val($(this).parent().attr("idkey"));
       let entry = {
         id: $(this).parent().attr("idkey"),
       }
@@ -108,13 +107,6 @@ $(document).ready(function () {
     });
   
     $("#update_btn").click(function (e) {
-        console.log("Clicked!");
-      let entry = {
-        code: document.getElementById('ucode').value,
-        system: document.getElementById('usystem').value,
-        display: document.getElementById('udisplay').value,
-        definition: document.getElementById('udefinition').value
-      }
       if($("#ucode").val() == ""){
         toastr.info('Please enter Organization Code');
         $("#ucode").focus();
@@ -129,6 +121,13 @@ $(document).ready(function () {
         toastr.info('Please enter System');
         $("#udisplay").focus();
         return;
+      }
+      let entry = {
+        id: $(".edit_btn").parent().attr("idkey"),
+        code: document.getElementById('ucode').value,
+        system: document.getElementById('usystem').value,
+        display: document.getElementById('udisplay').value,
+        definition: document.getElementById('udefinition').value
       }
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/update", (xhr, err) => {
           if (!err) {
