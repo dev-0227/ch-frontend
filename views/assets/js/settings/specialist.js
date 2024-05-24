@@ -326,11 +326,11 @@ $(document).ready(async function () {
       $("#etel").focus();
       return;
     }
-    if($("#eemail").val() == ""){
-      toastr.info('Please enter Email');
-      $("#eemail").focus();
-      return;
-    }
+    // if($("#eemail").val() == ""){
+    //   toastr.info('Please enter Email');
+    //   $("#eemail").focus();
+    //   return;
+    // }
     if($("#specialty_id").val() == ""){
       toastr.info('Please enter Specialty');
       $("#specialty_id").focus();
