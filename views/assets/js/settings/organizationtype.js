@@ -2,7 +2,7 @@ $(document).ready(function () {
     "use strict";
     var organization_table = $('#organization_table').DataTable({
         "ajax": {
-            "url": serviceUrl + "organization/",
+            "url": serviceUrl + "organization/type/",
             "type": "GET",
             "headers": { 'Authorization': localStorage.getItem('authToken') }
         },
@@ -75,7 +75,7 @@ $(document).ready(function () {
         display: document.getElementById('adisplay').value,
         definition: document.getElementById('adefinition').value
       }
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/add", (xhr, err) => {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/type/add", (xhr, err) => {
           if (!err) {
             toastr.success("organization is added successfully");
             $("#organization-add-modal").modal("hide");
@@ -92,7 +92,7 @@ $(document).ready(function () {
       let entry = {
         id: $(this).parent().attr("idkey"),
       }
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/chosen", (xhr, err) => {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/type/chosen", (xhr, err) => {
         if (!err) {
           let result = JSON.parse(xhr.responseText)['data'];
           $("#ucode").val(result[0]['code']);
@@ -129,7 +129,7 @@ $(document).ready(function () {
         display: document.getElementById('udisplay').value,
         definition: document.getElementById('udefinition').value
       }
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/update", (xhr, err) => {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/type/update", (xhr, err) => {
           if (!err) {
             toastr.success("organization is updated successfully");
             $("#organization-edit-modal").modal("hide");
@@ -159,7 +159,7 @@ $(document).ready(function () {
       }
           }).then(function (result) {
         if (result.value) {
-          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/delete", (xhr, err) => {
+          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/type/delete", (xhr, err) => {
             if (!err) {
               setTimeout( function () {
                 organization_table.ajax.reload();

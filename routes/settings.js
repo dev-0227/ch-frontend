@@ -43,10 +43,10 @@ router.get("/permission", (req, res, next) => {
     });
 });
 
-router.get("/organization", (req, res, next) => {
+router.get("/organizationtype", (req, res, next) => {
     res.render("layout/mainblank", {
-        pageTitle: "Organization List",
-        pageKey: "../settings/organization"
+        pageTitle: "Organization Type List",
+        pageKey: "../settings/organizationtype"
     })
 })
 
