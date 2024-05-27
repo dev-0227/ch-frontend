@@ -42,8 +42,9 @@
           <th class="text-center col-md-3">specialty</th>
           <th class="text-center col-md-2">Email</th>
           <th class="text-center col-md-3">Phone</th>
+          <th class="text-center col-md-1">City</th>
           <th class="text-center col-md-1">Active</th>
-          <th class="text-center col-md-3">Actions</th>
+          <th class="text-center col-md-2">Actions</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -128,6 +129,31 @@
                   <label for="emname" class="form-control-label mt-2 p-1">Middle Name:</label>
                   <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
                 </div>
+              </div>
+              <div class="col-md-4">
+                <label for="edob" class="form-control-label mt-2 p-1">Status:</label>
+                <div class="form-group" id="edob" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                  <input id="edob_input" type="text" class="form-control" data-td-target="#edob"/>
+                  <span class="input-group-text" data-td-target="#edob" data-td-toggle="datetimepicker">
+                      <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="egender" class="form-control-label mt-2 p-1">Status:</label>
+                  <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                    <select id="egender" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <select class="form-select form-select-lg form-select-solid" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple">
+                  <option></option>
+              </select>
               </div>
               <div class="col-md-6">
                 <div class="form-group">

@@ -2,6 +2,17 @@
 $(document).ready(async function () {
   "use strict";
 
+  // Fetch country flags from FlagIcon API
+  // fetch('https://restcountries.com/v3.1/all').then(response => response.json()).then(data => {
+  //     // Process the response data
+  //     data.forEach(country => {
+  //       const countryName = country.name.common;
+  //       const flagUrl = country.flags.png;
+  //       console.log(flagUrl, countryName);
+  //       // Do something with countryName and flagUrl
+  //   });
+  // }).catch(error => console.error('Error fetching data:', error));
+
   let sp = []
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
     if (!err) {
@@ -42,7 +53,7 @@ $(document).ready(async function () {
             return `
             <center>
               <div class="symbol symbol-60px symbol-circle">
-                  <div class="symbol-label fs-2 fw-semibold bg-primary text-inverse-primary">` + row.photo + `</div>
+                  <div class="symbol-label fs-3qx fw-semibold bg-primary text-inverse-primary">` + row.photo + `</div>
               </div>
             </center>
             `
@@ -76,6 +87,11 @@ $(document).ready(async function () {
       { data: 'phone',
         render: function (data, type, row) {
             return row.phone;
+        } 
+      },
+      { data: 'city',
+        render: function (data, type, row) {
+            return row.city;
         } 
       },
       { data: 'status',

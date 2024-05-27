@@ -86,7 +86,8 @@ $(document).ready(function () {
     $("#amode").val('');
     $("#aaddress1").val('');
     $("#aaddress2").val('');
-    $("#aaddress3").val('');
+    $("#acity").val('');
+    $("#astate").val('New York');
     $("#aphone1").val('');
     $("#aphone2").val('');
     $("#aphone3").val('');
@@ -129,7 +130,9 @@ $(document).ready(function () {
       mode: document.getElementById('amode').value,
       address1: document.getElementById('aaddress1').value,
       address2: document.getElementById('aaddress2').value,
-      address3: document.getElementById('aaddress3').value,
+      address3: '',
+      city: document.getElementById('acity').value,
+      state: document.getAnimations('astate').value,
       phone1: document.getElementById('aphone1').value,
       phone2: document.getElementById('aphone2').value,
       phone3: document.getElementById('aphone3').value,
@@ -138,8 +141,6 @@ $(document).ready(function () {
       email: document.getElementById('aemail').value,
       description: document.getElementById('adescription').value,
       characteristic: document.getElementById('acharacteristic').value,
-      city: '',
-      state: '',
       longitude: '',
       latitude: '',
       altitude: '',
@@ -181,7 +182,8 @@ $(document).ready(function () {
         $("#umode").val(result[0]['mode']);
         $("#uaddress1").val(result[0]['address1']);
         $("#uaddress2").val(result[0]['address2']);
-        $("#uaddress3").val(result[0]['address3']);
+        $("#ucity").val(result[0]['city']);
+        $("#ustate").val(result[0]['state']).trigger('change');
         $("#uphone1").val(result[0]['phone1']);
         $("#uphone2").val(result[0]['phone2']);
         $("#uphone3").val(result[0]['phone3']);
@@ -229,7 +231,9 @@ $(document).ready(function () {
       mode: document.getElementById('umode').value,
       address1: document.getElementById('uaddress1').value,
       address2: document.getElementById('uaddress2').value,
-      address3: document.getElementById('uaddress3').value,
+      address3: '',
+      city: document.getElementById('ucity').value,
+      state: document.getElementById('ustate').value,
       phone1: document.getElementById('uphone1').value,
       phone2: document.getElementById('uphone2').value,
       phone3: document.getElementById('uphone3').value,
@@ -238,8 +242,6 @@ $(document).ready(function () {
       email: document.getElementById('uemail').value,
       description: document.getElementById('udescription').value,
       characteristic: document.getElementById('ucharacteristic').value,
-      city: '',
-      state: '',
       longitude: '',
       latitude: '',
       altitude: '',
