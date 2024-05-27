@@ -55,7 +55,7 @@ $(document).ready(function () {
         },
         { data: 'statusid',
             render: function (data, type, row) {
-              if(row.statusid == 0)
+              if(row.statusid == 1)
                 return '<div class="badge badge-success fw-bold badge-lg">Active</span>';
               else
                 return '<div class="badge badge-danger fw-bold badge-lg">Inactive</span>';
@@ -96,6 +96,8 @@ $(document).ready(function () {
     $("#adescription").val('');
     $("#acharacteristic").val('');
     $("#organization-add-modal").modal("show");
+    $("#zip").val('');
+    $("#astatus").val(1).trigger('change');
   });
 
   $("#create_btn").click(function (e) {
@@ -120,7 +122,7 @@ $(document).ready(function () {
       return;
     }
     let entry = {
-      status: 1,
+      status: document.getElementById('astatus').value,
       name: document.getElementById('aname').value,
       type: document.getElementById('atype').value,
       alias: document.getElementById('aalias').value,
@@ -145,7 +147,8 @@ $(document).ready(function () {
       hoursoperation:'',
       virticalservice: '',
       endpoint: '',
-      map: ''
+      map: '',
+      zip: document.getElementById('azip').value
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/add", (xhr, err) => {
         if (!err) {
@@ -165,6 +168,7 @@ $(document).ready(function () {
   });
 
   $(document).on("click",".edit_btn",function(){
+    $("#chosen_organization").val($(this).parent().attr("idkey"));
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
@@ -186,6 +190,8 @@ $(document).ready(function () {
         $("#uemail").val(result[0]['email']);
         $("#udescription").val(result[0]['description']);
         $("#ucharacteristic").val(result[0]['characteristic']);
+        $("#uzip").val(result[0]['zip']);
+        $("#ustatus").val(result[0]['statusid']).trigger('change');
         $("#organization-edit-modal").modal("show");
       } else {
         return toastr.error("Action Failed");
@@ -215,8 +221,8 @@ $(document).ready(function () {
       return;
     }
     let entry = {
-      id: $(".edit_btn").parent().attr("idkey"),
-      status: 1,
+      id: $("#chosen_organization").val(),
+      status: $("#ustatus").val(),
       name: document.getElementById('uname').value,
       type: document.getElementById('utype').value,
       alias: document.getElementById('ualias').value,
@@ -241,7 +247,8 @@ $(document).ready(function () {
       hoursoperation:'',
       virticalservice: '',
       endpoint: '',
-      map: ''
+      map: '',
+      zip: document.getElementById('uzip').value
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/update", (xhr, err) => {
         if (!err) {

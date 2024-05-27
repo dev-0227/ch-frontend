@@ -46,6 +46,7 @@ $(document).ready(function () {
       });
 
     $(document).on("click",".organizationaddbtn",function(){
+      $("#chosen_organization").val('');
       $("#acode").val('');
       $("#asystem").val('');
       $("#adisplay").val('');
@@ -93,6 +94,7 @@ $(document).ready(function () {
     });
   
     $(document).on("click",".edit_btn",function(){
+      $("#chosen_organization").val($(this).parent().attr("idkey"));
       let entry = {
         id: $(this).parent().attr("idkey"),
       }
@@ -112,7 +114,7 @@ $(document).ready(function () {
   
     $("#update_btn").click(function (e) {
       if($("#ucode").val() == ""){
-        toastr.info('Please enter Organization Code');
+        toastr.info('Please enter organization code');
         $("#ucode").focus();
         return;
       }
@@ -127,7 +129,7 @@ $(document).ready(function () {
         return;
       }
       let entry = {
-        id: $(".edit_btn").parent().attr("idkey"),
+        id: $("#chosen_organization").val(),
         code: document.getElementById('ucode').value,
         system: document.getElementById('usystem').value,
         display: document.getElementById('udisplay').value,
