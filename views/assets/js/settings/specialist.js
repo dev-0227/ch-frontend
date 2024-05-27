@@ -12,7 +12,6 @@ $(document).ready(async function () {
         sp[result[i]['id']] = result[i]['name'];
       }
       $("#specialty_id").html(options);
-      // managertable.ajax.reload();
     }
   });
 
@@ -24,7 +23,6 @@ $(document).ready(async function () {
         options += '<option value="'+result[i]['id']+'" >'+result[i]['insName']+'</option>';
       }
       $("#insurance_id").html(options);
-
     }
   });
 
@@ -35,58 +33,70 @@ $(document).ready(async function () {
         "headers": { 'Authorization': localStorage.getItem('authToken') }
     },
     serverSide: true,
+    "pageLength": 10,
+    "order": [],
     "columns": [
-        { data: "fname",
-          render: function (data, type, row) {
-            return row.fname+" "+row.lname;
-          } 
-        },
-        { data: 'specialty_id' ,
-          render: function (data, type, row) {
-            // var str = "";
-            // if(row.specialty_id){
-            //   var specialties = row.specialty_id.toString().split(",");
-              
-            //   for(var i=0; i<specialties.length; i++){
-            //     if(sp[specialties[i]]=="")continue;
-            //     if(i>0) str+= ", ";
-            //     str += sp[specialties[i]];
-            //   }
-            // }
-              
-            // return str;
-            return row.sname;
-          } 
-        },
-        { data: 'email',
-          render: function(data, type, row) {
-            return row.email;
-          }
-         },
-        { data: 'phone',
-          render: function (data, type, row) {
-              return row.phone;
-          } 
-        },
-        { data: 'status',
-          render: function (data, type, row) {
-            if(row.status == 1)
-              return '<div class="badge badge-success fw-bold badge-lg">Active</span>';
-            else
-              return '<div class="badge badge-danger fw-bold badge-lg">Inactive</span>';
-          } 
-        },
-        { data: 'id',
-          render: function (data, type, row) {
+      { data: 'photo',
+        render: function(data, type, row) {
+          if (row.photo.length == 1) {
             return `
-              <div class="btn-group align-top" idkey="`+row.id+`">
-                <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
-                <button class="btn btn-sm btn-primary managereditbtn" type="button"><i class="fa fa-edit"></i></button>
-                <button class="btn btn-sm btn-danger managerdeletebtn" type="button"><i class="fa fa-trash"></i></button>
+            <center>
+              <div class="symbol symbol-60px symbol-circle">
+                  <div class="symbol-label fs-2 fw-semibold bg-primary text-inverse-primary">` + row.photo + `</div>
               </div>
+            </center>
             `
-          } 
+          }
+          else {
+            return `
+            <center>
+              <div class="symbol symbol-60px symbol-circle">
+                <div class="symbol-label" style="background-image: url(data:image/png;base64,${row.photo});"></div>
+              </div>
+            </center>
+            `
+          }
         }
+      },
+      { data: "fname",
+        render: function (data, type, row) {
+          return row.fname+" "+row.lname;
+        } 
+      },
+      { data: 'specialty_id' ,
+        render: function (data, type, row) {
+          return row.sname;
+        } 
+      },
+      { data: 'email',
+        render: function(data, type, row) {
+          return row.email;
+        }
+        },
+      { data: 'phone',
+        render: function (data, type, row) {
+            return row.phone;
+        } 
+      },
+      { data: 'status',
+        render: function (data, type, row) {
+          if(row.status == 1)
+            return '<div class="badge badge-success fw-bold badge-lg">Active</span>';
+          else
+            return '<div class="badge badge-danger fw-bold badge-lg">Inactive</span>';
+        } 
+      },
+      { data: 'id',
+        render: function (data, type, row) {
+          return `
+            <div class="btn-group align-top" idkey="`+row.id+`">
+              <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
+              <button class="btn btn-sm btn-primary managereditbtn" type="button"><i class="fa fa-edit"></i></button>
+              <button class="btn btn-sm btn-danger managerdeletebtn" type="button"><i class="fa fa-trash"></i></button>
+            </div>
+          `
+        } 
+      }
     ],
     "clinicid": $("#chosen_clinics").val(),
   });
@@ -94,27 +104,26 @@ $(document).ready(async function () {
   // <button class="btn btn-sm btn-info managerpwdbtn" type="button"><i class="fa fa-key"></i></button>
   // <button class="btn btn-sm btn-warning managerquestionbtn" type="button"><i class="fa fa-question-circle"></i></button>
 
-
   $('#table_search_input').on('keyup', function () {
     managertable.search(this.value).draw();
   });
 
   $(document).on("click",".manageraddbtn",function(){
-    $('#chosen_manager').val("")
+    $('#chosen_manager').val("");
     $("#efname").val("");
     $("#elname").val("");
     $("#emname").val("");
-    $("#eplocation").val("");
-    // $("#especiality").val("");
     $("#enpi").val("");
     $("#elicense").val("");
     $("#eemail").val("");
     $("#etel").val("");
     $("#ecel").val("");
     $("#eaddress").val("");
+    $("#eaddress2").val("");
     $("#efax").val("");
     $("#ecity").val("");
     $("#estate").val("");
+    $("#eweb").val("");
     $("#ezip").val("");
     $("#ecname").val("");
     $("#ecemail").val("");
@@ -123,6 +132,8 @@ $(document).ready(async function () {
     $("#specialty_id").val("").trigger('change');
     $("#insurance_id").val("").trigger('change');
     $("#taxonomy").val("");
+    $("#kt_docs_select2_country").val("US").trigger('change');
+    document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
     
     $("#specialist-edit-modal").modal("show");
   });
@@ -138,22 +149,27 @@ $(document).ready(async function () {
         $("#efname").val(result[0]['fname']);
         $("#elname").val(result[0]['lname']);
         $("#emname").val(result[0]['mname']);
-        $("#eplocation").val(result[0]['plocation']);
-        // $("#especiality").val(result[0]['speciality']);
         $("#enpi").val(result[0]['npi']);
+        $("#eweb").val(result[0]['web']);
         $("#elicense").val(result[0]['license']);
         $("#eemail").val(result[0]['email']);
         $("#etel").val(result[0]['phone']);
         $("#ecel").val(result[0]['cel']);
         $("#eaddress").val(result[0]['address']);
+        $("#eaddress2").val(result[0]['address2']);
         $("#efax").val(result[0]['fax']);
         $("#ecity").val(result[0]['city']);
-        $("#estate").val(result[0]['state']);
+        $("#estate").val(result[0]['state']).trigger('change');
         $("#ezip").val(result[0]['zip']);
         $("#ecname").val(result[0]['contactname']);
         $("#ecemail").val(result[0]['contactemail']);
         $("#eccel").val(result[0]['contactcel']);
-        $("#estatus").val(result[0]['status']);
+        $("#estatus").val(result[0]['status']).trigger('change');
+        $("#kt_docs_select2_country").val(result[0]['country']).trigger('change');
+        $("#photoname").val('origin');
+        if (result[0]['photo'] != '') document.getElementById('specialistPhoto').style.backgroundImage = `url(data:image/png;base64,${result[0]['photo']})`;
+        else if (result[0]['photo'] == '') document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
+
         if(result[0]['specialty_id']){
           $("#specialty_id").val(result[0]['specialty_id'].split(",")).trigger('change');
         }else{
@@ -201,6 +217,7 @@ $(document).ready(async function () {
       $(this).addClass("btn-primary");
     }
   });
+
   $(document).on("click",".managerclinicbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));
     $(".clinickey").prop('checked', false);
@@ -235,6 +252,7 @@ $(document).ready(async function () {
     });
 
   });
+
   $(document).on("click",".managerquestionbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));
     sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/getquestions", (xhr, err) => {
@@ -288,6 +306,7 @@ $(document).ready(async function () {
     $("#chosen_manager").val($(this).parent().attr("idkey"));
     $("#specialist-pwd-modal").modal("show");
   });
+
   $(document).on("click","#mclinicbtn",function(){
     var clinics = [];
     $('.clinickey:checked').each(function(i){
@@ -326,73 +345,144 @@ $(document).ready(async function () {
       $("#etel").focus();
       return;
     }
-    // if($("#eemail").val() == ""){
-    //   toastr.info('Please enter Email');
-    //   $("#eemail").focus();
-    //   return;
-    // }
     if($("#specialty_id").val() == ""){
       toastr.info('Please enter Specialty');
       $("#specialty_id").focus();
       return;
     }
-    let entry = {
-      id: $('#chosen_manager').val(),
-      fname: document.getElementById('efname').value,
-      lname: document.getElementById('elname').value,
-      mname: document.getElementById('emname').value,
-      plocation: document.getElementById('eplocation').value,
-      // speciality: document.getElementById('especiality').value,
-      npi: document.getElementById('enpi').value,
-      license: document.getElementById('elicense').value,
-      email: document.getElementById('eemail').value,
-      tel: document.getElementById('etel').value,
-      cel: document.getElementById('ecel').value,
-      address: document.getElementById('eaddress').value,
-      fax: document.getElementById('efax').value,
-      city: document.getElementById('ecity').value,
-      state: document.getElementById('estate').value,
-      zip: document.getElementById('ezip').value,
-      cname: document.getElementById('ecname').value,
-      cemail: document.getElementById('ecemail').value,
-      ccel: document.getElementById('eccel').value,
-      status: document.getElementById('estatus').value,
-      specialty_id: $('#specialty_id').val().toString(),
-      insurance_id: $('#insurance_id').val().toString(),
-      taxonomy: $('#taxonomy').val(),
+
+    if ($("#photoname").val() == 'origin') {
+      let entry = {
+        id: $('#chosen_manager').val(),
+        fname: document.getElementById('efname').value,
+        lname: document.getElementById('elname').value,
+        mname: document.getElementById('emname').value,
+        web: document.getElementById('eweb').value,
+        npi: document.getElementById('enpi').value,
+        license: document.getElementById('elicense').value,
+        email: document.getElementById('eemail').value,
+        tel: document.getElementById('etel').value,
+        cel: document.getElementById('ecel').value,
+        address: document.getElementById('eaddress').value,
+        address2: document.getElementById('eaddress2').value,
+        fax: document.getElementById('efax').value,
+        city: document.getElementById('ecity').value,
+        state: document.getElementById('estate').value,
+        country: document.getElementById('kt_docs_select2_country').value,
+        zip: document.getElementById('ezip').value,
+        cname: document.getElementById('ecname').value,
+        cemail: document.getElementById('ecemail').value,
+        ccel: document.getElementById('eccel').value,
+        status: document.getElementById('estatus').value,
+        specialty_id: $('#specialty_id').val().toString(),
+        insurance_id: $('#insurance_id').val().toString(),
+        taxonomy: $('#taxonomy').val(),
+        photo: "###@@@###"
+      }
+
+      if($('#chosen_manager').val()==""){
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/add", (xhr, err) => {
+          if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];
+            if(result == "existed"){
+              return toastr.info('This email is already existed so please try with another email');
+            }
+            else{
+              $("#specialist-edit-modal").modal("hide");
+              return toastr.success('Specialist is added successfully');
+            }
+            
+          } else {
+            return toastr.error('Action Failed');
+          }
+      });
+      }else{
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
+          if (!err) {
+            $("#specialist-edit-modal").modal("hide");
+            return toastr.success('Specialist is updated successfully');
+          } else {
+            return toastr.error('Action Failed');
+          }
+      });
+      }
+      
+      setTimeout( function () {
+        managertable.ajax.reload();
+      }, 1000 );
     }
 
-    if($('#chosen_manager').val()==""){
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/add", (xhr, err) => {
-        if (!err) {
-          let result = JSON.parse(xhr.responseText)['data'];
-          if(result == "existed"){
-            return toastr.info('This email is already existed so please try with another email');
-          }
-          else{
-            $("#specialist-edit-modal").modal("hide");
-            return toastr.success('Specialist is added successfully');
-          }
-          
-        } else {
-          return toastr.error('Action Failed');
+    //upload image
+    var filename = '';
+    var formData = new FormData();
+    formData.append("ephoto", document.getElementById('ephoto').files[0]);
+    sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "specialist/uploadimage", (xhr, err) => {
+      if (!err) {
+        if (JSON.parse(xhr.responseText)['data'] === undefined) filename = '';
+        else filename = JSON.parse(xhr.responseText)['data'].filename;
+
+        let entry = {
+          id: $('#chosen_manager').val(),
+          fname: document.getElementById('efname').value,
+          lname: document.getElementById('elname').value,
+          mname: document.getElementById('emname').value,
+          web: document.getElementById('eweb').value,
+          npi: document.getElementById('enpi').value,
+          license: document.getElementById('elicense').value,
+          email: document.getElementById('eemail').value,
+          tel: document.getElementById('etel').value,
+          cel: document.getElementById('ecel').value,
+          address: document.getElementById('eaddress').value,
+          address2: document.getElementById('eaddress2').value,
+          fax: document.getElementById('efax').value,
+          city: document.getElementById('ecity').value,
+          state: document.getElementById('estate').value,
+          country: document.getElementById('kt_docs_select2_country').value,
+          zip: document.getElementById('ezip').value,
+          cname: document.getElementById('ecname').value,
+          cemail: document.getElementById('ecemail').value,
+          ccel: document.getElementById('eccel').value,
+          status: document.getElementById('estatus').value,
+          specialty_id: $('#specialty_id').val().toString(),
+          insurance_id: $('#insurance_id').val().toString(),
+          taxonomy: $('#taxonomy').val(),
+          photo: filename
         }
-    });
-    }else{
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
-        if (!err) {
-          $("#specialist-edit-modal").modal("hide");
-          return toastr.success('Specialist is updated successfully');
-        } else {
-          return toastr.error('Action Failed');
-        }
-    });
-    }
     
-    setTimeout( function () {
-      managertable.ajax.reload();
-    }, 1000 );
+        if($('#chosen_manager').val()==""){
+          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/add", (xhr, err) => {
+            if (!err) {
+              let result = JSON.parse(xhr.responseText)['data'];
+              if(result == "existed"){
+                return toastr.info('This email is already existed so please try with another email');
+              }
+              else{
+                $("#specialist-edit-modal").modal("hide");
+                return toastr.success('Specialist is added successfully');
+              }
+              
+            } else {
+              return toastr.error('Action Failed');
+            }
+        });
+        }else{
+          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
+            if (!err) {
+              $("#specialist-edit-modal").modal("hide");
+              return toastr.success('Specialist is updated successfully');
+            } else {
+              return toastr.error('Action Failed');
+            }
+        });
+        }
+        
+        setTimeout( function () {
+          managertable.ajax.reload();
+        }, 1000 );
+      }
+    });
   });
+
   $("#mpwdbtn").click(function (e) {
     if($("#pwd").val() === $("#cpwd").val()){
       let entry = {
@@ -413,6 +503,7 @@ $(document).ready(async function () {
       
     }
   });
+
   $("#mquestionbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_manager').value,
@@ -433,9 +524,6 @@ $(document).ready(async function () {
     $("#specialist_import_modal").modal('show');
   });
 
-  
-
-  
   $(document).on("click","#specialist_import_action",function(){
     var formData = new FormData();
     var specialist_file = document.getElementById('specialist_file').files.length;
@@ -459,6 +547,9 @@ $(document).ready(async function () {
     } else {
       return toastr.info('Please load file');
     }
-  
   });
+
+  $("#ephoto").on('change', function() {
+    $("#photoname").val("");
+  })
 });

@@ -77,8 +77,12 @@ $(document).ready(function () {
       }
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/type/add", (xhr, err) => {
           if (!err) {
-            toastr.success("organization is added successfully");
-            $("#organization-add-modal").modal("hide");
+            if (JSON.parse(xhr.responseText)['msg'] == 'exist')
+              toastr.warning('The organization type is already exist!');
+            else {
+              toastr.success("Organization type is added successfully");
+              $("#organization-add-modal").modal("hide");
+            }
           } else {
             return toastr.error("Action Failed");
           }
@@ -131,8 +135,12 @@ $(document).ready(function () {
       }
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "organization/type/update", (xhr, err) => {
           if (!err) {
-            toastr.success("organization is updated successfully");
-            $("#organization-edit-modal").modal("hide");
+            if (JSON.parse(xhr.responseText)['msg'] == 'exist')
+              toastr.warning('The organization type is already exist!');
+            else {
+              toastr.success("organization type is updated successfully");
+              $("#organization-edit-modal").modal("hide");
+            }
           } else {
             return toastr.error("Action Failed");
           }

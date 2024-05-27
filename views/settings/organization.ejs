@@ -1,0 +1,278 @@
+
+<div class="card">
+  <div class="card-header border-0 pt-6">
+    <div class="card-title">
+      <div class="d-flex align-items-center position-relative my-1">
+        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+          <span class="path1"></span>
+          <span class="path2"></span>
+        </i>
+        <input id="table_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"
+          placeholder="Search ..."/>
+      </div>
+    </div>
+    <div class="card-toolbar">
+      <a class="btn btn-primary organizationaddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>Add Organization</a>
+    </div>
+  </div>
+  <div class="card-body py-4">
+    <input type="hidden" id="chosen_organization" />
+    <table class="table table-striped table-bordered text-nowrap  w-100"  id="organization_table" >
+      <thead>
+        <tr>
+          <th class="col-md-1">Name</th>
+          <th class="col-md-1">Alias</th>
+          <th class="col-md-2">Organization Type</th>
+          <th class="col-md-1">Email</th>
+          <th class="col-md-2">Address</th>
+          <th class="col-md-2">Phone</th>
+          <th class="col-md-1">Status</th>
+          <th class="col-md-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+<!-- ROW CLOSED -->
+<!-- EDIT -->
+<div class="modal fade" id="organization-edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg" organization="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit Organization</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+        </div>
+			</div>
+			<div class="modal-body">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+                <label for="uname" class="required form-control-label mt-4 p-1">Name:</label>
+                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uname">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="utype" class="required form-control-label mt-4 p-1">Organization Type:</label>
+              <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="utype" aria-label="Organization Type" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
+                  <option></option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+              <div class="form-group">
+                  <label for="ualias" class="form-control-label mt-4 p-1">Alias:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="ualias">
+              </div>
+          </div>
+          <div class="col-md-2">
+              <div class="form-group">
+                  <label for="umode" class="form-control-label mt-4 p-1">Mode:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="umode">
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+                <label for="uaddress1" class="required form-control-label mt-4 p-1">Address1:</label>
+                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uaddress1">
+            </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="uaddress2" class="form-control-label mt-4 p-1">Address2:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uaddress2">
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="uaddress3" class="form-control-label mt-4 p-1">Address3:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uaddress3">
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="uphone1" class="required form-control-label mt-4 p-1">Phone1:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uphone1">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="uphone2" class="form-control-label mt-4 p-1">Phone2:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uphone2">
+          </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="uphone3" class="form-control-label mt-4 p-1">Phone3:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uphone3">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="umobile" class="form-control-label mt-4 p-1">Mobile:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="umobile">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="ufax" class="form-control-label mt-4 p-1">Fax:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="ufax">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="uemail" class="form-control-label mt-4 p-1">Email:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="uemail">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group d-flex flex-column mb-7">
+              <label for="udescription" class="form-control-label mt-4 p-1">Description:</label>
+              <textarea class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Leave a comment here" id="udescription" style="height: 120px"></textarea>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group d-flex flex-column mb-7">
+              <label for="ucharacteristic" class="form-control-label mt-4 p-1">Characteristic:</label>
+              <textarea class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Leave a comment here" id="ucharacteristic" style="height: 120px"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+			<div class="modal-footer">
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="update_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
+      </div>
+		</div>
+	</div>
+</div>
+<!-- ADD -->
+<div class="modal fade" id="organization-add-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="specialist_title">Add New Organization</h5>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+                <label for="aname" class="required form-control-label mt-4 p-1">Name:</label>
+                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aname">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="atype" class="required form-control-label mt-4 p-1">Organization Type:</label>
+              <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="atype" aria-label="Organization Type" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+              <div class="form-group">
+                  <label for="aalias" class="form-control-label mt-4 p-1">Alias:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aalias">
+              </div>
+          </div>
+          <div class="col-md-2">
+              <div class="form-group">
+                  <label for="amode" class="form-control-label mt-4 p-1">Mode:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="amode">
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+                <label for="aaddress1" class="required form-control-label mt-4 p-1">Address1:</label>
+                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aaddress1">
+            </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="aaddress2" class="form-control-label mt-4 p-1">Address2:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aaddress2">
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="aaddress3" class="form-control-label mt-4 p-1">Address3:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aaddress3">
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="aphone1" class="required form-control-label mt-4 p-1">Phone1:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aphone1">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="aphone2" class="form-control-label mt-4 p-1">Phone2:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aphone2">
+          </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="aphone3" class="form-control-label mt-4 p-1">Phone3:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aphone3">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="amobile" class="form-control-label mt-4 p-1">Mobile:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="amobile">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="afax" class="form-control-label mt-4 p-1">Fax:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="afax">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="aemail" class="form-control-label mt-4 p-1">Email:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="aemail">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group d-flex flex-column mb-7">
+              <label for="adescription" class="form-control-label mt-4 p-1">Description:</label>
+              <textarea class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Leave a comment here" id="adescription" style="height: 120px"></textarea>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group d-flex flex-column mb-7">
+              <label for="acharacteristic" class="form-control-label mt-4 p-1">Characteristic:</label>
+              <textarea class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Leave a comment here" id="acharacteristic" style="height: 120px"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="create_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
+      </div>
+    </div>
+  </div>
+</div>

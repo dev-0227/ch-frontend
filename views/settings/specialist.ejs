@@ -1,3 +1,14 @@
+<!--begin::Image input placeholder-->
+<style>
+  .image-input-placeholder {
+      background-image: url('svg/avatars/blank.svg');
+  }
+
+  [data-bs-theme="dark"] .image-input-placeholder {
+      background-image: url('svg/avatars/blank-dark.svg');
+  }
+</style>
+<!--end::Image input placeholder-->
 <!-- ROW OPEN -->
 <div class="card">
   <div class="card-header border-0 pt-6">
@@ -26,12 +37,13 @@
     >
       <thead>
         <tr>
-          <th>Name</th>
-          <th>specialty</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Active</th>
-          <th class="text-center">Actions</th>
+          <th class="text-center col-md-1">Photo</th>
+          <th class="text-center col-md-2">Name</th>
+          <th class="text-center col-md-3">specialty</th>
+          <th class="text-center col-md-2">Email</th>
+          <th class="text-center col-md-3">Phone</th>
+          <th class="text-center col-md-1">Active</th>
+          <th class="text-center col-md-3">Actions</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -46,72 +58,116 @@
         <h5 class="modal-title" id="specialist_title">Specialist</h5>
         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
           <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-      </div>
+        </div>
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="efname" class="required form-control-label mt-2 p-1">First Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="efname" />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="elname" class="required form-control-label mt-2 p-1">Last Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elname" />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="emname" class="form-control-label mt-2 p-1">Middle Name:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="specialty_id" class="required form-control-label mt-2 p-1">Specialty:</label>
-              <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="specialty_id">
-              </select>
-            </div>
-          </div>
-          <!-- <div class="col-md-6">
-            <div class="form-group">
-              <label for="especiality" class="form-control-label mt-2 p-1">Specialty Text:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="especiality" />
-            </div>
-          </div> -->
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="insurance_id" class="form-control-label mt-2 p-1">Insurance:</label>
-              <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="insurance_id">
-              </select>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="taxonomy" class="form-control-label mt-2 p-1">Taxonomy Code:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="taxonomy" />
-            </div>
-          </div>
-          <div class="col-md-4 d-none">
-            <div class="form-group">
-              <label for="eplocation" class="form-control-label mt-2 p-1">Primary Location:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eplocation" />
-            </div>
-          </div>
           <div class="col-md-2">
-            <div class="form-group">
-              <label for="enpi" class="form-control-label mt-2 p-1">NPI:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="enpi" />
+            <div class="d-flex flex-row-fluid flex-center py-10">
+              <!--begin::Image input-->
+              <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true">
+                <!--begin::Image preview wrapper-->
+                <div class="image-input-wrapper w-150px h-150px" id="specialistPhoto"></div>
+                <!-- <img class="image-input-wrapper w-150px h-150px border-gray-100" id="specialistPhoto"></img> -->
+                <!--end::Image preview wrapper-->
+
+                <!--begin::Edit button-->
+                <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar">
+                    <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
+
+                    <!--begin::Inputs-->
+                    <input type="file" id="ephoto" name="avatar" accept=".png, .jpg, .jpeg" />
+                    <input type="hidden" name="avatar_remove" id="photoname" />
+                    <!--end::Inputs-->
+                </label>
+                <!--end::Edit button-->
+
+                <!--begin::Cancel button-->
+                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="cancel"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Cancel avatar">
+                    <i class="ki-outline ki-cross fs-3"></i>
+                </span>
+                <!--end::Cancel button-->
+
+                <!--begin::Remove button-->
+                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar">
+                    <i class="ki-outline ki-cross fs-3"></i>
+                </span>
+                <!--end::Remove button-->
+              </div>
+              <!--end::Image input-->
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="eemail" class="form-control-label mt-2 p-1">Email:</label>
-              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="eemail" />
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="efname" class="required form-control-label mt-2 p-1">First Name:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="efname" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="elname" class="required form-control-label mt-2 p-1">Last Name:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elname" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="emname" class="form-control-label mt-2 p-1">Middle Name:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="specialty_id" class="required form-control-label mt-2 p-1">Specialty:</label>
+                  <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="specialty_id">
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="insurance_id" class="form-control-label mt-2 p-1">Insurance:</label>
+                  <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="insurance_id">
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="enpi" class="form-control-label mt-2 p-1">NPI:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="enpi" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="taxonomy" class="form-control-label mt-2 p-1">Taxonomy Code:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="taxonomy" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="elicense" class="form-control-label mt-2 p-1">License:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elicense" />
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+        <div class="separator separator-content border-gray-600 my-10">
+          <span class="w-200px fw-bold">Specialist Contact</span>
+        </div>
+        <div class="row">
           <div class="col-md-4">
             <div class="form-group">
               <label for="etel" class="required form-control-label mt-2 p-1">Tel:</label>
@@ -124,16 +180,45 @@
               <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecel" />
             </div>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-4">
             <div class="form-group">
-              <label for="eaddress" class="form-control-label mt-2 p-1">Address:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress" />
+              <label for="estatus" class="form-control-label mt-2 p-1">Status:</label>
+              <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="estatus" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
+                  <option value="1">Active</option>
+                  <option value="2">Inactive</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <label for="efax" class="form-control-label mt-2 p-1">Fax:</label>
               <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="efax" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="eweb" class="form-control-label mt-2 p-1">Web:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eweb" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="eemail" class="form-control-label mt-2 p-1">Email:</label>
+              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="eemail" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="eaddress" class="form-control-label mt-2 p-1">Address1:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="eaddress2" class="form-control-label mt-2 p-1">Address2:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress2" />
             </div>
           </div>
           <div class="col-md-4">
@@ -145,68 +230,70 @@
           <div class="col-md-4">
             <div class="form-group">
               <label for="estate" class="form-control-label mt-2 p-1">State:</label>
-              <select id="estate" class="form-control custom-select">
-                <optgroup label="Alaskan/Hawaiian Time Zone">
-                  <option value="AK">Alaska</option>
-                  <option value="HI">Hawaii</option>
-                </optgroup>
-                <optgroup label="Pacific Time Zone">
-                  <option value="CA">California</option>
-                  <option value="NV">Nevada</option>
-                  <option value="OR">Oregon</option>
-                  <option value="WA">Washington</option>
-                </optgroup>
-                <optgroup label="Mountain Time Zone">
-                  <option value="AZ">Arizona</option>
-                  <option value="CO">Colorado</option>
-                  <option value="ID">Idaho</option>
-                  <option value="MT">Montana</option>
-                  <option value="NE">Nebraska</option>
-                  <option value="NM">New Mexico</option>
-                  <option value="ND">North Dakota</option>
-                  <option value="UT">Utah</option>
-                  <option value="WY">Wyoming</option>
-                </optgroup>
-                <optgroup label="Central Time Zone">
-                  <option value="AL">Alabama</option>
-                  <option value="AR">Arkansas</option>
-                  <option value="IL">Illinois</option>
-                  <option value="IA">Iowa</option>
-                  <option value="KS">Kansas</option>
-                  <option value="KY">Kentucky</option>
-                  <option value="LA">Louisiana</option>
-                  <option value="MN">Minnesota</option>
-                  <option value="MS">Mississippi</option>
-                  <option value="MO">Missouri</option>
-                  <option value="OK">Oklahoma</option>
-                  <option value="SD">South Dakota</option>
-                  <option value="TX">Texas</option>
-                  <option value="TN">Tennessee</option>
-                  <option value="WI">Wisconsin</option>
-                </optgroup>
-                <optgroup label="Eastern Time Zone">
-                  <option value="CT">Connecticut</option>
-                  <option value="DE">Delaware</option>
-                  <option value="FL">Florida</option>
-                  <option value="GA">Georgia</option>
-                  <option value="IN">Indiana</option>
-                  <option value="ME">Maine</option>
-                  <option value="MD">Maryland</option>
-                  <option value="MA">Massachusetts</option>
-                  <option value="MI">Michigan</option>
-                  <option value="NH">New Hampshire</option>
-                  <option value="NJ">New Jersey</option>
-                  <option value="NY" selected>New York</option>
-                  <option value="NC">North Carolina</option>
-                  <option value="OH">Ohio</option>
-                  <option value="PA">Pennsylvania</option>
-                  <option value="RI">Rhode Island</option>
-                  <option value="SC">South Carolina</option>
-                  <option value="VT">Vermont</option>
-                  <option value="VA">Virginia</option>
-                  <option value="WV">West Virginia</option>
-                </optgroup>
-              </select>
+              <div class="header-search d-flex align-items-center how menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="estate" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
+                  <optgroup label="Alaskan/Hawaiian Time Zone">
+                    <option value="AK">Alaska</option>
+                    <option value="HI">Hawaii</option>
+                  </optgroup>
+                  <optgroup label="Pacific Time Zone">
+                    <option value="CA">California</option>
+                    <option value="NV">Nevada</option>
+                    <option value="OR">Oregon</option>
+                    <option value="WA">Washington</option>
+                  </optgroup>
+                  <optgroup label="Mountain Time Zone">
+                    <option value="AZ">Arizona</option>
+                    <option value="CO">Colorado</option>
+                    <option value="ID">Idaho</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="UT">Utah</option>
+                    <option value="WY">Wyoming</option>
+                  </optgroup>
+                  <optgroup label="Central Time Zone">
+                    <option value="AL">Alabama</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TX">Texas</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="WI">Wisconsin</option>
+                  </optgroup>
+                  <optgroup label="Eastern Time Zone">
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="IN">Indiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NY" selected>New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="OH">Ohio</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WV">West Virginia</option>
+                  </optgroup>
+                </select>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
@@ -217,23 +304,246 @@
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <label for="elicense" class="form-control-label mt-2 p-1">License:</label>
-              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elicense" />
+              <label for="kt_docs_select2_country" class="form-control-label mt-2 p-1">Country:</label>
+              <select class="form-select form-select-transport select2-hidden-accessible" data-placeholder="Select a country" id="kt_docs_select2_country" 
+                      data-select2-id="select2-data-kt_docs_select2_country" tabindex="-1" aria-hidden="true">
+                <option data-select2-id="select2-data-87-ectt"></option>
+                <option value="AF" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/afghanistan.svg" data-select2-id="select2-data-88-0f39">Afghanistan</option>
+                <option value="AX" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/aland-islands.svg" data-select2-id="select2-data-89-t3e3">Aland Islands</option>
+                <option value="AL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/albania.svg" data-select2-id="select2-data-90-fii6">Albania</option>
+                <option value="DZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/algeria.svg" data-select2-id="select2-data-91-a99t">Algeria</option>
+                <option value="AS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/american-samoa.svg" data-select2-id="select2-data-92-ec4i">American Samoa</option>
+                <option value="AD" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/andorra.svg" data-select2-id="select2-data-93-pvpn">Andorra</option>
+                <option value="AO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/angola.svg" data-select2-id="select2-data-94-przr">Angola</option>
+                <option value="AI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/anguilla.svg" data-select2-id="select2-data-95-v09l">Anguilla</option>
+                <option value="AG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/antigua-and-barbuda.svg" data-select2-id="select2-data-96-i63p">Antigua and Barbuda</option>
+                <option value="AR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/argentina.svg" data-select2-id="select2-data-97-d90k">Argentina</option>
+                <option value="AM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/armenia.svg" data-select2-id="select2-data-98-eamt">Armenia</option>
+                <option value="AW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/aruba.svg" data-select2-id="select2-data-99-c14c">Aruba</option>
+                <option value="AU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/australia.svg" data-select2-id="select2-data-100-p67w">Australia</option>
+                <option value="AT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/austria.svg" data-select2-id="select2-data-101-fzd6">Austria</option>
+                <option value="AZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/azerbaijan.svg" data-select2-id="select2-data-102-k1ie">Azerbaijan</option>
+                <option value="BS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bahamas.svg" data-select2-id="select2-data-103-bc00">Bahamas</option>
+                <option value="BH" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bahrain.svg" data-select2-id="select2-data-104-wuma">Bahrain</option>
+                <option value="BD" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bangladesh.svg" data-select2-id="select2-data-105-df16">Bangladesh</option>
+                <option value="BB" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/barbados.svg" data-select2-id="select2-data-106-rewo">Barbados</option>
+                <option value="BY" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/belarus.svg" data-select2-id="select2-data-107-tzsc">Belarus</option>
+                <option value="BE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/belgium.svg" data-select2-id="select2-data-108-zvnn">Belgium</option>
+                <option value="BZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/belize.svg" data-select2-id="select2-data-109-jxbw">Belize</option>
+                <option value="BJ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/benin.svg" data-select2-id="select2-data-110-d5yd">Benin</option>
+                <option value="BM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bermuda.svg" data-select2-id="select2-data-111-e7xb">Bermuda</option>
+                <option value="BT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bhutan.svg" data-select2-id="select2-data-112-m4qq">Bhutan</option>
+                <option value="BO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bolivia.svg" data-select2-id="select2-data-113-u3qe">Bolivia, Plurinational State of</option>
+                <option value="BQ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bonaire.svg" data-select2-id="select2-data-114-vjtc">Bonaire, Sint Eustatius and Saba</option>
+                <option value="BA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bosnia-and-herzegovina.svg" data-select2-id="select2-data-115-uw6y">Bosnia and Herzegovina</option>
+                <option value="BW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/botswana.svg" data-select2-id="select2-data-116-jefi">Botswana</option>
+                <option value="BR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/brazil.svg" data-select2-id="select2-data-117-1mjd">Brazil</option>
+                <option value="IO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/british-indian-ocean-territory.svg" data-select2-id="select2-data-118-7eq1">British Indian Ocean Territory</option>
+                <option value="BN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/brunei.svg" data-select2-id="select2-data-119-ktjt">Brunei Darussalam</option>
+                <option value="BG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/bulgaria.svg" data-select2-id="select2-data-120-csr8">Bulgaria</option>
+                <option value="BF" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/burkina-faso.svg" data-select2-id="select2-data-121-m2b8">Burkina Faso</option>
+                <option value="BI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/burundi.svg" data-select2-id="select2-data-122-0cix">Burundi</option>
+                <option value="KH" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/cambodia.svg" data-select2-id="select2-data-123-b2om">Cambodia</option>
+                <option value="CM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/cameroon.svg" data-select2-id="select2-data-124-zmoh">Cameroon</option>
+                <option value="CA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/canada.svg" data-select2-id="select2-data-125-ow8l">Canada</option>
+                <option value="CV" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/cape-verde.svg" data-select2-id="select2-data-126-l6iv">Cape Verde</option>
+                <option value="KY" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/cayman-islands.svg" data-select2-id="select2-data-127-gycp">Cayman Islands</option>
+                <option value="CF" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/central-african-republic.svg" data-select2-id="select2-data-128-1h0n">Central African Republic</option>
+                <option value="TD" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/chad.svg" data-select2-id="select2-data-129-hdcg">Chad</option>
+                <option value="CL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/chile.svg" data-select2-id="select2-data-130-azfu">Chile</option>
+                <option value="CN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/china.svg" data-select2-id="select2-data-131-5nfb">China</option>
+                <option value="CX" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/christmas-island.svg" data-select2-id="select2-data-132-rxyp">Christmas Island</option>
+                <option value="CC" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/cocos-island.svg" data-select2-id="select2-data-133-ethb">Cocos (Keeling) Islands</option>
+                <option value="CO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/colombia.svg" data-select2-id="select2-data-134-1w76">Colombia</option>
+                <option value="KM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/comoros.svg" data-select2-id="select2-data-135-d60j">Comoros</option>
+                <option value="CK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/cook-islands.svg" data-select2-id="select2-data-136-bcoe">Cook Islands</option>
+                <option value="CR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/costa-rica.svg" data-select2-id="select2-data-137-krgp">Costa Rica</option>
+                <option value="CI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/ivory-coast.svg" data-select2-id="select2-data-138-8bli">Côte d'Ivoire</option>
+                <option value="HR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/croatia.svg" data-select2-id="select2-data-139-7yjz">Croatia</option>
+                <option value="CU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/cuba.svg" data-select2-id="select2-data-140-mms8">Cuba</option>
+                <option value="CW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/curacao.svg" data-select2-id="select2-data-141-ygs9">Curaçao</option>
+                <option value="CZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/czech-republic.svg" data-select2-id="select2-data-142-i7xd">Czech Republic</option>
+                <option value="DK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/denmark.svg" data-select2-id="select2-data-143-zwlb">Denmark</option>
+                <option value="DJ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/djibouti.svg" data-select2-id="select2-data-144-594w">Djibouti</option>
+                <option value="DM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/dominica.svg" data-select2-id="select2-data-145-4rla">Dominica</option>
+                <option value="DO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/dominican-republic.svg" data-select2-id="select2-data-146-3db2">Dominican Republic</option>
+                <option value="EC" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/ecuador.svg" data-select2-id="select2-data-147-hb69">Ecuador</option>
+                <option value="EG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/egypt.svg" data-select2-id="select2-data-148-9khe">Egypt</option>
+                <option value="SV" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/el-salvador.svg" data-select2-id="select2-data-149-3v0k">El Salvador</option>
+                <option value="GQ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/equatorial-guinea.svg" data-select2-id="select2-data-150-bea7">Equatorial Guinea</option>
+                <option value="ER" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/eritrea.svg" data-select2-id="select2-data-151-r90b">Eritrea</option>
+                <option value="EE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/estonia.svg" data-select2-id="select2-data-152-4zfb">Estonia</option>
+                <option value="ET" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/ethiopia.svg" data-select2-id="select2-data-153-ej4a">Ethiopia</option>
+                <option value="FK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/falkland-islands.svg" data-select2-id="select2-data-154-yxmc">Falkland Islands (Malvinas)</option>
+                <option value="FJ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/fiji.svg" data-select2-id="select2-data-155-wq6t">Fiji</option>
+                <option value="FI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/finland.svg" data-select2-id="select2-data-156-37h6">Finland</option>
+                <option value="FR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/france.svg" data-select2-id="select2-data-157-qftl">France</option>
+                <option value="PF" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/french-polynesia.svg" data-select2-id="select2-data-158-k6hr">French Polynesia</option>
+                <option value="GA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/gabon.svg" data-select2-id="select2-data-159-829i">Gabon</option>
+                <option value="GM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/gambia.svg" data-select2-id="select2-data-160-2eu3">Gambia</option>
+                <option value="GE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/georgia.svg" data-select2-id="select2-data-161-7lrx">Georgia</option>
+                <option value="DE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/germany.svg" data-select2-id="select2-data-162-rneh">Germany</option>
+                <option value="GH" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/ghana.svg" data-select2-id="select2-data-163-z39c">Ghana</option>
+                <option value="GI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/gibraltar.svg" data-select2-id="select2-data-164-jt7h">Gibraltar</option>
+                <option value="GR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/greece.svg" data-select2-id="select2-data-165-mwj9">Greece</option>
+                <option value="GL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/greenland.svg" data-select2-id="select2-data-166-4lk9">Greenland</option>
+                <option value="GD" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/grenada.svg" data-select2-id="select2-data-167-hcz9">Grenada</option>
+                <option value="GU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/guam.svg" data-select2-id="select2-data-168-edlv">Guam</option>
+                <option value="GT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/guatemala.svg" data-select2-id="select2-data-169-1f9z">Guatemala</option>
+                <option value="GG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/guernsey.svg" data-select2-id="select2-data-170-e6sm">Guernsey</option>
+                <option value="GN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/guinea.svg" data-select2-id="select2-data-171-zhz4">Guinea</option>
+                <option value="GW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/guinea-bissau.svg" data-select2-id="select2-data-172-5ttc">Guinea-Bissau</option>
+                <option value="HT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/haiti.svg" data-select2-id="select2-data-173-ylmh">Haiti</option>
+                <option value="VA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/vatican-city.svg" data-select2-id="select2-data-174-8rqo">Holy See (Vatican City State)</option>
+                <option value="HN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/honduras.svg" data-select2-id="select2-data-175-mxec">Honduras</option>
+                <option value="HK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/hong-kong.svg" data-select2-id="select2-data-176-a0cd">Hong Kong</option>
+                <option value="HU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/hungary.svg" data-select2-id="select2-data-177-681y">Hungary</option>
+                <option value="IS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/iceland.svg" data-select2-id="select2-data-178-cmc6">Iceland</option>
+                <option value="IN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/india.svg" data-select2-id="select2-data-179-hard">India</option>
+                <option value="ID" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/indonesia.svg" data-select2-id="select2-data-180-a3vz">Indonesia</option>
+                <option value="IR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/iran.svg" data-select2-id="select2-data-181-op2p">Iran, Islamic Republic of</option>
+                <option value="IQ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/iraq.svg" data-select2-id="select2-data-182-q66v">Iraq</option>
+                <option value="IE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/ireland.svg" data-select2-id="select2-data-183-jxiz">Ireland</option>
+                <option value="IM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/isle-of-man.svg" data-select2-id="select2-data-184-37i2">Isle of Man</option>
+                <option value="IL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/israel.svg" data-select2-id="select2-data-185-ctjj">Israel</option>
+                <option value="IT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/italy.svg" data-select2-id="select2-data-186-dmte">Italy</option>
+                <option value="JM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/jamaica.svg" data-select2-id="select2-data-187-9gpb">Jamaica</option>
+                <option value="JP" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/japan.svg" data-select2-id="select2-data-188-2rgp">Japan</option>
+                <option value="JE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/jersey.svg" data-select2-id="select2-data-189-q4rj">Jersey</option>
+                <option value="JO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/jordan.svg" data-select2-id="select2-data-190-ym4t">Jordan</option>
+                <option value="KZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/kazakhstan.svg" data-select2-id="select2-data-191-zsk2">Kazakhstan</option>
+                <option value="KE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/kenya.svg" data-select2-id="select2-data-192-20gp">Kenya</option>
+                <option value="KI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/kiribati.svg" data-select2-id="select2-data-193-6axb">Kiribati</option>
+                <option value="KP" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/north-korea.svg" data-select2-id="select2-data-194-3tra">Korea, Democratic People's Republic of</option>
+                <option value="KW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/kuwait.svg" data-select2-id="select2-data-195-wy0y">Kuwait</option>
+                <option value="KG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/kyrgyzstan.svg" data-select2-id="select2-data-196-t2gv">Kyrgyzstan</option>
+                <option value="LA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/laos.svg" data-select2-id="select2-data-197-pito">Lao People's Democratic Republic</option>
+                <option value="LV" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/latvia.svg" data-select2-id="select2-data-198-9zlm">Latvia</option>
+                <option value="LB" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/lebanon.svg" data-select2-id="select2-data-199-hess">Lebanon</option>
+                <option value="LS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/lesotho.svg" data-select2-id="select2-data-200-f1eb">Lesotho</option>
+                <option value="LR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/liberia.svg" data-select2-id="select2-data-201-kmmf">Liberia</option>
+                <option value="LY" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/libya.svg" data-select2-id="select2-data-202-5tkk">Libya</option>
+                <option value="LI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/liechtenstein.svg" data-select2-id="select2-data-203-kqzo">Liechtenstein</option>
+                <option value="LT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/lithuania.svg" data-select2-id="select2-data-204-1b5p">Lithuania</option>
+                <option value="LU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/luxembourg.svg" data-select2-id="select2-data-205-22ct">Luxembourg</option>
+                <option value="MO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/macao.svg" data-select2-id="select2-data-206-op8u">Macao</option>
+                <option value="MG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/madagascar.svg" data-select2-id="select2-data-207-lfg0">Madagascar</option>
+                <option value="MW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/malawi.svg" data-select2-id="select2-data-208-ev7b">Malawi</option>
+                <option value="MY" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/malaysia.svg" data-select2-id="select2-data-209-bi8y">Malaysia</option>
+                <option value="MV" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/maldives.svg" data-select2-id="select2-data-210-hr1z">Maldives</option>
+                <option value="ML" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/mali.svg" data-select2-id="select2-data-211-vrw4">Mali</option>
+                <option value="MT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/malta.svg" data-select2-id="select2-data-212-pkn8">Malta</option>
+                <option value="MH" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/marshall-island.svg" data-select2-id="select2-data-213-yeav">Marshall Islands</option>
+                <option value="MQ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/martinique.svg" data-select2-id="select2-data-214-6zry">Martinique</option>
+                <option value="MR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/mauritania.svg" data-select2-id="select2-data-215-svb2">Mauritania</option>
+                <option value="MU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/mauritius.svg" data-select2-id="select2-data-216-74c4">Mauritius</option>
+                <option value="MX" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/mexico.svg" data-select2-id="select2-data-217-tqg0">Mexico</option>
+                <option value="FM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/micronesia.svg" data-select2-id="select2-data-218-3olf">Micronesia, Federated States of</option>
+                <option value="MD" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/moldova.svg" data-select2-id="select2-data-219-k4l1">Moldova, Republic of</option>
+                <option value="MC" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/monaco.svg" data-select2-id="select2-data-220-z27l">Monaco</option>
+                <option value="MN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/mongolia.svg" data-select2-id="select2-data-221-1fvk">Mongolia</option>
+                <option value="ME" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/montenegro.svg" data-select2-id="select2-data-222-5qv7">Montenegro</option>
+                <option value="MS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/montserrat.svg" data-select2-id="select2-data-223-a9eb">Montserrat</option>
+                <option value="MA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/morocco.svg" data-select2-id="select2-data-224-ep3m">Morocco</option>
+                <option value="MZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/mozambique.svg" data-select2-id="select2-data-225-y0kq">Mozambique</option>
+                <option value="MM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/myanmar.svg" data-select2-id="select2-data-226-ijwu">Myanmar</option>
+                <option value="NA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/namibia.svg" data-select2-id="select2-data-227-89me">Namibia</option>
+                <option value="NR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/nauru.svg" data-select2-id="select2-data-228-tltb">Nauru</option>
+                <option value="NP" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/nepal.svg" data-select2-id="select2-data-229-7s4r">Nepal</option>
+                <option value="NL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/netherlands.svg" data-select2-id="select2-data-230-ubom">Netherlands</option>
+                <option value="NZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/new-zealand.svg" data-select2-id="select2-data-231-ijkh">New Zealand</option>
+                <option value="NI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/nicaragua.svg" data-select2-id="select2-data-232-5uld">Nicaragua</option>
+                <option value="NE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/niger.svg" data-select2-id="select2-data-233-n09h">Niger</option>
+                <option value="NG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/nigeria.svg" data-select2-id="select2-data-234-4rv5">Nigeria</option>
+                <option value="NU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/niue.svg" data-select2-id="select2-data-235-itow">Niue</option>
+                <option value="NF" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/norfolk-island.svg" data-select2-id="select2-data-236-h5x1">Norfolk Island</option>
+                <option value="MP" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/northern-mariana-islands.svg" data-select2-id="select2-data-237-nbjm">Northern Mariana Islands</option>
+                <option value="NO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/norway.svg" data-select2-id="select2-data-238-9zc9">Norway</option>
+                <option value="OM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/oman.svg" data-select2-id="select2-data-239-53qm">Oman</option>
+                <option value="PK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/pakistan.svg" data-select2-id="select2-data-240-iwgp">Pakistan</option>
+                <option value="PW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/palau.svg" data-select2-id="select2-data-241-zp8y">Palau</option>
+                <option value="PS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/palestine.svg" data-select2-id="select2-data-242-b2dl">Palestinian Territory, Occupied</option>
+                <option value="PA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/panama.svg" data-select2-id="select2-data-243-2cl4">Panama</option>
+                <option value="PG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/papua-new-guinea.svg" data-select2-id="select2-data-244-dlqf">Papua New Guinea</option>
+                <option value="PY" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/paraguay.svg" data-select2-id="select2-data-245-tnd3">Paraguay</option>
+                <option value="PE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/peru.svg" data-select2-id="select2-data-246-r8c4">Peru</option>
+                <option value="PH" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/philippines.svg" data-select2-id="select2-data-247-y28v">Philippines</option>
+                <option value="PL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/poland.svg" data-select2-id="select2-data-248-a2pj">Poland</option>
+                <option value="PT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/portugal.svg" data-select2-id="select2-data-249-fo00">Portugal</option>
+                <option value="PR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/puerto-rico.svg" data-select2-id="select2-data-250-agiv">Puerto Rico</option>
+                <option value="QA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/qatar.svg" data-select2-id="select2-data-251-uffr">Qatar</option>
+                <option value="RO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/romania.svg" data-select2-id="select2-data-252-vzmb">Romania</option>
+                <option value="RU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/russia.svg" data-select2-id="select2-data-253-f7ts">Russian Federation</option>
+                <option value="RW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/rwanda.svg" data-select2-id="select2-data-254-9hlu">Rwanda</option>
+                <option value="BL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/st-barts.svg" data-select2-id="select2-data-255-m3t4">Saint Barthélemy</option>
+                <option value="KN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/saint-kitts-and-nevis.svg" data-select2-id="select2-data-256-kumd">Saint Kitts and Nevis</option>
+                <option value="LC" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/st-lucia.svg" data-select2-id="select2-data-257-q6jm">Saint Lucia</option>
+                <option value="MF" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/sint-maarten.svg" data-select2-id="select2-data-258-fgsl">Saint Martin (French part)</option>
+                <option value="VC" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/st-vincent-and-the-grenadines.svg" data-select2-id="select2-data-259-x5da">Saint Vincent and the Grenadines</option>
+                <option value="WS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/samoa.svg" data-select2-id="select2-data-260-8d3t">Samoa</option>
+                <option value="SM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/san-marino.svg" data-select2-id="select2-data-261-vumd">San Marino</option>
+                <option value="ST" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/sao-tome-and-prince.svg" data-select2-id="select2-data-262-1wkm">Sao Tome and Principe</option>
+                <option value="SA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/saudi-arabia.svg" data-select2-id="select2-data-263-bfnn">Saudi Arabia</option>
+                <option value="SN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/senegal.svg" data-select2-id="select2-data-264-xpza">Senegal</option>
+                <option value="RS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/serbia.svg" data-select2-id="select2-data-265-aq4t">Serbia</option>
+                <option value="SC" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/seychelles.svg" data-select2-id="select2-data-266-r9ma">Seychelles</option>
+                <option value="SL" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/sierra-leone.svg" data-select2-id="select2-data-267-kjao">Sierra Leone</option>
+                <option value="SG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/singapore.svg" data-select2-id="select2-data-268-uy7n">Singapore</option>
+                <option value="SX" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/sint-maarten.svg" data-select2-id="select2-data-269-zx64">Sint Maarten (Dutch part)</option>
+                <option value="SK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/slovakia.svg" data-select2-id="select2-data-270-fbi4">Slovakia</option>
+                <option value="SI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/slovenia.svg" data-select2-id="select2-data-271-msh8">Slovenia</option>
+                <option value="SB" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/solomon-islands.svg" data-select2-id="select2-data-272-avtn">Solomon Islands</option>
+                <option value="SO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/somalia.svg" data-select2-id="select2-data-273-3r8s">Somalia</option>
+                <option value="ZA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/south-africa.svg" data-select2-id="select2-data-274-8gdt">South Africa</option>
+                <option value="KR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/south-korea.svg" data-select2-id="select2-data-275-mdiy">South Korea</option>
+                <option value="SS" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/south-sudan.svg" data-select2-id="select2-data-276-vcat">South Sudan</option>
+                <option value="ES" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/spain.svg" data-select2-id="select2-data-277-x5xx">Spain</option>
+                <option value="LK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/sri-lanka.svg" data-select2-id="select2-data-278-wm6n">Sri Lanka</option>
+                <option value="SD" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/sudan.svg" data-select2-id="select2-data-279-f447">Sudan</option>
+                <option value="SR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/suriname.svg" data-select2-id="select2-data-280-457y">Suriname</option>
+                <option value="SZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/swaziland.svg" data-select2-id="select2-data-281-35ov">Swaziland</option>
+                <option value="SE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/sweden.svg" data-select2-id="select2-data-282-1byj">Sweden</option>
+                <option value="CH" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/switzerland.svg" data-select2-id="select2-data-283-ekvc">Switzerland</option>
+                <option value="SY" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/syria.svg" data-select2-id="select2-data-284-ur39">Syrian Arab Republic</option>
+                <option value="TW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/taiwan.svg" data-select2-id="select2-data-285-gnsj">Taiwan, Province of China</option>
+                <option value="TJ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/tajikistan.svg" data-select2-id="select2-data-286-ntu7">Tajikistan</option>
+                <option value="TZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/tanzania.svg" data-select2-id="select2-data-287-sdu2">Tanzania, United Republic of</option>
+                <option value="TH" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/thailand.svg" data-select2-id="select2-data-288-mc9z">Thailand</option>
+                <option value="TG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/togo.svg" data-select2-id="select2-data-289-ugim">Togo</option>
+                <option value="TK" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/tokelau.svg" data-select2-id="select2-data-290-dot1">Tokelau</option>
+                <option value="TO" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/tonga.svg" data-select2-id="select2-data-291-fzn5">Tonga</option>
+                <option value="TT" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/trinidad-and-tobago.svg" data-select2-id="select2-data-292-sp08">Trinidad and Tobago</option>
+                <option value="TN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/tunisia.svg" data-select2-id="select2-data-293-ecz8">Tunisia</option>
+                <option value="TR" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/turkey.svg" data-select2-id="select2-data-294-00f8">Turkey</option>
+                <option value="TM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/turkmenistan.svg" data-select2-id="select2-data-295-i78c">Turkmenistan</option>
+                <option value="TC" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/turks-and-caicos.svg" data-select2-id="select2-data-296-p7kp">Turks and Caicos Islands</option>
+                <option value="TV" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/tuvalu.svg" data-select2-id="select2-data-297-84z0">Tuvalu</option>
+                <option value="UG" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/uganda.svg" data-select2-id="select2-data-298-q355">Uganda</option>
+                <option value="UA" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/ukraine.svg" data-select2-id="select2-data-299-w73j">Ukraine</option>
+                <option value="AE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/united-arab-emirates.svg" data-select2-id="select2-data-300-wc7w">United Arab Emirates</option>
+                <option value="GB" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/united-kingdom.svg" data-select2-id="select2-data-301-n3wq">United Kingdom</option>
+                <option value="US" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/united-states.svg" selected="" data-select2-id="select2-data-70-c0c5">United States</option>
+                <option value="UY" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/uruguay.svg" data-select2-id="select2-data-302-0rea">Uruguay</option>
+                <option value="UZ" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/uzbekistan.svg" data-select2-id="select2-data-303-fb72">Uzbekistan</option>
+                <option value="VU" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/vanuatu.svg" data-select2-id="select2-data-304-naic">Vanuatu</option>
+                <option value="VE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/venezuela.svg" data-select2-id="select2-data-305-i3lg">Venezuela, Bolivarian Republic of</option>
+                <option value="VN" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/vietnam.svg" data-select2-id="select2-data-306-n3j4">Vietnam</option>
+                <option value="VI" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/virgin-islands.svg" data-select2-id="select2-data-307-tjah">Virgin Islands</option>
+                <option value="YE" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/yemen.svg" data-select2-id="select2-data-308-d9h9">Yemen</option>
+                <option value="ZM" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/zambia.svg" data-select2-id="select2-data-309-0rlq">Zambia</option>
+                <option value="ZW" data-kt-select2-country="https://preview.keenthemes.com/html/craft/docs/assets/media/flags/zimbabwe.svg" data-select2-id="select2-data-310-x65t">Zimbabwe</option>
+              </select>
             </div>
           </div>
-          
+        </div>
+        <div class="separator separator-content border-gray-600 my-10">
+          <span class="w-200px fw-bold">Point of Contact</span>
+        </div>
+        <div class="row">
           <div class="col-md-4">
             <div class="form-group">
-              <label for="ecname" class="form-control-label mt-2 p-1"
-                >Contact Name:</label
-              >
+              <label for="ecname" class="form-control-label mt-2 p-1">Contact Name:</label>
               <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecname" />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="ecemail" class="form-control-label mt-2 p-1" >Contact Email:</label>
-              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecemail" />
             </div>
           </div>
           <div class="col-md-4">
@@ -244,11 +554,8 @@
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <label for="estatus" class="form-control-label mt-2 p-1">Status:</label>
-              <select id="estatus" class="form-control custom-select">
-                <option value="1">Active</option>
-                <option value="2">Inactive</option>
-              </select>
+              <label for="ecemail" class="form-control-label mt-2 p-1" >Contact Email:</label>
+              <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecemail" />
             </div>
           </div>
         </div>
@@ -257,11 +564,9 @@
         <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
         <button type="button" class="btn btn-primary" id="meditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
-      
     </div>
   </div>
 </div>
-
 <div  class="modal fade"  id="specialist-pwd-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -334,8 +639,7 @@
     </div>
   </div>
 </div>
-<div
-  class="modal fade"  id="specialist-clinic-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
+<div class="modal fade"  id="specialist-clinic-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -365,7 +669,6 @@
     </div>
   </div>
 </div>
-
 <div class="modal fade" id="specialist_import_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">

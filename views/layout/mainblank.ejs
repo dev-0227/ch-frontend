@@ -30,7 +30,7 @@
 					</div>
 					<div class="content fs-6 d-flex flex-column flex-column-fluid" id="kt_content">
 						<%- include("toolbar"); %>
-						<div class="container-xxl">
+						<div class="container-xxl" style="max-width: -webkit-fill-available; padding-left: 5%; padding-right: 5%;">
 						<%- include(pageKey); %>
 						</div>
 					</div>
@@ -58,6 +58,8 @@
 		<script src="/assets/js/custom/autocomplete.js"></script>
 		<script src="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
 		<script src="/assets/js/api.js"></script>
+		<script src="https://preview.keenthemes.com/html/craft/docs/assets/js/custom/documentation/forms/select2.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/imagekit-javascript/dist/imagekit.min.js"></script>
 		<script src="/assets/js/pages/<%- pageKey -%>.js"></script>
 		<script>
 			async function inactivitylogout() {
