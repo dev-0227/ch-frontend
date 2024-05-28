@@ -2,41 +2,41 @@
 $(document).ready(async function () {
   "use strict";
 
-  // Fetch country flags from FlagIcon API
-  // fetch('https://restcountries.com/v3.1/all').then(response => response.json()).then(data => {
-  //     // Process the response data
-  //     const uniqueLanguages = new Set();
-  //     data.forEach(country => {
-  //       const countryLanguages = country.languages;
-  //       if (countryLanguages) {
-  //         Object.values(countryLanguages).map(language => {
-  //           uniqueLanguages.add(language);
-  //         })
-  //       }
-  //   });
-  //   const allLanguages = Array.from(uniqueLanguages);
-  //   allLanguages.sort();
-  //   allLanguages.forEach(lang => {
-  //     if (lang == 'English') $("#elanguage").append(`<option value='${lang}' selected='' data-select2-id='${lang}'>${lang}</option>`);
-  //     else $("#elanguage").append(`<option value='${lang}' data-select2-id='${lang}'>${lang}</option>`);
-  //   })
-  // }).catch(error => console.error('Error fetching data:', error));
-
   await sendRequest('https://restcountries.com/v3.1/all', (xhr, res) => {
     const uniqueLanguages = new Set();
+    let flags = new Array();
     JSON.parse(xhr.responseText).forEach(country => {
-        const countryLanguages = country.languages;
-        if (countryLanguages) {
-          Object.values(countryLanguages).map(language => {
-            uniqueLanguages.add(language);
-          })
-        }
+      flags.push({
+        countryName: country.name.common,
+        val: country.cca2,
+        flagUrl: country.flags.svg,
+        id: country.area
+      });
+      
+      const countryLanguages = country.languages;
+      if (countryLanguages) {
+        Object.values(countryLanguages).map(language => {
+          uniqueLanguages.add(language);
+        })
+      }
     });
+
     const allLanguages = Array.from(uniqueLanguages);
     allLanguages.sort();
     allLanguages.forEach(lang => {
       if (lang == 'English') $("#elanguage").append(`<option value='${lang}' selected='' data-select2-id='${lang}'>${lang}</option>`);
       else $("#elanguage").append(`<option value='${lang}' data-select2-id='${lang}'>${lang}</option>`);
+    });
+
+    flags.sort(function(a, b) {
+      let x = a.countryName.toLowerCase();
+      let y = b.countryName.toLowerCase();
+      if (x < y) return -1;
+      if (x > y) return 1;
+      return 0;
+    });
+    flags.forEach(flag => {
+      $("#kt_docs_select2_country").append(`<option value='${flag.val}' data-kt-select2-country='${flag.flagUrl}' data-select2-id='${flag.id}'>${flag.countryName}</option>`);
     })
   })
 
