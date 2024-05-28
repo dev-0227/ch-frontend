@@ -71,11 +71,10 @@ $(document).ready(async function () {
       var options = '';
       for(var i=0; i<result.length; i++){
         options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
-        console.log(result[i]);
       }
       // select Doctor of Medicine
       $("#equalification").html(options);
-      $("#equalification").val(151).trigger('change');
+      $("#equalification").val('151').trigger('change');
     }
   });
 
