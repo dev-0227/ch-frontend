@@ -3,10 +3,28 @@ $(document).ready(async function () {
   "use strict";
 
   // Fetch country flags from FlagIcon API
-  fetch('https://restcountries.com/v3.1/all').then(response => response.json()).then(data => {
-      // Process the response data
-      const uniqueLanguages = new Set();
-      data.forEach(country => {
+  // fetch('https://restcountries.com/v3.1/all').then(response => response.json()).then(data => {
+  //     // Process the response data
+  //     const uniqueLanguages = new Set();
+  //     data.forEach(country => {
+  //       const countryLanguages = country.languages;
+  //       if (countryLanguages) {
+  //         Object.values(countryLanguages).map(language => {
+  //           uniqueLanguages.add(language);
+  //         })
+  //       }
+  //   });
+  //   const allLanguages = Array.from(uniqueLanguages);
+  //   allLanguages.sort();
+  //   allLanguages.forEach(lang => {
+  //     if (lang == 'English') $("#elanguage").append(`<option value='${lang}' selected='' data-select2-id='${lang}'>${lang}</option>`);
+  //     else $("#elanguage").append(`<option value='${lang}' data-select2-id='${lang}'>${lang}</option>`);
+  //   })
+  // }).catch(error => console.error('Error fetching data:', error));
+
+  await sendRequest('https://restcountries.com/v3.1/all', (xhr, res) => {
+    const uniqueLanguages = new Set();
+    JSON.parse(xhr.responseText).forEach(country => {
         const countryLanguages = country.languages;
         if (countryLanguages) {
           Object.values(countryLanguages).map(language => {
@@ -20,7 +38,7 @@ $(document).ready(async function () {
       if (lang == 'English') $("#elanguage").append(`<option value='${lang}' selected='' data-select2-id='${lang}'>${lang}</option>`);
       else $("#elanguage").append(`<option value='${lang}' data-select2-id='${lang}'>${lang}</option>`);
     })
-  }).catch(error => console.error('Error fetching data:', error));
+  })
 
   let sp = []
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
