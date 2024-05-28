@@ -57,6 +57,13 @@ router.get("/organizationtype", (req, res, next) => {
     })
 })
 
+router.get("/qualification", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Qualification List",
+        pageKey: "../settings/qualification"
+    })
+})
+
 router.post("/logger", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Audit Event",

@@ -130,39 +130,45 @@
                   <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
                 </div>
               </div>
-              <div class="col-md-4">
-                <label for="edob" class="form-control-label mt-2 p-1">Status:</label>
-                <div class="form-group" id="edob" data-td-target-input="nearest" data-td-target-toggle="nearest">
-                  <input id="edob_input" type="text" class="form-control" data-td-target="#edob"/>
-                  <span class="input-group-text" data-td-target="#edob" data-td-toggle="datetimepicker">
-                      <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
-                  </span>
-                </div>
+              <div class="col-md-2">
+                <label for="edob" class="required form-control-label mt-2 p-1">Date of Birth:</label>
+                <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="approve_date" id="edob">
               </div>
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <div class="form-group">
-                  <label for="egender" class="form-control-label mt-2 p-1">Status:</label>
+                  <label for="egender" class="form-control-label mt-2 p-1">Gender:</label>
                   <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                    <select id="egender" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
+                    <select id="egender" aria-label="Gender" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
                       <option value="1">Male</option>
                       <option value="2">Female</option>
                     </select>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <select class="form-select form-select-lg form-select-solid" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple">
+              <div class="col-md-8">
+                <label for="elanguage" class="required form-control-label mt-2 p-1">Spoken Language:</label>
+                <select id="elanguage" class="form-select form-select-lg form-select-solid" data-control="select2" data-placeholder="Select languages" data-allow-clear="true" multiple="multiple">
                   <option></option>
               </select>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-5">
                 <div class="form-group">
                   <label for="specialty_id" class="required form-control-label mt-2 p-1">Specialty:</label>
                   <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="specialty_id">
                   </select>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="equalification" class="form-control-label mt-2 p-1">Qualification:</label>
+                  <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                    <select id="equalification" aria-label="" data-control="select2" data-hide-search="true" data-placeholder="Qualification" class="form-select mb-2">
+                      <option></option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
                 <div class="form-group">
                   <label for="insurance_id" class="form-control-label mt-2 p-1">Insurance:</label>
                   <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="insurance_id">

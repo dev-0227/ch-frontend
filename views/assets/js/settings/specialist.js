@@ -3,15 +3,24 @@ $(document).ready(async function () {
   "use strict";
 
   // Fetch country flags from FlagIcon API
-  // fetch('https://restcountries.com/v3.1/all').then(response => response.json()).then(data => {
-  //     // Process the response data
-  //     data.forEach(country => {
-  //       const countryName = country.name.common;
-  //       const flagUrl = country.flags.png;
-  //       console.log(flagUrl, countryName);
-  //       // Do something with countryName and flagUrl
-  //   });
-  // }).catch(error => console.error('Error fetching data:', error));
+  fetch('https://restcountries.com/v3.1/all').then(response => response.json()).then(data => {
+      // Process the response data
+      const uniqueLanguages = new Set();
+      data.forEach(country => {
+        const countryLanguages = country.languages;
+        if (countryLanguages) {
+          Object.values(countryLanguages).map(language => {
+            uniqueLanguages.add(language);
+          })
+        }
+    });
+    const allLanguages = Array.from(uniqueLanguages);
+    allLanguages.sort();
+    allLanguages.forEach(lang => {
+      if (lang == 'English') $("#elanguage").append(`<option value='${lang}' selected='' data-select2-id='${lang}'>${lang}</option>`);
+      else $("#elanguage").append(`<option value='${lang}' data-select2-id='${lang}'>${lang}</option>`);
+    })
+  }).catch(error => console.error('Error fetching data:', error));
 
   let sp = []
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
@@ -34,6 +43,17 @@ $(document).ready(async function () {
         options += '<option value="'+result[i]['id']+'" >'+result[i]['insName']+'</option>';
       }
       $("#insurance_id").html(options);
+    }
+  });
+
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "qualification", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<result.length; i++){
+        options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
+      }
+      $("#equalification").html(options);
     }
   });
 
@@ -126,6 +146,10 @@ $(document).ready(async function () {
 
   $(document).on("click",".manageraddbtn",function(){
     $('#chosen_manager').val("");
+    $("#egender").val(1).trigger('change');
+    $("#equalification").val('').trigger('change');
+    $("#edob").val('');
+    $("#elanguage").val('English').trigger('change');
     $("#efname").val("");
     $("#elname").val("");
     $("#emname").val("");
@@ -163,6 +187,9 @@ $(document).ready(async function () {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         $("#efname").val(result[0]['fname']);
+        $("#edob").val(result[0]['dob']);
+        $("#equalification").val(result[0]['qualification']).trigger('change');
+        $("#egender").val(result[0]['gender']).trigger('change');
         $("#elname").val(result[0]['lname']);
         $("#emname").val(result[0]['mname']);
         $("#enpi").val(result[0]['npi']);
@@ -186,6 +213,11 @@ $(document).ready(async function () {
         if (result[0]['photo'] != '') document.getElementById('specialistPhoto').style.backgroundImage = `url(data:image/png;base64,${result[0]['photo']})`;
         else if (result[0]['photo'] == '') document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
 
+        if(result[0]['language']){
+          $("#elanguage").val(result[0]['language'].split(",")).trigger('change');
+        }else{
+          $("#elanguage").val("").trigger('change');
+        }
         if(result[0]['specialty_id']){
           $("#specialty_id").val(result[0]['specialty_id'].split(",")).trigger('change');
         }else{
@@ -347,23 +379,31 @@ $(document).ready(async function () {
   
   $("#meditbtn").click(function (e) {
     if($("#efname").val() == ""){
-      toastr.info('Please enter First name');
+      toastr.warning('Please enter First name');
       $("#efname").focus();
       return;
     }
     if($("#elname").val() == ""){
-      toastr.info('Please enter Last name');
+      toastr.warning('Please enter Last name');
       $("#elname").focus();
       return;
     }
     if($("#etel").val() == ""){
-      toastr.info('Please enter Phone number');
+      toastr.warning('Please enter Phone number');
       $("#etel").focus();
       return;
     }
     if($("#specialty_id").val() == ""){
-      toastr.info('Please enter Specialty');
+      toastr.warning('Please enter Specialty');
       $("#specialty_id").focus();
+      return;
+    }
+    if ($('#edob').val() == '') {
+      toastr.warning('Please enter date of birth');
+      return;
+    }
+    if ($("#elanguage").val() == '') {
+      toastr.warning('Please select languages');
       return;
     }
 
@@ -373,6 +413,10 @@ $(document).ready(async function () {
         fname: document.getElementById('efname').value,
         lname: document.getElementById('elname').value,
         mname: document.getElementById('emname').value,
+        dob: document.getElementById('edob').value,
+        qualification: document.getElementById('equalification').value,
+        gender: document.getElementById('egender').value,
+        language: $("#elanguage").val().toString(),
         web: document.getElementById('eweb').value,
         npi: document.getElementById('enpi').value,
         license: document.getElementById('elicense').value,
@@ -393,7 +437,7 @@ $(document).ready(async function () {
         specialty_id: $('#specialty_id').val().toString(),
         insurance_id: $('#insurance_id').val().toString(),
         taxonomy: $('#taxonomy').val(),
-        photo: "###@@@###"
+        photo: ""
       }
 
       if($('#chosen_manager').val()==""){
@@ -426,77 +470,81 @@ $(document).ready(async function () {
       setTimeout( function () {
         managertable.ajax.reload();
       }, 1000 );
-    }
+    } else {
+      //upload image
+      var filename = '';
+      var formData = new FormData();
+      formData.append("ephoto", document.getElementById('ephoto').files[0]);
+      sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "specialist/uploadimage", (xhr, err) => {
+        if (!err) {
+          if (JSON.parse(xhr.responseText)['data'] === undefined) filename = '';
+          else filename = JSON.parse(xhr.responseText)['data'].filename;
 
-    //upload image
-    var filename = '';
-    var formData = new FormData();
-    formData.append("ephoto", document.getElementById('ephoto').files[0]);
-    sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "specialist/uploadimage", (xhr, err) => {
-      if (!err) {
-        if (JSON.parse(xhr.responseText)['data'] === undefined) filename = '';
-        else filename = JSON.parse(xhr.responseText)['data'].filename;
-
-        let entry = {
-          id: $('#chosen_manager').val(),
-          fname: document.getElementById('efname').value,
-          lname: document.getElementById('elname').value,
-          mname: document.getElementById('emname').value,
-          web: document.getElementById('eweb').value,
-          npi: document.getElementById('enpi').value,
-          license: document.getElementById('elicense').value,
-          email: document.getElementById('eemail').value,
-          tel: document.getElementById('etel').value,
-          cel: document.getElementById('ecel').value,
-          address: document.getElementById('eaddress').value,
-          address2: document.getElementById('eaddress2').value,
-          fax: document.getElementById('efax').value,
-          city: document.getElementById('ecity').value,
-          state: document.getElementById('estate').value,
-          country: document.getElementById('kt_docs_select2_country').value,
-          zip: document.getElementById('ezip').value,
-          cname: document.getElementById('ecname').value,
-          cemail: document.getElementById('ecemail').value,
-          ccel: document.getElementById('eccel').value,
-          status: document.getElementById('estatus').value,
-          specialty_id: $('#specialty_id').val().toString(),
-          insurance_id: $('#insurance_id').val().toString(),
-          taxonomy: $('#taxonomy').val(),
-          photo: filename
-        }
-    
-        if($('#chosen_manager').val()==""){
-          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/add", (xhr, err) => {
-            if (!err) {
-              let result = JSON.parse(xhr.responseText)['data'];
-              if(result == "existed"){
-                return toastr.info('This email is already existed so please try with another email');
+          let entry = {
+            id: $('#chosen_manager').val(),
+            fname: document.getElementById('efname').value,
+            lname: document.getElementById('elname').value,
+            mname: document.getElementById('emname').value,
+            qualification: document.getElementById('equalification').value,
+            dob: document.getElementById('edob').value,
+            gender: document.getElementById('egender').value,
+            language: $("#elanguage").val().toString(),
+            web: document.getElementById('eweb').value,
+            npi: document.getElementById('enpi').value,
+            license: document.getElementById('elicense').value,
+            email: document.getElementById('eemail').value,
+            tel: document.getElementById('etel').value,
+            cel: document.getElementById('ecel').value,
+            address: document.getElementById('eaddress').value,
+            address2: document.getElementById('eaddress2').value,
+            fax: document.getElementById('efax').value,
+            city: document.getElementById('ecity').value,
+            state: document.getElementById('estate').value,
+            country: document.getElementById('kt_docs_select2_country').value,
+            zip: document.getElementById('ezip').value,
+            cname: document.getElementById('ecname').value,
+            cemail: document.getElementById('ecemail').value,
+            ccel: document.getElementById('eccel').value,
+            status: document.getElementById('estatus').value,
+            specialty_id: $('#specialty_id').val().toString(),
+            insurance_id: $('#insurance_id').val().toString(),
+            taxonomy: $('#taxonomy').val(),
+            photo: filename
+          }
+      
+          if($('#chosen_manager').val()==""){
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/add", (xhr, err) => {
+              if (!err) {
+                let result = JSON.parse(xhr.responseText)['data'];
+                if(result == "existed"){
+                  return toastr.info('This email is already existed so please try with another email');
+                }
+                else{
+                  $("#specialist-edit-modal").modal("hide");
+                  return toastr.success('Specialist is added successfully');
+                }
+                
+              } else {
+                return toastr.error('Action Failed');
               }
-              else{
+          });
+          }else{
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
+              if (!err) {
                 $("#specialist-edit-modal").modal("hide");
-                return toastr.success('Specialist is added successfully');
+                return toastr.success('Specialist is updated successfully');
+              } else {
+                return toastr.error('Action Failed');
               }
-              
-            } else {
-              return toastr.error('Action Failed');
-            }
-        });
-        }else{
-          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
-            if (!err) {
-              $("#specialist-edit-modal").modal("hide");
-              return toastr.success('Specialist is updated successfully');
-            } else {
-              return toastr.error('Action Failed');
-            }
-        });
+          });
+          }
+          
+          setTimeout( function () {
+            managertable.ajax.reload();
+          }, 1000 );
         }
-        
-        setTimeout( function () {
-          managertable.ajax.reload();
-        }, 1000 );
-      }
-    });
+      });
+    }
   });
 
   $("#mpwdbtn").click(function (e) {
