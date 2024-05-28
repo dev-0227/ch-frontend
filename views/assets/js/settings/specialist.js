@@ -75,7 +75,7 @@ $(document).ready(async function () {
       }
       // select Doctor of Medicine
       $("#equalification").html(options);
-      $("#equalification").val(91).trigger('change');
+      $("#equalification").val(151).trigger('change');
     }
   });
 
