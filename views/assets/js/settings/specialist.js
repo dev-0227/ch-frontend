@@ -68,13 +68,19 @@ $(document).ready(async function () {
   sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "qualification", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
+      result.sort(function(a, b) {
+        let x = a['display'].toLowerCase();
+        let y = b['display'].toLowerCase();
+        if (x < y) return -1;
+        if (x > y) return 1;
+        return 0;
+      });
       var options = '';
       for(var i=0; i<result.length; i++){
         options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
       }
       // select Doctor of Medicine
       $("#equalification").html(options);
-      $("#equalification").val('151').trigger('change');
     }
   });
 
@@ -168,7 +174,7 @@ $(document).ready(async function () {
   $(document).on("click",".manageraddbtn",function(){
     $('#chosen_manager').val("");
     $("#egender").val(1).trigger('change');
-    $("#equalification").val('MD').trigger('change');
+    $("#equalification").val(151).trigger('change');
     $("#edob").val('');
     $("#elanguage").val('English').trigger('change');
     $("#efname").val("");
