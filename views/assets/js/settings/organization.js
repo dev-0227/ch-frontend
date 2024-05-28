@@ -179,7 +179,7 @@ $(document).ready(function () {
         $("#uname").val(result[0]['name']);
         $("#utype").val(result[0]['typeid']).trigger('change');
         $("#ualias").val(result[0]['alias']);
-        $("#umode").val(result[0]['mode']);
+        $("#umode").val(result[0]['modeid']);
         $("#uaddress1").val(result[0]['address1']);
         $("#uaddress2").val(result[0]['address2']);
         $("#ucity").val(result[0]['city']);
