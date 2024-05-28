@@ -50,6 +50,7 @@ $(document).ready(async function () {
         sp[result[i]['id']] = result[i]['name'];
       }
       $("#specialty_id").html(options);
+      $("#fspecialty").html('<option value="0">All Specialties</option>' + options);
     }
   });
 
@@ -634,4 +635,9 @@ $(document).ready(async function () {
   $("#ephoto").on('change', function() {
     $("#photoname").val("");
   })
+
+  $("#fspecialty").on('change', function(e) {
+    if (e.target.value == '0') managertable.search('').draw();
+    else managertable.search(sp[e.target.value]).draw();
+  });
 });
