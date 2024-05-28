@@ -70,10 +70,12 @@ $(document).ready(async function () {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
       for(var i=0; i<result.length; i++){
-        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+        options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
+        console.log(result[i]);
       }
+      // select Doctor of Medicine
       $("#equalification").html(options);
-      $("@equalification").val('MD').trigger('change');
+      $("#equalification").val(91).trigger('change');
     }
   });
 
@@ -193,7 +195,9 @@ $(document).ready(async function () {
     $("#insurance_id").val("").trigger('change');
     $("#taxonomy").val("");
     $("#kt_docs_select2_country").val("US").trigger('change');
+
     document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
+    $("#photoname").val('none');
     
     $("#specialist-edit-modal").modal("show");
   });
@@ -229,9 +233,19 @@ $(document).ready(async function () {
         $("#eccel").val(result[0]['contactcel']);
         $("#estatus").val(result[0]['status']).trigger('change');
         $("#kt_docs_select2_country").val(result[0]['country']).trigger('change');
-        $("#photoname").val('origin');
-        if (result[0]['photo'] != '') document.getElementById('specialistPhoto').style.backgroundImage = `url(data:image/png;base64,${result[0]['photo']})`;
-        else if (result[0]['photo'] == '') document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
+        
+        if (result[0]['photo'] != '') {
+          document.getElementById('specialistPhoto').style.backgroundImage = `url(data:image/png;base64,${result[0]['photo']})`;
+          $("#photo_remove_btn").show();
+          $("#photo_cancel_btn").show();
+        }
+        else if (result[0]['photo'] == '') {
+          document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
+          $("#photo_remove_btn").hide();
+          $("#photo_cancel_btn").hide();
+        }
+        $("#photoname").val('none');
+
 
         if(result[0]['language']){
           $("#elanguage").val(result[0]['language'].split(",")).trigger('change');
@@ -423,7 +437,7 @@ $(document).ready(async function () {
       return;
     }
 
-    if ($("#photoname").val() == 'origin') {
+    if ($("#photoname").val() != 'update') {
       let entry = {
         id: $('#chosen_manager').val(),
         fname: document.getElementById('efname').value,
@@ -453,7 +467,8 @@ $(document).ready(async function () {
         specialty_id: $('#specialty_id').val().toString(),
         insurance_id: $('#insurance_id').val().toString(),
         taxonomy: $('#taxonomy').val(),
-        photo: ""
+        photo: '',
+        photostate: $("#photoname").val()
       }
 
       if($('#chosen_manager').val()==""){
@@ -525,7 +540,8 @@ $(document).ready(async function () {
             specialty_id: $('#specialty_id').val().toString(),
             insurance_id: $('#insurance_id').val().toString(),
             taxonomy: $('#taxonomy').val(),
-            photo: filename
+            photo: filename,
+            photostate: $("#photoname").val()
           }
       
           if($('#chosen_manager').val()==""){
@@ -533,7 +549,7 @@ $(document).ready(async function () {
               if (!err) {
                 let result = JSON.parse(xhr.responseText)['data'];
                 if(result == "existed"){
-                  return toastr.info('This email is already existed so please try with another email');
+                  return toastr.info('This data is already existed so please try with another email');
                 }
                 else{
                   $("#specialist-edit-modal").modal("hide");
@@ -629,8 +645,17 @@ $(document).ready(async function () {
     }
   });
 
-  $("#ephoto").on('change', function() {
-    $("#photoname").val("");
+  $("#ephoto").on('change', function(e) {
+    if (e.target.value != '') $("#photoname").val('update');
+    $("#photo_remove_btn").show();
+    $("#photo_cancel_btn").show();
+  })
+
+  $("#photo_remove_btn").click(function() {
+    document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
+    $("#photoname").val('update');
+    $("#photo_remove_btn").hide();
+    $("#photo_cancel_btn").hide();
   })
 
   $("#fspecialty").on('change', function(e) {
