@@ -70,9 +70,10 @@ $(document).ready(async function () {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
       for(var i=0; i<result.length; i++){
-        options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
+        options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
       }
       $("#equalification").html(options);
+      $("@equalification").val('MD').trigger('change');
     }
   });
 
@@ -166,7 +167,7 @@ $(document).ready(async function () {
   $(document).on("click",".manageraddbtn",function(){
     $('#chosen_manager').val("");
     $("#egender").val(1).trigger('change');
-    $("#equalification").val('').trigger('change');
+    $("#equalification").val('MD').trigger('change');
     $("#edob").val('');
     $("#elanguage").val('English').trigger('change');
     $("#efname").val("");
@@ -415,10 +416,6 @@ $(document).ready(async function () {
     if($("#specialty_id").val() == ""){
       toastr.warning('Please enter Specialty');
       $("#specialty_id").focus();
-      return;
-    }
-    if ($('#edob').val() == '') {
-      toastr.warning('Please enter date of birth');
       return;
     }
     if ($("#elanguage").val() == '') {
