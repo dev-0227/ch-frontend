@@ -40,6 +40,7 @@ $(document).ready(async function () {
     })
   })
 
+  let filesize = 0;
   let sp = []
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
     if (!err) {
@@ -535,6 +536,10 @@ $(document).ready(async function () {
       toastr.warning('Please select languages');
       return;
     }
+    if (filesize > 1000*30) {
+      toastr.warning('Your image is too large. Image size is smaller than 30KB.');
+      return;
+    }
 
     if ($("#photoname").val() != 'update') {
       let entry = {
@@ -745,7 +750,10 @@ $(document).ready(async function () {
   });
 
   $("#ephoto").on('change', function(e) {
-    if (e.target.value != '') $("#photoname").val('update');
+    if (e.target.value != '') {
+      $("#photoname").val('update');
+      filesize = e.target.files[0].size;
+    }
     $("#photo_remove_btn").show();
     $("#photo_cancel_btn").show();
   })
@@ -755,6 +763,7 @@ $(document).ready(async function () {
     $("#photoname").val('update');
     $("#photo_remove_btn").hide();
     $("#photo_cancel_btn").hide();
+    filesize = 0;
   })
 
   $("#fspecialty").on('change', function(e) {

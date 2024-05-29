@@ -240,9 +240,9 @@ $(document).ready(async function () {
             }
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/search", (xhr, err) => {
                 if (!err) {
-                  patients = JSON.parse(xhr.responseText)['data'];
-                  $("#searched_patient_list").empty();
-                  for(var i = 0; i < patients.length; i++){
+                    patients = JSON.parse(xhr.responseText)['data'];
+                    $("#searched_patient_list").empty();
+                    for(var i = 0; i < patients.length; i++){
                     var html = '<div class="menu-item px-3 pt-info " data-id="'+patients[i]['id']+'">';
                     html += '<div class="menu-link px-3 py-1 d-block">';
                     html += '<div class="text-primary">'
@@ -263,9 +263,9 @@ $(document).ready(async function () {
                     html += '</div>';
                     html += '</div></div>';
                     $("#searched_patient_list").append(html);
-                  }
+                    }
                 }
-              });
+            });
         }
     });
 

@@ -324,6 +324,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "specialist/getSpecialistByClinic", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
+    console.log(result);
     var options = '';
     for(var i=0; i<result.length; i++){
       options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
