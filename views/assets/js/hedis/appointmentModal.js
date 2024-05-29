@@ -151,8 +151,6 @@ $(document).on("click",".appt-list",function(){
   $("#appointment_modal").modal("show");
 });
 
-
-
 function GetFormattedDate(date) {
   var month = ("0" + (date.getMonth() + 1)).slice(-2);
   var day  = ("0" + (date.getDate())).slice(-2);
@@ -186,7 +184,6 @@ $(document).on("click",".appt_edit_btn",function(){
       $("#appointment_emr_id").val(result[0]['emr_id']);
       $("#appointment_clinic_id").val(localStorage.getItem('chosen_clinic'));
       $("#appointment_pcp_id").val(localStorage.getItem('userid'));
-     
       
       $("#appointment_clinic_name").html(result[0]['clinic_name']);
       $("#appointment_participate_status").val(result[0]['pt_participate_status']);
@@ -255,8 +252,6 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_edit_modal").modal("show");
 });
 
-
-
 $(document).on("click",".appt_delete_btn",function(){
   let entry = {
     id: $(this).parent().attr("idkey"),
@@ -308,7 +303,6 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
   }
 });
 
-
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getDoctorsByClinic", (xhr, err) => {
   if (!err) {
     let doctors = JSON.parse(xhr.responseText)['data'];
@@ -320,11 +314,9 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
   }
 });
 
-
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "specialist/getSpecialistByClinic", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
-    console.log(result);
     var options = '';
     for(var i=0; i<result.length; i++){
       options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';

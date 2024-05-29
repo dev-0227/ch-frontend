@@ -325,6 +325,7 @@ $(document).ready(async function () {
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/chosen", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
+        console.log(result);
         if(result.length > 0)
           if(result[0]['clinic']){
           var clinics = result[0]['clinic'].split(',');
@@ -385,14 +386,15 @@ $(document).ready(async function () {
     $(".organization_toggle").addClass("btn-secondary");
     
     let entry = {
-      id: $(this).parent().attr("idkey"),
+      clinicid: localStorage.getItem('chosen_clinic'),
+      specialistid: $(this).parent().attr("idkey")
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/chosen", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/getOrganizationByClinic", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         if(result.length > 0)
-          if(result[0]['organization']){
-          var organizations = result[0]['organization'].split(',');
+          if(result[0]['organizationid']){
+          var organizations = result[0]['organizationid'].split(',');
         
           $('.organizationkey').each(function(i){
               for(var i = 0; i < organizations.length; i++){
@@ -495,13 +497,14 @@ $(document).ready(async function () {
       organizations[i] = $(this).val();
     });
     let entry = {
-      id: document.getElementById('chosen_manager').value,
+      clinicid: localStorage.getItem('chosen_clinic'),
+      specialistid: document.getElementById('chosen_manager').value,
       organizations: organizations
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateorganizations", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/set", (xhr, err) => {
         if (!err) {
           $("#specialist-organization-modal").modal("hide");
-          return toastr.success('Organizations are updated successfully');
+          return toastr.success('Organizations are added successfully');
         } else {
           return toastr.error('Action Failed');
         }
@@ -536,7 +539,7 @@ $(document).ready(async function () {
       toastr.warning('Please select languages');
       return;
     }
-    if (filesize > 1000*30) {
+    if (filesize > 1024*30) {
       toastr.warning('Your image is too large. Image size is smaller than 30KB.');
       return;
     }
