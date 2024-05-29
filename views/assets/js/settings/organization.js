@@ -87,7 +87,7 @@ $(document).ready(function () {
     $("#aaddress1").val('');
     $("#aaddress2").val('');
     $("#acity").val('');
-    $("#astate").val('New York');
+    $("#astate").val('New York').trigger('change');
     $("#aphone1").val('');
     $("#aphone2").val('');
     $("#aphone3").val('');
@@ -97,7 +97,7 @@ $(document).ready(function () {
     $("#adescription").val('');
     $("#acharacteristic").val('');
     $("#organization-add-modal").modal("show");
-    $("#zip").val('');
+    $("#azip").val('');
     $("#astatus").val(1).trigger('change');
   });
 
@@ -132,7 +132,7 @@ $(document).ready(function () {
       address2: document.getElementById('aaddress2').value,
       address3: '',
       city: document.getElementById('acity').value,
-      state: document.getAnimations('astate').value,
+      state: document.getElementById('astate').value,
       phone1: document.getElementById('aphone1').value,
       phone2: document.getElementById('aphone2').value,
       phone3: document.getElementById('aphone3').value,
