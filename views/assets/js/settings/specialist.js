@@ -40,9 +40,10 @@ $(document).ready(async function () {
     })
   })
 
-  let filesize = 0;
+  let filesize = 0
   let relationship = []
-  let currentClinic = '1';
+  let currentClinic = '1'
+  let clinicList = []
   let sid = ''
   let sp = []
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
@@ -183,7 +184,7 @@ $(document).ready(async function () {
 
     relationship[currentClinic].organizations = organizations;
     relationship[currentClinic].specialistid = sid;
-    currentClinic = e.target.value.toString()
+    currentClinic = e.target.value.toString();
 
     $('.organizationkey').each(function(i) {
       $(this).prop('checked', false);
@@ -316,6 +317,7 @@ $(document).ready(async function () {
       let options = '';
       let result = JSON.parse(xhr.responseText)['data'];
       for(var i = 0; i < result.length; i++){
+        if (i == 0) currentClinic = result[i].id;
         $("#clinic-list-specialist").append(`
           <a href="#" class="btn btn-secondary m-1 clinic_toggle " style="border: 2px solid #cccccc;" >
               <input type="checkbox" value="`+result[i].id+`" value="`+result[i]['name']+`" class="clinickey" style="display: none;" >
@@ -330,6 +332,8 @@ $(document).ready(async function () {
           specialistid: '',
           organizations: []
         }
+
+        clinicList[result[i].id.toString()] = result[i];
       }
       $("#rel_clinics").html(options);
       if (!result.length) {
@@ -417,7 +421,7 @@ $(document).ready(async function () {
     }
   });
 
-  $(document).on("click",".managerorganizationbtn",function(){
+  $(document).on("click",".managerorganizationbtn",function() {
     $("#chosen_manager").val($(this).parent().attr("idkey"));
     sid = $(this).parent().attr("idkey").toString();
     $(".organizationkey").prop('checked', false);
@@ -427,6 +431,7 @@ $(document).ready(async function () {
     let entry = {
       specialistid: $(this).parent().attr("idkey")
     }
+    
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/getOrganizationBySpecialist", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
@@ -451,6 +456,11 @@ $(document).ready(async function () {
           });
         }
         $("#rel_clinics").val('1').trigger('change');
+
+        var nameElement = $(this).parent().parent().parent()[0].children[1];
+        var h = document.getElementById('org_title');
+        h.textContent = 'Set Organizations for ' + nameElement.innerHTML;
+
         $("#specialist-organization-modal").modal("show");
       } else {
         toastr.error('Credential is invalid');
