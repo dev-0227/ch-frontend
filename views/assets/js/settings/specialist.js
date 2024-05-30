@@ -41,6 +41,9 @@ $(document).ready(async function () {
   })
 
   let filesize = 0;
+  let relationship = []
+  let currentClinic = '1';
+  let sid = ''
   let sp = []
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
     if (!err) {
@@ -172,11 +175,35 @@ $(document).ready(async function () {
   // <button class="btn btn-sm btn-info managerpwdbtn" type="button"><i class="fa fa-key"></i></button>
   // <button class="btn btn-sm btn-warning managerquestionbtn" type="button"><i class="fa fa-question-circle"></i></button>
 
+  $("#rel_clinics").on('change', function(e) {
+    var organizations = [];
+    $('.organizationkey:checked').each(function(i){
+      organizations[i] = $(this).val();
+    });
+
+    relationship[currentClinic].organizations = organizations;
+    relationship[currentClinic].specialistid = sid;
+    currentClinic = e.target.value.toString()
+
+    $('.organizationkey').each(function(i) {
+      $(this).prop('checked', false);
+      $(this).parent().addClass("btn-secondary");
+      $(this).parent().removeClass("btn-primary");
+      for (var n = 0; n < relationship[currentClinic].organizations.length; n ++) {
+        if(relationship[currentClinic].organizations[n] == $(this).val()) {
+          $(this).prop('checked', true);
+          $(this).parent().removeClass("btn-secondary");
+          $(this).parent().addClass("btn-primary");
+        };
+      }
+    });
+  });
+
   $('#table_search_input').on('keyup', function () {
     managertable.search(this.value).draw();
   });
 
-  $(document).on("click",".manageraddbtn",function(){
+  $(document).on("click",".manageraddbtn",function() {
     $('#chosen_manager').val("");
     $("#egender").val(1).trigger('change');
     $("#equalification").val(151).trigger('change');
@@ -212,7 +239,8 @@ $(document).ready(async function () {
     $("#specialist-edit-modal").modal("show");
   });
 
-  $(document).on("click",".managereditbtn",function(){
+  $(document).on("click",".managereditbtn",function() {
+    sid = $(this).parent().attr("idkey");
     $("#chosen_manager").val($(this).parent().attr("idkey"));
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -285,6 +313,7 @@ $(document).ready(async function () {
 
   sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "setting/clinic/getAll", (xhr, err) => {
     if (!err) {
+      let options = '';
       let result = JSON.parse(xhr.responseText)['data'];
       for(var i = 0; i < result.length; i++){
         $("#clinic-list-specialist").append(`
@@ -293,7 +322,16 @@ $(document).ready(async function () {
               <span class="selectgroup-button">`+result[i].name+`</span>
           </a>
         `);
+        //insert into clinic list
+        options += `<option value = "`+result[i]['id']+`" >`+result[i]['name']+`</option>`;
+        //init relationship
+        relationship[result[i].id.toString()] = {
+          clinicid: result[i].id.toString(),
+          specialistid: '',
+          organizations: []
+        }
       }
+      $("#rel_clinics").html(options);
       if (!result.length) {
         $("#mclinicbtn").hide();
       }
@@ -315,6 +353,7 @@ $(document).ready(async function () {
 
   $(document).on("click",".managerclinicbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));
+    sid = $(this).parent().attr("idkey");
     $(".clinickey").prop('checked', false);
     $(".clinic_toggle").removeClass("btn-primary");
     $(".clinic_toggle").addClass("btn-secondary");
@@ -325,7 +364,6 @@ $(document).ready(async function () {
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/chosen", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
-        console.log(result);
         if(result.length > 0)
           if(result[0]['clinic']){
           var clinics = result[0]['clinic'].split(',');
@@ -381,24 +419,30 @@ $(document).ready(async function () {
 
   $(document).on("click",".managerorganizationbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));
+    sid = $(this).parent().attr("idkey").toString();
     $(".organizationkey").prop('checked', false);
     $(".organization_toggle").removeClass("btn-primary");
     $(".organization_toggle").addClass("btn-secondary");
     
     let entry = {
-      clinicid: localStorage.getItem('chosen_clinic'),
       specialistid: $(this).parent().attr("idkey")
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/getOrganizationByClinic", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/getOrganizationBySpecialist", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
-        if(result.length > 0)
-          if(result[0]['organizationid']){
-          var organizations = result[0]['organizationid'].split(',');
-        
-          $('.organizationkey').each(function(i){
-              for(var i = 0; i < organizations.length; i++){
-              if(organizations[i] == $(this).val()){
+        if(result.length > 0) {
+          for (var i = 0; i < result.length; i ++) {
+            if (i == 0) currentClinic = result[i]['clinicid'];
+            relationship[result[i]['clinicid']] = {
+              clinicid: result[i]['clinicid'].toString(),
+              specialistid: result[i]['specialistid'].toString(),
+              organizations: result[i]['organizationid'].split(',')
+            }
+          }
+          //select by default
+          $('.organizationkey').each(function(i) {
+            for (var n = 0; n < relationship[currentClinic].organizations.length; n ++) {
+              if(relationship[currentClinic].organizations[n] == $(this).val()) {
                 $(this).prop('checked', true);
                 $(this).parent().removeClass("btn-secondary");
                 $(this).parent().addClass("btn-primary");
@@ -406,13 +450,12 @@ $(document).ready(async function () {
             }
           });
         }
-      
+        $("#rel_clinics").val('1').trigger('change');
         $("#specialist-organization-modal").modal("show");
       } else {
         toastr.error('Credential is invalid');
       }
     });
-
   });
 
   $(document).on("click",".managerquestionbtn",function(){
@@ -496,14 +539,20 @@ $(document).ready(async function () {
     $('.organizationkey:checked').each(function(i){
       organizations[i] = $(this).val();
     });
-    let entry = {
-      clinicid: localStorage.getItem('chosen_clinic'),
+    relationship[currentClinic] = {
+      clinicid: currentClinic,
       specialistid: document.getElementById('chosen_manager').value,
       organizations: organizations
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/set", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {relationship: relationship, specialistid: sid}, "setting/relationship/set", (xhr, err) => {
         if (!err) {
           $("#specialist-organization-modal").modal("hide");
+          for(var i = 0; i < relationship.length; i ++) {
+            if (relationship[i] != undefined && relationship[i] != null) {
+              relationship[i]['specialistid'] = '';
+              relationship[i]['organizations'] = [];
+            }
+          }
           return toastr.success('Organizations are added successfully');
         } else {
           return toastr.error('Action Failed');
