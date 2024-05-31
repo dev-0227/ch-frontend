@@ -375,7 +375,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
 $(document).on("change","#appointment_measure",function(){
   $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
   $("#appointment_assessment").html("");
-  getSpecialty();
+  // getSpecialty();
   for(var i=0; i<observation.length; i++){
     if(observation[i]['m_id'] == $(this).val()){
       try{
