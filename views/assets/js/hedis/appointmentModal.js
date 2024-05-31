@@ -691,11 +691,13 @@ $("#appointment_measure").on('change', (e) => {
       var result = JSON.parse(xhr.responseText)['data'];
       var options = '';
       result.forEach(item => {
-        item['clinic'].split(',').forEach(value => {
-          if (value == localStorage.getItem('chosen_clinic')) {
-            options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
-          }
-        })
+        if (item !== null) {
+          item['clinic'].split(',').forEach(value => {
+            if (value == localStorage.getItem('chosen_clinic')) {
+              options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+            }
+          })
+        }
       });
       $("#appointment_specialist_provider").html(options);
     }
