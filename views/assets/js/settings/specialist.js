@@ -196,7 +196,7 @@ $(document).ready(async function () {
   });
 
   // organization table //
-  var managertable = $('#kt_sidebar_nav').DataTable({
+  var managertable_org = $('#kt_sidebar_nav').DataTable({
     "ajax": {
         "url": serviceUrl + "organization/",
         "type": "GET",
@@ -831,7 +831,7 @@ $(document).ready(async function () {
     lock = false;
   });
 
-  managertable.on('draw.dt', function(e) {
+  managertable_org.on('draw.dt', function(e) {
 
     setTimeout(() => {
       lock = true;
@@ -865,7 +865,7 @@ $(document).ready(async function () {
   });
 
   $("#org_search_input").on('keyup', function() {
-    managertable.search(this.value).draw();
+    managertable_org.search(this.value).draw();
   })
 
   // ### organization ### end //
