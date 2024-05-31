@@ -737,60 +737,74 @@ $(document).ready(async function () {
       if (!err) {
         clinic = JSON.parse(xhr.responseText)['data'][0].clinic;
 
-        //set title
-        $("#org_title").html('Set Organizations for ' + $(this).parent().parent().parent()[0].childNodes[1].innerHTML);
+        if (!clinic || clinic == '') {
+          lock = true;
+          $(".changeOrganID").prop('checked', false);
+          lock = false;
 
-        //init clinic
-        $("#rel_clinics").html('');
+          $("#morganizationbtn").hide();
+          $("#specialist-organization-modal").modal('show');
 
-        var available = clinic.split(',');
-        var options = '';
-        for(var i = 0; i < available.length; i ++) options += `<option value = "`+clinics[available[i]]['id']+`" >`+clinics[available[i]]['name']+`</option>`;
-        $("#rel_clinics").html(options);
+          //init clinic
+          $("#rel_clinics").html('');
+        } else {
+          $("#morganizationbtn").show();
+          //set title
+          $("#org_title").html('Set Organizations for ' + $(this).parent().parent().parent()[0].childNodes[1].innerHTML);
 
-        //
-        // read relationship data by using specialistid
-        $(".changeOrganID").prop('checked', false);
-        organizations = [];
-        available.forEach(item => {
-          organizations[item] = {
-            clinicid: item,
-            specialistid: specialistid,
-            organizationid: []
-          }
-        });
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), {specialistid: specialistid}, 'setting/relationship/getOrganizationBySpecialist', (xhr, err) => {
-          if (!err) {
-            //store in organizaions array.
-            let result = JSON.parse(xhr.responseText)['data'];
-            result.forEach(item => {
-              organizations[item.clinicid] = {
-                clinicid: item.clinicid,
-                specialistid: specialistid,
-                organizationid: item.organizationid.split(',')
-              }
+          //init clinic
+          $("#rel_clinics").html('');
 
+          var available = clinic.split(',');
+          var options = '';
+          for(var i = 0; i < available.length; i ++) options += `<option value = "`+clinics[available[i]]['id']+`" >`+clinics[available[i]]['name']+`</option>`;
+          $("#rel_clinics").html(options);
+
+          //
+          // read relationship data by using specialistid
+          $(".changeOrganID").prop('checked', false);
+          organizations = [];
+          available.forEach(item => {
+            organizations[item] = {
+              clinicid: item,
+              specialistid: specialistid,
+              organizationid: []
+            }
+          });
+          sendRequestWithToken('POST', localStorage.getItem('authToken'), {specialistid: specialistid}, 'setting/relationship/getOrganizationBySpecialist', (xhr, err) => {
+            if (!err) {
+              //store in organizaions array.
+              let result = JSON.parse(xhr.responseText)['data'];
+              result.forEach(item => {
+                organizations[item.clinicid] = {
+                  clinicid: item.clinicid,
+                  specialistid: specialistid,
+                  organizationid: item.organizationid.split(',')
+                }
+
+                //
+                lock = true;
+                $(".changeOrganID").prop('checked', false);
+
+                //set value
+                var l = $(".changeOrganID").children().prevObject.length;
+                for (var i = 0; i < l; i ++) {
+                  if (organizations[$("#rel_clinics").val()]['organizationid'].indexOf($(".changeOrganID").children().prevObject[i].value) !== -1)
+                    $(".changeOrganID").children().prevObject[i].checked = true;
+                }
+                lock = false;
+              });
+              $("#specialist-organization-modal").modal('show');
               //
-              lock = true;
-              $(".changeOrganID").prop('checked', false);
-
-              //set value
-              var l = $(".changeOrganID").children().prevObject.length;
-              for (var i = 0; i < l; i ++) {
-                if (organizations[$("#rel_clinics").val()]['organizationid'].indexOf($(".changeOrganID").children().prevObject[i].value) !== -1)
-                  $(".changeOrganID").children().prevObject[i].checked = true;
-              }
-              lock = false;
-            });
-            $("#specialist-organization-modal").modal('show');
-            //
-          }
-        });
+            }
+          });
+        }
       }
     });
   });
 
   $(document).on("change", ".changeOrganID",  function(e) {
+    if (!organizations.length) return;
     if (lock === false) {
       if (e.target.checked === true) {
         organizations[$("#rel_clinics").val()]['specialistid'] = specialistid;
