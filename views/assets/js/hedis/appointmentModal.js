@@ -304,7 +304,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: $("#appointment_specialist_provider").val()}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
-        var options = '<option></option>';
+        var options = '';
         for(var i=0; i<result.length; i++){
           options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
         }
@@ -689,13 +689,15 @@ $("#appointment_measure").on('change', (e) => {
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
     if (!err) {
       var result = JSON.parse(xhr.responseText)['data'];
-      console.log(result);
-      var options = '<option></option>';
+      var options = '';
       result.forEach(item => {
-        options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+        item['clinic'].split(',').forEach(value => {
+          if (value == localStorage.getItem('chosen_clinic')) {
+            options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+          }
+        })
       });
       $("#appointment_specialist_provider").html(options);
-      if (result.length) $("#appointment_specialist_provider").val(result[0]['id']);
     }
   });
 });
