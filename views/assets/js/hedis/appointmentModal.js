@@ -691,6 +691,7 @@ $("#appointment_measure").on('change', (e) => {
       var result = JSON.parse(xhr.responseText)['data'];
       var options = '';
       result.forEach(item => {
+        console.log(item);
         if (item['clinic'] !== null) {
           item['clinic'].split(',').forEach(value => {
             if (value == localStorage.getItem('chosen_clinic')) {
