@@ -41,10 +41,6 @@ $(document).ready(async function () {
   })
 
   let filesize = 0
-  let relationship = []
-  let currentClinic = '1'
-  let clinicList = []
-  let sid = ''
   let sp = []
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
     if (!err) {
@@ -59,7 +55,7 @@ $(document).ready(async function () {
     }
   });
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance", (xhr, err) => {
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       var options = '';
@@ -70,7 +66,7 @@ $(document).ready(async function () {
     }
   });
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "qualification", (xhr, err) => {
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "qualification", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       result.sort(function(a, b) {
@@ -86,6 +82,32 @@ $(document).ready(async function () {
       }
       // select Doctor of Medicine
       $("#equalification").html(options);
+    }
+  });
+
+  let specialistid = 0;
+  let clinics = []
+  let organizations = []
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/clinic/getAll", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      for(var i = 0; i < result.length; i++){
+        $("#clinic-list-specialist").append(`
+          <a href="#" class="btn btn-secondary m-1 clinic_toggle " style="border: 2px solid #cccccc;" >
+              <input type="checkbox" value="`+result[i].id+`" value="`+result[i]['name']+`" class="clinickey" style="display: none;" >
+              <span class="selectgroup-button">`+result[i].name+`</span>
+          </a>
+        `);
+        clinics[result[i].id] = result[i];
+        organizations[result[i].id] = {
+          clinicid: result[i].id,
+          specialistid: 0,
+          organizationid: []
+        };
+      }
+      if (!result.length) {
+        $("#mclinicbtn").hide();
+      }
     }
   });
 
@@ -159,7 +181,7 @@ $(document).ready(async function () {
           return `
             <div class="btn-group align-top" idkey="`+row.id+`">
               <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
-              <button organizationkey="`+row.organization+`" class="btn btn-sm btn-warning managerorganizationbtn" type="button"><i class="fa fa-solid fa-hotel">
+              <button organizationkey="`+row.oragnization+`" class="btn btn-sm btn-warning managerorganizationbtn" type="button"><i class="fa fa-solid fa-hotel">
                 <span class="path1"></span>
                 <span class="path2"></span>
               </i></button>
@@ -173,31 +195,40 @@ $(document).ready(async function () {
     "clinicid": $("#chosen_clinics").val(),
   });
 
-  // <button class="btn btn-sm btn-info managerpwdbtn" type="button"><i class="fa fa-key"></i></button>
-  // <button class="btn btn-sm btn-warning managerquestionbtn" type="button"><i class="fa fa-question-circle"></i></button>
-
-  $("#rel_clinics").on('change', function(e) {
-    var organizations = [];
-    $('.organizationkey:checked').each(function(i){
-      organizations[i] = $(this).val();
-    });
-
-    relationship[currentClinic].organizations = organizations;
-    relationship[currentClinic].specialistid = sid;
-    currentClinic = e.target.value.toString();
-
-    $('.organizationkey').each(function(i) {
-      $(this).prop('checked', false);
-      $(this).parent().addClass("btn-secondary");
-      $(this).parent().removeClass("btn-primary");
-      for (var n = 0; n < relationship[currentClinic].organizations.length; n ++) {
-        if(relationship[currentClinic].organizations[n] == $(this).val()) {
-          $(this).prop('checked', true);
-          $(this).parent().removeClass("btn-secondary");
-          $(this).parent().addClass("btn-primary");
-        };
-      }
-    });
+  // organization table //
+  var managertable = $('#kt_sidebar_nav').DataTable({
+    "ajax": {
+        "url": serviceUrl + "organization/",
+        "type": "GET",
+        "headers": { 'Authorization': localStorage.getItem('authToken') }
+    },
+    serverSide: true,
+    processing: true,
+    "pageLength": 10,
+    "order": [],
+    "columns": [
+      { data: 'id',
+        render: function(data, type, row) {
+          return `
+            <center>
+              <div class="form-check form-check-sm form-check-custom form-check-lg">
+                <input id="checkOrgan" class="form-check-input changeOrganID" class="form-check-input" type="checkbox" value='${row.id}' />
+              </div>
+            </center>
+          `
+        }
+      },
+      { data: 'name',
+        render: function(data, type, row) {
+          return `
+            <div class="form-check-label px-3 d-block">
+              <div class="text-primary fs-2">${row.name}</div>
+              <div class="fs-8"><i class="fa fa-location-dot"></i> ${row.address1} | <i class="fa fa-phone"></i> ${row.phone1}</div>
+            </div>
+          `
+        }
+      },
+    ]
   });
 
   $('#table_search_input').on('keyup', function () {
@@ -241,7 +272,6 @@ $(document).ready(async function () {
   });
 
   $(document).on("click",".managereditbtn",function() {
-    sid = $(this).parent().attr("idkey");
     $("#chosen_manager").val($(this).parent().attr("idkey"));
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -312,36 +342,6 @@ $(document).ready(async function () {
     });
   });
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "setting/clinic/getAll", (xhr, err) => {
-    if (!err) {
-      let options = '';
-      let result = JSON.parse(xhr.responseText)['data'];
-      for(var i = 0; i < result.length; i++){
-        if (i == 0) currentClinic = result[i].id;
-        $("#clinic-list-specialist").append(`
-          <a href="#" class="btn btn-secondary m-1 clinic_toggle " style="border: 2px solid #cccccc;" >
-              <input type="checkbox" value="`+result[i].id+`" value="`+result[i]['name']+`" class="clinickey" style="display: none;" >
-              <span class="selectgroup-button">`+result[i].name+`</span>
-          </a>
-        `);
-        //insert into clinic list
-        options += `<option value = "`+result[i]['id']+`" >`+result[i]['name']+`</option>`;
-        //init relationship
-        relationship[result[i].id.toString()] = {
-          clinicid: result[i].id.toString(),
-          specialistid: '',
-          organizations: []
-        }
-
-        clinicList[result[i].id.toString()] = result[i];
-      }
-      $("#rel_clinics").html(options);
-      if (!result.length) {
-        $("#mclinicbtn").hide();
-      }
-    }
-  });
-
   $(document).on("click",".clinic_toggle",function(){
     var checkbox = $(this).children().first();
     if(checkbox.prop('checked')){
@@ -357,7 +357,7 @@ $(document).ready(async function () {
 
   $(document).on("click",".managerclinicbtn",function(){
     $("#chosen_manager").val($(this).parent().attr("idkey"));
-    sid = $(this).parent().attr("idkey");
+    
     $(".clinickey").prop('checked', false);
     $(".clinic_toggle").removeClass("btn-primary");
     $(".clinic_toggle").addClass("btn-secondary");
@@ -389,83 +389,6 @@ $(document).ready(async function () {
       }
     });
 
-  });
-
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "organization/all", (xhr, err) => {
-    if (!err) {
-      let result = JSON.parse(xhr.responseText)['data'];
-      for(var i = 0; i < result.length; i++){
-        $("#organization-list-specialist").append(`
-          <a href="#" class="btn btn-secondary m-1 organization_toggle " style="border: 2px solid #cccccc;" >
-              <input type="checkbox" value="`+result[i].id+`" value="`+result[i]['name']+`" class="organizationkey" style="display: none;" >
-              <span class="selectgroup-button">`+result[i].name+`</span>
-          </a>
-        `);
-      }
-      if (!result.length) {
-        $("#morganizationbtn").hide();
-      }
-    }
-  });
-
-  $(document).on("click",".organization_toggle",function(){
-    var checkbox = $(this).children().first();
-    if(checkbox.prop('checked')){
-      checkbox.prop('checked', false);
-      $(this).removeClass("btn-primary");
-      $(this).addClass("btn-secondary");
-    }else{
-      checkbox.prop('checked', true);
-      $(this).removeClass("btn-secondary");
-      $(this).addClass("btn-primary");
-    }
-  });
-
-  $(document).on("click",".managerorganizationbtn",function() {
-    $("#chosen_manager").val($(this).parent().attr("idkey"));
-    sid = $(this).parent().attr("idkey").toString();
-    $(".organizationkey").prop('checked', false);
-    $(".organization_toggle").removeClass("btn-primary");
-    $(".organization_toggle").addClass("btn-secondary");
-    
-    let entry = {
-      specialistid: $(this).parent().attr("idkey")
-    }
-    
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/getOrganizationBySpecialist", (xhr, err) => {
-      if (!err) {
-        let result = JSON.parse(xhr.responseText)['data'];
-        if(result.length > 0) {
-          for (var i = 0; i < result.length; i ++) {
-            if (i == 0) currentClinic = result[i]['clinicid'];
-            relationship[result[i]['clinicid']] = {
-              clinicid: result[i]['clinicid'].toString(),
-              specialistid: result[i]['specialistid'].toString(),
-              organizations: result[i]['organizationid'].split(',')
-            }
-          }
-          //select by default
-          $('.organizationkey').each(function(i) {
-            for (var n = 0; n < relationship[currentClinic].organizations.length; n ++) {
-              if(relationship[currentClinic].organizations[n] == $(this).val()) {
-                $(this).prop('checked', true);
-                $(this).parent().removeClass("btn-secondary");
-                $(this).parent().addClass("btn-primary");
-              };
-            }
-          });
-        }
-        $("#rel_clinics").val('1').trigger('change');
-
-        var nameElement = $(this).parent().parent().parent()[0].children[1];
-        var h = document.getElementById('org_title');
-        h.textContent = 'Set Organizations for ' + nameElement.innerHTML;
-
-        $("#specialist-organization-modal").modal("show");
-      } else {
-        toastr.error('Credential is invalid');
-      }
-    });
   });
 
   $(document).on("click",".managerquestionbtn",function(){
@@ -531,10 +454,10 @@ $(document).ready(async function () {
       id: document.getElementById('chosen_manager').value,
       clinics: clinics
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateclinics", (xhr, err) => {
-        if (!err) {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateclinics", (xhr1, err1) => {
+        if (!err1) {
           $("#specialist-clinic-modal").modal("hide");
-          return toastr.success('Clinics are updated successfully');
+          toastr.success('Clinics are updated successfully');
         } else {
           return toastr.error('Action Failed');
         }
@@ -544,35 +467,6 @@ $(document).ready(async function () {
     }, 1000 );
   });
 
-  $(document).on("click","#morganizationbtn",function(){
-    var organizations = [];
-    $('.organizationkey:checked').each(function(i){
-      organizations[i] = $(this).val();
-    });
-    relationship[currentClinic] = {
-      clinicid: currentClinic,
-      specialistid: document.getElementById('chosen_manager').value,
-      organizations: organizations
-    }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {relationship: relationship, specialistid: sid}, "setting/relationship/set", (xhr, err) => {
-        if (!err) {
-          $("#specialist-organization-modal").modal("hide");
-          for(var i = 0; i < relationship.length; i ++) {
-            if (relationship[i] != undefined && relationship[i] != null) {
-              relationship[i]['specialistid'] = '';
-              relationship[i]['organizations'] = [];
-            }
-          }
-          return toastr.success('Organizations are added successfully');
-        } else {
-          return toastr.error('Action Failed');
-        }
-    });
-    setTimeout( function () {
-      managertable.ajax.reload();
-    }, 1000 );
-  });
-  
   $("#meditbtn").click(function (e) {
     if($("#efname").val() == ""){
       toastr.warning('Please enter First name');
@@ -832,4 +726,133 @@ $(document).ready(async function () {
     if (e.target.value == '0') managertable.search('').draw();
     else managertable.search(sp[e.target.value]).draw();
   });
+
+   // ### organization ### begin //
+   var lock = false;
+  $(document).on('click', '.managerorganizationbtn', function() {
+    // get specialist id, organizations, clinics
+    specialistid = $(this).parent().attr('idkey');
+    var clinic = '';
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: specialistid}, "specialist/getClinics", (xhr, err) => {
+      if (!err) {
+        clinic = JSON.parse(xhr.responseText)['data'][0].clinic;
+
+        //set title
+        $("#org_title").html('Set Organizations for ' + $(this).parent().parent().parent()[0].childNodes[1].innerHTML);
+
+        //init clinic
+        $("#rel_clinics").html('');
+
+        var available = clinic.split(',');
+        var options = '';
+        for(var i = 0; i < available.length; i ++) options += `<option value = "`+clinics[available[i]]['id']+`" >`+clinics[available[i]]['name']+`</option>`;
+        $("#rel_clinics").html(options);
+
+        //
+        // read relationship data by using specialistid
+        $(".changeOrganID").prop('checked', false);
+        organizations = [];
+        available.forEach(item => {
+          organizations[item] = {
+            clinicid: item,
+            specialistid: specialistid,
+            organizationid: []
+          }
+        });
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {specialistid: specialistid}, 'setting/relationship/getOrganizationBySpecialist', (xhr, err) => {
+          if (!err) {
+            //store in organizaions array.
+            let result = JSON.parse(xhr.responseText)['data'];
+            result.forEach(item => {
+              organizations[item.clinicid] = {
+                clinicid: item.clinicid,
+                specialistid: specialistid,
+                organizationid: item.organizationid.split(',')
+              }
+
+              //
+              lock = true;
+              $(".changeOrganID").prop('checked', false);
+
+              //set value
+              var l = $(".changeOrganID").children().prevObject.length;
+              for (var i = 0; i < l; i ++) {
+                if (organizations[$("#rel_clinics").val()]['organizationid'].indexOf($(".changeOrganID").children().prevObject[i].value) !== -1)
+                  $(".changeOrganID").children().prevObject[i].checked = true;
+              }
+              lock = false;
+            });
+            $("#specialist-organization-modal").modal('show');
+            //
+          }
+        });
+      }
+    });
+  });
+
+  $(document).on("change", ".changeOrganID",  function(e) {
+    if (lock === false) {
+      if (e.target.checked === true) {
+        organizations[$("#rel_clinics").val()]['specialistid'] = specialistid;
+        organizations[$("#rel_clinics").val()]['organizationid'].push(e.target.value);
+      } else if (e.target.checked === false) {
+        var index = organizations[$("#rel_clinics").val()]['organizationid'].indexOf(e.target.value);
+        if (index !== -1) {
+          organizations[$("#rel_clinics").val()]['organizationid'].splice(index, 1);
+        }
+      }
+    }
+  });
+
+  $(document).on("change", "#rel_clinics", function(e) {
+    lock = true;
+    $(".changeOrganID").prop('checked', false);
+
+    //set value
+    var l = $(".changeOrganID").children().prevObject.length;
+    for (var i = 0; i < l; i ++) {
+      if (organizations[e.target.value]['organizationid'].indexOf($(".changeOrganID").children().prevObject[i].value) !== -1)
+        $(".changeOrganID").children().prevObject[i].checked = true;
+    }
+    lock = false;
+  });
+
+  managertable.on('draw.dt', function(e) {
+
+    setTimeout(() => {
+      lock = true;
+      $(".changeOrganID").prop('checked', false);
+
+      //set value
+      var l = $(".changeOrganID").children().prevObject.length;
+      for (var i = 0; i < l; i ++) {
+        if (organizations[$("#rel_clinics").val()] !== undefined) {
+          if (organizations[$("#rel_clinics").val()]['organizationid'].indexOf($(".changeOrganID").children().prevObject[i].value) !== -1)
+            $(".changeOrganID").children().prevObject[i].checked = true;
+        }
+      }
+      lock = false;
+    }, 50);
+  });
+
+  $("#morganizationbtn").on('click', () => {
+    let entry = {
+      organizationid: organizations,
+      specialistid: specialistid
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/relationship/set", (xhr, err) => {
+      if (!err) {
+        $("#specialist-organization-modal").modal('hide');
+        toastr.success('Organizations are updated successfully!');
+      } else {
+        toastr.error('Action Failed!');
+      }
+    });
+  });
+
+  $("#org_search_input").on('keyup', function() {
+    managertable.search(this.value).draw();
+  })
+
+  // ### organization ### end //
 });
