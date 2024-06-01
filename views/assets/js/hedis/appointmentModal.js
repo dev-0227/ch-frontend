@@ -136,9 +136,6 @@ $(document).on("click",".apptbtn",function(){
 
         $("#appointment_title").html("New Appointment");
         $("#appt_add_btn").click();
-
-        
-        
       }
     }
   });
@@ -233,15 +230,15 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_participate_status").val('needs-action');
   $("#appointment_approve_date").val(t);
   $("#appointment_attended").prop('checked', false);
-  $("#appointment_status").val('proposed');
+  $("#appointment_status").val('pending').trigger('change');
   $("#appointment_measure").val($("#appt_pt_mid").val());
   $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
   getSpecialty();
   $("#appointment_cancel_reason").val('');
-  $("#appointment_class").val('VR');
-  $("#appointment_service_category").val('');
+  $("#appointment_class").val('AMB').trigger('change');
+  $("#appointment_service_category").val('7').trigger('change');
   
-  $("#appointment_priority").val('R');
+  $("#appointment_priority").val('R').trigger('change');
   $("#appointment_description").val('');
   $("#appointment_start_date").val("09:00");
   $("#appointment_end_date").val('09:15');
