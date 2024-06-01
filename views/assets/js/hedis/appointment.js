@@ -146,7 +146,6 @@ $(document).ready(async function () {
         $("#appointment_appt_type").val(appointment['appt_type']);
         $("#appointment_reason").val(appointment['reason']);
         $("#appointment_priority").val(appointment['priority']);
-        $("#appointment_description").val(appointment['description']);
         $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
         $("#appointment_notes").val(appointment['notes']);
         $("#appointment_pt_instruction").val(appointment['pt_instruction']);
@@ -203,7 +202,6 @@ $(document).ready(async function () {
         $("#appointment_service_category").val('7').trigger('change');
         
         $("#appointment_priority").val('R').trigger('change');
-        $("#appointment_description").val('');
         $("#appointment_start_date").val("09:00");
         $("#appointment_end_date").val('09:15');
         $("#appointment_cancel_date").val('');

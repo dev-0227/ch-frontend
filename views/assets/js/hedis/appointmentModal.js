@@ -211,7 +211,6 @@ $(document).on("click",".appt_edit_btn",function(){
       $("#appointment_appt_type").val(result[0]['appt_type']);
       $("#appointment_reason").val(result[0]['reason']);
       $("#appointment_priority").val(result[0]['priority']);
-      $("#appointment_description").val(result[0]['description']);
       $("#appointment_cancel_date").val(GetFormattedDate(new Date(result[0]['cancel_date'])));
       $("#appointment_notes").val(result[0]['notes']);
       $("#appointment_pt_instruction").val(result[0]['pt_instruction']);
@@ -239,7 +238,6 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_service_category").val('7').trigger('change');
   
   $("#appointment_priority").val('R').trigger('change');
-  $("#appointment_description").val('');
   $("#appointment_start_date").val("09:00");
   $("#appointment_end_date").val('09:15');
   $("#appointment_cancel_date").val('');
