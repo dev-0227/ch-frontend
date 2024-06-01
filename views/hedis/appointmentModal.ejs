@@ -136,19 +136,23 @@
 
 <div class="modal fade" id="appointment_edit_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
-	  <div class="modal-content">
+		<div class="modal-content">
 		<div class="modal-header pb-1 border-gray-400">
-		  <div class="fs-1 fw-bold text-gray-900 my-3" id="appointment_title">Appointment </div>
-		  <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-			  <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-		  </div>
-		  
+			<div class="fs-1 fw-bold text-gray-900 my-2" id="appointment_title">Appointment </div>
+			<label class="form-check form-check-custom form-check-sm form-check-solid mb-1 me-6">
+			<input class="form-control form-check-input p-4" type="checkbox" value="1"  id="appointment_attended" data-field="attended">
+			<span class="form-check-label text-gray-600 fw-semibold">Appointment Attended</span>
+			</label>
+			<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+				<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+			</div>
+			
 		</div>
 		<div class="modal-body pt-4">
 			<%- include("appointmentModalBody"); %>
 		</div>
 		
-	  </div>
+		</div>
 	</div>
 </div>
 
