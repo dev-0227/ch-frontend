@@ -706,7 +706,12 @@ $("#appointment_measure").on('change', (e) => {
           var result = JSON.parse(xhr.responseText)['data'];
           var options = '';
           result.forEach(item => {
-            options += `<option value='${item.id}'>${item.name}</option>`;
+            options += `<option value='${item.id}'>
+              <div class="form-check-label px-3 d-block">
+                <div class="text-primary fs-2">${item.name} | </div>
+                <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.address1} | <i class="fa fa-phone"></i> ${item.phone1}</div>
+              </div>
+            </option>`;
           });
           $("#appointment_organization").html(options);
         }
@@ -726,7 +731,12 @@ $(document).on('change', '#appointment_specialist_provider', (e) => {
       var result = JSON.parse(xhr.responseText)['data'];
       var options = '';
       result.forEach(item => {
-        options += `<option value='${item.id}'>${item.name}</option>`;
+        options += `<option value='${item.id}'>
+              <div class="form-check-label px-3 d-block">
+                <div class="text-primary fs-2">${item.name} | </div>
+                <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.address1} | <i class="fa fa-phone"></i> ${item.phone1}</div>
+              </div>
+            </option>`;
       });
       $("#appointment_organization").html(options);
     }

@@ -178,7 +178,6 @@ $(document).ready(async function () {
         $("#appointment_modal_phone").parent().removeClass("d-none");
         $("#appointment_modal_email").html("");
         $("#appointment_modal_email").parent().removeClass("d-none");
-        $("#appointment_specialist_provider").html('');
         $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
         $("#appointment_title").html('Appointment | ' + $("#chosen_clinics option:selected").text());
 
