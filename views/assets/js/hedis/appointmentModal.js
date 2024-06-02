@@ -295,7 +295,6 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
       options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
     }
     $("#appointment_measure").html(options);
-
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: $("#appointment_specialist_provider").val()}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
@@ -304,7 +303,9 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
           options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
         }
         $("#appointment_specialist_provider").html(options);
-        if (result.length) $("#appointment_specialist_provider").val(result[0]['id']);
+        if (result.length) {
+          $("#appointment_specialist_provider").val(result[0]['id']).trigger('change');
+        }
       }
     });
   }
@@ -686,7 +687,6 @@ $("#appointment_measure").on('change', (e) => {
       var result = JSON.parse(xhr.responseText)['data'];
       var options = '';
       result.forEach(item => {
-        console.log(item);
         if (item['clinic'] !== null) {
           item['clinic'].split(',').forEach(value => {
             if (value == localStorage.getItem('chosen_clinic')) {
@@ -696,6 +696,39 @@ $("#appointment_measure").on('change', (e) => {
         }
       });
       $("#appointment_specialist_provider").html(options);
+
+      var entry = {
+        specialistid: $("#appointment_specialist_provider").val(),
+        clinicid: localStorage.getItem('chosen_clinic')
+      }
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
+        if (!err) {
+          var result = JSON.parse(xhr.responseText)['data'];
+          var options = '';
+          result.forEach(item => {
+            options += `<option value='${item.id}'>${item.name}</option>`;
+          });
+          $("#appointment_organization").html(options);
+        }
+      });
+    }
+  });
+});
+
+$(document).on('change', '#appointment_specialist_provider', (e) => {
+  var entry = {
+    specialistid: e.target.value,
+    clinicid: localStorage.getItem('chosen_clinic')
+  }
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
+    if (!err) {
+      var result = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      result.forEach(item => {
+        options += `<option value='${item.id}'>${item.name}</option>`;
+      });
+      $("#appointment_organization").html(options);
     }
   });
 });
