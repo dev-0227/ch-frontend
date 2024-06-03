@@ -811,21 +811,11 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
     {
       data: 'id',
       render: function(data, type, row) {
-        var clinics = row.clinic.split(',');
-        _clinics[row.id] = {
-          id: row.id,
-          clinics: clinics
-        }
-        if (clinics.indexOf(localStorage.getItem('chosen_clinic')) !== -1) {
-          return `
-            <center>
-              <div class="form-check form-check-sm form-check-custom form-check-lg">
-                <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" checked value='${row.id}' />
-              </div>
-            </center>
-          `
-        }
-        else {
+        if (row.clinic == null || row.clinic == undefined) {
+          _clinics[row.id] = {
+            id: row.id,
+            clinics: []
+          }
           return `
             <center>
               <div class="form-check form-check-sm form-check-custom form-check-lg">
@@ -833,6 +823,31 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
               </div>
             </center>
           `
+        }
+        else {
+          var clinics = row.clinic.split(',');
+          _clinics[row.id] = {
+            id: row.id,
+            clinics: clinics
+          }
+          if (clinics.indexOf(localStorage.getItem('chosen_clinic')) !== -1) {
+            return `
+              <center>
+                <div class="form-check form-check-sm form-check-custom form-check-lg">
+                  <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" checked value='${row.id}' />
+                </div>
+              </center>
+            `
+          }
+          else {
+            return `
+              <center>
+                <div class="form-check form-check-sm form-check-custom form-check-lg">
+                  <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" value='${row.id}' />
+                </div>
+              </center>
+            `
+          }
         }
       }
     },
