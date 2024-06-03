@@ -190,11 +190,11 @@ $(document).ready(async function () {
         $("#appointment_specialist_provider").prop("disabled", false);
         $("#appointment_clinic_provider").prop("disabled", true);
         $("#appointment_clinic_provider").val("");
-        $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
+        // $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
         $("#appointment_attended").prop('checked', false);
         $("#appointment_status").val('pending').trigger('change');
-        $("#appointment_measure").val($("#appointment_measure option:first").val());
-        $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
+        // $("#appointment_measure").val($("#appointment_measure option:first").val());
+        // $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
         getSpecialty();
         $("#appointment_cancel_reason").val('');
         $("#appointment_class").val('AMB').trigger('change');

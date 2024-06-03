@@ -454,7 +454,7 @@ $(document).ready(async function () {
       id: document.getElementById('chosen_manager').value,
       clinics: clinics
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateclinics", (xhr1, err1) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateclinic", (xhr1, err1) => {
         if (!err1) {
           $("#specialist-clinic-modal").modal("hide");
           toastr.success('Clinics are updated successfully');

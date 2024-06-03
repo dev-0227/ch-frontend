@@ -201,7 +201,7 @@ $(document).ready(function () {
       id: document.getElementById('chosen_manager').value,
       clinics: clinics
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "manager/updateclinics", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "manager/updateclinic", (xhr, err) => {
         if (!err) {
           return $.growl.notice({
             message: "Clinics are updated successfully"

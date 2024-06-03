@@ -432,7 +432,7 @@ function setEndData(){
   $("#appointment_end_date").val(checkTime(end_date.getHours())+":"+checkTime(end_date.getMinutes()));
 }
 
-$("#appointment_specialist_provider").prop("disabled", true);
+// $("#appointment_specialist_provider").prop("disabled", true);
 $(document).on("change",".provider-radio",function(){
   var value = $('input[name="appointment_provider"]:checked').val();
   if(value=="0"){
@@ -691,7 +691,7 @@ $("#appointment_measure").on('change', (e) => {
         if (item['clinic'] !== null) {
           item['clinic'].split(',').forEach(value => {
             if (value == localStorage.getItem('chosen_clinic')) {
-              options += '<option value="' + item['measureId'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+              options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
             }
           })
         }
@@ -709,7 +709,7 @@ $("#appointment_measure").on('change', (e) => {
           if (result.length) {
             options = `<div value='${result[0].id}'>
               <div class="form-check-label px-3 d-block">
-                <div class="text-primary fs-3">${result[0].name}</div>
+                <div class="text-primary fs-4">${result[0].name}</div>
                 <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
                 <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
               </div>
@@ -741,7 +741,7 @@ $(document).on('change', '#appointment_specialist_provider', (e) => {
       if (result.length) {
         options = `<div value='${result[0].id}'>
           <div class="form-check-label px-3 d-block">
-            <div class="text-primary fs-3">${result[0].name}</div>
+            <div class="text-primary fs-4">${result[0].name}</div>
             <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
             <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
           </div>
@@ -766,7 +766,7 @@ $(document).on('click', '#appointment-org-next-click', () => {
     i ++;
     var options = `<div value='${organizations[i].id}'>
       <div class="form-check-label px-3 d-block">
-        <div class="text-primary fs-3">${organizations[i].name}</div>
+        <div class="text-primary fs-4">${organizations[i].name}</div>
         <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${organizations[0].city} ${organizations[0].state} ${organizations[0].zip}</div>
         <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
       </div>
@@ -783,7 +783,7 @@ $(document).on('click', '#appointment-org-prev-click', () => {
     i --;
     var options = `<div value='${organizations[i].id}'>
       <div class="form-check-label px-3 d-block">
-        <div class="text-primary fs-3">${organizations[i].name}</div>
+        <div class="text-primary fs-4">${organizations[i].name}</div>
         <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${organizations[0].city} ${organizations[0].state} ${organizations[0].zip}</div>
         <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
       </div>
@@ -795,42 +795,60 @@ $(document).on('click', '#appointment-org-prev-click', () => {
 
 // ### specialist search //
 
+let _clinics = []
 var appt_search_table = $("#appointment_specialist_table").DataTable({
   "ajax": {
-    "url": serviceUrl + "specialist/getSpecialistByMeasureId",
-    "type": "POST",
+    "url": serviceUrl + "specialist/listBymeasureID",
+    "type": "GET",
     "headers": { 'Authorization': localStorage.getItem('authToken') },
     "data":function (d) {
-      d.measureId = $("#appointment_measure").val()
+      d.measureid = $("#appointment_measure").val()
     },
   },
   serverSide: true,
-  processing: true,
   "pageLength": 10,
-  "order": [],
   "columns": [
-    { data: 'id',
+    {
+      data: 'id',
       render: function(data, type, row) {
-        return `
-          <center>
-            <div class="form-check form-check-sm form-check-custom form-check-lg">
-              <input id="checkOrgan" class="form-check-input changeOrganID" class="form-check-input" type="checkbox" value='${row.id}' />
-            </div>
-          </center>
-        `
+        var clinics = row.clinic.split(',');
+        _clinics[row.id] = {
+          id: row.id,
+          clinics: clinics
+        }
+        if (clinics.indexOf(localStorage.getItem('chosen_clinic')) !== -1) {
+          return `
+            <center>
+              <div class="form-check form-check-sm form-check-custom form-check-lg">
+                <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" checked value='${row.id}' />
+              </div>
+            </center>
+          `
+        }
+        else {
+          return `
+            <center>
+              <div class="form-check form-check-sm form-check-custom form-check-lg">
+                <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" value='${row.id}' />
+              </div>
+            </center>
+          `
+        }
       }
     },
-    { data: 'name',
+    {
+      data: 'fname',
       render: function(data, type, row) {
         return `
           <div class="form-check-label px-3 d-block">
-            <div class="text-primary fs-2">${row.name}</div>
+            <div class="text-primary fs-4">${row.fname} ${row.lname}</div>
             <div class="fs-8"><i class="fa fa-location-dot"></i> ${row.address} | <i class="fa fa-phone"></i> ${row.phone}</div>
           </div>
         `
       }
     },
-    { data: 'sname',
+    {
+      data: 'specialty_id',
       render: function(data, type, row) {
         return `
           <div class="text-primary fs-2">${row.sname}</div>
@@ -842,7 +860,85 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
 
 $(document).on('click', '#appointment-specialist-search', () => {
   //load specialist realted to clinic selected and measure selected.
-  appt_search_table.draw();
-
+  appt_search_table.ajax.reload(null, false);
+  _clinics = []
   $("#appointment-edit-modal-2").modal('show');
+});
+
+$(document).on('click', '#appointment-specialist-close', function(e) {
+  $("#appointment-edit-modal-2").modal('hide');
+});
+
+$("#appointment_specialist_search_input").on('keyup', function() {
+  appt_search_table.search(this.value).draw();
+});
+
+$("#appointment_specialist_save").click(() => {
+  var entry = {
+    clinics: _clinics
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateClinics", (xhr, err) => {
+    if (!err) {
+      toastr.success("Specialist is changed successfully!");
+      
+      let entry = {
+        measureid: $("#appointment_measure").val()
+      }
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
+        if (!err) {
+          var result = JSON.parse(xhr.responseText)['data'];
+          var options = '';
+          result.forEach(item => {
+            if (item['clinic'] !== null) {
+              item['clinic'].split(',').forEach(value => {
+                if (value == localStorage.getItem('chosen_clinic')) {
+                  options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+                }
+              })
+            }
+          });
+          $("#appointment_specialist_provider").html(options);
+    
+          var entry = {
+            specialistid: $("#appointment_specialist_provider").val(),
+            clinicid: localStorage.getItem('chosen_clinic')
+          }
+          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
+            if (!err) {
+              var result = organizations = JSON.parse(xhr.responseText)['data'];
+              var options = '';
+              if (result.length) {
+                options = `<div value='${result[0].id}'>
+                  <div class="form-check-label px-3 d-block">
+                    <div class="text-primary fs-4">${result[0].name}</div>
+                    <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
+                    <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
+                  </div>
+                </div>`;
+                $("#appointment-org-val").val(0);
+              }
+              if (result.length > 1) $("#appointment_org_buttons").html(`
+                <div class="d-flex flex-end">
+                  <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click">&lt;&lt;&nbsp;&nbsp;</a>
+                  <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;&gt;&gt;</a>
+                </div>`);
+              else $("#appointment_org_buttons").html(``);
+              $("#appointment_organization").html(options);
+            }
+          });
+        }
+      });
+      $("#appointment-edit-modal-2").modal('hide');
+    }
+  });
+});
+
+$(document).on('change', '#appt_spec_check', (e) => {
+  var c = localStorage.getItem('chosen_clinic');
+  if (e.target.checked == false) {
+    var index = _clinics[e.target.value].clinics.indexOf(c);
+    if (index != -1) _clinics[e.target.value].clinics.splice(index, 1);
+  }else if (e.target.checked == true) {
+    _clinics[e.target.value].clinics.push(c);
+  }
 });

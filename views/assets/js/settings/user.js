@@ -860,7 +860,7 @@ $(document).ready(function () {
       clinics: clinics
     }
 
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/updateclinics", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/updateclinic", (xhr, err) => {
       if (!err) {
         toastr.success('Clinic is set successfully');
         $("#user_clinic_modal").modal("hide");
