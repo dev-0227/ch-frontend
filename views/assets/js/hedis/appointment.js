@@ -179,7 +179,7 @@ $(document).ready(async function () {
         $("#appointment_modal_email").html("");
         $("#appointment_modal_email").parent().removeClass("d-none");
         $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
-        $("#appointment_title").html('Appointment | ' + $("#chosen_clinics option:selected").text());
+        $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
 
         var t = new Date().toISOString().split('T')[0];
         $("#appointment_id").val('');
