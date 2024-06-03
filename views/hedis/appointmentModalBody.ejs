@@ -304,10 +304,11 @@
         </div>
         <div class="col-md-3">
             <div class="">
-                <label for="appointment_organization" class="fw-semibold fs-6 my-2">Organizations:</label>
+                <label for="appointment_organization" class="fw-semibold fs-6 my-2">Specialist Locations:</label>
                 <!-- <select class="form-select" data-hide-search="true" data-dropdown-css-class="w-600px" data-placeholder="Select Organization" data-control="select2" id="appointment_organization" data-field="organization">
                 </select> -->
                 <div id="appointment_organization"></div>
+                <div id="appointment_org_buttons"></div>
             </div>
         </div>
     </div>
@@ -367,52 +368,41 @@
 
 <div class="modal fade"  id="appointment-specialist-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
+        <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title" id="org_title"></h1>
-          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <h1 class="modal-title" id="org_title"></h1>
+            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
             <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-          </div>
+            </div>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <label class="form-label">Please Select Clinic</label>
-              <div class="header-search d-flex align-items-center w-100 w-lg-350px show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                <select id="rel_clinics" aria-label="Select a Clinic" data-control="select2" data-hide-search="true" data-placeholder="Select a Clinic..." class="form-select mb-2">
-                </select>
-              </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label" for="appointment_specialist_search">Please Input Specialist Name or Address or Phone</label>
+                    <div class="d-flex align-items-center position-relative">
+                    <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                    </i>
+                    <input id="appointment_specialist_search" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-300px ps-13"
+                        placeholder="Search ..."/>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label" for="org_search_input">Please Input Specialist Name or Address or Phone</label>
-              <div class="d-flex align-items-center position-relative">
-                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                  <span class="path1"></span>
-                  <span class="path2"></span>
-                </i>
-                <input id="org_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-300px ps-13"
-                  placeholder="Search ..."/>
-              </div>
+            <div class="separator separator-content border-gray-300 my-5">
             </div>
-          </div>
-          <div class="separator separator-content border-gray-300 my-5">
-          </div>
-          <div class="row">
-            <div class="card-body px-0 px-3 min-h-300px">
-              <table class="table table-striped table-bordered text-nowrap w-100" id="kt_sidebar_nav">
-                <tbody></tbody>
-              </table>
+            <div class="row">
+                <div class="card-body px-0 px-3 min-h-300px">
+                    <table class="table table-striped table-bordered text-nowrap w-100" id="appointment_specialist_table">
+                    <tbody></tbody>
+                    </table>
+                </div>
             </div>
-          </div>
-          <div class="row">
-            <ul class="pagination">
-            </ul>
-          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-          <button type="button" class="btn btn-primary" id="morganizationbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+            <button type="button" class="btn btn-primary" id="appointment_specialist_sve"><i class="fa fa-save">&nbsp;</i> Save</button>
         </div>
-      </div>
+        </div>
     </div>
-  </div>
+</div>

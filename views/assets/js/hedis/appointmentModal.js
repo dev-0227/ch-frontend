@@ -713,13 +713,15 @@ $("#appointment_measure").on('change', (e) => {
                 <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1}</div>
                 <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
               </div>
-              <div class="d-flex flex-end">
-                <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
-                <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
-              </div>
             </div>`;
             $("#appointment-org-val").val(0);
           }
+          if (result.length > 1) $("#appointment_org_buttons").html(`
+            <div class="d-flex flex-end">
+              <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click">&lt;&lt;&nbsp;&nbsp;</a>
+              <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;&gt;&gt;</a>
+            </div>`);
+          else $("#appointment_org_buttons").html(``);
           $("#appointment_organization").html(options);
         }
       });
@@ -743,13 +745,15 @@ $(document).on('change', '#appointment_specialist_provider', (e) => {
             <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1}</div>
             <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
           </div>
-          <div class="d-flex flex-end">
-            <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
-            <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
-          </div>
         </div>`;
         $("#appointment-org-val").val(0);
       }
+      if (result.length > 1) $("#appointment_org_buttons").html(`
+        <div class="d-flex flex-end">
+          <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click">&lt;&lt;&nbsp;&nbsp;</a>
+          <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;&gt;&gt;</a>
+        </div>`);
+      else $("#appointment_org_buttons").html(``);
       $("#appointment_organization").html(options);
     }
   });
@@ -765,10 +769,6 @@ $(document).on('click', '#appointment-org-next-click', () => {
         <div class="text-primary fs-3">${organizations[i].name}</div>
         <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1}</div>
         <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
-      </div>
-      <div class="d-flex flex-end">
-        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
-        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
       </div>
     </div>`;
     $("#appointment-org-val").val(i);
@@ -786,10 +786,6 @@ $(document).on('click', '#appointment-org-prev-click', () => {
         <div class="text-primary fs-3">${organizations[i].name}</div>
         <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1}</div>
         <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
-      </div>
-      <div class="d-flex flex-end">
-        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
-        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
       </div>
     </div>`;
     $("#appointment-org-val").val(i);
