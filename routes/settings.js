@@ -11,7 +11,7 @@ router.get("/setting", (req, res, next) => {
 router.get("/specialist", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Specialist List",
-        pageKey: "../settings/specialist"
+        pageKey: "../specialists/specialist"
     });
 });
 
@@ -46,14 +46,14 @@ router.get("/permission", (req, res, next) => {
 router.get("/organization", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Organization Management",
-        pageKey: "../settings/organization"
+        pageKey: "../organizations/organization"
     })
 })
 
 router.get("/organizationtype", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Organization Type List",
-        pageKey: "../settings/organizationtype"
+        pageKey: "../organizations/organizationtype"
     })
 })
 

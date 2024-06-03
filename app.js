@@ -11,7 +11,6 @@ const hedis = require('./routes/hedis');
 const patients = require('./routes/patients');
 const insurance = require('./routes/insurance');
 const database = require('./routes/database');
-const cors = require('cors');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -19,20 +18,6 @@ app.set('views', path.join(__dirname, 'views'));
 // Config middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// app.disable("x-powered-by");
-// app.use(cors());
-
-// app.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Authorization, X-Custom-Header, Origin, X-Requested-With, Content-Type, Accept, Cache-Control");
-//     res.header("Access-Control-Expose-Headers", "Authorization, Content-Type, Allow, X-Response-Time, Cache-Control");
-//     if (req.method === 'OPTIONS') {
-//         res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
-//         return res.status(200).json({});
-//     }
-//     next();
-// });
 
 // Static Pages
 app.use('/assets', express.static(path.join(__dirname, 'views/assets')));
@@ -47,7 +32,6 @@ app.use('/insurance', insurance);
 app.use('/database', database);
 
 app.use('*', (req, res) => {
-    //res.status(404).render('pages-404');
     res.redirect('../');
 });
 

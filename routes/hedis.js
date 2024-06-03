@@ -11,7 +11,7 @@ router.get("/", (req, res, next) => {
 router.get("/appointment", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Appointment",
-        pageKey: "../hedis/appointment"
+        pageKey: "../appointments/appointment"
     });
 });
 

@@ -452,4 +452,4 @@ $(document).ready(async function () {
     });
 });
 
-document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
+document.write('<script src="/assets/js/appointments/appointmentModal.js" type="text/javascript"></script>');

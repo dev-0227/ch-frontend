@@ -767,7 +767,7 @@ $(document).on('click', '#appointment-org-next-click', () => {
     var options = `<div value='${organizations[i].id}'>
       <div class="form-check-label px-3 d-block">
         <div class="text-primary fs-3">${organizations[i].name}</div>
-        <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
+        <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${organizations[0].city} ${organizations[0].state} ${organizations[0].zip}</div>
         <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
       </div>
     </div>`;
@@ -784,7 +784,7 @@ $(document).on('click', '#appointment-org-prev-click', () => {
     var options = `<div value='${organizations[i].id}'>
       <div class="form-check-label px-3 d-block">
         <div class="text-primary fs-3">${organizations[i].name}</div>
-        <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
+        <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${organizations[0].city} ${organizations[0].state} ${organizations[0].zip}</div>
         <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
       </div>
     </div>`;
