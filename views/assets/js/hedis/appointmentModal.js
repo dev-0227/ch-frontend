@@ -678,6 +678,7 @@ $(document).on("click","#save_patient_btn",function(){
 });
 
 // ### //
+let organizations = []
 $("#appointment_measure").on('change', (e) => {
   let entry = {
     measureid: e.target.value
@@ -703,16 +704,22 @@ $("#appointment_measure").on('change', (e) => {
       }
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
         if (!err) {
-          var result = JSON.parse(xhr.responseText)['data'];
+          var result = organizations = JSON.parse(xhr.responseText)['data'];
           var options = '';
-          result.forEach(item => {
-            options += `<option value='${item.id}'>
+          if (result.length) {
+            options = `<div value='${result[0].id}'>
               <div class="form-check-label px-3 d-block">
-                <div class="text-primary fs-2">${item.name} | </div>
-                <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.address1} | <i class="fa fa-phone"></i> ${item.phone1}</div>
+                <div class="text-primary fs-3">${result[0].name}</div>
+                <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1}</div>
+                <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
               </div>
-            </option>`;
-          });
+              <div class="d-flex flex-end">
+                <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
+                <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
+              </div>
+            </div>`;
+            $("#appointment-org-val").val(0);
+          }
           $("#appointment_organization").html(options);
         }
       });
@@ -725,20 +732,67 @@ $(document).on('change', '#appointment_specialist_provider', (e) => {
     specialistid: e.target.value,
     clinicid: localStorage.getItem('chosen_clinic')
   }
-
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
     if (!err) {
-      var result = JSON.parse(xhr.responseText)['data'];
+      var result = organizations = JSON.parse(xhr.responseText)['data'];
       var options = '';
-      result.forEach(item => {
-        options += `<option value='${item.id}'>
-              <div class="form-check-label px-3 d-block">
-                <div class="text-primary fs-2">${item.name} | </div>
-                <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.address1} | <i class="fa fa-phone"></i> ${item.phone1}</div>
-              </div>
-            </option>`;
-      });
+      if (result.length) {
+        options = `<div value='${result[0].id}'>
+          <div class="form-check-label px-3 d-block">
+            <div class="text-primary fs-3">${result[0].name}</div>
+            <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1}</div>
+            <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
+          </div>
+          <div class="d-flex flex-end">
+            <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
+            <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
+          </div>
+        </div>`;
+        $("#appointment-org-val").val(0);
+      }
       $("#appointment_organization").html(options);
     }
   });
+});
+
+$(document).on('click', '#appointment-org-next-click', () => {
+  var i = $("#appointment-org-val").val();
+  if (i == organizations.length -1) return;
+  else {
+    i ++;
+    var options = `<div value='${organizations[i].id}'>
+      <div class="form-check-label px-3 d-block">
+        <div class="text-primary fs-3">${organizations[i].name}</div>
+        <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1}</div>
+        <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
+      </div>
+      <div class="d-flex flex-end">
+        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
+        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
+      </div>
+    </div>`;
+    $("#appointment-org-val").val(i);
+    $("#appointment_organization").html(options);
+  }
+});
+
+$(document).on('click', '#appointment-org-prev-click', () => {
+  var i = $("#appointment-org-val").val();
+  if (i == 0) return;
+  else {
+    i --;
+    var options = `<div value='${organizations[i].id}'>
+      <div class="form-check-label px-3 d-block">
+        <div class="text-primary fs-3">${organizations[i].name}</div>
+        <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1}</div>
+        <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
+      </div>
+      <div class="d-flex flex-end">
+        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click"><<&nbsp;&nbsp;</a>
+        <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;>></a>
+      </div>
+    </div>`;
+    $("#appointment-org-val").val(i);
+    $("#appointment_organization").html(options);
+  }
 });

@@ -4,346 +4,415 @@
 <input type="hidden" class="form-control" id="appointment_patient_id" data-field="patient_id">
 <input type="hidden" class="form-control" id="appointment_emr_id" data-field="emr_id">
 <input type="hidden" class="form-control" id="appointment_pcp_id" data-field="pcp_id">
-<div class="row">
-    <div class="col-md-12">
-        <div class="d-flex align-items-center d-none mb-3" id="appointment_patient_find">
-            <span class="fs-6  pe-2">Patient: </span>
-            <div  class="header-search d-flex align-items-center w-100 w-lg-500px" >
-                <div class="w-lg-500px">
-                    <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
-                        <i class="ki-duotone ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                        </i>
-                        <input type="text" class="search-input form-control form-control-solid ps-13" id="search_patient" value="" placeholder="Search..." data-kt-search-element="input" autocomplete="off">
-                        <span class="search-spinner position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-5" data-kt-search-element="spinner">
-                            <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
-                        </span>
-                        <span class="search-reset btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0  me-4" data-kt-search-element="clear">
-                            <i class="ki-duotone ki-cross fs-2 fs-lg-1 me-0">
+<input id="appointment-org-val" class="form-control" type="hidden" value="" />
+
+<div class="appointment-modal">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex align-items-center d-none mb-3" id="appointment_patient_find">
+                <span class="fs-6  pe-2">Patient: </span>
+                <div  class="header-search d-flex align-items-center w-100 w-lg-500px" >
+                    <div class="w-lg-500px">
+                        <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                            <i class="ki-duotone ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5">
                                 <span class="path1"></span>
                                 <span class="path2"></span>
                             </i>
-                        </span>
+                            <input type="text" class="search-input form-control form-control-solid ps-13" id="search_patient" value="" placeholder="Search..." data-kt-search-element="input" autocomplete="off">
+                            <span class="search-spinner position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-5" data-kt-search-element="spinner">
+                                <span class="spinner-border h-15px w-15px align-middle text-gray-500"></span>
+                            </span>
+                            <span class="search-reset btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0  me-4" data-kt-search-element="clear">
+                                <i class="ki-duotone ki-cross fs-2 fs-lg-1 me-0">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                        </div>
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded  menu-gray-800 menu-state-bg-light-primary fw-semibold w-lg-500px py-3 mt-sm-2" data-kt-menu="true" id="searched_patient_list" >
+                                <div class="menu-item px-3 ">
+                                    <span class="menu-link px-3 py-1" data-item="name"></span>
+                                </div>
+                        </div>
                     </div>
-                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded  menu-gray-800 menu-state-bg-light-primary fw-semibold w-lg-500px py-3 mt-sm-2" data-kt-menu="true" id="searched_patient_list" >
-                            <div class="menu-item px-3 ">
-                                <span class="menu-link px-3 py-1" data-item="name"></span>
+                </div>
+                <div class="me-0 ms-2 w" id="search_item_select_button">
+                    <button class="btn btn-outline  btn-outline-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                        <span id="pt_search_item">Name</span>
+                        <i class="ki-duotone ki-down fs-2 ms-3 pe-0"></i>
+                    </button>
+                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-150px py-3 mt-sm-2" data-kt-menu="true" >
+                        <div class="p-1 cursor-pointer" id="search_item_list">
+                            <div class="menu-item px-3">
+                                <span class="menu-link px-3 py-1" data-item="name">Name</span>
                             </div>
-                    </div>
-                </div>
-            </div>
-            <div class="me-0 ms-2 w" id="search_item_select_button">
-                <button class="btn btn-outline  btn-outline-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                    <span id="pt_search_item">Name</span>
-                    <i class="ki-duotone ki-down fs-2 ms-3 pe-0"></i>
-                </button>
-                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-150px py-3 mt-sm-2" data-kt-menu="true" >
-                    <div class="p-1 cursor-pointer" id="search_item_list">
-                        <div class="menu-item px-3">
-                            <span class="menu-link px-3 py-1" data-item="name">Name</span>
-                        </div>
-                        <div class="menu-item px-3 ">
-                            <span class="menu-link px-3 py-1" data-item="dob">DOB</span>
-                        </div>
-                        <div class="menu-item px-3">
-                            <span class="menu-link px-3 py-1" data-item="emr_id">Account No</span>
-                        </div>
-                        <div class="menu-item px-3">
-                            <span class="menu-link px-3 py-1" data-item="phone">Phone No</span>
-                        </div>
-                        <div class="menu-item px-3">
-                            <span class="menu-link px-3 py-1" data-item="Insurance">Subscriber No</span>
+                            <div class="menu-item px-3 ">
+                                <span class="menu-link px-3 py-1" data-item="dob">DOB</span>
+                            </div>
+                            <div class="menu-item px-3">
+                                <span class="menu-link px-3 py-1" data-item="emr_id">Account No</span>
+                            </div>
+                            <div class="menu-item px-3">
+                                <span class="menu-link px-3 py-1" data-item="phone">Phone No</span>
+                            </div>
+                            <div class="menu-item px-3">
+                                <span class="menu-link px-3 py-1" data-item="Insurance">Subscriber No</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="" id="appointment_patient_info">
-            <div class="d-flex align-items-center ">
-                <a  class="text-gray-900 text-hover-primary fs-4 fw-bold me-1" id="appointment_modal_fullname"></a>
-                <div class= "fw-semibold fs-6 m-1 pe-2">
-                    <a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
-                        <div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
-                            <span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
-                        </div><div id="appointment_modal_language"></div></a>
+            <div class="" id="appointment_patient_info">
+                <div class="d-flex align-items-center ">
+                    <a  class="text-gray-900 text-hover-primary fs-4 fw-bold me-1" id="appointment_modal_fullname"></a>
+                    <div class= "fw-semibold fs-6 m-1 pe-2">
+                        <a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
+                            <div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+                                <span class="symbol-label bg-info text-inverse-info fw-bold">L</span>
+                            </div><div id="appointment_modal_language"></div></a>
+                    </div>
+                    <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+                        <a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
+                            <div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
+                            <span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
+                            </div><div class="" id="appointment_modal_gender"></div></a>
+                    </div>
+                    <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+                        <div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
+                        <div class="text-gray-500" id="appointment_modal_dob"></div>
+                    </div>
+                    <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
+                        <div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
+                        <div class="text-gray-500" id="appointment_modal_age"></div>
+                    </div>
+                    <div  class="mx-3 mt-1 cursor-pointer pt_info ms-20 d-flex align-items-center fs-6 " id="appointment_pt_info" >
+                        <i class="ki-outline ki-information-2 text-primary fs-2x me-2">
+                        </i> Patient Information
+                    </div>
+                    <div  class="mx-3 mt-1 cursor-pointer appt-list ms-4 d-flex align-items-center fs-6" >
+                        <i class="ki-outline ki-time text-primary fs-2x me-1 ">
+                        </i> Appointments
+                    </div>
                 </div>
-                <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-                    <a  class="d-flex align-items-center text-gray-500 text-hover-primary me-5 ">
-                        <div class="symbol symbol-20px symbol-circle me-2" data-bs-toggle="tooltip"  data-kt-initialized="1">
-                        <span class="symbol-label bg-primary text-inverse-primary fw-bold">S</span>
-                        </div><div class="" id="appointment_modal_gender"></div></a>
-                </div>
-                <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-                    <div class=" fw-bold fs-6 pe-1 text-active-info ">DOB:</div>
-                    <div class="text-gray-500" id="appointment_modal_dob"></div>
-                </div>
-                <div class= "d-flex align-items-center fw-semibold fs-6 m-1 pe-2">
-                    <div class=" fw-bold fs-6 pe-1 text-active-info ">Age:</div>
-                    <div class="text-gray-500" id="appointment_modal_age"></div>
-                </div>
-                <div  class="mx-3 mt-1 cursor-pointer pt_info ms-20 d-flex align-items-center fs-6 " id="appointment_pt_info" >
-                    <i class="ki-outline ki-information-2 text-primary fs-2x me-2">
-                    </i> Patient Information
-                </div>
-                <div  class="mx-3 mt-1 cursor-pointer appt-list ms-4 d-flex align-items-center fs-6" >
-                    <i class="ki-outline ki-time text-primary fs-2x me-1 ">
-                    </i> Appointments
-                </div>
-            </div>
-            <div class="d-flex flex-wrap fw-semibold fs-6 my-2 pe-2">
-                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-                    <i class="ki-duotone ki-safe-home fs-4 me-1">
+                <div class="d-flex flex-wrap fw-semibold fs-6 my-2 pe-2">
+                    <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+                        <i class="ki-duotone ki-safe-home fs-4 me-1">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i><div id="appointment_modal_clinic"></div></a>
+                    <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+                    <i class="fa fa-phone me-2"></i><div id="appointment_modal_telephone" class="calling cursor-pointer"></div></a>
+                    <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+                        <i class="ki-duotone ki-phone fs-4 me-1">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i><div id="appointment_modal_phone" class="calling cursor-pointer"></div></a>
+                        <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
+                    <i class="ki-duotone ki-sms fs-4 me-1">
                         <span class="path1"></span>
                         <span class="path2"></span>
-                    </i><div id="appointment_modal_clinic"></div></a>
-                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-                <i class="fa fa-phone me-2"></i><div id="appointment_modal_telephone" class="calling cursor-pointer"></div></a>
-                <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-                    <i class="ki-duotone ki-phone fs-4 me-1">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i><div id="appointment_modal_phone" class="calling cursor-pointer"></div></a>
-                    <a href="#" class="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
-                <i class="ki-duotone ki-sms fs-4 me-1">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                </i><div id="appointment_modal_email"></div></a>
+                    </i><div id="appointment_modal_email"></div></a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_appt_type" class="fw-semibold fs-6 my-2">Appointment Type:</label>
-            <select  class="form-select" data-hide-search="true" data-control="select2" id="appointment_appt_type" data-field="appt_type">
-            </select>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_appt_type" class="fw-semibold fs-6 my-2">Appointment Type:</label>
+                <select  class="form-select" data-hide-search="true" data-control="select2" id="appointment_appt_type" data-field="appt_type">
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_reason" class="required  fs-6 my-2">Reason:</label>
+                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="appointment_reason">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_approve_date" class="fw-semibold fs-6 my-2">Appointment Date:</label>
+                <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="approve_date" id="appointment_approve_date">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="d-flex flex-column flex-wrap fw-semibold px-4 pt-6 pb-2" data-kt-customer-table-filter="appointment_provider_type">
+                <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+                    <input class="form-check-input provider-radio" type="radio" name="appointment_provider" value="0" checked="checked">
+                    <span class="form-check-label text-gray-600" id="appointment_clinic_name">Clinic Name</span>
+                </label>
+                <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
+                    <input class="form-check-input provider-radio" type="radio" name="appointment_provider" value="1">
+                    <span class="form-check-label text-gray-600">Specialist Visit</span>
+                </label>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_reason" class="required  fs-6 my-2">Reason:</label>
-            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="reason" id="appointment_reason">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_priority" class="fw-semibold fs-6 my-2">Priority:</label>
+                <select  class="form-select" data-hide-search="true" data-placeholder="Select Priority" data-control="select2" id="appointment_priority" data-field="priority">
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_approve_date" class="fw-semibold fs-6 my-2">Appointment Date:</label>
-            <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="approve_date" id="appointment_approve_date">
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="d-flex flex-column flex-wrap fw-semibold px-4 pt-6 pb-2" data-kt-customer-table-filter="appointment_provider_type">
-            <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-                <input class="form-check-input provider-radio" type="radio" name="appointment_provider" value="0" checked="checked">
-                <span class="form-check-label text-gray-600" id="appointment_clinic_name">Clinic Name</span>
-            </label>
-            <label class="form-check form-check-sm form-check-custom form-check-solid mb-3 me-5">
-                <input class="form-check-input provider-radio" type="radio" name="appointment_provider" value="1">
-                <span class="form-check-label text-gray-600">Specialist Visit</span>
-            </label>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_priority" class="fw-semibold fs-6 my-2">Priority:</label>
-            <select  class="form-select" data-hide-search="true" data-placeholder="Select Priority" data-control="select2" id="appointment_priority" data-field="priority">
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_status" class="fw-semibold fs-6 my-2">Status:</label>
-            <select  class="form-select" data-hide-search="true" data-placeholder="Select Status" data-control="select2" id="appointment_status" data-field="status">
-                <option value="proposed">Proposed</option>
-                <option value="pending">Pending </option>
-                <option value="booked">Booked </option>
-                <option value="arrived">Arrived </option>
-                <option value="fulfilled">Fulfilled</option>
-                <option value="cancelled">Cancelled</option>
-                <option value="noshow">No Show</option>
-                <option value="entered-in-error">Entered in Error </option>
-                <option value="checked-in">Checked In</option>
-                <option value="waitlist">Waitlisted</option>
-            </select>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_status" class="fw-semibold fs-6 my-2">Status:</label>
+                <select  class="form-select" data-hide-search="true" data-placeholder="Select Status" data-control="select2" id="appointment_status" data-field="status">
+                    <option value="proposed">Proposed</option>
+                    <option value="pending">Pending </option>
+                    <option value="booked">Booked </option>
+                    <option value="arrived">Arrived </option>
+                    <option value="fulfilled">Fulfilled</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="noshow">No Show</option>
+                    <option value="entered-in-error">Entered in Error </option>
+                    <option value="checked-in">Checked In</option>
+                    <option value="waitlist">Waitlisted</option>
+                </select>
 
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_start_date" class="required  fs-6 my-2">Start Time:</label>
+                <input type="time" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="start_date" id="appointment_start_date">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_end_date" class="fw-semibold fs-6 my-2">End Time:</label>
+                <input type="time" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="end_date" id="appointment_end_date">
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_start_date" class="required  fs-6 my-2">Start Time:</label>
-            <input type="time" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="start_date" id="appointment_start_date">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_measure" class="fw-semibold fs-6 my-2">Related Measure:</label>
+                <select class="form-select" data-hide-search="true" data-dropdown-css-class="w-850px" data-placeholder="Select Related Measure" data-control="select2" id="appointment_measure" data-field="measure">
+                    <option></option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_assessment" class="fw-semibold fs-6 my-2">Assessment:</label>
+                <select  class="form-select" data-hide-search="true" data-placeholder="Select Assessment" data-control="select2" id="appointment_assessment" data-field="assessment">
+                    
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_clinic_provider" class="fw-semibold fs-6 my-2">Clinic Provider:</label>
+                <select class="form-select" data-hide-search="true" data-placeholder="Select Clinic Provider" data-control="select2" id="appointment_clinic_provider" data-field="clinic_provider">
+                    
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_specialist_provider" class="fw-semibold fs-6 my-2 d-flex justify-content-between flex-lg-grow-1">External Medical Provider: 
+                    <a href="#" class="btn-color-success btn-active-color-primary" id="appointment-specialist-search"><i class="bi bi-search"></i></a>
+                </label>
+                <select class="form-select" data-hide-search="true" data-placeholder="Select External Mdecial Provider" data-control="select2" id="appointment_specialist_provider" data-field="specialist_provider">
+                </select>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_end_date" class="fw-semibold fs-6 my-2">End Time:</label>
-            <input type="time" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="end_date" id="appointment_end_date">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="appointment_participate_status" class="fw-semibold fs-6 my-2">Patient Participate Status:</label>
+                        <select class="form-select" data-hide-search="true" data-placeholder="Select Patient Participate Status" data-control="select2" id="appointment_participate_status" data-field="pt_participate_status">
+                            <option value="needs-action">Needs Action</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="declined">Declined</option>
+                            <option value="tentative">Tentative</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="appointment_class" class="fw-semibold fs-6 my-2">Class:</label>
+                        <select class="form-select" data-hide-search="true" data-placeholder="Select a Class" data-control="select2" id="appointment_class" data-field="class"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="appointment_service_category" class="fw-semibold fs-6 my-2">Service Category:</label>
+                        <select class="form-select" data-hide-search="true" data-placeholder="Select Service Category" data-control="select2" id="appointment_service_category" data-field="service_category">
+                            <option value="1">Adoption</option>
+                            <option value="2">Aged Care</option>
+                            <option value="34">Allied Health</option>
+                            <option value="3">Alternative/Complementary Therapies</option>
+                            <option value="4">Child Care /Kindergarten</option>
+                            <option value="5">Child Development</option>
+                            <option value="6">Child Protection & Family Services</option>
+                            <option value="7">Community Health Care</option>
+                            <option value="8">Counselling</option>
+                            <option value="36">Crisis Line (GPAH use only)</option>
+                            <option value="9">Death Services</option>
+                            <option value="10">Dental</option>
+                            <option value="11">Disability Support</option>
+                            <option value="12">Drug/Alcohol</option>
+                            <option value="13">Education & Learning</option>
+                            <option value="14">Emergency Department</option>
+                            <option value="15">Employment</option>
+                            <option value="16">Financial & Material Aid</option>
+                            <option value="17">General Practice</option>
+                            <option value="35">Hospital</option>
+                            <option value="18">Housing/Homelessness</option>
+                            <option value="19">Interpreting</option>
+                            <option value="20">Justice</option>
+                            <option value="21">Legal</option>
+                            <option value="22">Mental Health</option>
+                            <option value="38">NDIA</option>
+                            <option value="23">Physical Activity & Recreation</option>
+                            <option value="24">Regulation</option>
+                            <option value="25">Respite/Carer Support</option>
+                            <option value="26">Specialist Clinical Pathology</option>
+                            <option value="27">Specialist Medical</option>
+                            <option value="28">Specialist Obstetrics & Gynecology</option>
+                            <option value="29">Specialist Paediatric</option>
+                            <option value="30">Specialist Radiology/Imaging</option>
+                            <option value="31">Specialist Surgical - requires referral</option>
+                            <option value="32">Support group/s</option>
+                            <option value="37">Test Message (HSD admin use only)</option>
+                            <option value="33">Transport</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="appointment_notes" class="fw-semibold fs-6 my-2">Notes:</label>
+                        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="appointment_notes">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="appointment_pt_instruction" class=" fw-semibold fs-6 my-2">Patient Instruction:</label>
+                        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_instruction" id="appointment_pt_instruction">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="">
+                <label for="appointment_organization" class="fw-semibold fs-6 my-2">Organizations:</label>
+                <!-- <select class="form-select" data-hide-search="true" data-dropdown-css-class="w-600px" data-placeholder="Select Organization" data-control="select2" id="appointment_organization" data-field="organization">
+                </select> -->
+                <div id="appointment_organization"></div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_measure" class="fw-semibold fs-6 my-2">Related Measure:</label>
-            <select class="form-select" data-hide-search="true" data-dropdown-css-class="w-850px" data-placeholder="Select Related Measure" data-control="select2" id="appointment_measure" data-field="measure">
-                <option></option>
-            </select>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="form-group">
+                <label for="appointment_cancel_reason" class="fw-semibold fs-6 my-2">Cancel Reason:</label>
+                <select class="form-select" data-hide-search="true" data-placeholder="Select Cancel Reason" data-control="select2" id="appointment_cancel_reason" data-field="cancel_reason">
+                    <option value=""></option>
+                    <option value="pat">Patient</option>
+                    <option value="pat-crs">Patient: Canceled via automated reminder system</option>
+                    <option value="pat-cpp">Patient: Canceled via Patient Portal</option>
+                    <option value="pat-dec">Patient: Deceased</option>
+                    <option value="pat-fb">Patient: Feeling Better</option>
+                    <option value="pat-lt">Patient: Lack of Transportation</option>
+                    <option value="pat-mt">Patient: Member Terminated</option>
+                    <option value="pat-mv">Patient: Moved</option>
+                    <option value="pat-preg">Patient: Pregnant</option>
+                    <option value="pat-swl">Patient: Scheduled from Wait List</option>
+                    <option value="pat-ucp">Patient: Unhappy/Changed Provider</option>
+                    <option value="prov">Provider</option>
+                    <option value="prov-pers">Provider: Personal</option>
+                    <option value="prov-dch">Provider: Discharged</option>
+                    <option value="prov-edu">Provider: Edu/Meeting</option>
+                    <option value="prov-hosp">Provider: Hospitalized</option>
+                    <option value="prov-labs">Provider: Labs Out of Acceptable Range</option>
+                    <option value="prov-mri">Provider: MRI Screening Form Marked Do Not Proceed</option>
+                    <option value="prov-onc">Provider: Oncology Treatment Plan Changes</option>
+                    <option value="maint">Equipment Maintenance/Repair</option>
+                    <option value="meds-inc">Prep/Med Incomplete</option>
+                    <option value="other">Other</option>
+                    <option value="oth-cms">Other: CMS Therapy Cap Service Not Authorized</option>
+                    <option value="oth-err">Other: Error</option>
+                    <option value="oth-fin">Other: Financial</option>
+                    <option value="oth-iv">Other: Improper IV Access/Infiltrate IV</option>
+                    <option value="oth-int">Other: No Interpreter Available</option>
+                    <option value="oth-mu">Other: Prep/Med/Results Unavailable</option>
+                    <option value="oth-room">Other: Room/Resource Maintenance</option>
+                    <option value="oth-oerr">Other: Schedule Order Error</option>
+                    <option value="oth-swie">Other: Silent Walk In Error</option>
+                    <option value=" oth-weath">Other: Weather</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="appointment_cancel_date" class="fw-semibold fs-6 my-2">Cancel Date:</label>
+                <input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="cancel_date" id="appointment_cancel_date">
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_assessment" class="fw-semibold fs-6 my-2">Assessment:</label>
-            <select  class="form-select" data-hide-search="true" data-placeholder="Select Assessment" data-control="select2" id="appointment_assessment" data-field="assessment">
-                
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_clinic_provider" class="fw-semibold fs-6 my-2">Clinic Provider:</label>
-            <select class="form-select" data-hide-search="true" data-placeholder="Select Clinic Provider" data-control="select2" id="appointment_clinic_provider" data-field="clinic_provider">
-                
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_specialist_provider" class="fw-semibold fs-6 my-2">External Medical Provider:</label>
-            <select class="form-select" data-hide-search="true" data-placeholder="Select External Mdecial Provider" data-control="select2" id="appointment_specialist_provider" data-field="specialist_provider">
-                
-            </select>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_participate_status" class="fw-semibold fs-6 my-2">Patient Participate Status:</label>
-            <select class="form-select" data-hide-search="true" data-placeholder="Select Patient Participate Status" data-control="select2" id="appointment_participate_status" data-field="pt_participate_status">
-                <option value="needs-action">Needs Action</option>
-                <option value="accepted">Accepted</option>
-                <option value="declined">Declined</option>
-                <option value="tentative">Tentative</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_class" class="fw-semibold fs-6 my-2">Class:</label>
-            <select class="form-select" data-hide-search="true" data-placeholder="Select a Class" data-control="select2" id="appointment_class" data-field="class"></select>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_service_category" class="fw-semibold fs-6 my-2">Service Category:</label>
-            <select class="form-select" data-hide-search="true" data-placeholder="Select Service Category" data-control="select2" id="appointment_service_category" data-field="service_category">
-                <option value="1">Adoption</option>
-                <option value="2">Aged Care</option>
-                <option value="34">Allied Health</option>
-                <option value="3">Alternative/Complementary Therapies</option>
-                <option value="4">Child Care /Kindergarten</option>
-                <option value="5">Child Development</option>
-                <option value="6">Child Protection & Family Services</option>
-                <option value="7">Community Health Care</option>
-                <option value="8">Counselling</option>
-                <option value="36">Crisis Line (GPAH use only)</option>
-                <option value="9">Death Services</option>
-                <option value="10">Dental</option>
-                <option value="11">Disability Support</option>
-                <option value="12">Drug/Alcohol</option>
-                <option value="13">Education & Learning</option>
-                <option value="14">Emergency Department</option>
-                <option value="15">Employment</option>
-                <option value="16">Financial & Material Aid</option>
-                <option value="17">General Practice</option>
-                <option value="35">Hospital</option>
-                <option value="18">Housing/Homelessness</option>
-                <option value="19">Interpreting</option>
-                <option value="20">Justice</option>
-                <option value="21">Legal</option>
-                <option value="22">Mental Health</option>
-                <option value="38">NDIA</option>
-                <option value="23">Physical Activity & Recreation</option>
-                <option value="24">Regulation</option>
-                <option value="25">Respite/Carer Support</option>
-                <option value="26">Specialist Clinical Pathology</option>
-                <option value="27">Specialist Medical</option>
-                <option value="28">Specialist Obstetrics & Gynecology</option>
-                <option value="29">Specialist Paediatric</option>
-                <option value="30">Specialist Radiology/Imaging</option>
-                <option value="31">Specialist Surgical - requires referral</option>
-                <option value="32">Support group/s</option>
-                <option value="37">Test Message (HSD admin use only)</option>
-                <option value="33">Transport</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_organization" class="fw-semibold fs-6 my-2">Organizations:</label>
-            <select class="form-select" data-hide-search="true" data-dropdown-css-class="w-600px" data-placeholder="Select Organization" data-control="select2" id="appointment_organization" data-field="organization">
-            </select>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="appointment_notes" class="fw-semibold fs-6 my-2">Notes:</label>
-            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="notes" id="appointment_notes">
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="appointment_pt_instruction" class=" fw-semibold fs-6 my-2">Patient Instruction:</label>
-            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_instruction" id="appointment_pt_instruction">
-        </div>
-    </div>
-    <div class="col-md-9">
-        <div class="form-group">
-            <label for="appointment_cancel_reason" class="fw-semibold fs-6 my-2">Cancel Reason:</label>
-            <select class="form-select" data-hide-search="true" data-placeholder="Select Cancel Reason" data-control="select2" id="appointment_cancel_reason" data-field="cancel_reason">
-                <option value=""></option>
-                <option value="pat">Patient</option>
-                <option value="pat-crs">Patient: Canceled via automated reminder system</option>
-                <option value="pat-cpp">Patient: Canceled via Patient Portal</option>
-                <option value="pat-dec">Patient: Deceased</option>
-                <option value="pat-fb">Patient: Feeling Better</option>
-                <option value="pat-lt">Patient: Lack of Transportation</option>
-                <option value="pat-mt">Patient: Member Terminated</option>
-                <option value="pat-mv">Patient: Moved</option>
-                <option value="pat-preg">Patient: Pregnant</option>
-                <option value="pat-swl">Patient: Scheduled from Wait List</option>
-                <option value="pat-ucp">Patient: Unhappy/Changed Provider</option>
-                <option value="prov">Provider</option>
-                <option value="prov-pers">Provider: Personal</option>
-                <option value="prov-dch">Provider: Discharged</option>
-                <option value="prov-edu">Provider: Edu/Meeting</option>
-                <option value="prov-hosp">Provider: Hospitalized</option>
-                <option value="prov-labs">Provider: Labs Out of Acceptable Range</option>
-                <option value="prov-mri">Provider: MRI Screening Form Marked Do Not Proceed</option>
-                <option value="prov-onc">Provider: Oncology Treatment Plan Changes</option>
-                <option value="maint">Equipment Maintenance/Repair</option>
-                <option value="meds-inc">Prep/Med Incomplete</option>
-                <option value="other">Other</option>
-                <option value="oth-cms">Other: CMS Therapy Cap Service Not Authorized</option>
-                <option value="oth-err">Other: Error</option>
-                <option value="oth-fin">Other: Financial</option>
-                <option value="oth-iv">Other: Improper IV Access/Infiltrate IV</option>
-                <option value="oth-int">Other: No Interpreter Available</option>
-                <option value="oth-mu">Other: Prep/Med/Results Unavailable</option>
-                <option value="oth-room">Other: Room/Resource Maintenance</option>
-                <option value="oth-oerr">Other: Schedule Order Error</option>
-                <option value="oth-swie">Other: Silent Walk In Error</option>
-                <option value=" oth-weath">Other: Weather</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="form-group">
-            <label for="appointment_cancel_date" class="fw-semibold fs-6 my-2">Cancel Date:</label>
-            <input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="cancel_date" id="appointment_cancel_date">
-        </div>
-    </div>
-    
-
 </div>
 <div class="modal-footer mt-8">
     <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
     <button type="button" class="btn btn-primary" id="appt_save_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
 </div>
+
+<div class="modal fade"  id="appointment-specialist-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title" id="org_title"></h1>
+          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Please Select Clinic</label>
+              <div class="header-search d-flex align-items-center w-100 w-lg-350px show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="rel_clinics" aria-label="Select a Clinic" data-control="select2" data-hide-search="true" data-placeholder="Select a Clinic..." class="form-select mb-2">
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="org_search_input">Please Input Specialist Name or Address or Phone</label>
+              <div class="d-flex align-items-center position-relative">
+                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                  <span class="path1"></span>
+                  <span class="path2"></span>
+                </i>
+                <input id="org_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-300px ps-13"
+                  placeholder="Search ..."/>
+              </div>
+            </div>
+          </div>
+          <div class="separator separator-content border-gray-300 my-5">
+          </div>
+          <div class="row">
+            <div class="card-body px-0 px-3 min-h-300px">
+              <table class="table table-striped table-bordered text-nowrap w-100" id="kt_sidebar_nav">
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <ul class="pagination">
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+          <button type="button" class="btn btn-primary" id="morganizationbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
