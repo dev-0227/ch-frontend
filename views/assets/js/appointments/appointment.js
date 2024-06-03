@@ -149,7 +149,7 @@ $(document).ready(async function () {
         $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
         $("#appointment_notes").val(appointment['notes']);
         $("#appointment_pt_instruction").val(appointment['pt_instruction']);
-        $("#appointment_edit_modal").modal("show");
+        $("#appointment_edit_modal-1").modal("show");
         $("#appointment_modal").modal("hide");
 
 
@@ -207,7 +207,7 @@ $(document).ready(async function () {
         $("#appointment_notes").val('');
         $("#appointment_pt_instruction").val('');
         $("#appointment_pt_instruction_date").val('');
-        $("#appointment_edit_modal").modal("show");
+        $("#appointment_edit_modal-1").modal("show");
         $("#appointment_modal").modal("hide");
     });
 

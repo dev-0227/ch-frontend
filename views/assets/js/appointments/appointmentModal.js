@@ -144,7 +144,7 @@ $(document).on("click",".apptbtn",function(){
 
 $(document).on("click",".appt-list",function(){
   
-  $("#appointment_edit_modal").modal("hide");
+  $("#appointment_edit_modal-1").modal("hide");
   $("#appointment_modal").modal("show");
 });
 
@@ -214,7 +214,7 @@ $(document).on("click",".appt_edit_btn",function(){
       $("#appointment_cancel_date").val(GetFormattedDate(new Date(result[0]['cancel_date'])));
       $("#appointment_notes").val(result[0]['notes']);
       $("#appointment_pt_instruction").val(result[0]['pt_instruction']);
-      $("#appointment_edit_modal").modal("show");
+      $("#appointment_edit_modal-1").modal("show");
       $("#appointment_modal").modal("hide");
 
     } else {
@@ -244,7 +244,7 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_notes").val('');
   $("#appointment_pt_instruction").val('');
   $("#appointment_pt_instruction_date").val('');
-  $("#appointment_edit_modal").modal("show");
+  $("#appointment_edit_modal-1").modal("show");
 });
 
 $(document).on("click",".appt_delete_btn",function(){
@@ -487,7 +487,7 @@ $("#appt_save_btn").click(function (e) {
         if(JSON.parse(xhr.responseText)['message']=="exist"){
           toastr.info("Appointment is exist");
         }else{
-          $("#appointment_edit_modal").modal("hide");
+          $("#appointment_edit_modal-1").modal("hide");
           toastr.success("Appointment is added successfully");
         }
         
@@ -498,7 +498,7 @@ $("#appt_save_btn").click(function (e) {
   }else{
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/update", (xhr, err) => {
       if (!err) {
-        $("#appointment_edit_modal").modal("hide");
+        $("#appointment_edit_modal-1").modal("hide");
         toastr.success("Appointment is updated successfully");
       } else {
         return toastr.error("Action Failed");
@@ -615,7 +615,7 @@ $(".pt_info").click(function (e) {
           $("#deceased_at").prop("disabled", true);
         }
         $("#patient-add-modal").modal("show");
-        $("#appointment_edit_modal").modal("hide");
+        $("#appointment_edit_modal-1").modal("hide");
       }else{
         
       }
@@ -667,7 +667,7 @@ $(document).on("click","#save_patient_btn",function(){
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/update", (xhr, err) => {
     if (!err) {
       $("#patient-add-modal").modal("hide");
-      $("#appointment_edit_modal").modal("hide");
+      $("#appointment_edit_modal-1").modal("hide");
       $("#appointment_modal").modal("hide");
       return toastr.success('patient is added successfully');
     } else {
@@ -691,7 +691,7 @@ $("#appointment_measure").on('change', (e) => {
         if (item['clinic'] !== null) {
           item['clinic'].split(',').forEach(value => {
             if (value == localStorage.getItem('chosen_clinic')) {
-              options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+              options += '<option value="' + item['measureId'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
             }
           })
         }
@@ -791,4 +791,58 @@ $(document).on('click', '#appointment-org-prev-click', () => {
     $("#appointment-org-val").val(i);
     $("#appointment_organization").html(options);
   }
+});
+
+// ### specialist search //
+
+var appt_search_table = $("#appointment_specialist_table").DataTable({
+  "ajax": {
+    "url": serviceUrl + "specialist/getSpecialistByMeasureId",
+    "type": "POST",
+    "headers": { 'Authorization': localStorage.getItem('authToken') },
+    "data":function (d) {
+      d.measureId = $("#appointment_measure").val()
+    },
+  },
+  serverSide: true,
+  processing: true,
+  "pageLength": 10,
+  "order": [],
+  "columns": [
+    { data: 'id',
+      render: function(data, type, row) {
+        return `
+          <center>
+            <div class="form-check form-check-sm form-check-custom form-check-lg">
+              <input id="checkOrgan" class="form-check-input changeOrganID" class="form-check-input" type="checkbox" value='${row.id}' />
+            </div>
+          </center>
+        `
+      }
+    },
+    { data: 'name',
+      render: function(data, type, row) {
+        return `
+          <div class="form-check-label px-3 d-block">
+            <div class="text-primary fs-2">${row.name}</div>
+            <div class="fs-8"><i class="fa fa-location-dot"></i> ${row.address} | <i class="fa fa-phone"></i> ${row.phone}</div>
+          </div>
+        `
+      }
+    },
+    { data: 'sname',
+      render: function(data, type, row) {
+        return `
+          <div class="text-primary fs-2">${row.sname}</div>
+        `
+      }
+    },
+  ]
+});
+
+$(document).on('click', '#appointment-specialist-search', () => {
+  //load specialist realted to clinic selected and measure selected.
+  appt_search_table.draw();
+
+  $("#appointment-edit-modal-2").modal('show');
 });
