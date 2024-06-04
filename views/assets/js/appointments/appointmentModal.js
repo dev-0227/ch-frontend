@@ -802,7 +802,10 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
     "type": "GET",
     "headers": { 'Authorization': localStorage.getItem('authToken') },
     "data":function (d) {
-      d.measureid = $("#appointment_measure").val()
+      d.measureid = $("#appointment_measure").val(),
+      d.specialty = $("#appointment_search_specialty").val(),
+      d.zip = $("#appointment_search_zip").val(),
+      d.all = $("#appointment_search_all").prop('checked')
     },
   },
   serverSide: true,
@@ -857,7 +860,7 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
         return `
           <div class="form-check-label px-3 d-block">
             <div class="text-primary fs-4">${row.fname} ${row.lname}</div>
-            <div class="fs-8"><i class="fa fa-location-dot"></i> ${row.address} | <i class="fa fa-phone"></i> ${row.phone}</div>
+            <div class="fs-8"><i class="fa fa-location-dot"></i> ${row.address} ${row.city} | <i class="fa fa-phone"></i> ${row.phone}</div>
           </div>
         `
       }
@@ -866,11 +869,38 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
       data: 'specialty_id',
       render: function(data, type, row) {
         return `
-          <div class="text-primary fs-2">${row.sname}</div>
+          <div class="text-primary fs-5">${row.sname}</div>
         `
       }
     },
+    {
+      data: 'city',
+      render: function(data, type, row) {
+        return `
+          <div>${row.city}</div>
+        `
+      }
+    },
+    {
+      data: 'zip',
+      render: function(data, type, row) {
+        return `
+          <div>${row.zip}</div>
+        `
+      }
+    }
   ]
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['id']+'" >'+result[i]['name']+'</option>';
+    }
+    $("#appointment_search_specialty").html('<option value="0">All Specialties</option>' + options);
+  }
 });
 
 $(document).on('click', '#appointment-specialist-search', () => {
@@ -886,6 +916,10 @@ $(document).on('click', '#appointment-specialist-close', function(e) {
 
 $("#appointment_specialist_search_input").on('keyup', function() {
   appt_search_table.search(this.value).draw();
+});
+
+$("#appointment_search_zip").on('keyup', function() {
+  appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
 });
 
 $("#appointment_specialist_save").click(() => {
@@ -957,3 +991,11 @@ $(document).on('change', '#appt_spec_check', (e) => {
     _clinics[e.target.value].clinics.push(c);
   }
 });
+
+$(document).on('change', '#appointment_search_specialty', (e) => {
+  appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
+})
+
+$(document).on('change', '#appointment_search_all', (e) => {
+  appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
+})
