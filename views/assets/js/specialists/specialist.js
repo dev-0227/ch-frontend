@@ -181,7 +181,7 @@ $(document).ready(async function () {
           return `
             <div class="btn-group align-top" idkey="`+row.id+`">
               <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
-              <button organizationkey="`+row.oragnization+`" class="btn btn-sm btn-warning managerorganizationbtn" type="button"><i class="fa fa-solid fa-hotel">
+              <button organizationkey="`+row.oragnization+`" class="btn btn-sm btn-warning managerorganizationbtn menu-link pq-menu d-none" type="button" data-permit="SPECIALIST_ORGAN_ASSOCIATE"><i class="fa fa-solid fa-hotel">
                 <span class="path1"></span>
                 <span class="path2"></span>
               </i></button>
