@@ -821,7 +821,7 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
           }
           return `
             <center>
-              <div class="form-check form-check-sm form-check-custom form-check-lg">
+              <div class="form-check form-check-sm form-check-custom form-check-lg menu-link pq-menu d-none" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
                 <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" value='${row.id}' />
               </div>
             </center>
@@ -836,7 +836,7 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
           if (clinics.indexOf(localStorage.getItem('chosen_clinic')) !== -1) {
             return `
               <center>
-                <div class="form-check form-check-sm form-check-custom form-check-lg">
+                <div class="form-check form-check-sm form-check-custom form-check-lg menu-link pq-menu d-none" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
                   <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" checked value='${row.id}' />
                 </div>
               </center>
@@ -845,7 +845,7 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
           else {
             return `
               <center>
-                <div class="form-check form-check-sm form-check-custom form-check-lg">
+                <div class="form-check form-check-sm form-check-custom form-check-lg menu-link pq-menu d-none" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
                   <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" value='${row.id}' />
                 </div>
               </center>
