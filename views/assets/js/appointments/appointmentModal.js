@@ -795,6 +795,7 @@ $(document).on('click', '#appointment-org-prev-click', () => {
 
 // ### specialist search //
 
+let _specialists = []
 let _clinics = []
 var appt_search_table = $("#appointment_specialist_table").DataTable({
   "ajax": {
@@ -814,6 +815,7 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
     {
       data: 'id',
       render: function(data, type, row) {
+        _specialists[row.id] = row;
         if (row.clinic == null || row.clinic == undefined) {
           _clinics[row.id] = {
             id: row.id,
@@ -859,7 +861,7 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
       render: function(data, type, row) {
         return `
           <div class="form-check-label px-3 d-block">
-            <div class="text-primary fs-4">${row.fname} ${row.lname}</div>
+            <a id="appointment_search_ext_select" data="${row.id}" href="#" class="text-primary fs-4">${row.fname} ${row.lname}</a>
             <div class="fs-8"><i class="fa fa-location-dot"></i> ${row.address} ${row.city} | <i class="fa fa-phone"></i> ${row.phone}</div>
           </div>
         `
@@ -904,6 +906,8 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/app
 });
 
 $(document).on('click', '#appointment-specialist-search', () => {
+  // clear
+  _specialists = []
   //load specialist realted to clinic selected and measure selected.
   appt_search_table.ajax.reload(null, false);
   _clinics = []
@@ -915,10 +919,15 @@ $(document).on('click', '#appointment-specialist-close', function(e) {
 });
 
 $("#appointment_specialist_search_input").on('keyup', function() {
+  // clear
+  _specialists = []
   appt_search_table.search(this.value).draw();
 });
 
 $("#appointment_search_zip").on('keyup', function() {
+  // clear
+  _specialists = []
+
   appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
 });
 
@@ -993,9 +1002,24 @@ $(document).on('change', '#appt_spec_check', (e) => {
 });
 
 $(document).on('change', '#appointment_search_specialty', (e) => {
+  // clear
+  _specialists = []
+
   appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
 })
 
 $(document).on('change', '#appointment_search_all', (e) => {
+  // clear
+  _specialists = []
+
   appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
+})
+
+$(document).on('click', '#appointment_search_ext_select', (e) => {
+  _specialists[e.target.attributes['data'].value]
+  var option = '<option value="'+e.target.attributes['data'].value+'" >'+_specialists[e.target.attributes['data'].value].fname + ' ' + _specialists[e.target.attributes['data'].value].lname + '</option>';
+  $("#appointment_specialist_provider").append(option);
+  $("#appointment_specialist_provider").val(e.target.attributes['data'].value).trigger('change');
+
+  $("#appointment-edit-modal-2").modal('hide');
 })
