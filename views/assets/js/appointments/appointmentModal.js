@@ -1021,5 +1021,5 @@ $(document).on('click', '#appointment_search_ext_select', (e) => {
   $("#appointment_specialist_provider").append(option);
   $("#appointment_specialist_provider").val(e.target.attributes['data'].value).trigger('change');
 
-  $("#appointment-edit-modal-2").modal('hide');
+  toastr.success("Specialist is added in the specialist list successfully!");
 })
