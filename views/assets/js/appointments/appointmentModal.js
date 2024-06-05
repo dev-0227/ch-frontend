@@ -820,10 +820,10 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
             clinics: []
           }
           return `
-            <center>
-              <div class="form-check form-check-sm form-check-custom form-check-lg menu-link pq-menu d-none" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
-                <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" value='${row.id}' />
-              </div>
+            <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
+              <label class="form-check form-check-custom form-check-lg form-check-solide" data-field="all">
+                <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" value='${row.id}' />
+              </label>
             </center>
           `
         }
@@ -835,19 +835,19 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
           }
           if (clinics.indexOf(localStorage.getItem('chosen_clinic')) !== -1) {
             return `
-              <center>
-                <div class="form-check form-check-sm form-check-custom form-check-lg menu-link pq-menu d-none" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
-                  <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" checked value='${row.id}' />
-                </div>
+              <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
+                <label class="form-check form-check-custom form-check-lg form-check-solid" data-field="all">
+                  <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" checked value='${row.id}' />
+                </label>
               </center>
             `
           }
           else {
             return `
-              <center>
-                <div class="form-check form-check-sm form-check-custom form-check-lg menu-link pq-menu d-none" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
-                  <input id="appt_spec_check" class="form-check-input" class="form-check-input" type="checkbox" value='${row.id}' />
-                </div>
+              <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
+                <label class="form-check form-check-custom form-check-lg form-check-solid" data-field="all">
+                  <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" value='${row.id}' />
+                </label>
               </center>
             `
           }
