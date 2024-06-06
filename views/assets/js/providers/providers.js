@@ -195,7 +195,7 @@ $(document).ready(async function () {
         $("#ephpfhirid").val("");
         $("#ezip").val("");
         $("#estatus").val('1');
-        $("#specialty").val("").trigger('change');
+        $("#especialty").val("").trigger('change');
         $("#estate").val('NY').trigger('change');
         $("#kt_docs_select2_country").val("US").trigger('change');
 
