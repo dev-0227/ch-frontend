@@ -253,7 +253,6 @@ $(document).ready(async function () {
     $("#eaddress2").val("");
     $("#efax").val("");
     $("#ecity").val("");
-    $("#estate").val("");
     $("#eweb").val("");
     $("#ezip").val("");
     $("#ecname").val("");
@@ -263,6 +262,7 @@ $(document).ready(async function () {
     $("#specialty_id").val("").trigger('change');
     $("#insurance_id").val("").trigger('change');
     $("#taxonomy").val("");
+    $("#estate").val('NY').trigger('change');
     $("#kt_docs_select2_country").val("US").trigger('change');
 
     document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;

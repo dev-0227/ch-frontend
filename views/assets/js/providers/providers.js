@@ -192,11 +192,11 @@ $(document).ready(async function () {
         $("#eaddress").val("");
         $("#eaddress2").val("");
         $("#ecity").val("");
-        $("#estate").val("");
         $("#ephpfhirid").val("");
         $("#ezip").val("");
         $("#estatus").val('1');
         $("#specialty").val("").trigger('change');
+        $("#estate").val('NY').trigger('change');
         $("#kt_docs_select2_country").val("US").trigger('change');
 
         document.getElementById('providerPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
