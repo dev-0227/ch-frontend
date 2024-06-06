@@ -117,7 +117,11 @@ $(document).ready(async function () {
     "ajax": {
         "url": serviceUrl + "specialist/",
         "type": "GET",
-        "headers": { 'Authorization': localStorage.getItem('authToken') }
+        "headers": { 'Authorization': localStorage.getItem('authToken') },
+        'data': function(d) {
+          d.clinicid = $("#chosen_clinics").val(),
+          d.fspecialty = $("#fspecialty").val()
+        }
     },
     serverSide: true,
     "pageLength": 10,
@@ -193,8 +197,7 @@ $(document).ready(async function () {
           `
         } 
       }
-    ],
-    "clinicid": $("#chosen_clinics").val(),
+    ]
   });
 
   // organization table //
@@ -731,8 +734,7 @@ $(document).ready(async function () {
   })
 
   $("#fspecialty").on('change', function(e) {
-    if (e.target.value == '0') managertable.search('').draw();
-    else managertable.search(sp[e.target.value]).draw();
+    managertable.search($("#table_search_input").val()).draw()
   });
 
    // ### organization ### begin //
