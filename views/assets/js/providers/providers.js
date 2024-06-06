@@ -66,6 +66,7 @@ $(document).ready(async function () {
         }
     });
 
+    let _defQual = -1
     await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "qualification", (xhr, err) => {
         if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
@@ -79,6 +80,7 @@ $(document).ready(async function () {
             var options = '';
             for(var i=0; i<result.length; i++){
                 options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
+                if (result[i]['code'] == 'MD') _defQual = result[i]['id'];
             }
             // select Doctor of Medicine
             $("#equalification").html(options);
@@ -179,7 +181,7 @@ $(document).ready(async function () {
     $(document).on("click",".manageraddbtn",function() {
         $('#chosen_manager').val("");
         $("#egender").val(1).trigger('change');
-        $("#equalification").val(151).trigger('change');
+        $("#equalification").val(_defQual).trigger('change');
         $("#edob").val('');
         $("#eemrid").val('');
         $("#efname").val("");
@@ -266,13 +268,17 @@ $(document).ready(async function () {
         $(".clinickey").prop('checked', false);
         $(".clinic_toggle").removeClass("btn-primary");
         $(".clinic_toggle").addClass("btn-secondary");
+
+        _clinics = []
+        lock = true;
+        $(".check-clinic").prop('checked', false);
+        lock = false;
         
         let entry = {
             id: $(this).parent().attr("idkey"),
         }
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "provider/chosen", (xhr, err) => {
             if (!err) {
-                _clinics = []
                 let result = JSON.parse(xhr.responseText)['data'];
                 if(result.length > 0) {
                     if(result[0]['clinic']) {
@@ -282,7 +288,6 @@ $(document).ready(async function () {
                     
                         // check
                         lock = true
-                        $(".check-clinic").prop('checked', false);
                         $(".check-clinic").each(function() {
                             if (_clinics.indexOf($(this).val().toString()) !== -1) {
                                 $(this).prop('checked', true)
@@ -338,6 +343,7 @@ $(document).ready(async function () {
                         setTimeout( function () {
                             managertable.ajax.reload();
                         }, 1000 );
+                        toastr.success('The clinic provider is deleted successfully!');
                     } else {
                         return toastr.error('Action Failed');
                     }

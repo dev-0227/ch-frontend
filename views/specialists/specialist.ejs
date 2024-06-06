@@ -72,52 +72,56 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-2">
-            <div class="d-flex flex-row-fluid flex-center py-10">
-              <!--begin::Image input-->
-              <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true">
-                <!--begin::Image preview wrapper-->
-                <div class="image-input-wrapper w-150px h-150px" id="specialistPhoto"></div>
-                <!-- <img class="image-input-wrapper w-150px h-150px border-gray-100" id="specialistPhoto"></img> -->
-                <!--end::Image preview wrapper-->
+            <div class="row">
+              <div class="com-md-12">
+                <div class="d-flex flex-row-fluid flex-center pt-18">
+                  <!--begin::Image input-->
+                  <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true">
+                    <!--begin::Image preview wrapper-->
+                    <div class="image-input-wrapper w-150px h-150px" id="specialistPhoto"></div>
+                    <!-- <img class="image-input-wrapper w-150px h-150px border-gray-100" id="specialistPhoto"></img> -->
+                    <!--end::Image preview wrapper-->
 
-                <!--begin::Edit button-->
-                <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-                data-kt-image-input-action="change"
-                data-bs-toggle="tooltip"
-                data-bs-dismiss="click"
-                title="Change avatar">
-                    <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
+                    <!--begin::Edit button-->
+                    <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                    data-kt-image-input-action="change"
+                    data-bs-toggle="tooltip"
+                    data-bs-dismiss="click"
+                    title="Change avatar">
+                        <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
 
-                    <!--begin::Inputs-->
-                    <input type="file" id="ephoto" name="avatar" accept=".png, .jpg, .jpeg" />
-                    <input type="hidden" name="avatar_remove" id="photoname" />
-                    <!--end::Inputs-->
-                </label>
-                <!--end::Edit button-->
+                        <!--begin::Inputs-->
+                        <input type="file" id="ephoto" name="avatar" accept=".png, .jpg, .jpeg" />
+                        <input type="hidden" name="avatar_remove" id="photoname" />
+                        <!--end::Inputs-->
+                    </label>
+                    <!--end::Edit button-->
 
-                <!--begin::Cancel button-->
-                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-                data-kt-image-input-action="cancel"
-                data-bs-toggle="tooltip"
-                data-bs-dismiss="click"
-                title="Cancel avatar"
-                id = "photo_cancel_btn">
-                    <i class="ki-outline ki-cross fs-3"></i>
-                </span>
-                <!--end::Cancel button-->
+                    <!--begin::Cancel button-->
+                    <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                    data-kt-image-input-action="cancel"
+                    data-bs-toggle="tooltip"
+                    data-bs-dismiss="click"
+                    title="Cancel avatar"
+                    id = "photo_cancel_btn">
+                        <i class="ki-outline ki-cross fs-3"></i>
+                    </span>
+                    <!--end::Cancel button-->
 
-                <!--begin::Remove button-->
-                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-                data-kt-image-input-action="remove"
-                data-bs-toggle="tooltip"
-                data-bs-dismiss="click"
-                title="Remove avatar"
-                id = "photo_remove_btn">
-                    <i class="ki-outline ki-cross fs-3"></i>
-                </span>
-                <!--end::Remove button-->
+                    <!--begin::Remove button-->
+                    <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                    data-kt-image-input-action="remove"
+                    data-bs-toggle="tooltip"
+                    data-bs-dismiss="click"
+                    title="Remove avatar"
+                    id = "photo_remove_btn">
+                        <i class="ki-outline ki-cross fs-3"></i>
+                    </span>
+                    <!--end::Remove button-->
+                  </div>
+                  <!--end::Image input-->
+                </div>
               </div>
-              <!--end::Image input-->
             </div>
           </div>
           <div class="col-md-10">
@@ -185,6 +189,18 @@
                   </select>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="eemrid" class="form-control-label mt-2 p-1">EMR User ID:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eemrid" />
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="enpi" class="form-control-label mt-2 p-1">NPI:</label>

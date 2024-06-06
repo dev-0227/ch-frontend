@@ -314,7 +314,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
   }
 });
 
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getDoctorsByClinic", (xhr, err) => {
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "provider/getProviderByClinic", (xhr, err) => {
   if (!err) {
     let doctors = JSON.parse(xhr.responseText)['data'];
     var options = '';
@@ -937,6 +937,7 @@ $("#appointment_search_zip").on('keyup', function() {
   appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
 });
 
+// Don't delete.
 // $("#appointment_specialist_save").click(() => {
 //   var entry = {
 //     clinics: _clinics

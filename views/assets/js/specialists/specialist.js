@@ -66,6 +66,7 @@ $(document).ready(async function () {
     }
   });
 
+  let _defQual = -1
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "qualification", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -79,6 +80,7 @@ $(document).ready(async function () {
       var options = '';
       for(var i=0; i<result.length; i++){
         options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
+        if (result[i]['code'] == 'MD') _defQual = result[i]['id'];
       }
       // select Doctor of Medicine
       $("#equalification").html(options);
@@ -238,7 +240,7 @@ $(document).ready(async function () {
   $(document).on("click",".manageraddbtn",function() {
     $('#chosen_manager').val("");
     $("#egender").val(1).trigger('change');
-    $("#equalification").val(151).trigger('change');
+    $("#equalification").val(_defQual).trigger('change');
     $("#edob").val('');
     $("#elanguage").val('English').trigger('change');
     $("#efname").val("");
@@ -263,6 +265,7 @@ $(document).ready(async function () {
     $("#insurance_id").val("").trigger('change');
     $("#taxonomy").val("");
     $("#estate").val('NY').trigger('change');
+    $("#eemrid").val('');
     $("#kt_docs_select2_country").val("US").trigger('change');
 
     document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
@@ -301,6 +304,7 @@ $(document).ready(async function () {
         $("#ecemail").val(result[0]['contactemail']);
         $("#eccel").val(result[0]['contactcel']);
         $("#estatus").val(result[0]['status']).trigger('change');
+        $("#eemrid").val(result[0]['emrid']);
         $("#kt_docs_select2_country").val(result[0]['country']).trigger('change');
         
         if (result[0]['photo'] != '') {
@@ -431,6 +435,7 @@ $(document).ready(async function () {
             setTimeout( function () {
               managertable.ajax.reload();
             }, 1000 );
+            toastr.success('The specialist is deleted successfully!');
           } else {
             console.log(xhr.responseText)
             return toastr.error('Action Failed');
@@ -528,6 +533,7 @@ $(document).ready(async function () {
         specialty_id: $('#specialty_id').val().toString(),
         insurance_id: $('#insurance_id').val().toString(),
         taxonomy: $('#taxonomy').val(),
+        emrid: $("#eemrid").val(),
         photo: '',
         photostate: $("#photoname").val()
       }
@@ -601,6 +607,7 @@ $(document).ready(async function () {
             specialty_id: $('#specialty_id').val().toString(),
             insurance_id: $('#insurance_id').val().toString(),
             taxonomy: $('#taxonomy').val(),
+            emrid: $("#eemrid").val(),
             photo: filename,
             photostate: $("#photoname").val()
           }
