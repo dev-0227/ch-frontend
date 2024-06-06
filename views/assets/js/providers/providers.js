@@ -264,6 +264,9 @@ $(document).ready(async function () {
     let lock = false
     let _clinics = []
     $(document).on("click",".managerclinicbtn",function(){
+        //set title
+        $("#clinic_title").html('Set Clinics for ' + $(this).parent().parent().parent()[0].childNodes[1].innerHTML);
+
         $("#chosen_manager").val($(this).parent().attr('idkey'));
         $(".clinickey").prop('checked', false);
         $(".clinic_toggle").removeClass("btn-primary");
