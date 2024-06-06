@@ -15,6 +15,13 @@ router.get("/specialist", (req, res, next) => {
     });
 });
 
+router.get("/providers", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Clinic Providers",
+        pageKey: "../providers/providers"
+    });
+});
+
 router.get("/manager", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "User List",
