@@ -280,6 +280,7 @@ $(document).on("click",".appt_delete_btn",function(){
 
 var measure = []
 var observation = []
+var _externProvider = []
 
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getMeasureObservation", (xhr, err) => {
   if (!err) {
@@ -297,9 +298,11 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
     $("#appointment_measure").html(options);
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: $("#appointment_specialist_provider").val()}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
       if (!err) {
+        _externProvider = []
         let result = JSON.parse(xhr.responseText)['data'];
         var options = '';
         for(var i=0; i<result.length; i++){
+          _externProvider.push(result[i]['id'].toString())
           options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
         }
         $("#appointment_specialist_provider").html(options);
@@ -685,12 +688,14 @@ $("#appointment_measure").on('change', (e) => {
   }
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
     if (!err) {
+      _externProvider = []
       var result = JSON.parse(xhr.responseText)['data'];
       var options = '';
       result.forEach(item => {
         if (item['clinic'] !== null) {
           item['clinic'].split(',').forEach(value => {
             if (value == localStorage.getItem('chosen_clinic')) {
+              _externProvider.push(item['id'].toString())
               options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
             }
           })
@@ -812,53 +817,54 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
   serverSide: true,
   "pageLength": 10,
   "columns": [
-    {
-      data: 'id',
-      render: function(data, type, row) {
-        _specialists[row.id] = row;
-        if (row.clinic == null || row.clinic == undefined) {
-          _clinics[row.id] = {
-            id: row.id,
-            clinics: []
-          }
-          return `
-            <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
-              <label class="form-check form-check-custom form-check-lg form-check-solide" data-field="all">
-                <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" value='${row.id}' />
-              </label>
-            </center>
-          `
-        }
-        else {
-          var clinics = row.clinic.split(',');
-          _clinics[row.id] = {
-            id: row.id,
-            clinics: clinics
-          }
-          if (clinics.indexOf(localStorage.getItem('chosen_clinic')) !== -1) {
-            return `
-              <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
-                <label class="form-check form-check-custom form-check-lg form-check-solid" data-field="all">
-                  <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" checked value='${row.id}' />
-                </label>
-              </center>
-            `
-          }
-          else {
-            return `
-              <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
-                <label class="form-check form-check-custom form-check-lg form-check-solid" data-field="all">
-                  <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" value='${row.id}' />
-                </label>
-              </center>
-            `
-          }
-        }
-      }
-    },
+    // {
+    //   data: 'id',
+    //   render: function(data, type, row) {
+    //     _specialists[row.id] = row;
+    //     if (row.clinic == null || row.clinic == undefined) {
+    //       _clinics[row.id] = {
+    //         id: row.id,
+    //         clinics: []
+    //       }
+    //       return `
+    //         <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
+    //           <label class="form-check form-check-custom form-check-lg form-check-solide" data-field="all">
+    //             <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" value='${row.id}' />
+    //           </label>
+    //         </center>
+    //       `
+    //     }
+    //     else {
+    //       var clinics = row.clinic.split(',');
+    //       _clinics[row.id] = {
+    //         id: row.id,
+    //         clinics: clinics
+    //       }
+    //       if (clinics.indexOf(localStorage.getItem('chosen_clinic')) !== -1) {
+    //         return `
+    //           <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
+    //             <label class="form-check form-check-custom form-check-lg form-check-solid" data-field="all">
+    //               <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" checked value='${row.id}' />
+    //             </label>
+    //           </center>
+    //         `
+    //       }
+    //       else {
+    //         return `
+    //           <center class="${$("#appointment_search_cls").attr('class')}" data-permit="APPOINTMENT_SEARCH_ASSOCIATE">
+    //             <label class="form-check form-check-custom form-check-lg form-check-solid" data-field="all">
+    //               <input id="appt_spec_check" class="form-control form-check-input" type="checkbox" value='${row.id}' />
+    //             </label>
+    //           </center>
+    //         `
+    //       }
+    //     }
+    //   }
+    // },
     {
       data: 'fname',
       render: function(data, type, row) {
+        _specialists[row.id] = row;
         return `
           <div class="form-check-label px-3 d-block">
             <a id="appointment_search_ext_select" data="${row.id}" href="#" class="text-primary fs-4">${row.fname} ${row.lname}</a>
@@ -931,65 +937,65 @@ $("#appointment_search_zip").on('keyup', function() {
   appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
 });
 
-$("#appointment_specialist_save").click(() => {
-  var entry = {
-    clinics: _clinics
-  }
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateClinics", (xhr, err) => {
-    if (!err) {
-      toastr.success("Specialist is changed successfully!");
+// $("#appointment_specialist_save").click(() => {
+//   var entry = {
+//     clinics: _clinics
+//   }
+//   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/updateClinics", (xhr, err) => {
+//     if (!err) {
+//       toastr.success("Specialist is changed successfully!");
       
-      let entry = {
-        measureid: $("#appointment_measure").val()
-      }
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
-        if (!err) {
-          var result = JSON.parse(xhr.responseText)['data'];
-          var options = '';
-          result.forEach(item => {
-            if (item['clinic'] !== null) {
-              item['clinic'].split(',').forEach(value => {
-                if (value == localStorage.getItem('chosen_clinic')) {
-                  options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
-                }
-              })
-            }
-          });
-          $("#appointment_specialist_provider").html(options);
+//       let entry = {
+//         measureid: $("#appointment_measure").val()
+//       }
+//       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
+//         if (!err) {
+//           var result = JSON.parse(xhr.responseText)['data'];
+//           var options = '';
+//           result.forEach(item => {
+//             if (item['clinic'] !== null) {
+//               item['clinic'].split(',').forEach(value => {
+//                 if (value == localStorage.getItem('chosen_clinic')) {
+//                   options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+//                 }
+//               })
+//             }
+//           });
+//           $("#appointment_specialist_provider").html(options);
     
-          var entry = {
-            specialistid: $("#appointment_specialist_provider").val(),
-            clinicid: localStorage.getItem('chosen_clinic')
-          }
-          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
-            if (!err) {
-              var result = organizations = JSON.parse(xhr.responseText)['data'];
-              var options = '';
-              if (result.length) {
-                options = `<div value='${result[0].id}'>
-                  <div class="form-check-label px-3 d-block">
-                    <div class="text-primary fs-4">${result[0].name}</div>
-                    <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
-                    <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
-                  </div>
-                </div>`;
-                $("#appointment-org-val").val(0);
-              }
-              if (result.length > 1) $("#appointment_org_buttons").html(`
-                <div class="d-flex flex-end">
-                  <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click">&lt;&lt;&nbsp;&nbsp;</a>
-                  <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;&gt;&gt;</a>
-                </div>`);
-              else $("#appointment_org_buttons").html(``);
-              $("#appointment_organization").html(options);
-            }
-          });
-        }
-      });
-      $("#appointment-edit-modal-2").modal('hide');
-    }
-  });
-});
+//           var entry = {
+//             specialistid: $("#appointment_specialist_provider").val(),
+//             clinicid: localStorage.getItem('chosen_clinic')
+//           }
+//           sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
+//             if (!err) {
+//               var result = organizations = JSON.parse(xhr.responseText)['data'];
+//               var options = '';
+//               if (result.length) {
+//                 options = `<div value='${result[0].id}'>
+//                   <div class="form-check-label px-3 d-block">
+//                     <div class="text-primary fs-4">${result[0].name}</div>
+//                     <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
+//                     <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
+//                   </div>
+//                 </div>`;
+//                 $("#appointment-org-val").val(0);
+//               }
+//               if (result.length > 1) $("#appointment_org_buttons").html(`
+//                 <div class="d-flex flex-end">
+//                   <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click">&lt;&lt;&nbsp;&nbsp;</a>
+//                   <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;&gt;&gt;</a>
+//                 </div>`);
+//               else $("#appointment_org_buttons").html(``);
+//               $("#appointment_organization").html(options);
+//             }
+//           });
+//         }
+//       });
+//       $("#appointment-edit-modal-2").modal('hide');
+//     }
+//   });
+// });
 
 $(document).on('change', '#appt_spec_check', (e) => {
   var c = localStorage.getItem('chosen_clinic');
@@ -1016,10 +1022,16 @@ $(document).on('change', '#appointment_search_all', (e) => {
 })
 
 $(document).on('click', '#appointment_search_ext_select', (e) => {
-  _specialists[e.target.attributes['data'].value]
+  console.log(_externProvider, e.target.attributes['data'].value)
+  if (_externProvider.indexOf(e.target.attributes['data'].value) > -1) {
+    toastr.warning("Specialist is already added in the External Provider List!");
+    return;
+  }
   var option = '<option value="'+e.target.attributes['data'].value+'" >'+_specialists[e.target.attributes['data'].value].fname + ' ' + _specialists[e.target.attributes['data'].value].lname + '</option>';
   $("#appointment_specialist_provider").append(option);
   $("#appointment_specialist_provider").val(e.target.attributes['data'].value).trigger('change');
 
-  toastr.success("Specialist is added in the specialist list successfully!");
+  _externProvider.push(e.target.attributes['data'].value)
+
+  toastr.success("Specialist is added in the External Provider List successfully!");
 })
