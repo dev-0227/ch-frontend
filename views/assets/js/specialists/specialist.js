@@ -432,6 +432,7 @@ $(document).ready(async function () {
               managertable.ajax.reload();
             }, 1000 );
           } else {
+            console.log(xhr.responseText)
             return toastr.error('Action Failed');
           }
         });	

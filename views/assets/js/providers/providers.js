@@ -372,6 +372,11 @@ $(document).ready(async function () {
             $("#especialty").focus();
             return;
         }
+        if ($("#eemrid").val() == '') {
+            toastr.warning('Please enter Emr ID');
+            $("#eemrid").focus();
+            return;
+        }
         if (filesize > 1024*30) {
             toastr.warning('Your image is too large. Image size is smaller than 30KB.');
             return;
