@@ -319,10 +319,16 @@ $(document).ready(async function () {
                                         <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.address} ${item.city} ${item.zip} | <i class="fa fa-phone"></i> ${item.phone}</div>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="text" class="form-control mb-3 mb-lg-0 pcp-emrid" key="${item.id}" value="${_pcp[item.id] === undefined ? '' : _pcp[item.id].emrid}" placeholder="EMR User ID" />
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control pcp-emrid" key="${item.id}" value="${_pcp[item.id] === undefined ? '' : _pcp[item.id].emrid}" placeholder="EMR User ID" />
+                                            <label >EMR User ID</label>
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="text" class="form-control mb-3 mb-lg-0 pcp-pcpfhirid"  key="${item.id}" value="${_pcp[item.id] === undefined ? '' : _pcp[item.id].doctorfhirid}" placeholder="PCP FHIR ID" />
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control pcp-pcpfhirid"  key="${item.id}" value="${_pcp[item.id] === undefined ? '' : _pcp[item.id].doctorfhirid}" placeholder="PCP FHIR ID" />
+                                            <label >PCP FHIR ID</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="separator separator-content border-gray-600 my-5"></div>

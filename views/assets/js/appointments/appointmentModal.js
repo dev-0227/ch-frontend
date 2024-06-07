@@ -288,7 +288,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
   }
 });
 
-sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/measuresData", (xhr, err) => {
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid: localStorage.getItem('chosen_clinic')}, "hedissetting/measuresDataByClinic", (xhr, err) => {
   if (!err) {
     let measure = JSON.parse(xhr.responseText)['data'];
     var options = '';
