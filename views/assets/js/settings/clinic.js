@@ -232,8 +232,8 @@ $(document).ready(function () {
       $("#contactcheck").prop("checked", false);
       $("#contact_area").addClass("d-none");
       $("#logo_area").addClass("d-none");
-      $("#logo_width").val(img.width);
-      $("#logo_height").val(img.height);
+      // $("#logo_width").val(img.width);
+      // $("#logo_height").val(img.height);
       $('#clinic_logo')[0].dropzone.removeAllFiles();  
       $("#clinic-edit-modal").modal("show");
   });

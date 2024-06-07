@@ -1,93 +1,92 @@
 <!--begin::Image input placeholder-->
 <style>
-    .image-input-placeholder {
-        background-image: url('svg/avatars/blank.svg');
-    }
-  
-    [data-bs-theme="dark"] .image-input-placeholder {
-        background-image: url('svg/avatars/blank-dark.svg');
-    }
-  </style>
-  <!--end::Image input placeholder-->
-  <!-- ROW OPEN -->
-  <div class="card">
-    <div class="card-header border-0 pt-6">
-      <div class="card-title">
-        <div class="d-flex align-items-center position-relative my-1">
-          <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-            <span class="path1"></span>
-            <span class="path2"></span>
-          </i>
-          <input id="table_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"
-            placeholder="Search ..."/>
-        </div>
-      </div>
-      <div class="card-toolbar">
-        <a class="btn btn-primary manageraddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>Add</a>
+  .image-input-placeholder {
+      background-image: url('svg/avatars/blank.svg');
+  }
+
+  [data-bs-theme="dark"] .image-input-placeholder {
+      background-image: url('svg/avatars/blank-dark.svg');
+  }
+</style>
+<!--end::Image input placeholder-->
+<!-- ROW OPEN -->
+<div class="card">
+  <div class="card-header border-0 pt-6">
+    <div class="card-title">
+      <div class="d-flex align-items-center position-relative my-1">
+        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+          <span class="path1"></span>
+          <span class="path2"></span>
+        </i>
+        <input id="table_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"
+          placeholder="Search ..."/>
       </div>
     </div>
-    <div class="card-body py-4">
-      <div class="menu-link pq-menu d-none" data-permit="SPECIALIST_ORGAN_ASSOCIATE" id="provider_organization"></div>
-      <input type="hidden" id="chosen_manager" />
-      <table
-        class="table table-striped table-bordered text-nowrap w-100"
-        id="providertable"
-      >
-        <thead>
-          <tr>
-            <th class="text-center col-md-1">Photo</th>
-            <th class="text-center col-md-1">Name</th>
-            <th class="text-center col-md-1">EMR ID</th>
-            <th class="text-center col-md-2">Address</th>
-            <th class="text-center col-md-2">specialty</th>
-            <th class="text-center col-md-2">Email</th>
-            <th class="text-center col-md-2">Phone</th>
-            <th class="text-center col-md-2">Status</th>
-            <th class="text-center col-md-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <div class="card-toolbar">
+      <a class="btn btn-primary manageraddbtn" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>Add</a>
     </div>
   </div>
-  <!-- ROW CLOSED -->
-  <div class="modal fade" id="provider-edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="provider_title">Add New Clinic Provider</h5>
-          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-          </div>
+  <div class="card-body py-4">
+    <div class="menu-link pq-menu d-none" data-permit="SPECIALIST_ORGAN_ASSOCIATE" id="provider_organization"></div>
+    <input type="hidden" id="chosen_manager" />
+    <table
+      class="table table-striped table-bordered text-nowrap w-100"
+      id="providertable"
+    >
+      <thead>
+        <tr>
+          <th class="text-center col-md-1">Photo</th>
+          <th class="text-center col-md-1">Name</th>
+          <th class="text-center col-md-2">Address</th>
+          <th class="text-center col-md-2">specialty</th>
+          <th class="text-center col-md-2">Email</th>
+          <th class="text-center col-md-2">Phone</th>
+          <th class="text-center col-md-1">Status</th>
+          <th class="text-center col-md-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+<!-- ROW CLOSED -->
+<div class="modal fade" id="provider-edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="provider_title">Add New Clinic Provider</h5>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
         </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-3">
-              <div class="d-flex flex-row-fluid flex-center pt-18">
-                <!--begin::Image input-->
-                <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true">
-                  <!--begin::Image preview wrapper-->
-                  <div class="image-input-wrapper w-150px h-150px" id="providerPhoto"></div>
-                  <!-- <img class="image-input-wrapper w-150px h-150px border-gray-100" id="providerPhoto"></img> -->
-                  <!--end::Image preview wrapper-->
-  
-                  <!--begin::Edit button-->
-                  <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-                  data-kt-image-input-action="change"
-                  data-bs-toggle="tooltip"
-                  data-bs-dismiss="click"
-                  title="Change avatar">
-                      <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
-  
-                      <!--begin::Inputs-->
-                      <input type="file" id="ephoto" name="avatar" accept=".png, .jpg, .jpeg" />
-                      <input type="hidden" name="avatar_remove" id="photoname" />
-                      <!--end::Inputs-->
-                  </label>
-                  <!--end::Edit button-->
-  
-                  <!--begin::Cancel button-->
-                  <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="d-flex flex-row-fluid flex-center pt-18">
+              <!--begin::Image input-->
+              <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true">
+                <!--begin::Image preview wrapper-->
+                <div class="image-input-wrapper w-150px h-150px" id="providerPhoto"></div>
+                <!-- <img class="image-input-wrapper w-150px h-150px border-gray-100" id="providerPhoto"></img> -->
+                <!--end::Image preview wrapper-->
+
+                <!--begin::Edit button-->
+                <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar">
+                    <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
+
+                    <!--begin::Inputs-->
+                    <input type="file" id="ephoto" name="avatar" accept=".png, .jpg, .jpeg" />
+                    <input type="hidden" name="avatar_remove" id="photoname" />
+                    <!--end::Inputs-->
+                </label>
+                <!--end::Edit button-->
+
+                <!--begin::Cancel button-->
+                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
                   data-kt-image-input-action="cancel"
                   data-bs-toggle="tooltip"
                   data-bs-dismiss="click"
@@ -104,345 +103,357 @@
                   data-bs-dismiss="click"
                   title="Remove avatar"
                   id = "photo_remove_btn">
-                      <i class="ki-outline ki-cross fs-3"></i>
-                  </span>
-                  <!--end::Remove button-->
-                </div>
-                <!--end::Image input-->
+                    <i class="ki-outline ki-cross fs-3"></i>
+                </span>
+                <!--end::Remove button-->
               </div>
+              <!--end::Image input-->
             </div>
-            <div class="col-md-9">
-              <div class="row">
-                <div class="col-md-4">
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="efname" class="required form-control-label mt-2 p-1">First Name:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="efname" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="emname" class="form-control-label mt-2 p-1">Middle Name:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
+                </div>
+              </div>
+              <div class="col-md-4">
                   <div class="form-group">
-                    <label for="efname" class="required form-control-label mt-2 p-1">First Name:</label>
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="efname" />
+                    <label for="elname" class="required form-control-label mt-2 p-1">Last Name:</label>
+                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elname" />
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="emname" class="form-control-label mt-2 p-1">Middle Name:</label>
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="emname" />
+              <div class="col-md-4">
+                <label for="edob" class="form-control-label mt-2 p-1">Date of Birth:</label>
+                <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="approve_date" id="edob">
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="egender" class="form-control-label mt-2 p-1">Gender:</label>
+                  <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                    <select id="egender" aria-label="Gender" data-control="select2" data-hide-search="true" data-placeholder="Gender" class="form-select mb-2">
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
                   </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="elname" class="required form-control-label mt-2 p-1">Last Name:</label>
-                      <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elname" />
-                    </div>
-                  </div>
-                <div class="col-md-4">
-                  <label for="edob" class="form-control-label mt-2 p-1">Date of Birth:</label>
-                  <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="approve_date" id="edob">
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="eemail" class="form-control-label mt-2 p-1">Email:</label>
+                  <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="eemail" />
                 </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="egender" class="form-control-label mt-2 p-1">Gender:</label>
-                    <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                      <select id="egender" aria-label="Gender" data-control="select2" data-hide-search="true" data-placeholder="Gender" class="form-select mb-2">
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                      </select>
-                    </div>
-                  </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="elicense" class="form-control-label mt-2 p-1">License:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elicense" />
                 </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="eemail" class="form-control-label mt-2 p-1">Email:</label>
-                    <input type="email" class="form-control form-control-solid mb-3 mb-lg-0 " id="eemail" />
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <label for="eemrid" class="required form-control-label mt-2 p-1">EMR User ID:</label>
-                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eemrid" />
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="ephpfhirid" class="form-control-label mt-2 p-1">PHPFHIR ID:</label>
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ephpfhirid" />
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="enpi" class="form-control-label mt-2 p-1">NPI:</label>
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="enpi" />
-                  </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="enpi" class="form-control-label mt-2 p-1">NPI:</label>
+                  <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="enpi" />
                 </div>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-5">
-              <div class="form-group">
-                <label for="equalification" class="form-control-label mt-2 p-1">Qualification:</label>
-                <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                  <select id="equalification" aria-label="" data-control="select2" data-hide-search="true" data-placeholder="Qualification" class="form-select mb-2">
-                    <option></option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-7">
-              <div class="form-group">
-                <label for="especialty" class="required form-control-label mt-2 p-1">Specialty:</label>
-                <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="especialty">
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+            <div class="form-group">
+              <label for="equalification" class="form-control-label mt-2 p-1">Qualification:</label>
+              <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="equalification" aria-label="" data-control="select2" data-hide-search="true" data-placeholder="Qualification" class="form-select mb-2">
+                  <option></option>
                 </select>
               </div>
             </div>
           </div>
-          <div class="separator separator-content border-gray-600 my-10">
-            <span class="w-250px fw-bold">Clinic Provider Contact</span>
+          <div class="col-md-7">
+            <div class="form-group">
+              <label for="especialty" class="required form-control-label mt-2 p-1">Specialty:</label>
+              <select class="form-control form-select-solid " data-control="select2"  multiple="multiple" id="especialty">
+              </select>
+            </div>
           </div>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="ephone" class="required form-control-label mt-2 p-1">Phone:</label>
-                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ephone" />
-              </div>
+        </div>
+        <div class="separator separator-content border-gray-600 my-10">
+          <span class="w-250px fw-bold">Clinic Provider Contact</span>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="ephone" class="required form-control-label mt-2 p-1">Phone:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ephone" />
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="eaddress" class="form-control-label mt-2 p-1">Address1:</label>
-                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress" />
-              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="eaddress" class="form-control-label mt-2 p-1">Address1:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress" />
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="eaddress2" class="form-control-label mt-2 p-1">Address2:</label>
-                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress2" />
-              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="eaddress2" class="form-control-label mt-2 p-1">Address2:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="eaddress2" />
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="ecity" class="form-control-label mt-2 p-1">City:</label>
-                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecity" />
-              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="ecity" class="form-control-label mt-2 p-1">City:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ecity" />
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="estate" class="form-control-label mt-2 p-1">State:</label>
-                <div class="header-search d-flex align-items-center how menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                  <select id="estate" aria-label="State" data-control="select2" data-hide-search="true" data-placeholder="State" class="form-select mb-2">
-                    <optgroup label="Alaskan/Hawaiian Time Zone">
-                      <option value="AK">Alaska</option>
-                      <option value="HI">Hawaii</option>
-                    </optgroup>
-                    <optgroup label="Pacific Time Zone">
-                      <option value="CA">California</option>
-                      <option value="NV">Nevada</option>
-                      <option value="OR">Oregon</option>
-                      <option value="WA">Washington</option>
-                    </optgroup>
-                    <optgroup label="Mountain Time Zone">
-                      <option value="AZ">Arizona</option>
-                      <option value="CO">Colorado</option>
-                      <option value="ID">Idaho</option>
-                      <option value="MT">Montana</option>
-                      <option value="NE">Nebraska</option>
-                      <option value="NM">New Mexico</option>
-                      <option value="ND">North Dakota</option>
-                      <option value="UT">Utah</option>
-                      <option value="WY">Wyoming</option>
-                    </optgroup>
-                    <optgroup label="Central Time Zone">
-                      <option value="AL">Alabama</option>
-                      <option value="AR">Arkansas</option>
-                      <option value="IL">Illinois</option>
-                      <option value="IA">Iowa</option>
-                      <option value="KS">Kansas</option>
-                      <option value="KY">Kentucky</option>
-                      <option value="LA">Louisiana</option>
-                      <option value="MN">Minnesota</option>
-                      <option value="MS">Mississippi</option>
-                      <option value="MO">Missouri</option>
-                      <option value="OK">Oklahoma</option>
-                      <option value="SD">South Dakota</option>
-                      <option value="TX">Texas</option>
-                      <option value="TN">Tennessee</option>
-                      <option value="WI">Wisconsin</option>
-                    </optgroup>
-                    <optgroup label="Eastern Time Zone">
-                      <option value="CT">Connecticut</option>
-                      <option value="DE">Delaware</option>
-                      <option value="FL">Florida</option>
-                      <option value="GA">Georgia</option>
-                      <option value="IN">Indiana</option>
-                      <option value="ME">Maine</option>
-                      <option value="MD">Maryland</option>
-                      <option value="MA">Massachusetts</option>
-                      <option value="MI">Michigan</option>
-                      <option value="NH">New Hampshire</option>
-                      <option value="NJ">New Jersey</option>
-                      <option value="NY" selected>New York</option>
-                      <option value="NC">North Carolina</option>
-                      <option value="OH">Ohio</option>
-                      <option value="PA">Pennsylvania</option>
-                      <option value="RI">Rhode Island</option>
-                      <option value="SC">South Carolina</option>
-                      <option value="VT">Vermont</option>
-                      <option value="VA">Virginia</option>
-                      <option value="WV">West Virginia</option>
-                    </optgroup>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="kt_docs_select2_country" class="form-control-label mt-2 p-1">Country:</label>
-                <select class="form-select form-select-transport select2-hidden-accessible" data-hide-search="true" data-placeholder="Select a country" id="kt_docs_select2_country" 
-                  data-select2-id="select2-data-kt_docs_select2_country" tabindex="-1" aria-hidden="true">
-                  <option data-select2-id="select2-data-87-ectt"></option>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="estate" class="form-control-label mt-2 p-1">State:</label>
+              <div class="header-search d-flex align-items-center how menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="estate" aria-label="State" data-control="select2" data-hide-search="true" data-placeholder="State" class="form-select mb-2">
+                  <optgroup label="Alaskan/Hawaiian Time Zone">
+                    <option value="AK">Alaska</option>
+                    <option value="HI">Hawaii</option>
+                  </optgroup>
+                  <optgroup label="Pacific Time Zone">
+                    <option value="CA">California</option>
+                    <option value="NV">Nevada</option>
+                    <option value="OR">Oregon</option>
+                    <option value="WA">Washington</option>
+                  </optgroup>
+                  <optgroup label="Mountain Time Zone">
+                    <option value="AZ">Arizona</option>
+                    <option value="CO">Colorado</option>
+                    <option value="ID">Idaho</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="UT">Utah</option>
+                    <option value="WY">Wyoming</option>
+                  </optgroup>
+                  <optgroup label="Central Time Zone">
+                    <option value="AL">Alabama</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TX">Texas</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="WI">Wisconsin</option>
+                  </optgroup>
+                  <optgroup label="Eastern Time Zone">
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="IN">Indiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NY" selected>New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="OH">Ohio</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WV">West Virginia</option>
+                  </optgroup>
                 </select>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="ezip" class="form-control-label mt-2 p-1">Zip:</label>
-                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ezip" />
-              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="kt_docs_select2_country" class="form-control-label mt-2 p-1">Country:</label>
+              <select class="form-select form-select-transport select2-hidden-accessible" data-hide-search="true" data-placeholder="Select a country" id="kt_docs_select2_country" 
+                data-select2-id="select2-data-kt_docs_select2_country" tabindex="-1" aria-hidden="true">
+                <option data-select2-id="select2-data-87-ectt"></option>
+              </select>
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="elicense" class="form-control-label mt-2 p-1">License:</label>
-                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="elicense" />
-              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="ezip" class="form-control-label mt-2 p-1">Zip:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="ezip" />
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="estatus" class="form-control-label mt-2 p-1">Status:</label>
-                <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                  <select id="estatus" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
-                    <option value="1">Active</option>
-                    <option value="2">Inactive</option>
-                  </select>
-                </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="estatus" class="form-control-label mt-2 p-1">Status:</label>
+              <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                <select id="estatus" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Status" class="form-select mb-2">
+                  <option value="1">Active</option>
+                  <option value="2">Inactive</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-          <button type="button" class="btn btn-primary" id="meditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="meditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="provider-pwd-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="example-Modal3">
-            Clinic Provider Password Setting
-          </h5>
-          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-        </div>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="pwd" class="form-control-label mt-2 p-1">New Password:</label>
-                <input type="password" class="form-control form-control-solid mb-3 mb-lg-0 " id="pwd" />
-              </div>
+</div>
+<div class="modal fade" id="provider-pwd-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="example-Modal3">
+          Clinic Provider Password Setting
+        </h5>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+      </div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="pwd" class="form-control-label mt-2 p-1">New Password:</label>
+              <input type="password" class="form-control form-control-solid mb-3 mb-lg-0 " id="pwd" />
             </div>
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="cpwd" class="form-control-label mt-2 p-1"
-                  >Confirm Password:</label
-                >
-                <input type="password" class="form-control form-control-solid mb-3 mb-lg-0 " id="cpwd" />
-              </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="cpwd" class="form-control-label mt-2 p-1"
+                >Confirm Password:</label
+              >
+              <input type="password" class="form-control form-control-solid mb-3 mb-lg-0 " id="cpwd" />
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-          <button type="button" class="btn btn-primary" id="mpwdbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="mpwdbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="provider-question-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="example-Modal3">Set Security Question</h5>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+      </div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="question" class="form-control-label mt-2 p-1"
+                >Security Question:</label
+              >
+              <select id="question" class="form-control custom-select"></select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="answer" class="form-control-label mt-2 p-1">Answer:</label>
+              <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="answer" />
+            </div>
+          </div>
         </div>
-        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="mquestionbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<div class="modal fade"  id="provider-clinic-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="clinic_title">Set Clinics</h1>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="d-flex align-items-center position-relative">
+              <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+              <input id="clinic_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid ps-13"
+                placeholder="Please Input Clinic Name or Address or Phone"/>
+            </div>
+          </div>
+        </div>
+        <div class="separator separator-content border-gray-300 my-5">
+        </div>
+        <div class="row">
+          <div class="card-body px-0 px-3 min-h-300px">
+            <table class="table table-striped table-bordered text-nowrap w-100" id="clinic_table">
+              <thead>
+                  <tr>
+                    <th class="text-center"></th>
+                    <th class="text-center col-md-6">Clinic</th>
+                    <th class="text-center col-md-5">Web</th>
+                  </tr>
+                </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="clinic-save"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="provider-question-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="example-Modal3">Set Security Question</h5>
-          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+</div>
+<div class="modal fade"  id="provider-pcp-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="pcp_title">Set EMR ID and PCP FHIR ID</h1>
+        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
         </div>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="question" class="form-control-label mt-2 p-1"
-                  >Security Question:</label
-                >
-                <select id="question" class="form-control custom-select"></select>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="answer" class="form-control-label mt-2 p-1">Answer:</label>
-                <input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " id="answer" />
-              </div>
-            </div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="scroll card-body px-0 px-3 h-500px" id="pcp-form">
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-          <button type="button" class="btn btn-primary" id="mquestionbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
-        </div>
-        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+        <button type="button" class="btn btn-primary" id="pcp-save"><i class="fa fa-save">&nbsp;</i> Save</button>
       </div>
     </div>
   </div>
-  <div class="modal fade"  id="provider-clinic-modal"  tabindex="-1"  role="dialog"  aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title" id="clinic_title">Set Clinics</h1>
-          <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-          </div>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="d-flex align-items-center position-relative">
-                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                  <span class="path1"></span>
-                  <span class="path2"></span>
-                </i>
-                <input id="clinic_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid ps-13"
-                  placeholder="Please Input Clinic Name or Address or Phone"/>
-              </div>
-            </div>
-          </div>
-          <div class="separator separator-content border-gray-300 my-5">
-          </div>
-          <div class="row">
-            <div class="card-body px-0 px-3 min-h-300px">
-              <table class="table table-striped table-bordered text-nowrap w-100" id="clinic_table">
-                <thead>
-                    <tr>
-                      <th class="text-center"></th>
-                      <th class="text-center">Clinic</th>
-                      <th class="text-center">Web</th>
-                    </tr>
-                  </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-          <button type="button" class="btn btn-primary" id="clinic-save"><i class="fa fa-save">&nbsp;</i> Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>

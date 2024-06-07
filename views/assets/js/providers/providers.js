@@ -96,81 +96,68 @@ $(document).ready(async function () {
         serverSide: true,
         "pageLength": 10,
         "order": [],
-        "columns": [
-            {
-                data: 'photo',
-                render: function(data, type, row) {
-                    if (row.photo.length == 1) {
-                    return `
-                        <center>
-                            <div class="symbol symbol-60px symbol-circle">
-                                <div class="symbol-label fs-3qx fw-semibold bg-primary text-inverse-primary">` + row.photo + `</div>
-                            </div>
-                        </center>
-                    `
-                    }
-                    else {
-                    return `
-                        <center>
-                            <div class="symbol symbol-60px symbol-circle">
-                            <div class="symbol-label" style="background-image: url(data:image/png;base64,${row.photo});"></div>
-                            </div>
-                        </center>
-                    `
-                    }
-                }
-            },
-            { data: "fname",
-                render: function (data, type, row) {
-                    return row.fname+" "+row.lname;
-                } 
-            },
-            { data: 'emrid',
-                render: function (data, type, row) {
-                    return row.emrid;
-                } 
-            },
-            {
-                data: 'address',
-                render: function (data, type, row) {
-                    return row.address;
-                }
-            },
-            { data: 'specialty',
-                render: function (data, type, row) {
-                    return row.sname;
-                } 
-            },
-            { data: 'email',
-                render: function(data, type, row) {
-                    return row.email;
-                }
-            },
-            { data: 'phone',
-                render: function (data, type, row) {
-                    return row.phone;
-                } 
-            },
-            { data: 'status',
-                render: function (data, type, row) {
-                    if(row.status == 1)
-                        return '<div class="badge badge-success fw-bold badge-lg">Active</span>';
-                    else
-                        return '<div class="badge badge-danger fw-bold badge-lg">Inactive</span>';
-                } 
-            },
-            { data: 'id',
-                render: function (data, type, row) {
-                    return `
-                        <div class="btn-group align-top" idkey="`+row.id+`">
-                            <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
-                            <button class="btn btn-sm btn-primary managereditbtn" type="button"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger managerdeletebtn" type="button"><i class="fa fa-trash"></i></button>
+        "columns": [{
+            data: 'photo',
+            render: function(data, type, row) {
+                if (row.photo.length == 1) {
+                return `
+                    <center>
+                        <div class="symbol symbol-60px symbol-circle">
+                            <div class="symbol-label fs-3qx fw-semibold bg-primary text-inverse-primary">` + row.photo + `</div>
                         </div>
-                    `
-                } 
+                    </center>
+                `
+                }
+                else {
+                return `
+                    <center>
+                        <div class="symbol symbol-60px symbol-circle">
+                        <div class="symbol-label" style="background-image: url(data:image/png;base64,${row.photo});"></div>
+                        </div>
+                    </center>
+                `
+                }
             }
-        ],
+        }, { data: "fname",
+            render: function (data, type, row) {
+                return row.fname+" "+row.lname;
+            } 
+        }, {
+            data: 'address',
+            render: function (data, type, row) {
+                return row.address;
+            }
+        }, { data: 'specialty',
+            render: function (data, type, row) {
+                return row.sname;
+            } 
+        }, { data: 'email',
+            render: function(data, type, row) {
+                return row.email;
+            }
+        }, { data: 'phone',
+            render: function (data, type, row) {
+                return row.phone;
+            } 
+        }, { data: 'status',
+            render: function (data, type, row) {
+                if(row.status == 1)
+                    return '<div class="badge badge-success fw-bold badge-lg">Active</span>';
+                else
+                    return '<div class="badge badge-danger fw-bold badge-lg">Inactive</span>';
+            } 
+        }, { data: 'id',
+            render: function (data, type, row) {
+                return `
+                    <div class="btn-group align-top" idkey="`+row.id+`">
+                        <button class="btn btn-sm btn-primary managereditbtn" type="button"><i class="fa fa-edit"></i></button>
+                        <button clinickey="`+row.clinic+`" class="btn btn-sm btn-success managerclinicbtn" type="button"><i class="fa fa-house-medical-circle-check"></i></button>
+                        <button clinickey="`+row.clinic+`" class="btn btn-sm btn-warning managerpcpbtn" type="button"><i class="bi bi-controller"></i></button>
+                        <button class="btn btn-sm btn-danger managerdeletebtn" type="button"><i class="fa fa-trash"></i></button>
+                    </div>
+                `
+            } 
+        }],
         "clinicid": $("#chosen_clinics").val(),
     });
 
@@ -183,7 +170,6 @@ $(document).ready(async function () {
         $("#egender").val(1).trigger('change');
         $("#equalification").val(_defQual).trigger('change');
         $("#edob").val('');
-        $("#eemrid").val('');
         $("#efname").val("");
         $("#elname").val("");
         $("#emname").val("");
@@ -194,7 +180,6 @@ $(document).ready(async function () {
         $("#eaddress").val("");
         $("#eaddress2").val("");
         $("#ecity").val("");
-        $("#ephpfhirid").val("");
         $("#ezip").val("");
         $("#estatus").val('1');
         $("#especialty").val("").trigger('change');
@@ -222,13 +207,11 @@ $(document).ready(async function () {
                 $("#elname").val(result[0]['lname']);
                 $("#emname").val(result[0]['mname']);
                 $("#enpi").val(result[0]['npi']);
-                $("#eemrid").val(result[0]['emrid']);
                 $("#elicense").val(result[0]['license']);
                 $("#eemail").val(result[0]['email']);
                 $("#ephone").val(result[0]['phone']);
                 $("#eaddress").val(result[0]['address']);
                 $("#eaddress2").val(result[0]['address2']);
-                $("#ephpfhirid").val(result[0]['phpfhirid']);
                 $("#ecity").val(result[0]['city']);
                 $("#estate").val(result[0]['state']).trigger('change');
                 $("#ezip").val(result[0]['zip']);
@@ -263,7 +246,9 @@ $(document).ready(async function () {
 
     let lock = false
     let _clinics = []
-    $(document).on("click",".managerclinicbtn",function(){
+    let _pcp = []
+    let _doctorid = 0
+    $(document).on("click",".managerclinicbtn",function() {
         //set title
         $("#clinic_title").html('Set Clinics for ' + $(this).parent().parent().parent()[0].childNodes[1].innerHTML);
 
@@ -304,6 +289,51 @@ $(document).ready(async function () {
                 toastr.error('Credential is invalid');
             }
         });
+    });
+    
+    $(document).on('click', '.managerpcpbtn', function() {
+        $("#pcp-form").html('')
+        _pcp = []
+        _doctorid = $(this).parent().attr('idkey')
+        var entry = {
+            id: _doctorid
+        }
+        // get emrid and pcpfhirid
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {doctorid: entry.id}, 'provider/getPCPInfo', (xhr1, err1) => {
+            if (!err1) {
+                var result1 = JSON.parse(xhr1.responseText)['data']
+                result1.forEach(item => {
+                    _pcp[item['clinicid']] = item
+                })
+            }
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'provider/getClinic', (xhr, err) => {
+                if (!err) {
+                    var result = JSON.parse(xhr.responseText)['data'];
+                    if (result.length > 0) {
+                        var comoponent = ''
+                        result.forEach(item => {
+                            comoponent += `
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-primary fs-3">${item.name}</div>
+                                        <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.address} ${item.city} ${item.zip} | <i class="fa fa-phone"></i> ${item.phone}</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control mb-3 mb-lg-0 pcp-emrid" key="${item.id}" value="${_pcp[item.id] === undefined ? '' : _pcp[item.id].emrid}" placeholder="EMR User ID" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control mb-3 mb-lg-0 pcp-pcpfhirid"  key="${item.id}" value="${_pcp[item.id] === undefined ? '' : _pcp[item.id].doctorfhirid}" placeholder="PCP FHIR ID" />
+                                    </div>
+                                </div>
+                                <div class="separator separator-content border-gray-600 my-5"></div>
+                            `
+                        });
+                        $("#pcp-form").html(comoponent)
+                    }
+                }
+            })
+        })
+        $("#provider-pcp-modal").modal('show');
     });
 
     $(document).on("click",".managerquestionbtn",function(){
@@ -381,11 +411,6 @@ $(document).ready(async function () {
             $("#especialty").focus();
             return;
         }
-        if ($("#eemrid").val() == '') {
-            toastr.warning('Please enter Emr ID');
-            $("#eemrid").focus();
-            return;
-        }
         if (filesize > 1024*30) {
             toastr.warning('Your image is too large. Image size is smaller than 30KB.');
             return;
@@ -400,7 +425,6 @@ $(document).ready(async function () {
                 dob: document.getElementById('edob').value,
                 qualification: document.getElementById('equalification').value,
                 gender: document.getElementById('egender').value,
-                emrid: document.getElementById('eemrid').value,
                 npi: document.getElementById('enpi').value,
                 license: document.getElementById('elicense').value,
                 email: document.getElementById('eemail').value,
@@ -408,7 +432,6 @@ $(document).ready(async function () {
                 phone2: '',
                 address: document.getElementById('eaddress').value,
                 address2: document.getElementById('eaddress2').value,
-                phpfhirid: document.getElementById('ephpfhirid').value,
                 city: document.getElementById('ecity').value,
                 state: document.getElementById('estate').value,
                 country: document.getElementById('kt_docs_select2_country').value,
@@ -417,7 +440,8 @@ $(document).ready(async function () {
                 specialty: $('#especialty').val().toString(),
                 type: 0,
                 photo: '',
-                photostate: $("#photoname").val()
+                photostate: $("#photoname").val(),
+                user: localStorage.getItem('userid')
             }
 
             if($('#chosen_manager').val()==""){
@@ -468,7 +492,6 @@ $(document).ready(async function () {
                         dob: document.getElementById('edob').value,
                         qualification: document.getElementById('equalification').value,
                         gender: document.getElementById('egender').value,
-                        emrid: document.getElementById('eemrid').value,
                         npi: document.getElementById('enpi').value,
                         license: document.getElementById('elicense').value,
                         email: document.getElementById('eemail').value,
@@ -476,7 +499,6 @@ $(document).ready(async function () {
                         phone2: '',
                         address: document.getElementById('eaddress').value,
                         address2: document.getElementById('eaddress2').value,
-                        phpfhirid: document.getElementById('ephpfhirid').value,
                         city: document.getElementById('ecity').value,
                         state: document.getElementById('estate').value,
                         country: document.getElementById('kt_docs_select2_country').value,
@@ -485,7 +507,8 @@ $(document).ready(async function () {
                         specialty: $('#especialty').val().toString(),
                         type: 0,
                         photo: filename,
-                        photostate: $("#photoname").val()
+                        photostate: $("#photoname").val(),
+                        user: localStorage.getItem('userid')
                     }
                 
                     if($('#chosen_manager').val()=="") {
@@ -668,5 +691,34 @@ $(document).ready(async function () {
                 toastr.error('Action Failed!');
             }
         })
+    });
+
+    $("#pcp-save").on('click', () => {
+        _pcp = []
+        $(".pcp-emrid").each(function() {
+            _pcp[$(this).attr('key')] = {
+                doctorid: _doctorid,
+                emrid: $(this).val(),
+                pcpfhirid: '',
+                clinicid: $(this).attr('key'),
+                usertypeid: localStorage.getItem('usertype'),
+                pcpid: '',
+                insuranceid: '',
+                doctorinsid: '',
+                user: localStorage.getItem('userid')
+            }
+        });
+        $(".pcp-pcpfhirid").each(function() {
+            _pcp[$(this).attr('key')].pcpfhirid = $(this).val()
+        });
+
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {doctorid: _doctorid, pcp: _pcp}, 'provider/setPCPInfo', (xhr, err) => {
+            if (!err) {
+                toastr.success('Emr IDs and PCP FHIR IDs are added successfully!');
+                $("#provider-pcp-modal").modal('hide');
+            } else {
+                toastr.error('Action failed!');
+            }
+        });
     });
 });
