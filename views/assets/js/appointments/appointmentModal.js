@@ -292,25 +292,27 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid: local
   if (!err) {
     let measure = JSON.parse(xhr.responseText)['data'];
     var options = '';
-    for(var i=0; i<measure.length; i++){
+    for(var i=0; i<measure.length; i++){ 
       options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
     }
     $("#appointment_measure").html(options);
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: $("#appointment_specialist_provider").val()}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
-      if (!err) {
-        _externProvider = []
-        let result = JSON.parse(xhr.responseText)['data'];
-        var options = '';
-        for(var i=0; i<result.length; i++){
-          _externProvider.push(result[i]['id'].toString())
-          options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
+    // $("#appointment_measure").val(measure[0]['measureId']).trigger('change');
+    if (measure.length > 0) {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: measure[0]['measureId']}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
+        if (!err) {
+          _externProvider = []
+          let result = JSON.parse(xhr.responseText)['data'];
+          var options = '';
+          for(var i=0; i<result.length; i++) {
+            if (result[i]['clinic'].split(',').indexOf(localStorage.getItem('chosen_clinic')) != -1) {
+              _externProvider.push(result[i]['id'].toString())
+              options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
+            }
+          }
+          $("#appointment_specialist_provider").html(options);
         }
-        $("#appointment_specialist_provider").html(options);
-        if (result.length) {
-          $("#appointment_specialist_provider").val(result[0]['id']).trigger('change');
-        }
-      }
-    });
+      });
+    }
   }
 });
 
@@ -369,29 +371,6 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
     }
     $("#appointment_participant_type").html(options);
   }
-});
-
-$(document).on("change","#appointment_measure",function(){
-  $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
-  $("#appointment_assessment").html("");
-  // getSpecialty();
-  for(var i=0; i<observation.length; i++){
-    if(observation[i]['m_id'] == $(this).val()){
-      try{
-        var icd = JSON.parse(observation[i]['ICD']);
-        var options = '';
-        for(var j=0; j<icd.length; j++){
-          options += '<option value="'+icd[j]['value']+'" >'+icd[j]['code']+'</option>';
-        }
-        $("#appointment_assessment").html(options);
-
-      }catch(e){
-        console.log(observation[i]['ICD'])
-      }
-    }
-  }
-
-
 });
 
 function getSpecialty(){
@@ -683,9 +662,27 @@ $(document).on("click","#save_patient_btn",function(){
 // ### //
 let organizations = []
 $("#appointment_measure").on('change', (e) => {
-  let entry = {
-    measureid: e.target.value
+  $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
+  $("#appointment_assessment").html("");
+  for(var i=0; i<observation.length; i++){
+    if(observation[i]['m_id'] == e.target.val){
+      try{
+        var icd = JSON.parse(observation[i]['ICD']);
+        var options = '';
+        for(var j=0; j<icd.length; j++){
+          options += '<option value="'+icd[j]['value']+'" >'+icd[j]['code']+'</option>';
+        }
+        $("#appointment_assessment").html(options);
+
+      }catch(e){
+        console.log(observation[i]['ICD'])
+      }
+    }
   }
+  let entry = {
+    measureid: parseInt(e.target.value)
+  }
+  console.log(entry)
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
     if (!err) {
       _externProvider = []
