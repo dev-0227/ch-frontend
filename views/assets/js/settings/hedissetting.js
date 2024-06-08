@@ -1,3 +1,4 @@
+
 let globalsmsarr;
 let educationlink = ''
 let genderlink = ''
@@ -11,6 +12,7 @@ function isFloat(n){
   else
     return false;
 }
+
 function changeSeparator(tmpname,separator){
   tmpname = tmpname.replace(/[-|_/[\]\\]/g, separator);
   return tmpname;
@@ -54,6 +56,7 @@ function inputType(type){
 
   }
 }
+
 function updateEducationField (id,value){
   sendRequestWithToken('POST', localStorage.getItem('authToken'), { id: id, value: value }, "hedissetting/updateeducationfield", (xhr, err) => {
     if (!err) {
@@ -67,6 +70,7 @@ function updateEducationField (id,value){
     }
 });
 }
+
 function changestatusedumsg(check,id) {
   if (check) {
     updateEducationField(id,  0);
@@ -74,6 +78,7 @@ function changestatusedumsg(check,id) {
     updateEducationField(id,  1);
   }
 }
+
 function changeformitems(linkurl){
   let mainurl = linkurl.split("?")
   let paramarr = mainurl[1].split("&")
@@ -140,6 +145,7 @@ function changeformitems(linkurl){
    
   }
 }
+
 changeAlias = (id) => {
   var source = event.target || event.srcElement;
   if (source.constructor.name !== 'XMLHttpRequest') {
@@ -157,10 +163,11 @@ changeAlias = (id) => {
       });
   }
 }
+
 $( function() {
   // $( "#sortable" ).sortable();
   // $( "#sortable" ).disableSelection();
-} );
+});
 
 function jsonToString(data){
   var str = JSON.stringify(data, undefined, 6).replace(/\n( *)/g, function (match, p1) {
@@ -168,7 +175,6 @@ function jsonToString(data){
   });
   return str;
 }
-
 
 $(document).ready(async function () {
   "use strict";
@@ -248,9 +254,6 @@ $(document).ready(async function () {
     });
   }
   
-
-  
-  
   $('#qpp_measure_table_search_input').on('keyup', function () {
     qppmeasuretable.search(this.value).draw();
   });
@@ -288,14 +291,12 @@ $(document).ready(async function () {
     }
   });
 
- 
   $(document).on("change","#qpp_years",function(){
     $('#selected_year').val($(this).val());
     qppmeasuretable.clear().draw();
     qppmeasuretable.ajax.url(serviceUrl + "hedissetting/qppMeasuresData?eyear="+$('#selected_year').val()).load()
   });
   
-
   $(document).on("click",".showQppModal",function(){
     $('#qpp_data').html('');
     let entry = {
@@ -376,7 +377,6 @@ $(document).ready(async function () {
     ]
   });
 
-
   $('[data-bs-toggle="popover"]').on("mouseenter", function() {
     // $(this).popover('show');
   }).on("mouseleave", function() {
@@ -430,8 +430,6 @@ $(document).ready(async function () {
     });
   });
 
-  
-
   $('#measures_data_import_btn').on('click', function () {
     if($("#measures_data_qpp_years").val() === null){
       toastr.info('Please select Year');
@@ -461,8 +459,6 @@ $(document).ready(async function () {
       }
     });
   })
-
-  
 
   $(document).on("click",".showMeasureDataModal",function(){
     $('#measures_data').html('');
@@ -548,9 +544,6 @@ $(document).ready(async function () {
 		});
   })
 
-  
-
-
   $(document).on("click",".showMeasureDataEditModal",function(){
     $('.m_data').each(function() {
       if($(this).attr('type')=='checkbox'){
@@ -587,17 +580,14 @@ $(document).ready(async function () {
                 }
               }
             }
-            
           }
         }
-
       }
     });
   
     $("#measures_data_modal").modal("show");
   });
 
-  
   $("#measures_data_save_btn").click(function (e) {
     if($("#m_data_title").val() == ""){
       toastr.info('Please enter Title');
@@ -655,7 +645,9 @@ $(document).ready(async function () {
       eMeasureUuid: document.getElementById('m_data_eMeasureUuid').value,
       strata: document.getElementById('m_data_strata').value,
       eligibilityOptions: document.getElementById('m_data_eligibilityOptions').value,
-      performanceOptions: document.getElementById('m_data_performanceOptions').value
+      performanceOptions: document.getElementById('m_data_performanceOptions').value,
+      appt_specialist: document.getElementById('m_data_appt_specialist').checked? 1 : 0,
+      appt_clinic: document.getElementById('m_data_appt_clinic').checked? 1 : 0
     }
     if($("#m_data_id").val() == ""){
       sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/addMeasureaData", (xhr, err) => {
@@ -822,7 +814,6 @@ $(document).ready(async function () {
 
   });
   
-
   $(document).on("click",".m_observ_edit_btn",function(){
     $('#m_observ_measure').addClass('d-none');
     $('.m_observ_code').each(function() {
@@ -963,9 +954,7 @@ $(document).ready(async function () {
 		});
   });
 
-  
   var qpp_measure_data = {}
-
   sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/publicationState", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -976,6 +965,7 @@ $(document).ready(async function () {
       $("#m_observ_status").html(options);
     }
   });
+
   sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/jurisdiction", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -997,6 +987,7 @@ $(document).ready(async function () {
       $("#m_observ_category").html(options);
     }
   });
+
   sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/specimenType", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -1066,6 +1057,7 @@ $(document).ready(async function () {
 
     return data;
   }
+
   function add_observ_codeset_row(item, v){
     var data = '<div class="form-group row m_observ_code" style="border-bottom: dotted 1px #cccccc;">';
     data += '<div class="col-md-2 py-2">';
@@ -1126,8 +1118,6 @@ $(document).ready(async function () {
     return data;
   }
 
-  
-
   $(document).on("change","#m_observ_multiple",function(e){
     if(this.checked){
       $('.multiple').removeClass('d-none');
@@ -1148,8 +1138,6 @@ $(document).ready(async function () {
     
   });
 
-
-
   $(document).on("click",".remove_observ_code_row",function(e){
     $(this).parent().parent().html('');
   });
@@ -1159,8 +1147,6 @@ $(document).ready(async function () {
     insurances.children('div').children(':checkbox').prop('checked', this.checked);
     insurances.children('div').children().eq(0).trigger('change');
   });
-
-  
 
   $(document).on("change",".m_observ_code_check",function(e){
     var insurances = $(this).parent().parent().children();
@@ -1190,8 +1176,6 @@ $(document).ready(async function () {
     code_object.children('.m_observ_code_value').data('insurance', value);
   });
   
-  
-
   function measureid_change(value){
     $('#m_observ_measure').addClass('d-none');
     qpp_measure_data = {}
@@ -1235,7 +1219,6 @@ $(document).ready(async function () {
     }
     // ac_icd.setData(datasrc);
   }
-
 
   $(document).on("keyup","#m_observ_mid",function(e){
     measureid_change($(this).val())
@@ -1337,8 +1320,6 @@ $(document).ready(async function () {
     
   });
 
-
-
   var hdomaintable = $('#hdomaintable').DataTable({
     "ajax": {
         "url": serviceUrl + "hedissetting/gethdomain",
@@ -1360,6 +1341,7 @@ $(document).ready(async function () {
         }
     ],
   });
+
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/gethdomain", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -1383,6 +1365,7 @@ $(document).ready(async function () {
     $("#hdomain_domain").val('');
     $("#hdomain-modal").modal("show");
   });
+
   $("#hdomain_addbtn").click(function (e) {
     if($("#hdomain_org").val() == ""){
       toastr.info('Please enter Organization');
@@ -1538,17 +1521,11 @@ $(document).ready(async function () {
 //     }
 // });
 
-  
-
-  
   $(document).on("click",".editeducationbtn",function(){
     $("#chosen_hdomain").val($(this).parent().attr("idkey"));
     
   });
 
- 
-
-  
   $("#hdomain_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_hdomain').value,
@@ -1596,9 +1573,6 @@ $(document).ready(async function () {
       educationtable.ajax.reload();
     }, 1000 );
   });
-
-
-  
 
   //measure area
   var measuretable = $('#measuretable').DataTable({
@@ -1672,6 +1646,7 @@ $(document).ready(async function () {
         }
     ]
   });
+
   var definemeasuretable = $('#definemeasuretable').DataTable({
     "ajax": {
         "url": serviceUrl + "hedissetting/getmeasure",
@@ -1699,6 +1674,7 @@ $(document).ready(async function () {
   $(document).on("click","#measureaddbtn",function(){
     $("#measure-add-modal").modal("show");
   });
+
   $("#measure_addbtn").click(function (e) {
     let entry = {
       domain: document.getElementById('measure_domain').value,
@@ -1734,6 +1710,7 @@ $(document).ready(async function () {
     }, 1000 );
     
   });
+
   $(document).on("click",".editmeasurebtn",function(){
     $("#chosen_measure").val($(this).parent().attr("idkey"));
     let entry = {
@@ -1766,6 +1743,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $("#measure_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_measure').value,
@@ -1850,7 +1828,6 @@ $(document).ready(async function () {
    
   });
 
-
   $(document).on("click",".deletemeasurebtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -1877,6 +1854,7 @@ $(document).ready(async function () {
 			}
 		});
   });
+
   $(document).on("click",".measureoutcomecheck",function(){
     if($(this).prop("checked"))
       var tmpcheck = 1
@@ -1898,6 +1876,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $(document).on("click",".measureyearlycheck",function(){
     if($(this).prop("checked"))
       var tmpcheck = 1
@@ -1983,7 +1962,6 @@ $(document).ready(async function () {
 		});
   });
 
-
   //CPT ICD MAP area
   var cimtable = $('#cimtable').DataTable({
     "ajax": {
@@ -2051,9 +2029,11 @@ $(document).ready(async function () {
         }
     ]
   });
+
   $(document).on("click","#cimaddbtn",function(){
     $("#cim-add-modal").modal("show");
   });
+
   $("#cim_addbtn").click(function (e) {
     let entry = {
       m_id: document.getElementById('cim_m_id').value,
@@ -2090,6 +2070,7 @@ $(document).ready(async function () {
     }, 1000 );
     
   });
+
   $(document).on("click",".editcimbtn",function(){
     $("#chosen_cim").val($(this).parent().attr("idkey"));
     let entry = {
@@ -2123,6 +2104,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $("#cim_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_cim').value,
@@ -2159,6 +2141,7 @@ $(document).ready(async function () {
       cimtable.ajax.reload();
     }, 1000 );
   });
+
   $(document).on("click",".deletecimbtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -2228,6 +2211,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $(".addcimrange").click(function(){
     $(".cim_table_range tbody").empty();
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:$("#chosen_cim").val(),name:$("#cimicd").val(),v1:$("#cimrangev1").val(),v2:$("#cimrangev2").val()}, "hedissetting/addcimrangevalue", (xhr, err) => {
@@ -2284,6 +2268,7 @@ $(document).ready(async function () {
       });
     }
   });
+
   $("#updatehdate").click(function(){
     let entry = {
       date:$("#hedisdate").val()
@@ -2358,6 +2343,7 @@ $(document).ready(async function () {
   $("#coloraddbtn").click(function(){
     $("#color-add-modal").modal("show");
   });
+
   $(".addcoloritem").click(function(){
     let entry = {
       name: document.getElementById('colorname').value,
@@ -2386,6 +2372,7 @@ $(document).ready(async function () {
     }, 1000 );
     
   });
+
   $(document).on("click",".editcolorbtn",function(){
     $("#chosen_color").val($(this).parent().attr("idkey"));
     let entry = {
@@ -2411,6 +2398,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $(".editcoloritem").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_color').value,
@@ -2439,6 +2427,7 @@ $(document).ready(async function () {
       colortable.ajax.reload();
     }, 1000 );
   });
+
   $(document).on("click",".deletecolorbtn",function(){
     var tmp = $(this).parent().parent().parent();
     let entry = {
@@ -2487,9 +2476,11 @@ $(document).ready(async function () {
         }
     ],
   });
+
   $(document).on("click","#imeasureaddbtn",function(){
     $("#imeasure-add-modal").modal("show");
   });
+
   $("#imeasure_addbtn").click(function (e) {
     let entry = {
       name: document.getElementById('imeasure_name').value,
@@ -2511,6 +2502,7 @@ $(document).ready(async function () {
     }, 1000 );
     
   });
+
   $(document).on("click",".editimeasurebtn",function(){
     $("#chosen_imeasure").val($(this).parent().attr("idkey"));
     let entry = {
@@ -2529,6 +2521,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $("#imeasure_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_imeasure').value,
@@ -2550,6 +2543,7 @@ $(document).ready(async function () {
       imeasuretable.ajax.reload();
     }, 1000 );
   });
+
   $(document).on("click",".deleteimeasurebtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -2597,6 +2591,7 @@ $(document).ready(async function () {
         }
     ],
   });
+
   $(document).on("click",".deletenmeasurebtn",function(){
     let entry = {
       measure: $(this).parent().attr("idkey"),
@@ -2623,10 +2618,12 @@ $(document).ready(async function () {
 			}
 		});
   });
+
   $(document).on("click",".editnmeasurebtn",function(){
     $("#chosen-define-measure").html($(this).parent().parent().parent().children().eq(0).html())
     $("#measure-define-modal").modal("show");
   });
+
   $(document).on("click","#definemeasuretable tr",function(){
     let entry = {
       variable:$("#chosen-define-measure").html(),
@@ -2687,9 +2684,11 @@ $(document).ready(async function () {
         }
     ],
   });
+
   $(document).on("click","#mtimeaddbtn",function(){
     $("#mtime-add-modal").modal("show");
   });
+
   $("#mtime_addbtn").click(function (e) {
     let entry = {
       name: document.getElementById('mtime_name').value,
@@ -2713,6 +2712,7 @@ $(document).ready(async function () {
     }, 1000 );
     
   });
+
   $(document).on("click",".editmtimebtn",function(){
     $("#chosen_mtime").val($(this).parent().attr("idkey"));
     let entry = {
@@ -2733,6 +2733,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $("#mtime_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_mtime').value,
@@ -2756,6 +2757,7 @@ $(document).ready(async function () {
       mtimetable.ajax.reload();
     }, 1000 );
   });
+
   $(document).on("click",".deletemtimebtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -2800,6 +2802,7 @@ $(document).ready(async function () {
       });
     }
   });
+
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getfilenames", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -2816,6 +2819,7 @@ $(document).ready(async function () {
       });
     }
   });
+
   var filenametable = $('#filenametable').DataTable({
     "ajax": {
         "url": serviceUrl + "hedissetting/getfilenames",
@@ -2846,28 +2850,33 @@ $(document).ready(async function () {
         }
     ],
   });
+
   var separator = "_";
   var tmpname = "";
   $("#filename").change(function(){
       tmpname = $(this).val();
   });
+
   $("#separator").change(function(){
       separator = $(this).val();
       tmpname = changeSeparator(tmpname,$(this).val());
       $("#filename").val(tmpname);
   });
+
   $("#prefix").change(function(){
       if($(this).val()!=0){
           tmpname = tmpname+(tmpname==""?"":separator)+($(this).find("option:selected")).text();
           $("#filename").val(tmpname);
       }
   });
+
   $("#state").change(function(){
       if($(this).val()!=0){
           tmpname = tmpname+(tmpname==""?"":separator)+($(this).find("option:selected")).val();
           $("#filename").val(tmpname);
       }
   });
+
   $("#fileinsid").change(function(){
     if($(this).val()!=0){
         $(".generatefilenamebtn").prop("disabled",false);
@@ -2876,6 +2885,7 @@ $(document).ready(async function () {
         $(".generatefilenamebtn").prop("disabled",true);
     }
   });
+
   $(".generatefilenamebtn").click(function(){
     if($("#filedefinition").val() == 0){
       return $.growl.notice({
@@ -2910,6 +2920,7 @@ $(document).ready(async function () {
       }, 1000 );
     }
   });
+
   $(document).on("click",".deletefilenamebtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -2936,6 +2947,7 @@ $(document).ready(async function () {
 			}
 		});
   });
+
   $(document).on("click",".editfilenamebtn",function(){
     $("#chosen_filename").val($(this).parent().attr("idkey"));
     let entry = {
@@ -2955,6 +2967,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $("#filename_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_filename').value,
@@ -2977,6 +2990,7 @@ $(document).ready(async function () {
       filenametable.ajax.reload();
     }, 1000 );
   });
+
   $("#filenameid").change(function(){
       if($(this).val()!=0){
         $('.field_ul').empty();
@@ -3002,6 +3016,7 @@ $(document).ready(async function () {
         $('.field_ul').empty();
       }
   });
+
   $(".fieldnamebtn").click(function(){
     if($("#fieldname").val() == ""){
       return $.growl.notice({
@@ -3012,6 +3027,7 @@ $(document).ready(async function () {
       $("#field_define_modal").modal('show');
     }
   });
+
   $(".fieldtypeitem").change(function(){
       if($(this).val()==2){
           $(".fieldformatsection").removeClass("d-none");
@@ -3020,6 +3036,7 @@ $(document).ready(async function () {
           $(".fieldformatsection").addClass("d-none");
       }
   });
+
   $(".efieldtypeitem").change(function(){
       if($(this).val()==2){
           $(".efieldformatsection").removeClass("d-none");
@@ -3028,6 +3045,7 @@ $(document).ready(async function () {
           $(".efieldformatsection").addClass("d-none");
       }
   });
+
   $(".addfieldbtn").click(function(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {filename:$("#filenameid").val(),fieldname:$("#fieldname").val(),fieldtype:$(".fieldtypeitem:checked").val(),fieldformat:$("#dateformat").val(),required:$("#requireditem:checked").val()}, "hedissetting/addfield", (xhr, err) => {
       if (!err) {
@@ -3043,6 +3061,7 @@ $(document).ready(async function () {
       }
     });
   });
+
   $(".setPosbtn").click(function(){
       var field_idarray = [];
       for(var i = 0; i < $(".field_ul").children().length; i++){
@@ -3060,6 +3079,7 @@ $(document).ready(async function () {
         }
       });
   });
+
   $(document).on("click",".deletefield",function(){
     var tmp = $(this).parent().parent().parent();
     let entry = {
@@ -3087,6 +3107,7 @@ $(document).ready(async function () {
 			}
 		});
   });
+
   $(document).on("click",".editfield",function(){
       $("#chosenfield").val($(this).parent().parent().parent().attr("id"));
       sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:$(this).parent().parent().parent().attr("id")}, "hedissetting/editfield", (xhr, err) => {
@@ -3229,6 +3250,7 @@ $(document).ready(async function () {
         }
       });
   });
+
   $(".editfieldbtn").click(function(){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:$("#chosenfield").val(),filename:$("#filenameid").val(),fieldname:$("#efieldname").val(),fieldtype:$(".efieldtypeitem:checked").val(),fieldformat:$("#edateformat").val(),required:$("#erequireditem:checked").val(),mapfield:$(".mapfieldvalue:checked").val()}, "hedissetting/updatefield", (xhr, err) => {
       if (!err) {
@@ -3247,7 +3269,6 @@ $(document).ready(async function () {
 
   //Hedis file aliases
   
-
   // Datatables   
   // var filealiastable = $('#filealiastable').on('init.dt', function () {
   //     $("input[id^=a]").tagsinput();
@@ -3274,8 +3295,6 @@ $(document).ready(async function () {
   //   }
   // );
 
-  
-
   //ins domain
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/getchoseninsurances", (xhr, err) => {
     if (!err) {
@@ -3296,6 +3315,7 @@ $(document).ready(async function () {
       });
     }
   });
+
   var idomaintable = $('#idomaintable').DataTable({
     "ajax": {
         "url": serviceUrl + "hedissetting/getidomain",
@@ -3366,11 +3386,10 @@ $(document).ready(async function () {
   //   ]
   // });
 
-  
-
   $(document).on("click","#idomainaddbtn",function(){
     $("#idomain-add-modal").modal("show");
   });
+
   $("#idomain_addbtn").click(function (e) {
     let entry = {
       insid: document.getElementById('idomain_ins').value,
@@ -3393,6 +3412,7 @@ $(document).ready(async function () {
     }, 1000 );
     
   });
+
   $(document).on("click",".editidomainbtn",function(){
     $("#chosen_idomain").val($(this).parent().attr("idkey"));
     let entry = {
@@ -3432,6 +3452,7 @@ $(document).ready(async function () {
     // $('#education-link').html(tlink)
     $('#link-url').val(tlink)
   });
+
   $(".agerange").click(function(){
     if($(this).val() == 0){
       agelink = ''
@@ -3458,6 +3479,7 @@ $(document).ready(async function () {
    
     
   });
+
   $("#link-min-age").change(function(){
     let maxage = $('#link-max-age').val()
     agelink = '&min_age='+$(this).val()+'&max_age='+maxage
@@ -3468,6 +3490,7 @@ $(document).ready(async function () {
     $('#link-url').val(tlink)
 
   });
+
   $("#link-max-age").change(function(){
     let minage = $('#link-min-age').val()
     agelink = '&min_age='+minage+'&max_age='+$(this).val()
@@ -3477,7 +3500,6 @@ $(document).ready(async function () {
     // $('#education-link').html(tlink)
     $('#link-url').val(tlink)
   });
-
 
   $("#edu-link-save").click(function (e) {
     let tmpids = $("#same-id-input").val()
@@ -3516,6 +3538,7 @@ $(document).ready(async function () {
     let linkurl = $(this).val()
     changeformitems(linkurl)
   })
+
   $("#link-dg-sublist").change(function(){
     let selectedid = $(this).val()
     for(let i=0 ; i < globalsmsarr.length ; i++){
@@ -3532,6 +3555,7 @@ $(document).ready(async function () {
     }
    
   })
+
   $("#link-dg-lang").change(function(){
     
     glang = $("#link-dg-lang option:selected").val()
@@ -3576,7 +3600,6 @@ $(document).ready(async function () {
         }
     });
   });
-
   
   $(".addlinkbtn").click(function (e) {
     let linkcount = $(this).val(0) 
@@ -3593,7 +3616,6 @@ $(document).ready(async function () {
     $("#sameiddiv").toggle()
   })
   
-
   $("#idomain_editbtn").click(function (e) {
     let entry = {
       id: document.getElementById('chosen_idomain').value,
@@ -3616,6 +3638,7 @@ $(document).ready(async function () {
       idomaintable.ajax.reload();
     }, 1000 );
   });
+
   $(document).on("click",".deleteidomainbtn",function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
@@ -3670,6 +3693,4 @@ $(document).ready(async function () {
 			}
 		});
   });
-
-  
 });

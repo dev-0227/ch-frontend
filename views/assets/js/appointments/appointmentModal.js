@@ -288,7 +288,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting
   }
 });
 
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid: localStorage.getItem('chosen_clinic')}, "hedissetting/measuresDataByClinic", (xhr, err) => {
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $('input[name="appointment_provider"]:checked').val() == '0'? false : true}, "hedissetting/measuresDataForAppointment", (xhr, err) => {
   if (!err) {
     let measure = JSON.parse(xhr.responseText)['data'];
     var options = '';
@@ -315,6 +315,36 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid: local
     }
   }
 });
+
+$('.toggle-measure').on('change', () => {
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $('input[name="appointment_provider"]:checked').val() == '0'? false : true}, "hedissetting/measuresDataForAppointment", (xhr, err) => {
+    if (!err) {
+      let measure = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<measure.length; i++){ 
+        options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
+      }
+      $("#appointment_measure").html(options);
+      // $("#appointment_measure").val(measure[0]['measureId']).trigger('change');
+      if (measure.length > 0) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: measure[0]['measureId']}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
+          if (!err) {
+            _externProvider = []
+            let result = JSON.parse(xhr.responseText)['data'];
+            var options = '';
+            for(var i=0; i<result.length; i++) {
+              if (result[i]['clinic'].split(',').indexOf(localStorage.getItem('chosen_clinic')) != -1) {
+                _externProvider.push(result[i]['id'].toString())
+                options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
+              }
+            }
+            $("#appointment_specialist_provider").html(options);
+          }
+        });
+      }
+    }
+  });
+})
 
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "provider/getProviderByClinic", (xhr, err) => {
   if (!err) {
