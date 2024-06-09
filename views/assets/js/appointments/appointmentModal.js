@@ -403,6 +403,17 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
   }
 });
 
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/appointmentStatus", (xhr, err) => {
+  if (!err) {
+    var result = JSON.parse(xhr.responseText)['data'];
+    var options = ''
+    result.forEach(item => {
+      options += `<option value='${item.code}'>${item.display}</option>`
+    });
+    $("#appointment_status").html(options)
+  }
+});
+
 function getSpecialty(){
   sendRequestWithToken('POST', localStorage.getItem('authToken'), {measure_id: $("#appointment_measure").val()}, "referral/appointmentSpecialty/getSpecialtyByMeasure", (xhr, err) => {
     if (!err) {
