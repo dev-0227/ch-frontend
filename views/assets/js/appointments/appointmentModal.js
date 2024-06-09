@@ -767,6 +767,7 @@ $("#appointment_measure").on('change', (e) => {
                 <div class="text-primary fs-4">${result[0].name}</div>
                 <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
                 <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
+                <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone2}</div>
               </div>
             </div>`;
             $("#appointment-org-val").val(0);
