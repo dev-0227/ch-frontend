@@ -205,7 +205,7 @@ $(document).on("click",".appt_edit_btn",function(){
       }
       $("#appointment_attended").prop('checked', result[0]['attended']=="1"?true:false);
       $("#appointment_status").val(result[0]['status']);
-      $("#appointment_barrier_reason").val(result[0]['cancel_reason']);
+      // $("#appointment_barrier_reason").val(result[0]['cancel_reason']);
       $("#appointment_class").val(result[0]['class']);
       $("#appointment_service_category").val(result[0]['service_category']);
       $("#appointment_appt_type").val(result[0]['appt_type']);
@@ -233,7 +233,7 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_measure").val($("#appt_pt_mid").val());
   $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
   getSpecialty();
-  $("#appointment_barrier_reason").val('');
+  // $("#appointment_barrier_reason").val('');
   $("#appointment_class").val('AMB').trigger('change');
   $("#appointment_service_category").val('7').trigger('change');
   
