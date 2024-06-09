@@ -10,6 +10,7 @@
                             <li class="nav-item"><a href="#appt_type_tab" class="nav-link active" data-bs-toggle="tab">Appointment Type</a></li>
                             <li class="nav-item"><a href="#appt_category_tab" class="nav-link " data-bs-toggle="tab">Appt Category</a></li>
                             <li class="nav-item"><a href="#appt_calendar_tab" class="nav-link " data-bs-toggle="tab">Calendar</a></li>
+                            <li class="nav-item"><a href="#appt_status_tab" class="nav-link " data-bs-toggle="tab">Status</a></li>
                         </ul>
                     </div>
                     <div class="panel-body tabs-menu-body tab_area">
@@ -92,7 +93,7 @@
                                         <div class="card shadow-sm">
                                             <div class="card-header border-0 d-flex align-items-center">
                                                 <div class="card-title">
-                                                    <h3 class="card-title ">Calendar</h3>
+                                                    <h3 class="card-title ">Doctor Types</h3>
                                                 </div>
                                                 <div class="card-options d-flex">
                                                     
@@ -112,6 +113,38 @@
                                                         Specialist
                                                     </label>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="appt_status_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 d-flex align-items-center">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Appointment Category Type</h3>
+                                                </div>
+                                                <div class="card-options">
+                                                    <button id="appt_status_add_btn" type="button" class="btn btn-md btn-primary"><i class="fa fa-plus mr-2"></i>Add Status</button>
+                                                    <input type="hidden" id="chosen_appt_status" />
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap  w-100"  id="appt_status_table" >
+                                                    <thead>
+                                                        <tr >
+                                                            <th class="col-md-1">Code</th>
+                                                            <th class="col-md-3">System</th>
+                                                            <th class="col-md-2">Display</th>
+                                                            <th class="col-md-3">Definition</th>
+                                                            <th class="text-center col-md-1">Canonical Mapping</th>
+                                                            <th class="col-md-2">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -231,3 +264,54 @@
 	</div>
 </div>
 
+<div class="modal fade" id="appt_status_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Appointment Status</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <input type="hidden" class="form-control" id="appt_status_id" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_status_code" class="required fw-semibold fs-6 mt-2">Code:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_status_code" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_status_system" class="fw-semibold fs-6 mt-2">System:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_status_system" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_status_display" class="required fw-semibold fs-6 mt-2">Display:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_status_display" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_status_definition" class="fw-semibold fs-6 mt-2">Definition:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_status_definition" >
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="appt_status_canonical" class="fw-semibold fs-6 mt-2">Canonical Mapping for Appointment Status:</label>
+                            <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" id="appt_status_canonical" >
+                        </div>
+                    </div>
+                </div>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="appt_status_create"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+		</div>
+	</div>
+</div>
