@@ -938,17 +938,6 @@ var appt_search_table = $("#appointment_specialist_table").DataTable({
   ]
 });
 
-sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
-  if (!err) {
-    let result = JSON.parse(xhr.responseText)['data'];
-    var options = '';
-    for(var i=0; i<result.length; i++){
-      options += '<option value="'+result[i]['id']+'" >'+result[i]['name']+'</option>';
-    }
-    $("#appointment_search_specialty").html('<option value="0">All Specialties</option>' + options);
-  }
-});
-
 $(document).on('click', '#appointment-specialist-search', () => {
   // clear
   _specialists = []
@@ -1073,4 +1062,27 @@ $(document).on('click', '#appointment_search_ext_select', (e) => {
   _externProvider.push(e.target.attributes['data'].value)
 
   toastr.success("Specialist is added in the External Provider List successfully!");
+})
+
+_oldStatus = ''
+$("#appointment_attended").on('change', (e) => {
+  if (e.target.checked === true) {
+    console.log($("#appointment_status").val())
+    _oldStatus = $("#appointment_status").val()
+    $("#appointment_status").val('checked-out').trigger('change');
+  } else if (e.target.checked === false) {
+    if (_oldStatus !== '') {
+      $("#appointment_status").val(_oldStatus).trigger('change');
+    }
+  }
+})
+
+$("#appointment_status").on('change', (e) => {
+  if (e.target.value === 'noshow' || e.target.value === 'cancelled' || e.target.value === 'rescheduled') {
+    $("#appointment_cancel_reason").prop('disabled', false)
+    $("#appointment_cancel_date").prop('disabled', false)
+  } else {
+    $("#appointment_cancel_reason").prop('disabled', true)
+    $("#appointment_cancel_date").prop('disabled', true)
+  }
 })

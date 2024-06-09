@@ -218,15 +218,18 @@ $(document).ready(async function () {
         $("#search_patient").val("");
         $(".menu-sub-dropdown").removeClass("show");
     });
+
     $(document).on("click","#search_patient",function(){
         $("#searched_patient_list").removeClass("show");
     }) 
+
     $(document).on("click",".search-reset",function(){
         $("#searched_patient_list").removeClass("show");
         $("#appointment_patient_info").addClass('d-none');
         $("#searched_patient_list").html("");
         $("#search_patient").val("");
     }) 
+
     var patients = []
     $(document).on("keyup","#search_patient",function(){
         $("#searched_patient_list").removeClass("show");
@@ -268,7 +271,6 @@ $(document).ready(async function () {
             });
         }
     });
-
 
     $(document).on("click",".pt-info",function(){
         for(var i = 0; i<patients.length; i++){
@@ -324,7 +326,6 @@ $(document).ready(async function () {
         $("#appointment_patient_info").removeClass('d-none');
     });
     
-
     $("#appt_save_btn").click(function (e) {
         setTimeout( function () {
             load_data();
@@ -334,6 +335,7 @@ $(document).ready(async function () {
     var entry ={
         clinic_id: localStorage.getItem('chosen_clinic'),
     }
+
     var doctors = []
     await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getAllDoctorsByClinic", (xhr, err) => {
         if (!err) {
@@ -362,6 +364,7 @@ $(document).ready(async function () {
     sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
         if (!err) {
             specialty = JSON.parse(xhr.responseText)['data'];
+            var options = '';
             for(var i=0;i<specialty.length;i++){
                 html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
                 html += '<input class="form-check-input specialty-check" type="checkbox" checked="checked" data-id="'+specialty[i]['id']+'" >';
@@ -370,10 +373,12 @@ $(document).ready(async function () {
                 html += '</span></label>';
                 specialty[i]['ch'] = "1";
                 $("#specialty_list").append(html);
+
+                options += '<option value="'+specialty[i]['id']+'" >'+specialty[i]['name']+'</option>';
             }
+            $("#appointment_search_specialty").html('<option value="0">All Specialties</option>' + options);
         }
     });
-
 
     function add_event(){
         app_calendar.removeAllEvents();
@@ -414,7 +419,6 @@ $(document).ready(async function () {
         });
     }
     
-    
     $(document).on("change",".specialty-check",function(){
         if($(this).data("id")=="0"){
             $(".specialty-check").prop("checked", $(this).prop("checked"));
@@ -430,6 +434,7 @@ $(document).ready(async function () {
         load_data()
         
     });
+
     $(document).on("change",".doctor-check",function(){
         selected_doctor= "";
         for(var i=0;i<doctors.length;i++){
