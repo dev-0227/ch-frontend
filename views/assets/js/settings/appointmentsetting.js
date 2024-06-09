@@ -444,4 +444,127 @@ $(document).ready(async function () {
       }
     });
   });
+
+  /******************************* Appointment Barrier *************************************************** */
+  var appt_barrier_table = $('#appt_barrier_table').DataTable({
+    "ajax": {
+        "url": serviceUrl + "referral/appointmentBarrier",
+        "type": "GET",
+        "headers": { 'Authorization': localStorage.getItem('authToken') }
+    },
+    "fixedColumns": {
+      right: 1
+    },
+    "columns": [
+      { data: 'code' },
+        { data: 'reason' },
+        { data: 'id',
+          render: function (data, type, row) {
+            return `
+              <div idkey="`+row.id+`">
+              <button class="btn btn-sm btn-primary edit_appt_barrier_btn"><i class="fa fa-edit"></i> Edit</button>
+              <button class="btn btn-sm btn-danger delete_appt_barrier_btn"><i class="fa fa-trash"></i> Delete</button>
+              </div>
+            `
+          } 
+        }
+    ],
+  });
+
+  $(document).on("click","#appt_barrier_add_btn",function(){
+    $("#appt_barrier_id").val('');
+    $("#appt_barrier_reason").val('');
+    $("#appt_barrier_code").val('');
+    $("#appt_barrier_modal").modal("show");
+  });
+
+  $(document).on("click","#appt_barrier_create",function(){
+    if($("#appt_barrier_code").val() == ""){
+      toastr.info('Please Enter Code');
+      $("#appt_barrier_code").focus();
+      return;
+    }
+    if($("#appt_barrier_reason").val() == ""){
+      toastr.info('Please Enter Reason');
+      $("#appt_barrier_reason").focus();
+      return;
+    }
+    let entry = {
+        id: $('#appt_barrier_id').val(),
+        code: $("#appt_barrier_code").val(),
+        reason: $('#appt_barrier_reason').val(),
+      }
+
+    if($("#appt_barrier_id").val() == ""){
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentBarrier/create", (xhr, err) => {
+        if (!err) {
+          $("#appt_barrier_modal").modal("hide");
+          return toastr.success("Action successfully");
+        } else {
+          return toastr.error("Action Failed");
+        }
+      });
+    }else{
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentBarrier/update", (xhr, err) => {
+        if (!err) {
+          $("#appt_barrier_modal").modal("hide");
+          return toastr.success("Action successfully");
+        } else {
+          return toastr.error("Action Failed");
+        }
+    });
+    }
+    
+    setTimeout( function () {
+      appt_barrier_table.ajax.reload();
+    }, 1000 );
+  });
+
+  $(document).on("click",".edit_appt_barrier_btn",function(){
+    $("#appt_barrier_id").val($(this).parent().attr("idkey"));
+    let entry = {
+      id: $("#appt_barrier_id").val(),
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentBarrier/chosen", (xhr, err) => {
+      if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];
+        $("#appt_barrier_code").val(result[0]['code']);
+        $("#appt_barrier_reason").val(result[0]['reason']);
+        $("#appt_barrier_modal").modal("show");
+      } else {
+        return toastr.error("Action Failed");
+      }
+    });
+  });
+
+  $(document).on("click",".delete_appt_barrier_btn",function(){
+    $("#appt_barrier_id").val($(this).parent().attr("idkey"));
+    let entry = {
+      id: $("#appt_barrier_id").val(),
+    }
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, return",
+      customClass: {
+          confirmButton: "btn btn-danger",
+          cancelButton: "btn btn-primary"
+      }
+        }).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointmentBarrier/delete", (xhr, err) => {
+          if (!err) {
+            setTimeout( function () {
+              appt_barrier_table.ajax.reload();
+            }, 1000 );
+          } else {
+            toastr.error('Credential is invalid');
+          }
+        });	
+      }
+    });
+  });
 });

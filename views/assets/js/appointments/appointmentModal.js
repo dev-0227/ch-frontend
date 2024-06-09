@@ -205,13 +205,13 @@ $(document).on("click",".appt_edit_btn",function(){
       }
       $("#appointment_attended").prop('checked', result[0]['attended']=="1"?true:false);
       $("#appointment_status").val(result[0]['status']);
-      $("#appointment_cancel_reason").val(result[0]['cancel_reason']);
+      $("#appointment_barrier_reason").val(result[0]['cancel_reason']);
       $("#appointment_class").val(result[0]['class']);
       $("#appointment_service_category").val(result[0]['service_category']);
       $("#appointment_appt_type").val(result[0]['appt_type']);
       $("#appointment_reason").val(result[0]['reason']);
       $("#appointment_priority").val(result[0]['priority']);
-      $("#appointment_cancel_date").val(GetFormattedDate(new Date(result[0]['cancel_date'])));
+      // $("#appointment_barrier_date").val(GetFormattedDate(new Date(result[0]['cancel_date'])));
       $("#appointment_notes").val(result[0]['notes']);
       $("#appointment_pt_instruction").val(result[0]['pt_instruction']);
       $("#appointment_edit_modal-1").modal("show");
@@ -233,14 +233,14 @@ $(document).on("click","#appt_add_btn",function(){
   $("#appointment_measure").val($("#appt_pt_mid").val());
   $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
   getSpecialty();
-  $("#appointment_cancel_reason").val('');
+  $("#appointment_barrier_reason").val('');
   $("#appointment_class").val('AMB').trigger('change');
   $("#appointment_service_category").val('7').trigger('change');
   
   $("#appointment_priority").val('R').trigger('change');
   $("#appointment_start_date").val("09:00");
   $("#appointment_end_date").val('09:15');
-  $("#appointment_cancel_date").val('');
+  // $("#appointment_barrier_date").val('');
   $("#appointment_notes").val('');
   $("#appointment_pt_instruction").val('');
   $("#appointment_pt_instruction_date").val('');
@@ -411,6 +411,18 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/app
       options += `<option value='${item.code}'>${item.display}</option>`
     });
     $("#appointment_status").html(options)
+  }
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/appointmentBarrier", (xhr, err) => {
+  if (!err) {
+    var result = JSON.parse(xhr.responseText)['data'];
+    console.log(result)
+    var options = ''
+    result.forEach(item => {
+      options += `<option value='${item.code}'>${item.reason}</option>`
+    });
+    $("#appointment_barrier_reason").html(options)
   }
 });
 
@@ -1079,10 +1091,10 @@ $("#appointment_attended").on('change', (e) => {
 
 $("#appointment_status").on('change', (e) => {
   if (e.target.value === 'noshow' || e.target.value === 'cancelled' || e.target.value === 'rescheduled') {
-    $("#appointment_cancel_reason").prop('disabled', false)
-    $("#appointment_cancel_date").prop('disabled', false)
+    $("#appointment_barrier_reason").prop('disabled', false)
+    // $("#appointment_barrier_date").prop('disabled', false)
   } else {
-    $("#appointment_cancel_reason").prop('disabled', true)
-    $("#appointment_cancel_date").prop('disabled', true)
+    $("#appointment_barrier_reason").prop('disabled', true)
+    // $("#appointment_barrier_date").prop('disabled', true)
   }
 })

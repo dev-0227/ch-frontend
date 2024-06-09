@@ -344,7 +344,6 @@
 								<div class="form-group">
 									<label for="appointment_assessment" class="fw-semibold fs-6 my-2">Assessment:</label>
 									<select  class="form-select" data-hide-search="true" data-placeholder="Select Assessment" data-control="select2" id="appointment_assessment" data-field="assessment">
-										
 									</select>
 								</div>
 							</div>
@@ -352,7 +351,6 @@
 								<div class="form-group">
 									<label for="appointment_clinic_provider" class="fw-semibold fs-6 my-2">Clinic Provider:</label>
 									<select class="form-select" data-hide-search="true" data-placeholder="Select Clinic Provider" data-control="select2" id="appointment_clinic_provider" data-field="clinic_provider">
-										
 									</select>
 								</div>
 							</div>
@@ -445,6 +443,13 @@
 											<input type="text" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="pt_instruction" id="appointment_pt_instruction">
 										</div>
 									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="appointment_barrier_reason" class="fw-semibold fs-6 my-2">Barrier Reason:</label>
+											<select class="form-select" data-hide-search="true" data-placeholder="Select Barrier Reason" data-control="select2" id="appointment_barrier_reason" data-field="cancel_reason">
+											</select>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="col-md-3">
@@ -452,54 +457,6 @@
 									<label for="appointment_organization" class="fw-semibold fs-6 my-2">Specialist Locations:</label>
 									<div id="appointment_organization"></div>
 									<div id="appointment_org_buttons"></div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-9">
-								<div class="form-group">
-									<label for="appointment_cancel_reason" class="fw-semibold fs-6 my-2">Cancel Reason:</label>
-									<select class="form-select" data-hide-search="true" data-placeholder="Select Cancel Reason" data-control="select2" id="appointment_cancel_reason" data-field="cancel_reason">
-										<option value=""></option>
-										<option value="pat">Patient</option>
-										<option value="pat-crs">Patient: Canceled via automated reminder system</option>
-										<option value="pat-cpp">Patient: Canceled via Patient Portal</option>
-										<option value="pat-dec">Patient: Deceased</option>
-										<option value="pat-fb">Patient: Feeling Better</option>
-										<option value="pat-lt">Patient: Lack of Transportation</option>
-										<option value="pat-mt">Patient: Member Terminated</option>
-										<option value="pat-mv">Patient: Moved</option>
-										<option value="pat-preg">Patient: Pregnant</option>
-										<option value="pat-swl">Patient: Scheduled from Wait List</option>
-										<option value="pat-ucp">Patient: Unhappy/Changed Provider</option>
-										<option value="prov">Provider</option>
-										<option value="prov-pers">Provider: Personal</option>
-										<option value="prov-dch">Provider: Discharged</option>
-										<option value="prov-edu">Provider: Edu/Meeting</option>
-										<option value="prov-hosp">Provider: Hospitalized</option>
-										<option value="prov-labs">Provider: Labs Out of Acceptable Range</option>
-										<option value="prov-mri">Provider: MRI Screening Form Marked Do Not Proceed</option>
-										<option value="prov-onc">Provider: Oncology Treatment Plan Changes</option>
-										<option value="maint">Equipment Maintenance/Repair</option>
-										<option value="meds-inc">Prep/Med Incomplete</option>
-										<option value="other">Other</option>
-										<option value="oth-cms">Other: CMS Therapy Cap Service Not Authorized</option>
-										<option value="oth-err">Other: Error</option>
-										<option value="oth-fin">Other: Financial</option>
-										<option value="oth-iv">Other: Improper IV Access/Infiltrate IV</option>
-										<option value="oth-int">Other: No Interpreter Available</option>
-										<option value="oth-mu">Other: Prep/Med/Results Unavailable</option>
-										<option value="oth-room">Other: Room/Resource Maintenance</option>
-										<option value="oth-oerr">Other: Schedule Order Error</option>
-										<option value="oth-swie">Other: Silent Walk In Error</option>
-										<option value=" oth-weath">Other: Weather</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="appointment_cancel_date" class="fw-semibold fs-6 my-2">Cancel Date:</label>
-									<input type="datetime-local" class="form-control form-control-solid mb-3 mb-lg-0 " data-field="cancel_date" id="appointment_cancel_date">
 								</div>
 							</div>
 						</div>
