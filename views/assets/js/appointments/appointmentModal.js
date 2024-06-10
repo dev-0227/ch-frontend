@@ -375,7 +375,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/enc
     let result = JSON.parse(xhr.responseText)['data'];
     var options = '';
     for(var i=0; i<result.length; i++){
-      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
     }
     $("#appointment_class").html(options);
   }
@@ -386,18 +386,19 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
     let result = JSON.parse(xhr.responseText)['data'];
     var options = '';
     for(var i=0; i<result.length; i++){
-      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
     }
     $("#appointment_priority").html(options);
   }
 });
 
+// not used
 sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterParticipantType", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
     var options = '';
     for(var i=0; i<result.length; i++){
-      options += '<option value="'+result[i]['code']+'" >'+result[i]['display']+'</option>';
+      options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
     }
     $("#appointment_participant_type").html(options);
   }
@@ -408,7 +409,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/app
     var result = JSON.parse(xhr.responseText)['data'];
     var options = ''
     result.forEach(item => {
-      options += `<option value='${item.code}'>${item.display}</option>`
+      options += `<option value='${item.id}'>${item.display}</option>`
     });
     $("#appointment_status").html(options)
   }
@@ -417,10 +418,9 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/app
 sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/appointmentBarrier", (xhr, err) => {
   if (!err) {
     var result = JSON.parse(xhr.responseText)['data'];
-    console.log(result)
     var options = ''
     result.forEach(item => {
-      options += `<option value='${item.code}'>${item.reason}</option>`
+      options += `<option value='${item.id}'>${item.reason}</option>`
     });
     $("#appointment_barrier_reason").html(options)
   }
@@ -514,8 +514,17 @@ $("#appt_save_btn").click(function (e) {
   entry['ins_id'] = $("#appt_pt_insurance").val();
   entry['subscrber_no'] = $("#appt_pt_inspcpid").val();
   entry['year'] = $("#appt_pt_cyear").val();
+  // add new
+  entry['pt_participate_status'] = $("#appointment_participate_status").val()
+  entry['status'] = $("#appointment_status").val()
+  entry['class'] = $("#appointment_class").val()
+  entry['service_category'] = $("#appointment_service_category").val()
+  entry['priority'] = $("#appointment_priority").val()
+  entry['appt_type'] = $("#appointment_appt_type").val()
+  entry['measure'] = $("#appointment_measure").val()
+  entry['specialist_provider'] = $("#appointment_specialist_provider").val()
+  entry['clinic_provider'] = $("#appointment_clinic_provider").val()
 
-  
   if($("#appointment_id").val()==""){
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/create", (xhr, err) => {
       if (!err) {
@@ -540,10 +549,9 @@ $("#appt_save_btn").click(function (e) {
       }
     });
   }
-  
-  setTimeout( function () {
-    appointment_table.ajax.reload();
-  }, 1000 );
+  // setTimeout( function () {
+  //   appointment_table.ajax.reload();
+  // }, 1000 );
 });
 
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "patientlist/getLanguages", (xhr, err) => {
@@ -735,7 +743,6 @@ $("#appointment_measure").on('change', (e) => {
   let entry = {
     measureid: parseInt(e.target.value)
   }
-  console.log(entry)
   sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
     if (!err) {
       _externProvider = []
@@ -800,6 +807,7 @@ $(document).on('change', '#appointment_specialist_provider', (e) => {
             <div class="text-primary fs-4">${result[0].name}</div>
             <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
             <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
+            <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone2}</div>
           </div>
         </div>`;
         $("#appointment-org-val").val(0);
@@ -1018,6 +1026,7 @@ $("#appointment_search_zip").on('keyup', function() {
 //                     <div class="text-primary fs-4">${result[0].name}</div>
 //                     <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
 //                     <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
+//                     <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone2}</div>
 //                   </div>
 //                 </div>`;
 //                 $("#appointment-org-val").val(0);
@@ -1063,7 +1072,6 @@ $(document).on('change', '#appointment_search_all', (e) => {
 })
 
 $(document).on('click', '#appointment_search_ext_select', (e) => {
-  console.log(_externProvider, e.target.attributes['data'].value)
   if (_externProvider.indexOf(e.target.attributes['data'].value) > -1) {
     toastr.warning("Specialist is already added in the External Provider List!");
     return;
@@ -1080,7 +1088,6 @@ $(document).on('click', '#appointment_search_ext_select', (e) => {
 _oldStatus = ''
 $("#appointment_attended").on('change', (e) => {
   if (e.target.checked === true) {
-    console.log($("#appointment_status").val())
     _oldStatus = $("#appointment_status").val()
     $("#appointment_status").val('checked-out').trigger('change');
   } else if (e.target.checked === false) {

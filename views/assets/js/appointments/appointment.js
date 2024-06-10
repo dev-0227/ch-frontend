@@ -72,7 +72,6 @@ $(document).ready(async function () {
             load_data();
         }
     });
-
     app_calendar.render();
 
     const handleViewEvent = (data) => {
@@ -140,13 +139,15 @@ $(document).ready(async function () {
         }
         $("#appointment_attended").prop('checked', appointment['attended']=="1"?true:false);
         $("#appointment_status").val(appointment['status']);
-        $("#appointment_cancel_reason").val(appointment['cancel_reason']);
+        // $("#appointment_cancel_reason").val(appointment['cancel_reason']);
+        $("#appointment_cancel_reason").val(appointment['barrier_reason']);
         $("#appointment_class").val(appointment['class']);
         $("#appointment_service_category").val(appointment['service_category']);
         $("#appointment_appt_type").val(appointment['appt_type']);
         $("#appointment_reason").val(appointment['reason']);
         $("#appointment_priority").val(appointment['priority']);
-        $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
+        // $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
+        $("#appointment_barrier_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
         $("#appointment_notes").val(appointment['notes']);
         $("#appointment_pt_instruction").val(appointment['pt_instruction']);
         $("#appointment_edit_modal-1").modal("show");
@@ -192,23 +193,24 @@ $(document).ready(async function () {
         $("#appointment_clinic_provider").val("");
         // $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
         $("#appointment_attended").prop('checked', false);
-        $("#appointment_status").val('pending').trigger('change');
+        $("#appointment_status").val('2').trigger('change');
         // $("#appointment_measure").val($("#appointment_measure option:first").val());
         // $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
         getSpecialty();
-        $("#appointment_cancel_reason").val('');
-        $("#appointment_class").val('AMB').trigger('change');
+        // $("#appointment_cancel_reason").val('');
+        $("#appointment_barrier_reason").val('');
+        $("#appointment_class").val('2').trigger('change');
         $("#appointment_service_category").val('7').trigger('change');
         
-        $("#appointment_priority").val('R').trigger('change');
+        $("#appointment_priority").val('7').trigger('change');
         $("#appointment_start_date").val("09:00");
         $("#appointment_end_date").val('09:15');
-        $("#appointment_cancel_date").val('');
+        // $("#appointment_barrier_date").val('');
         $("#appointment_notes").val('');
         $("#appointment_pt_instruction").val('');
         $("#appointment_pt_instruction_date").val('');
         $("#appointment_edit_modal-1").modal("show");
-        $("#appointment_modal").modal("hide");
+        // $("#appointment_modal").modal("show");
     });
 
     var patient_search_item = "name";
