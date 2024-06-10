@@ -1098,7 +1098,8 @@ $("#appointment_attended").on('change', (e) => {
 })
 
 $("#appointment_status").on('change', (e) => {
-  if (e.target.value === 'noshow' || e.target.value === 'cancelled' || e.target.value === 'rescheduled') {
+  console.log(e.target.text)
+  if (e.target.value === '7' || e.target.value === '11' || e.target.value === '12') {
     $("#appointment_barrier_reason").prop('disabled', false)
     // $("#appointment_barrier_date").prop('disabled', false)
   } else {
