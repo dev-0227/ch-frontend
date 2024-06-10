@@ -1089,7 +1089,7 @@ _oldStatus = ''
 $("#appointment_attended").on('change', (e) => {
   if (e.target.checked === true) {
     _oldStatus = $("#appointment_status").val()
-    $("#appointment_status").val('checked-out').trigger('change');
+    $("#appointment_status").val('11').trigger('change');
   } else if (e.target.checked === false) {
     if (_oldStatus !== '') {
       $("#appointment_status").val(_oldStatus).trigger('change');
