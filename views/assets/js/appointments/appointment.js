@@ -1,3 +1,44 @@
+
+// Parameters begin //
+var patient_id = 0;
+
+var selected_doctor= "";
+var selected_date= "";
+var appointments = [];
+var specialties = "0";
+
+var calendarEl = document.getElementById('kt_calendar_app');
+var todayDate = moment().startOf('day');
+var YM = todayDate.format('YYYY-MM');
+var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
+var TODAY = todayDate.format('YYYY-MM-DD');
+var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+
+var measure = []
+var observation = []
+var _externProvider = []
+
+var _oldStatus = ''
+
+let _specialists = []
+let _clinics = []
+
+var duration_mins = 0;
+
+let organizations = []
+
+let appointmentType = []
+
+var patient_search_item = "name"
+
+var patients = []
+
+var doctors = []
+
+var specialty = []
+// Parameters end //
+
+// utils begin //
 function GetFormattedDate(date) {
     var month = ("0" + (date.getMonth() + 1)).slice(-2);
     var day  = ("0" + (date.getDate())).slice(-2);
@@ -18,7 +59,7 @@ function calculateAge(dateString) {
         age--;
     }
     return age;
-  }
+}
 
 function getGender(gender, short=true) {
     var str="-"
@@ -28,23 +69,236 @@ function getGender(gender, short=true) {
     return short?str.charAt(0).toUpperCase():str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-$(document).ready(async function () {
+function checkTime(i) {
+    return (i < 10) ? "0" + i : i;
+}
 
-    var selected_doctor= "";
-    var selected_date= "";
-    var appointments = [];
-    var specialties = "0";
+function setEndData(){
+    let startTime = new Date();
+    let start_date = $("#appointment_start_date").val();
+    startTime.setHours(start_date.split(":")[0], start_date.split(":")[1], 0, 0);
+    let end_date = new Date(startTime);
+    end_date.setMinutes(end_date.getMinutes() + duration_mins);
+    $("#appointment_end_date").val(checkTime(end_date.getHours())+":"+checkTime(end_date.getMinutes()));
+}
+// utils end //
+
+// Data Load begin //
+function loadSpecialistProviderByMeasureId(mid) {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: mid}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
+        if (!err) {
+          _externProvider = []
+          let result = JSON.parse(xhr.responseText)['data'];
+          var options = '';
+          for(var i=0; i<result.length; i++) {
+            if (result[i]['clinic'].split(',').indexOf(localStorage.getItem('chosen_clinic')) != -1) {
+              _externProvider.push(result[i]['id'].toString())
+              options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
+            }
+          }
+          $("#appointment_specialist_provider").html(options);
+        }
+    });
+}
+
+function getSpecialty() {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {measure_id: $("#appointment_measure").val()}, "referral/appointmentSpecialty/getSpecialtyByMeasure", (xhr, err) => {
+        if (!err) {
+                let result = JSON.parse(xhr.responseText)['data'];
+                if(result.length>0){
+                $("#appointment_specialty").val(result[0]['id']);
+            }
+        }
+    });
+}
+
+// For Appointment Form begin //
+
+// Load Measure Data
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getMeasureObservation", (xhr, err) => {
+    if (!err) {
+        observation = JSON.parse(xhr.responseText)['data'];
+    }
+});
+
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $('input[name="appointment_provider"]:checked').val() == '0'? false : true}, "hedissetting/measuresDataForAppointment", (xhr, err) => {
+    if (!err) {
+      let measure = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<measure.length; i++){ 
+        options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
+      }
+      $("#appointment_measure").html(options);
+      // $("#appointment_measure").val(measure[0]['measureId']).trigger('change');
+      if (measure.length > 0) {
+        loadSpecialistProviderByMeasureId(measure[0]['measureId'])
+      }
+    }
+});
+
+// Load Clinic
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "provider/getProviderByClinic", (xhr, err) => {
+    if (!err) {
+      let doctors = JSON.parse(xhr.responseText)['data'];
+      var options = '';
+      for(var i=0; i<doctors.length; i++){
+        options += '<option value="'+doctors[i]['id']+'" >'+doctors[i]['fname']+' '+doctors[i]['lname']+'</option>';
+      }
+      $("#appointment_clinic_provider").html(options);
+    }
+});
+
+// Load Appointment Type
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentType", (xhr, err) => {
+    if (!err) {
+        appointmentType = JSON.parse(xhr.responseText)['data'];
+        var options = '';
+        for(var i=0; i<appointmentType.length; i++){
+            options += '<option value="'+appointmentType[i]['id']+'" >'+appointmentType[i]['name']+'</option>';
+        }
+        $("#appointment_appt_type").html(options);
+    }
+});
+
+// Load Patient Participate Status
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/appointmentStatus", (xhr, err) => {
+    if (!err) {
+        var result = JSON.parse(xhr.responseText)['data'];
+        var options = ''
+        result.forEach(item => {
+            options += `<option value='${item.id}'>${item.display}</option>`
+        });
+        $("#appointment_status").html(options)
+    }
+});
+
+// Load Barrier Reason
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/appointmentBarrier", (xhr, err) => {
+    if (!err) {
+        var result = JSON.parse(xhr.responseText)['data'];
+        var options = ''
+        result.forEach(item => {
+            options += `<option value='${item.id}'>${item.reason}</option>`
+        });
+        $("#appointment_barrier_reason").html(options)
+    }
+});
+// For Appointment Form end //
+
+
+// Load Class
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/encounterClass", (xhr, err) => {
+    if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];
+        var options = '';
+        for(var i=0; i<result.length; i++){
+            options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
+        }
+        $("#appointment_class").html(options);
+    }
+});
+
+// Load Priority
+sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterPriority", (xhr, err) => {
+  if (!err) {
+    let result = JSON.parse(xhr.responseText)['data'];
+    var options = '';
+    for(var i=0; i<result.length; i++){
+      options += '<option value="'+result[i]['id']+'" >'+result[i]['display']+'</option>';
+    }
+    $("#appointment_priority").html(options);
+  }
+});
+
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getAllDoctorsByClinic", (xhr, err) => {
+    if (!err) {
+        doctors = JSON.parse(xhr.responseText)['data'];
+        $("#pcp_list").html("");
+        $("#specialist_list").html("");
+        $("#pcp_select_button").removeClass("d-none");
+        $("#specialist_select_button").removeClass("d-none");
+        for(var i=0;i<doctors.length;i++){
+            html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
+            html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
+            html += '<span class="form-check-label text-gray-600 fw-semibold">';
+            html += doctors[i]['fname']+' '+doctors[i]['lname'];
+            if(doctors[i]['type']=="3") html += ' ('+doctors[i]['speciality']+") ";
+            html += '</span></label>';
+            doctors[i]['ch'] = "1";
+            if(doctors[i]['type']=="5") $("#pcp_list").append(html);
+            if(doctors[i]['type']=="3") $("#specialist_list").append(html);
+        }
+        if($("#pcp_list").html()=="")$("#pcp_select_button").addClass("d-none");
+        if($("#specialist_list").html()=="")$("#specialist_select_button").addClass("d-none");
+    }
+});
+
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
+    if (!err) {
+        specialty = JSON.parse(xhr.responseText)['data'];
+        var options = '';
+        for(var i=0;i<specialty.length;i++){
+            html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
+            html += '<input class="form-check-input specialty-check" type="checkbox" checked="checked" data-id="'+specialty[i]['id']+'" >';
+            html += '<span class="form-check-label text-gray-600 fw-semibold">';
+            html += specialty[i]['name'];
+            html += '</span></label>';
+            specialty[i]['ch'] = "1";
+            $("#specialty_list").append(html);
+
+            options += '<option value="'+specialty[i]['id']+'" >'+specialty[i]['name']+'</option>';
+        }
+        $("#appointment_search_specialty").html('<option value="0">All Specialties</option>' + options);
+    }
+});
+// Data Load end //
+
+$(document).ready(async function() {
+    // Appointment dashboad begin //
+
+    function add_event(){
+        app_calendar.removeAllEvents();
+        for(var i in appointments){
+            var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
+            var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
+            var bg = 'info'
+            if(appointments[i]['attended']=="1")bg = 'success';
+            events = {
+                id: appointments[i]['id'],
+                title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                start: s,
+                end: e,
+                className: "border border-danger border-0 bg-"+bg+" text-inverse-primary",
+            }
+            app_calendar.addEvent(events);
+        }
+       
+    }
     
+    function load_data(){
+        var entry ={
+            date: selected_date,
+            clinic_id: localStorage.getItem('chosen_clinic'),
+            specialties: specialties
+        }
+        if(selected_doctor!="")entry['doctors'] = selected_doctor;
+        appointments = []
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
+            if (!err) {
+              var result = JSON.parse(xhr.responseText)['data'];
+              for(var i=0; i<result.length; i++){
+                appointments[result[i]['id']] = result[i];
+              }
+              
+              add_event();
+            }
+        });
+    }
 
-    var calendarEl = document.getElementById('kt_calendar_app');
-    var todayDate = moment().startOf('day');
-    var YM = todayDate.format('YYYY-MM');
-    var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
-    var TODAY = todayDate.format('YYYY-MM-DD');
-    var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
-    
-
+    // Calendar begin //
     var app_calendar = new FullCalendar.Calendar(calendarEl, {
+        // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+        initialView: 'timeGridDay',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
@@ -64,9 +318,6 @@ $(document).ready(async function () {
 
         editable: false,
         dayMaxEvents: true,
-        events: [
-            
-        ],
         datesSet: function(){
             selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
             load_data();
@@ -74,8 +325,62 @@ $(document).ready(async function () {
     });
     app_calendar.render();
 
+    const handleNewEvent = (data) => {
+        $(".appt-list").addClass('d-none');
+        $("#appointment_patient_info").addClass('d-none');
+        $("#appointment_patient_find").removeClass('d-none');
+        $("#appointment_patient_id").val("");
+        $("#appointment_emr_id").val("");
+        $("#appointment_modal_fullname").html("");
+        $("#appointment_modal_language").html("");
+        $("#appointment_modal_language").parent().removeClass("d-none");
+        $("#appointment_modal_clinic").html("");
+        $("#appointment_modal_gender").html("");
+        $("#appointment_modal_dob").html("");
+        $("#appointment_modal_dob").parent().removeClass("d-none");
+        $("#appointment_modal_age").html("");
+        $("#appointment_modal_age").parent().removeClass("d-none");
+        $("#appointment_modal_telephone").html("");
+        $("#appointment_modal_telephone").parent().removeClass("d-none");
+        $("#appointment_modal_phone").html("");
+        $("#appointment_modal_phone").parent().removeClass("d-none");
+        $("#appointment_modal_email").html("");
+        $("#appointment_modal_email").parent().removeClass("d-none");
+        $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
+        $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
+
+        // var t = new Date().toISOString().split('T')[0];
+        $("#appointment_id").val('');
+        $("#appointment_participate_status").val('needs-action');
+        $("#appointment_approve_date").val(data.startStr);
+        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
+        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
+        $("#appointment_specialist_provider").prop("disabled", false);
+        $("#appointment_clinic_provider").prop("disabled", true);
+        $("#appointment_clinic_provider").val("");
+        // $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
+        $("#appointment_attended").prop('checked', false);
+        $("#appointment_status").val('2').trigger('change');
+        // $("#appointment_measure").val($("#appointment_measure option:first").val());
+        // $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
+        getSpecialty();
+        // $("#appointment_cancel_reason").val('');
+        $("#appointment_barrier_reason").val('');
+        $("#appointment_class").val('2').trigger('change');
+        $("#appointment_service_category").val('7').trigger('change');
+        
+        $("#appointment_priority").val('7').trigger('change');
+        $("#appointment_start_date").val("10:00");
+        $("#appointment_end_date").val('10:30');
+        // $("#appointment_barrier_date").val('');
+        $("#appointment_notes").val('');
+        $("#appointment_pt_instruction").val('');
+        $("#appointment_pt_instruction_date").val('');
+        $("#appointment_edit_modal-1").modal("show");
+        // $("#appointment_modal").modal("show");
+    }
+
     const handleViewEvent = (data) => {
-        // console.log(data.event.id);
         observation_id = null;
         var appointment = appointments[data.event.id];
         $("#appointment_id").val(data.event.id);
@@ -115,7 +420,7 @@ $(document).ready(async function () {
         $(".appt-list").addClass('d-none');
         $("#appointment_patient_info").removeClass('d-none');
         $("#appointment_patient_find").addClass('d-none');
-
+        $("#appointment_measure").val(appointment['measure']).trigger('change');
         $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
         $("#appointment_participate_status").val(appointment['pt_participate_status']);
         $("#appointment_approve_date").val(GetFormattedDate(new Date(appointment['approve_date'])));
@@ -123,31 +428,31 @@ $(document).ready(async function () {
         $("#appointment_end_date").val(appointment['end_date']);
         $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", appointment['provider']=="0"?true:false);
         $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", appointment['provider']=="1"?true:false);
-        $("#appointment_measure").val(appointment['measure']);
-        $("#appointment_assessment").val(appointment['assessment']);
+        $("#appointment_assessment").val(appointment['assessment']).trigger('change');
        
         if(appointment['provider']=="0"){
             $("#appointment_specialist_provider").prop("disabled", true);
             $("#appointment_clinic_provider").prop("disabled", false);
-            $("#appointment_clinic_provider").val(appointment['provider_id']);
-            $("#appointment_specialist_provider").val("");
+            $("#appointment_clinic_provider").val(appointment['provider_id']).trigger('change');
+            $("#appointment_specialist_provider").val("").trigger('change');
         }else{
             $("#appointment_specialist_provider").prop("disabled", false);
             $("#appointment_clinic_provider").prop("disabled", true);
-            $("#appointment_clinic_provider").val("");
-            $("#appointment_specialist_provider").val(appointment['provider_id']);
+            $("#appointment_clinic_provider").val("").trigger('change');
+            $("#appointment_specialist_provider").val(appointment['provider_id']).trigger('change');
+            console.log(appointment['provider_id'])
         }
         $("#appointment_attended").prop('checked', appointment['attended']=="1"?true:false);
-        $("#appointment_status").val(appointment['status']);
+        $("#appointment_status").val(appointment['status']).trigger('change');
         // $("#appointment_cancel_reason").val(appointment['cancel_reason']);
-        $("#appointment_cancel_reason").val(appointment['barrier_reason']);
-        $("#appointment_class").val(appointment['class']);
-        $("#appointment_service_category").val(appointment['service_category']);
-        $("#appointment_appt_type").val(appointment['appt_type']);
+        $("#appointment_barrier_reason").val(appointment['cancel_reason'].split(',')).trigger('change');
+        $("#appointment_class").val(appointment['class']).trigger('change').trigger('change');
+        $("#appointment_service_category").val(appointment['service_category']).trigger('change');
+        $("#appointment_appt_type").val(appointment['appt_type']).trigger('change');
         $("#appointment_reason").val(appointment['reason']);
-        $("#appointment_priority").val(appointment['priority']);
+        $("#appointment_priority").val(appointment['priority']).trigger('change');
         // $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
-        $("#appointment_barrier_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
+        // $("#appointment_barrier_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
         $("#appointment_notes").val(appointment['notes']);
         $("#appointment_pt_instruction").val(appointment['pt_instruction']);
         $("#appointment_edit_modal-1").modal("show");
@@ -156,64 +461,86 @@ $(document).ready(async function () {
 
         // startDateMod = moment(data.event.startStr).format('Do MMM, YYYY - h:mm a');
     }
+    // Calendar end //
 
-    $("#appt_new_button").click(function (e) {
+    // Appointment dashboad end //
 
-        $(".appt-list").addClass('d-none');
-        $("#appointment_patient_info").addClass('d-none');
-        $("#appointment_patient_find").removeClass('d-none');
-        $("#appointment_patient_id").val("");
-        $("#appointment_emr_id").val("");
-        $("#appointment_modal_fullname").html("");
-        $("#appointment_modal_language").html("");
-        $("#appointment_modal_language").parent().removeClass("d-none");
-        $("#appointment_modal_clinic").html("");
-        $("#appointment_modal_gender").html("");
-        $("#appointment_modal_dob").html("");
-        $("#appointment_modal_dob").parent().removeClass("d-none");
-        $("#appointment_modal_age").html("");
-        $("#appointment_modal_age").parent().removeClass("d-none");
-        $("#appointment_modal_telephone").html("");
-        $("#appointment_modal_telephone").parent().removeClass("d-none");
-        $("#appointment_modal_phone").html("");
-        $("#appointment_modal_phone").parent().removeClass("d-none");
-        $("#appointment_modal_email").html("");
-        $("#appointment_modal_email").parent().removeClass("d-none");
-        $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
-        $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
+    // Appointment Form begin //
 
-        var t = new Date().toISOString().split('T')[0];
-        $("#appointment_id").val('');
-        $("#appointment_participate_status").val('needs-action');
-        $("#appointment_approve_date").val(t);
-        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
-        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
-        $("#appointment_specialist_provider").prop("disabled", false);
-        $("#appointment_clinic_provider").prop("disabled", true);
-        $("#appointment_clinic_provider").val("");
-        // $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
-        $("#appointment_attended").prop('checked', false);
-        $("#appointment_status").val('2').trigger('change');
-        // $("#appointment_measure").val($("#appointment_measure option:first").val());
-        // $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
-        getSpecialty();
-        // $("#appointment_cancel_reason").val('');
-        $("#appointment_barrier_reason").val('');
-        $("#appointment_class").val('2').trigger('change');
-        $("#appointment_service_category").val('7').trigger('change');
+    $("#appt_save_btn").click(function (e) {
+        if($("#appointment_patient_id").val() == ""){
+            toastr.info('Please select Patient');
+            return;
+          }
+          if($("#appointment_reason").val() == ""){
+            toastr.info('Please enter Reason');
+            $("#appointment_reason").focus();
+            return;
+          }
+          if($("#appointment_start_date").val() == ""){
+            toastr.info('Please enter Start Date');
+            $("#appointment_start_date").focus();
+            return;
+          }
+          let entry = {}
         
-        $("#appointment_priority").val('7').trigger('change');
-        $("#appointment_start_date").val("09:00");
-        $("#appointment_end_date").val('09:15');
-        // $("#appointment_barrier_date").val('');
-        $("#appointment_notes").val('');
-        $("#appointment_pt_instruction").val('');
-        $("#appointment_pt_instruction_date").val('');
-        $("#appointment_edit_modal-1").modal("show");
-        // $("#appointment_modal").modal("show");
+          $('.form-control').each(function() {
+            if($(this).data('field')!==undefined){
+                
+                if($(this).attr('type')=='checkbox'){
+                  entry[$(this).data('field')] = $(this).prop("checked")?"1":"0";
+                }else{
+                  entry[$(this).data('field')] = $(this).val();
+                }
+            }
+          });
+          entry['provider'] = $('input[name="appointment_provider"]:checked').val();
+          entry['ins_id'] = $("#appt_pt_insurance").val();
+          entry['subscrber_no'] = $("#appt_pt_inspcpid").val();
+          entry['year'] = $("#appt_pt_cyear").val();
+          // add new
+          entry['pt_participate_status'] = $("#appointment_participate_status").val()
+          entry['status'] = $("#appointment_status").val()
+          entry['class'] = $("#appointment_class").val()
+          entry['service_category'] = $("#appointment_service_category").val()
+          entry['priority'] = $("#appointment_priority").val()
+          entry['appt_type'] = $("#appointment_appt_type").val()
+          entry['measure'] = $("#appointment_measure").val()
+          entry['specialist_provider'] = $("#appointment_specialist_provider").val()
+          entry['clinic_provider'] = $("#appointment_clinic_provider").val()
+          entry['cancel_reason'] = $("#appointment_barrier_reason").val().join(',')
+        
+          if($("#appointment_id").val()==""){
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/create", (xhr, err) => {
+              if (!err) {
+                if(JSON.parse(xhr.responseText)['message']=="exist"){
+                  toastr.info("Appointment is exist");
+                }else{
+                  $("#appointment_edit_modal-1").modal("hide");
+                  toastr.success("Appointment is added successfully");
+                }
+                
+              } else {
+                return toastr.error("Action Failed");
+              }
+            });
+          }else{
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/update", (xhr, err) => {
+              if (!err) {
+                $("#appointment_edit_modal-1").modal("hide");
+                toastr.success("Appointment is updated successfully");
+              } else {
+                return toastr.error("Action Failed");
+              }
+            });
+          }
+
+        setTimeout( function () {
+            load_data();
+        }, 1000 );
     });
 
-    var patient_search_item = "name";
+    // Patient Search begin //
     $(".menu-item").click(function (e) {
         patient_search_item = $(this).children().data("item");
         $("#pt_search_item").html($(this).children().html());
@@ -231,8 +558,7 @@ $(document).ready(async function () {
         $("#searched_patient_list").html("");
         $("#search_patient").val("");
     }) 
-
-    var patients = []
+  
     $(document).on("keyup","#search_patient",function(){
         $("#searched_patient_list").removeClass("show");
         $("#appointment_patient_info").addClass('d-none');
@@ -327,100 +653,336 @@ $(document).ready(async function () {
         }
         $("#appointment_patient_info").removeClass('d-none');
     });
+    // Patient Search end //
+
+    // event begin //
+    $("#appointment_attended").on('change', (e) => {
+        if (e.target.checked === true) {
+            _oldStatus = $("#appointment_status").val()
+            $("#appointment_status").val('11').trigger('change');
+        } else if (e.target.checked === false) {
+            if (_oldStatus !== '') {
+                $("#appointment_status").val(_oldStatus).trigger('change');
+            }
+        }
+    })
     
-    $("#appt_save_btn").click(function (e) {
-        setTimeout( function () {
-            load_data();
-        }, 1000 );
-    });
+    $("#appointment_status").on('change', (e) => {
+        if (e.target.value === '7' || e.target.value === '11' || e.target.value === '12') {
+            $("#appointment_barrier_reason").prop('disabled', false)
+            // $("#appointment_barrier_date").prop('disabled', false)
+        } else {
+            $("#appointment_barrier_reason").prop('disabled', true)
+            // $("#appointment_barrier_date").prop('disabled', true)
+        }
+    })
 
-    var entry ={
-        clinic_id: localStorage.getItem('chosen_clinic'),
-    }
-
-    var doctors = []
-    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getAllDoctorsByClinic", (xhr, err) => {
-        if (!err) {
-            doctors = JSON.parse(xhr.responseText)['data'];
-            $("#pcp_list").html("");
-            $("#specialist_list").html("");
-            $("#pcp_select_button").removeClass("d-none");
-            $("#specialist_select_button").removeClass("d-none");
-            for(var i=0;i<doctors.length;i++){
-                html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
-                html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
-                html += '<span class="form-check-label text-gray-600 fw-semibold">';
-                html += doctors[i]['fname']+' '+doctors[i]['lname'];
-                if(doctors[i]['type']=="3") html += ' ('+doctors[i]['speciality']+") ";
-                html += '</span></label>';
-                doctors[i]['ch'] = "1";
-                if(doctors[i]['type']=="5") $("#pcp_list").append(html);
-                if(doctors[i]['type']=="3") $("#specialist_list").append(html);
+    $("#appointment_measure").on('change', (e) => {
+        $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
+        $("#appointment_assessment").html("");
+        for(var i=0; i<observation.length; i++){
+            if(observation[i]['m_id'] == e.target.val){
+                try{
+                    var icd = JSON.parse(observation[i]['ICD']);
+                    var options = '';
+                    for(var j=0; j<icd.length; j++){
+                        options += '<option value="'+icd[j]['value']+'" >'+icd[j]['code']+'</option>';
+                    }
+                    $("#appointment_assessment").html(options);
+                }catch(e){
+                    console.log(observation[i]['ICD'])
+                }
             }
-            if($("#pcp_list").html()=="")$("#pcp_select_button").addClass("d-none");
-            if($("#specialist_list").html()=="")$("#specialist_select_button").addClass("d-none");
         }
-    });
-
-    var specialty = []
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
-        if (!err) {
-            specialty = JSON.parse(xhr.responseText)['data'];
-            var options = '';
-            for(var i=0;i<specialty.length;i++){
-                html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
-                html += '<input class="form-check-input specialty-check" type="checkbox" checked="checked" data-id="'+specialty[i]['id']+'" >';
-                html += '<span class="form-check-label text-gray-600 fw-semibold">';
-                html += specialty[i]['name'];
-                html += '</span></label>';
-                specialty[i]['ch'] = "1";
-                $("#specialty_list").append(html);
-
-                options += '<option value="'+specialty[i]['id']+'" >'+specialty[i]['name']+'</option>';
-            }
-            $("#appointment_search_specialty").html('<option value="0">All Specialties</option>' + options);
+        let entry = {
+            measureid: parseInt(e.target.value)
         }
-    });
-
-    function add_event(){
-        app_calendar.removeAllEvents();
-        for(var i in appointments){
-            var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
-            var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
-            var bg = 'info'
-            if(appointments[i]['attended']=="1")bg = 'success';
-            events = {
-                id: appointments[i]['id'],
-                title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
-                start: s,
-                end: e,
-                className: "border border-danger border-0 bg-"+bg+" text-inverse-primary",
-            }
-            app_calendar.addEvent(events);
-        }
-       
-    }
-    
-    function load_data(){
-        var entry ={
-            date: selected_date,
-            clinic_id: localStorage.getItem('chosen_clinic'),
-            specialties: specialties
-        }
-        if(selected_doctor!="")entry['doctors'] = selected_doctor;
-        appointments = []
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
             if (!err) {
-              var result = JSON.parse(xhr.responseText)['data'];
-              for(var i=0; i<result.length; i++){
-                appointments[result[i]['id']] = result[i];
-              }
-              
-              add_event();
+                _externProvider = []
+                var result = JSON.parse(xhr.responseText)['data'];
+                var options = '';
+                result.forEach(item => {
+                    if (item['clinic'] !== null) {
+                        item['clinic'].split(',').forEach(value => {
+                            if (value == localStorage.getItem('chosen_clinic')) {
+                                _externProvider.push(item['id'].toString())
+                                options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
+                            }
+                        })
+                    }
+                });
+                $("#appointment_specialist_provider").html(options);
+                $("#appointment_specialist_provider").val(result[0]['id']).trigger('change')
             }
         });
-    }
+    });
+
+    $(document).on("change",".provider-radio",function(){
+        var value = $('input[name="appointment_provider"]:checked').val();
+        if(value=="0"){
+            $("#appointment_specialist_provider").val("");
+            $("#appointment_specialist_provider").prop("disabled", true);
+            $("#appointment_clinic_provider").prop("disabled", false);
+            $("#appointment_clinic_provider").val($("#appointment_clinic_provider option:first").val());
+        }else{
+            $("#appointment_clinic_provider").val("");
+            $("#appointment_clinic_provider").prop("disabled", true);
+            $("#appointment_specialist_provider").prop("disabled", false);
+            $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
+        }
+    });
+
+    $('.toggle-measure').on('change', () => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $('input[name="appointment_provider"]:checked').val() == '0'? false : true}, "hedissetting/measuresDataForAppointment", (xhr, err) => {
+            if (!err) {
+                    let measure = JSON.parse(xhr.responseText)['data'];
+                    var options = '';
+                    for(var i=0; i<measure.length; i++){ 
+                    options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
+                }
+                $("#appointment_measure").html(options);
+                if (measure.length > 0) {
+                    loadSpecialistProviderByMeasureId(measure[0]['measureId'])
+                }
+            }
+        });
+    })
     
+    $(document).on('change', '#appointment_specialist_provider', (e) => {
+        var entry = {
+            specialistid: e.target.value,
+            clinicid: localStorage.getItem('chosen_clinic')
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/relationship/getOrganizationNames', (xhr, err) => {
+            if (!err) {
+                var result = organizations = JSON.parse(xhr.responseText)['data'];
+                var options = '';
+                if (result.length) {
+                options = `<div value='${result[0].id}'>
+                    <div class="form-check-label px-3 d-block">
+                    <div class="text-primary fs-4">${result[0].name}</div>
+                    <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${result[0].address1} ${result[0].city} ${result[0].state} ${result[0].zip}</div>
+                    <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone1}</div>
+                    <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${result[0].phone2}</div>
+                    </div>
+                </div>`;
+                $("#appointment-org-val").val(0);
+                }
+                if (result.length > 1) $("#appointment_org_buttons").html(`
+                <div class="d-flex flex-end">
+                    <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-prev-click">&lt;&lt;&nbsp;&nbsp;</a>
+                    <a href="#" class="btn btn-link btn-color-muted btn-active-color-primary" id="appointment-org-next-click">&nbsp;&nbsp;&gt;&gt;</a>
+                </div>`);
+                else $("#appointment_org_buttons").html(``);
+                $("#appointment_organization").html(options);
+            }
+        });
+    });
+
+    $(document).on("change","#appointment_appt_type",function(){
+        for(var i=0; i<appointmentType.length; i++){
+            if(appointmentType[i]['id'] == $(this).val()){
+                duration_mins = appointmentType[i]['duration'];
+                setEndData();
+            }
+        }
+    });
+    
+    $(document).on("change","#appointment_start_date",function(){
+        setEndData();
+    });
+
+    $(document).on('click', '#appointment-org-next-click', () => {
+        var i = $("#appointment-org-val").val();
+        if (i == organizations.length -1) return;
+        else {
+            i ++;
+            var options = `<div value='${organizations[i].id}'>
+            <div class="form-check-label px-3 d-block">
+                <div class="text-primary fs-4">${organizations[i].name}</div>
+                <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${organizations[0].city} ${organizations[0].state} ${organizations[0].zip}</div>
+                <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
+            </div>
+            </div>`;
+            $("#appointment-org-val").val(i);
+            $("#appointment_organization").html(options);
+        }
+    });
+        
+    $(document).on('click', '#appointment-org-prev-click', () => {
+        var i = $("#appointment-org-val").val();
+        if (i == 0) return;
+        else {
+            i --;
+            var options = `<div value='${organizations[i].id}'>
+            <div class="form-check-label px-3 d-block">
+                <div class="text-primary fs-4">${organizations[i].name}</div>
+                <div class="fs-7 py-2"><i class="fa fa-location-dot"></i> ${organizations[i].address1} ${organizations[0].city} ${organizations[0].state} ${organizations[0].zip}</div>
+                <div class="fs-7 py-1"><i class="fa fa-phone"></i> ${organizations[i].phone1}</div>
+            </div>
+            </div>`;
+            $("#appointment-org-val").val(i);
+            $("#appointment_organization").html(options);
+        }
+    });
+    // event end //
+
+    $("#appt_new_button").click(function (e) {
+
+        $(".appt-list").addClass('d-none');
+        $("#appointment_patient_info").addClass('d-none');
+        $("#appointment_patient_find").removeClass('d-none');
+        $("#appointment_patient_id").val("");
+        $("#appointment_emr_id").val("");
+        $("#appointment_modal_fullname").html("");
+        $("#appointment_modal_language").html("");
+        $("#appointment_modal_language").parent().removeClass("d-none");
+        $("#appointment_modal_clinic").html("");
+        $("#appointment_modal_gender").html("");
+        $("#appointment_modal_dob").html("");
+        $("#appointment_modal_dob").parent().removeClass("d-none");
+        $("#appointment_modal_age").html("");
+        $("#appointment_modal_age").parent().removeClass("d-none");
+        $("#appointment_modal_telephone").html("");
+        $("#appointment_modal_telephone").parent().removeClass("d-none");
+        $("#appointment_modal_phone").html("");
+        $("#appointment_modal_phone").parent().removeClass("d-none");
+        $("#appointment_modal_email").html("");
+        $("#appointment_modal_email").parent().removeClass("d-none");
+        $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
+        $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
+
+        var t = new Date().toISOString().split('T')[0];
+        $("#appointment_id").val('');
+        $("#appointment_participate_status").val('needs-action');
+        $("#appointment_approve_date").val(t);
+        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
+        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
+        $("#appointment_specialist_provider").prop("disabled", false);
+        $("#appointment_clinic_provider").prop("disabled", true);
+        $("#appointment_clinic_provider").val("");
+        $("#appointment_attended").prop('checked', false);
+        $("#appointment_status").val('2').trigger('change');
+        getSpecialty();
+        $("#appointment_barrier_reason").val('');
+        $("#appointment_class").val('2').trigger('change');
+        $("#appointment_service_category").val('7').trigger('change');
+        
+        $("#appointment_priority").val('7').trigger('change');
+        $("#appointment_start_date").val("10:00");
+        $("#appointment_end_date").val('10:30');
+        $("#appointment_notes").val('');
+        $("#appointment_pt_instruction").val('');
+        $("#appointment_pt_instruction_date").val('');
+        $("#appointment_edit_modal-1").modal("show");
+    });
+
+    // Appointment Search Form begin //
+    var appt_search_table = $("#appointment_specialist_table").DataTable({
+    "ajax": {
+        "url": serviceUrl + "specialist/listBymeasureID",
+        "type": "GET",
+        "headers": { 'Authorization': localStorage.getItem('authToken') },
+        "data":function (d) {
+        d.measureid = $("#appointment_measure").val(),
+        d.specialty = $("#appointment_search_specialty").val(),
+        d.zip = $("#appointment_search_zip").val(),
+        d.all = $("#appointment_search_all").prop('checked')
+        },
+    },
+    serverSide: true,
+    "pageLength": 10,
+    "columns": [
+        {
+        data: 'fname',
+        render: function(data, type, row) {
+            _specialists[row.id] = row;
+            return `
+            <div class="form-check-label px-3 d-block">
+                <a id="appointment_search_ext_select" data="${row.id}" href="#" class="text-primary fs-4">${row.fname} ${row.lname}</a>
+                <div class="fs-8"><i class="fa fa-location-dot"></i> ${row.address} ${row.city} | <i class="fa fa-phone"></i> ${row.phone}</div>
+            </div>
+            `
+        }
+        },
+        {
+        data: 'specialty_id',
+        render: function(data, type, row) {
+            return `
+            <div class="text-primary fs-5">${row.sname}</div>
+            `
+        }
+        },
+        {
+        data: 'city',
+        render: function(data, type, row) {
+            return `
+            <div>${row.city}</div>
+            `
+        }
+        },
+        {
+        data: 'zip',
+        render: function(data, type, row) {
+            return `
+            <div>${row.zip}</div>
+            `
+        }
+        }
+    ]
+    });
+
+    $(document).on('click', '#appointment-specialist-search', () => {
+        // clear
+        _specialists = []
+        //load specialist realted to clinic selected and measure selected.
+        appt_search_table.ajax.reload(null, false);
+        _clinics = []
+        $("#appointment-edit-modal-2").modal('show');
+    });
+
+    $("#appointment_specialist_search_input").on('keyup', function() {
+        // clear
+        _specialists = []
+        appt_search_table.search(this.value).draw();
+    });
+    
+    $("#appointment_search_zip").on('keyup', function() {
+        // clear
+        _specialists = []
+        
+        appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
+    });
+
+    $(document).on('change', '#appointment_search_specialty', (e) => {
+        // clear
+        _specialists = []
+      
+        appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
+    })
+    
+    $(document).on('change', '#appointment_search_all', (e) => {
+        // clear
+        _specialists = []
+    
+        appt_search_table.search($("#appointment_specialist_search_input").val()).draw();
+    })
+    
+    $(document).on('click', '#appointment_search_ext_select', (e) => {
+        if (_externProvider.indexOf(e.target.attributes['data'].value) > -1) {
+            toastr.warning("Specialist is already added in the External Provider List!");
+            return;
+        }
+        var option = '<option value="'+e.target.attributes['data'].value+'" >'+_specialists[e.target.attributes['data'].value].fname + ' ' + _specialists[e.target.attributes['data'].value].lname + '</option>';
+        $("#appointment_specialist_provider").append(option);
+        $("#appointment_specialist_provider").val(e.target.attributes['data'].value).trigger('change');
+        
+        _externProvider.push(e.target.attributes['data'].value)
+        
+        toastr.success("Specialist is added in the External Provider List successfully!");
+    })
+    // Appointment Search Form end //
     $(document).on("change",".specialty-check",function(){
         if($(this).data("id")=="0"){
             $(".specialty-check").prop("checked", $(this).prop("checked"));
@@ -453,10 +1015,5 @@ $(document).ready(async function () {
         load_data()
         // load_html(appointments);
     });
-
-    $(document).on("click",".appt",function(){
-        //alert($(this).data("id"));
-    });
-});
-
-document.write('<script src="/assets/js/appointments/appointmentModal.js" type="text/javascript"></script>');
+    // Appointment Form end //
+})

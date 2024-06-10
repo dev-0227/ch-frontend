@@ -144,8 +144,6 @@
 	</div>
 </div>
 
-
-
 <div class="modal fade" id="appointment_edit_modal-1" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
@@ -483,7 +481,7 @@
 					<input class="form-control form-check-input p-4" type="checkbox" id="appointment_search_all" data-field="all">
 					<span class="form-check-label text-gray-600 fw-semibold"> Show All Specialist</span>
 				</label>
-                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" aria-label="Close" id="appointment-specialist-close">
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" aria-label="Close" data-bs-dismiss="modal">
                 	<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                 </div>
             </div>
@@ -529,7 +527,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="appointment-specialist-close"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
                 <button type="button" class="btn btn-primary menu-link pq-menu d-none" id="appointment_specialist_save"><i class="fa fa-save">&nbsp;</i> Save</button>
             </div>
         </div>
