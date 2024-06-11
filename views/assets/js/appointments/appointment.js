@@ -272,6 +272,11 @@ $(document).ready(async function() {
                 start: s,
                 end: e,
                 className: "border border-danger border-0 bg-"+bg+" text-inverse-primary",
+                // Extended Props
+                address: appointments[i]['daddress'],
+                phone: appointments[i]['dphone'],
+                city: appointments[i]['dcity'],
+                zip: appointments[i]['dzip']
             }
             app_calendar.addEvent(events);
         }
@@ -300,7 +305,6 @@ $(document).ready(async function() {
 
     // Calendar begin //
     var app_calendar = new FullCalendar.Calendar(calendarEl, {
-        // plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
         initialView: 'timeGridDay',
         headerToolbar: {
             left: 'prev,next today',
@@ -311,6 +315,9 @@ $(document).ready(async function() {
         navLinks: true,
         selectable: true,
         selectMirror: true,
+        dayHeaders: false,
+        weekHeaders: false,
+        slotDuration: {minutes: 5},
         select: function (arg) {
             handleNewEvent(arg);
         },
@@ -318,7 +325,18 @@ $(document).ready(async function() {
         eventClick: function (arg) {
             handleViewEvent(arg);
         },
-
+        eventContent: function(arg) {
+            let el = document.createElement('div')
+            el.setAttribute('style', 'height: 100%;')
+            el.innerHTML = `
+                <div class="text-white fs-6">${arg.event.title}</div>
+                <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
+                <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
+            `
+            return {
+                domNodes: [el]
+            }
+        },
         editable: false,
         dayMaxEvents: true,
         datesSet: function(){
@@ -353,35 +371,35 @@ $(document).ready(async function() {
         $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
         $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
 
-        // var t = new Date().toISOString().split('T')[0];
         $("#appointment_id").val('');
         $("#appointment_participate_status").val('needs-action');
-        $("#appointment_approve_date").val(data.startStr);
         $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
         $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
         $("#appointment_specialist_external_provider").prop("disabled", false);
         $("#appointment_clinic_provider").prop("disabled", true);
         $("#appointment_clinic_provider").val("");
-        // $("#appointment_specialist_external_provider").val($("#appointment_specialist_external_provider option:first").val());
         $("#appointment_attended").prop('checked', false);
         $("#appointment_status").val('2').trigger('change');
-        // $("#appointment_measure").val($("#appointment_measure option:first").val());
-        // $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
-        getSpecialty();
-        // $("#appointment_cancel_reason").val('');
+        $("#appointment_reason").val('')
+        // getSpecialty();
         $("#appointment_barrier_reason").val('');
         $("#appointment_class").val('2').trigger('change');
         $("#appointment_service_category").val('7').trigger('change');
         
         $("#appointment_priority").val('7').trigger('change');
-        $("#appointment_start_date").val("10:00");
-        $("#appointment_end_date").val('10:30');
-        // $("#appointment_barrier_date").val('');
+
+        var startTime = data.startStr.split("T")[1]
+        var endTime = data.endStr.split("T")[1]
+        if (startTime === null || startTime === undefined || startTime === '') $("#appointment_start_date").val('09:00');
+        else $("#appointment_start_date").val(startTime.substr(0, 5));
+        if (endTime === undefined || endTime === null || endTime === '') endTime = $("#appointment_end_date").val('09:30');
+        else $("#appointment_end_date").val(endTime.substr(0, 5));
+        $("#appointment_approve_date").val(data.startStr.substr(0, 10));
+
         $("#appointment_notes").val('');
         $("#appointment_pt_instruction").val('');
         $("#appointment_pt_instruction_date").val('');
         $("#appointment_edit_modal-1").modal("show");
-        // $("#appointment_modal").modal("show");
     }
 
     const handleViewEvent = (data) => {
@@ -842,6 +860,7 @@ $(document).ready(async function() {
         $("#appointment_clinic_provider").val("");
         $("#appointment_attended").prop('checked', false);
         $("#appointment_status").val('2').trigger('change');
+        $("#appointment_reason").val('')
         getSpecialty();
         $("#appointment_barrier_reason").val('');
         $("#appointment_class").val('2').trigger('change');
