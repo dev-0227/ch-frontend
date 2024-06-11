@@ -36,6 +36,8 @@ var patients = []
 var doctors = []
 
 var specialty = []
+
+var __spec = 0
 // Parameters end //
 
 // utils begin //
@@ -85,18 +87,18 @@ function setEndData(){
 
 // Data Load begin //
 function loadSpecialistProviderByMeasureId(mid) {
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: mid}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: mid, clinicid: localStorage.getItem('chosen_clinic')}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
         if (!err) {
           _externProvider = []
           let result = JSON.parse(xhr.responseText)['data'];
           var options = '';
           for(var i=0; i<result.length; i++) {
-            if (result[i]['clinic'].split(',').indexOf(localStorage.getItem('chosen_clinic')) != -1) {
-              _externProvider.push(result[i]['id'].toString())
-              options += '<option value="'+result[i]['id']+'" >'+result[i]['fname']+' '+result[i]['lname']+'</option>';
-            }
+            options += `<option value='${result[i]['id']}'>${result[i]['fname']} ${result[i]['lname']}</option>`
+            _externProvider.push(result[i]['id'].toString())
           }
-          $("#appointment_specialist_provider").html(options);
+          $("#appointment_specialist_external_provider").html(options);
+          if (__spec == 0) __spec = result[0]['id']
+          $("#appointment_specialist_external_provider").val(__spec).trigger('change')
         }
     });
 }
@@ -145,6 +147,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
         options += '<option value="'+doctors[i]['id']+'" >'+doctors[i]['fname']+' '+doctors[i]['lname']+'</option>';
       }
       $("#appointment_clinic_provider").html(options);
+      $("#appointment_clinic_provider").val(doctors[0]['id'])
     }
 });
 
@@ -326,6 +329,7 @@ $(document).ready(async function() {
     app_calendar.render();
 
     const handleNewEvent = (data) => {
+        __spec = 0
         $(".appt-list").addClass('d-none');
         $("#appointment_patient_info").addClass('d-none');
         $("#appointment_patient_find").removeClass('d-none');
@@ -355,10 +359,10 @@ $(document).ready(async function() {
         $("#appointment_approve_date").val(data.startStr);
         $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
         $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
-        $("#appointment_specialist_provider").prop("disabled", false);
+        $("#appointment_specialist_external_provider").prop("disabled", false);
         $("#appointment_clinic_provider").prop("disabled", true);
         $("#appointment_clinic_provider").val("");
-        // $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
+        // $("#appointment_specialist_external_provider").val($("#appointment_specialist_external_provider option:first").val());
         $("#appointment_attended").prop('checked', false);
         $("#appointment_status").val('2').trigger('change');
         // $("#appointment_measure").val($("#appointment_measure option:first").val());
@@ -415,11 +419,23 @@ $(document).ready(async function() {
         }else{
             $("#appointment_modal_email").parent().addClass("d-none");
         }
-       
         
         $(".appt-list").addClass('d-none');
         $("#appointment_patient_info").removeClass('d-none');
         $("#appointment_patient_find").addClass('d-none');
+
+        if(appointment['provider']=="0"){
+            $("#appointment_specialist_external_provider").prop("disabled", true);
+            $("#appointment_clinic_provider").prop("disabled", false);
+            $("#appointment_clinic_provider").val(appointment['provider_id']).trigger('change');
+            $("#appointment_specialist_external_provider").val("").trigger('change');
+        }else{
+            $("#appointment_specialist_external_provider").prop("disabled", false);
+            $("#appointment_clinic_provider").prop("disabled", true);
+            $("#appointment_clinic_provider").val("").trigger('change');
+            __spec = appointment['provider_id']
+        }
+
         $("#appointment_measure").val(appointment['measure']).trigger('change');
         $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
         $("#appointment_participate_status").val(appointment['pt_participate_status']);
@@ -429,18 +445,7 @@ $(document).ready(async function() {
         $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", appointment['provider']=="0"?true:false);
         $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", appointment['provider']=="1"?true:false);
         $("#appointment_assessment").val(appointment['assessment']).trigger('change');
-       
-        if(appointment['provider']=="0"){
-            $("#appointment_specialist_provider").prop("disabled", true);
-            $("#appointment_clinic_provider").prop("disabled", false);
-            $("#appointment_clinic_provider").val(appointment['provider_id']).trigger('change');
-            $("#appointment_specialist_provider").val("").trigger('change');
-        }else{
-            $("#appointment_specialist_provider").prop("disabled", false);
-            $("#appointment_clinic_provider").prop("disabled", true);
-            $("#appointment_clinic_provider").val("").trigger('change');
-            $("#appointment_specialist_provider").val(appointment['provider_id']).trigger('change');
-        }
+
         $("#appointment_attended").prop('checked', appointment['attended']=="1"?true:false);
         $("#appointment_status").val(appointment['status']).trigger('change');
         // $("#appointment_cancel_reason").val(appointment['cancel_reason']);
@@ -505,7 +510,7 @@ $(document).ready(async function() {
           entry['priority'] = $("#appointment_priority").val()
           entry['appt_type'] = $("#appointment_appt_type").val()
           entry['measure'] = $("#appointment_measure").val()
-          entry['specialist_provider'] = $("#appointment_specialist_provider").val()
+          entry['specialist_provider'] = $("#appointment_specialist_external_provider").val()
           entry['clinic_provider'] = $("#appointment_clinic_provider").val()
           entry['cancel_reason'] = $("#appointment_barrier_reason").val().join(',')
         
@@ -693,62 +698,36 @@ $(document).ready(async function() {
                 }
             }
         }
-        let entry = {
-            measureid: parseInt(e.target.value)
-        }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'specialist/getSpecialistByMeasureId', (xhr, err) => {
-            if (!err) {
-                _externProvider = []
-                var result = JSON.parse(xhr.responseText)['data'];
-                var options = '';
-                result.forEach(item => {
-                    if (item['clinic'] !== null) {
-                        item['clinic'].split(',').forEach(value => {
-                            if (value == localStorage.getItem('chosen_clinic')) {
-                                _externProvider.push(item['id'].toString())
-                                options += '<option value="' + item['id'] + '" >' + item['fname'] + ' ' + item['lname'] + '</option>';
-                            }
-                        })
-                    }
-                });
-                $("#appointment_specialist_provider").html(options);
-                $("#appointment_specialist_provider").val(result[0]['id']).trigger('change')
-            }
-        });
+        loadSpecialistProviderByMeasureId(e.target.value)
     });
 
     $(document).on("change",".provider-radio",function(){
+        console.log("OK")
         var value = $('input[name="appointment_provider"]:checked').val();
         if(value=="0"){
-            $("#appointment_specialist_provider").val("");
-            $("#appointment_specialist_provider").prop("disabled", true);
+            $("#appointment_specialist_external_provider").prop("disabled", true);
             $("#appointment_clinic_provider").prop("disabled", false);
             $("#appointment_clinic_provider").val($("#appointment_clinic_provider option:first").val());
         }else{
-            $("#appointment_clinic_provider").val("");
             $("#appointment_clinic_provider").prop("disabled", true);
-            $("#appointment_specialist_provider").prop("disabled", false);
-            $("#appointment_specialist_provider").val($("#appointment_specialist_provider option:first").val());
+            $("#appointment_specialist_external_provider").prop("disabled", false);
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $('input[name="appointment_provider"]:checked').val() == '0'? false : true}, "hedissetting/measuresDataForAppointment", (xhr, err) => {
+                if (!err) {
+                        let measure = JSON.parse(xhr.responseText)['data'];
+                        var options = '';
+                        for(var i=0; i<measure.length; i++){ 
+                        options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
+                    }
+                    $("#appointment_measure").html(options);
+                    if (measure.length > 0) {
+                        loadSpecialistProviderByMeasureId(measure[0]['measureId'])
+                    }
+                }
+            });
         }
     });
 
-    $('.toggle-measure').on('change', () => {
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $('input[name="appointment_provider"]:checked').val() == '0'? false : true}, "hedissetting/measuresDataForAppointment", (xhr, err) => {
-            if (!err) {
-                    let measure = JSON.parse(xhr.responseText)['data'];
-                    var options = '';
-                    for(var i=0; i<measure.length; i++){ 
-                    options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
-                }
-                $("#appointment_measure").html(options);
-                if (measure.length > 0) {
-                    loadSpecialistProviderByMeasureId(measure[0]['measureId'])
-                }
-            }
-        });
-    })
-    
-    $(document).on('change', '#appointment_specialist_provider', (e) => {
+    $(document).on('change', '#appointment_specialist_external_provider', (e) => {
         var entry = {
             specialistid: e.target.value,
             clinicid: localStorage.getItem('chosen_clinic')
@@ -779,17 +758,17 @@ $(document).ready(async function() {
         });
     });
 
-    $(document).on("change","#appointment_appt_type",function(){
-        for(var i=0; i<appointmentType.length; i++){
-            if(appointmentType[i]['id'] == $(this).val()){
-                duration_mins = appointmentType[i]['duration'];
-                setEndData();
-            }
-        }
-    });
+    // $(document).on("change","#appointment_appt_type",function(){
+    //     for(var i=0; i<appointmentType.length; i++){
+    //         if(appointmentType[i]['id'] == $(this).val()){
+    //             duration_mins = appointmentType[i]['duration'];
+    //             setEndData();
+    //         }
+    //     }
+    // });
     
     $(document).on("change","#appointment_start_date",function(){
-        setEndData();
+        // setEndData();
     });
 
     $(document).on('click', '#appointment-org-next-click', () => {
@@ -858,7 +837,7 @@ $(document).ready(async function() {
         $("#appointment_approve_date").val(t);
         $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
         $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
-        $("#appointment_specialist_provider").prop("disabled", false);
+        $("#appointment_specialist_external_provider").prop("disabled", false);
         $("#appointment_clinic_provider").prop("disabled", true);
         $("#appointment_clinic_provider").val("");
         $("#appointment_attended").prop('checked', false);
@@ -974,8 +953,8 @@ $(document).ready(async function() {
             return;
         }
         var option = '<option value="'+e.target.attributes['data'].value+'" >'+_specialists[e.target.attributes['data'].value].fname + ' ' + _specialists[e.target.attributes['data'].value].lname + '</option>';
-        $("#appointment_specialist_provider").append(option);
-        $("#appointment_specialist_provider").val(e.target.attributes['data'].value).trigger('change');
+        $("#appointment_specialist_external_provider").append(option);
+        $("#appointment_specialist_external_provider").val(e.target.attributes['data'].value).trigger('change');
         
         _externProvider.push(e.target.attributes['data'].value)
         
