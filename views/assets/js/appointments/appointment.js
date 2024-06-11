@@ -440,12 +440,11 @@ $(document).ready(async function() {
             $("#appointment_clinic_provider").prop("disabled", true);
             $("#appointment_clinic_provider").val("").trigger('change');
             $("#appointment_specialist_provider").val(appointment['provider_id']).trigger('change');
-            console.log(appointment['provider_id'])
         }
         $("#appointment_attended").prop('checked', appointment['attended']=="1"?true:false);
         $("#appointment_status").val(appointment['status']).trigger('change');
         // $("#appointment_cancel_reason").val(appointment['cancel_reason']);
-        $("#appointment_barrier_reason").val(appointment['cancel_reason'].split(',')).trigger('change');
+        if (appointment['cancel_reason'] != null) $("#appointment_barrier_reason").val(appointment['cancel_reason'].split(',')).trigger('change');
         $("#appointment_class").val(appointment['class']).trigger('change').trigger('change');
         $("#appointment_service_category").val(appointment['service_category']).trigger('change');
         $("#appointment_appt_type").val(appointment['appt_type']).trigger('change');
