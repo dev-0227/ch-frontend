@@ -264,19 +264,38 @@ $(document).ready(async function() {
         for(var i in appointments){
             var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
             var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
-            var bg = 'info'
-            if(appointments[i]['attended']=="1")bg = 'success';
-            events = {
-                id: appointments[i]['id'],
-                title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
-                start: s,
-                end: e,
-                className: "border border-danger border-0 bg-"+bg+" text-inverse-primary",
-                // Extended Props
-                address: appointments[i]['daddress'],
-                phone: appointments[i]['dphone'],
-                city: appointments[i]['dcity'],
-                zip: appointments[i]['dzip']
+            var bg = ''
+            if (appointments[i]['provider'] === '0') bg = 'info'
+            else if (appointments[i]['provider'] === '1') bg = 'primary'
+            if(appointments[i]['attended']=="1") bg = 'success';
+            if (appointments[i]['provider'] == '0') {
+                events = {
+                    id: appointments[i]['id'],
+                    title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                    start: s,
+                    end: e,
+                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                    // Extended Props
+                    address: appointments[i]['daddress'],
+                    phone: appointments[i]['dphone'],
+                    city: appointments[i]['dcity'],
+                    zip: appointments[i]['dzip'],
+                    provider: 0
+                }
+            } else if (appointments[i]['provider'] === '1') {
+                events = {
+                    id: appointments[i]['id'],
+                    title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
+                    start: s,
+                    end: e,
+                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                    // Extended Props
+                    address: appointments[i]['saddress'],
+                    phone: appointments[i]['sphone'],
+                    city: appointments[i]['scity'],
+                    zip: appointments[i]['szip'],
+                    provider: 1
+                }
             }
             app_calendar.addEvent(events);
         }
@@ -289,7 +308,8 @@ $(document).ready(async function() {
             clinic_id: localStorage.getItem('chosen_clinic'),
             specialties: specialties
         }
-        if(selected_doctor!="")entry['doctors'] = selected_doctor;
+        if(selected_doctor!="") entry['doctors'] = selected_doctor;
+        console.log(selected_doctor)
         appointments = []
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
             if (!err) {
@@ -326,10 +346,17 @@ $(document).ready(async function() {
             handleViewEvent(arg);
         },
         eventContent: function(arg) {
+            var icon = ''
             let el = document.createElement('div')
+            console.log(arg.event.extendedProps)
             el.setAttribute('style', 'height: 100%;')
+            if (arg.event.extendedProps.provider === 1) {
+                icon = 'fa-user-doctor'
+            } else if (arg.event.extendedProps.provider === 0) {
+                icon = 'fa-house-medical'
+            }
             el.innerHTML = `
-                <div class="text-white fs-6">${arg.event.title}</div>
+                <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
                 <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
                 <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
             `
@@ -1012,5 +1039,102 @@ $(document).ready(async function() {
         load_data()
         // load_html(appointments);
     });
+
+    // Patient Management Modal begin //
+    $(".pt_info").click(function (e) {
+        if($(this).data("id"))$("#appointment_patient_id").val($(this).data("id"));
+        let entry = {
+            pt_id: $("#appointment_patient_id").val(),
+            emr_id:$("#appt_pt_emrid").val()
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/get", (xhr, err) => {
+            if (!err) {
+                let result = JSON.parse(xhr.responseText)['data'];
+                if(result.length>0){
+                    $("#appointment_patient_id").val(result[0]['id']);
+                    $("#fname").val(result[0]['FNAME']);
+                    $("#mname").val(result[0]['MNAME']);
+                    $("#lname").val(result[0]['LNAME']);
+                    $("#emr_id").val(result[0]['patientid']);
+                    $("#gender").val(result[0]['GENDER'].toLocaleLowerCase());
+                    $("#email").val(result[0]['EMAIL']);
+                    if(result[0]['DOB'])
+                        $("#dob").val(result[0]['DOB'].split("T")[0]);
+                    $("#phone").val(result[0]['PHONE']);
+                    $("#mobile").val(result[0]['MOBILE']);
+                    $("#address").val(result[0]['ADDRESS']);
+                    $("#address2").val(result[0]['ADDRESS2']);
+                    $("#zip").val(result[0]['ZIP']);
+                    $("#city").val(result[0]['CITY']);
+                    $("#state").val(result[0]['State']);
+                    $("#race").val(result[0]['race']);
+                    $("#ethnicity").val(result[0]['ethnicity_CDC']);
+                    $("#marital").val(result[0]['marital_status']);
+                    if(result[0]['Deceased_at'])
+                        $("#deceased_at").val(result[0]['Deceased_at'].split("T")[0]);
+                    $('#deceased').prop('checked', result[0]['Deceased_at']=="1"?true:false);
+                    if(result[0]['Deceased_at']=="1"){
+                        $("#deceased_at").prop("disabled", false);
+                    }else{
+                        $("#deceased_at").prop("disabled", true);
+                    }
+                    $("#patient-add-modal").modal("show");
+                    $("#appointment_edit_modal-1").modal("hide");
+                }
+            }
+        });
+    });
+
+    $(document).on("click","#save_patient_btn",function(){
+        if($("#fname").val() == ""){
+            $("#fname").focus();
+            return toastr.info('Please enter First Name');
+        }
+        if($("#lname").val() == ""){
+            $("#lname").focus();
+            return toastr.info('Please enter Last Name');
+        }
+        if($("#dob").val() == ""){
+            return toastr.info('Please enter DOB');
+        }
+      
+        let entry = {
+            user_id:localStorage.getItem('userid'),
+            id: $("#appointment_patient_id").val(),
+            fname: document.getElementById('fname').value,
+            mname: document.getElementById('mname').value,
+            lname: document.getElementById('lname').value,
+            gender: document.getElementById('gender').value,
+            emr_id: document.getElementById('emr_id').value,
+            email: document.getElementById('email').value,
+            dob: document.getElementById('dob').value,
+            phone: document.getElementById('phone').value,
+            mobile: document.getElementById('mobile').value,
+            language: document.getElementById('language').value,
+            address: document.getElementById('address').value,
+            address2: document.getElementById('address2').value,
+            city: document.getElementById('city').value,
+            zip: document.getElementById('zip').value,
+            state: document.getElementById('state').value,
+            race: document.getElementById('race').value,
+            ethnicity: document.getElementById('ethnicity').value,
+            marital: document.getElementById('marital').value,
+            deceased: $('#deceased').is(":checked")?"1":"0",
+            deceased_at: document.getElementById('deceased_at').value,
+        }
+      
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/update", (xhr, err) => {
+            if (!err) {
+                $("#patient-add-modal").modal("hide");
+                $("#appointment_edit_modal-1").modal("hide");
+                $("#appointment_modal").modal("hide");
+                return toastr.success('patient is added successfully');
+            } else {
+                return toastr.error('Action Failed');
+            }
+        });
+    });
+    // Patient Management Modal end //
+
     // Appointment Form end //
 })
