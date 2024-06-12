@@ -1150,4 +1150,6 @@ $(document).ready(async function() {
     // Patient Management Modal end //
 
     // Appointment Form end //
+
+    $(".fc-license-message").hide()
 })
