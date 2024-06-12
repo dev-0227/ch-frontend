@@ -10,6 +10,9 @@
   "author": "Jay",
   "license": "ISC",
   "dependencies": {
+    "@fullcalendar/core": "^6.1.14",
+    "@fullcalendar/resource": "^6.1.14",
+    "@fullcalendar/resource-timeline": "^6.1.14",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "ejs": "^3.1.3",

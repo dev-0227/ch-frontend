@@ -138,7 +138,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $
     }
 });
 
-// Load Clinic
+// Load Clinic Provider
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "provider/getProviderByClinic", (xhr, err) => {
     if (!err) {
       let doctors = JSON.parse(xhr.responseText)['data'];
@@ -150,6 +150,13 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
       $("#appointment_clinic_provider").val(doctors[0]['id'])
     }
 });
+
+// Load Clinic
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, 'clinic/getByStatus', (xhr, err) => {
+    if (!err) {
+        _clinics = JSON.parse(xhr.responseText)
+    }
+})
 
 // Load Appointment Type
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentType", (xhr, err) => {
@@ -269,6 +276,7 @@ $(document).ready(async function() {
             else if (appointments[i]['provider'] === '1') bg = 'primary'
             if(appointments[i]['attended']=="1") bg = 'success';
             if (appointments[i]['provider'] == '0') {
+                // for month
                 events = {
                     id: appointments[i]['id'],
                     title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
@@ -283,6 +291,7 @@ $(document).ready(async function() {
                     provider: 0
                 }
             } else if (appointments[i]['provider'] === '1') {
+                // for month
                 events = {
                     id: appointments[i]['id'],
                     title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
@@ -298,6 +307,14 @@ $(document).ready(async function() {
                 }
             }
             app_calendar.addEvent(events);
+            
+            // resources
+            _clinics.forEach(item => {
+                app_calendar.addResource({
+                    id: item.id,
+                    title: item.name
+                })
+            })
         }
        
     }
@@ -309,7 +326,6 @@ $(document).ready(async function() {
             specialties: specialties
         }
         if(selected_doctor!="") entry['doctors'] = selected_doctor;
-        console.log(selected_doctor)
         appointments = []
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
             if (!err) {
@@ -325,11 +341,11 @@ $(document).ready(async function() {
 
     // Calendar begin //
     var app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timeGridDay',
+        initialView: 'resourceTimelineDay',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'dayGridMonth,resourceTimelineDay'
         },
         initialDate: TODAY,
         navLinks: true,
@@ -341,14 +357,12 @@ $(document).ready(async function() {
         select: function (arg) {
             handleNewEvent(arg);
         },
-
         eventClick: function (arg) {
             handleViewEvent(arg);
         },
         eventContent: function(arg) {
             var icon = ''
             let el = document.createElement('div')
-            console.log(arg.event.extendedProps)
             el.setAttribute('style', 'height: 100%;')
             if (arg.event.extendedProps.provider === 1) {
                 icon = 'fa-user-doctor'
@@ -369,7 +383,7 @@ $(document).ready(async function() {
         datesSet: function(){
             selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
             load_data();
-        }
+        },
     });
     app_calendar.render();
 
@@ -747,7 +761,6 @@ $(document).ready(async function() {
     });
 
     $(document).on("change",".provider-radio",function(){
-        console.log("OK")
         var value = $('input[name="appointment_provider"]:checked').val();
         if(value=="0"){
             $("#appointment_specialist_external_provider").prop("disabled", true);
@@ -962,7 +975,6 @@ $(document).ready(async function() {
         _specialists = []
         //load specialist realted to clinic selected and measure selected.
         appt_search_table.ajax.reload(null, false);
-        _clinics = []
         $("#appointment-edit-modal-2").modal('show');
     });
 
@@ -1006,6 +1018,7 @@ $(document).ready(async function() {
         
         toastr.success("Specialist is added in the External Provider List successfully!");
     })
+    
     // Appointment Search Form end //
     $(document).on("change",".specialty-check",function(){
         if($(this).data("id")=="0"){
