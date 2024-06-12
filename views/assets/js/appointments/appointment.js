@@ -271,12 +271,6 @@ $(document).ready(async function() {
     function add_event(){
         app_calendar.removeAllEvents();
 
-        // resources
-        // let resources = []
-        // _clinics.forEach(item => {
-        //     resources[item.id] = {}
-        // })
-
         let events = {}
 
         for(var i in appointments){
@@ -351,11 +345,11 @@ $(document).ready(async function() {
 
     // Calendar begin //
     var app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'resourceTimelineDay',
+        initialView: localStorage.getItem('usertype') <= 1 ? 'resourceTimelineDay' : 'timeGridDay',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,resourceTimelineDay'
+            right: localStorage.getItem('usertype') <= 1 ? 'dayGridMonth,resourceTimelineDay' : 'dayGridMonth,timeGridDay'
         },
         initialDate: TODAY,
         navLinks: true,
