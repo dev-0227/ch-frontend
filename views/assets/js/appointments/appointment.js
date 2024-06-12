@@ -270,6 +270,15 @@ $(document).ready(async function() {
 
     function add_event(){
         app_calendar.removeAllEvents();
+
+        // resources
+        // let resources = []
+        // _clinics.forEach(item => {
+        //     resources[item.id] = {}
+        // })
+
+        let events = {}
+
         for(var i in appointments){
             var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
             var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
@@ -280,6 +289,7 @@ $(document).ready(async function() {
             if (appointments[i]['provider'] == '0') {
                 // for month
                 events = {
+                    resourceId: appointments[i]['clinic_id'],
                     id: appointments[i]['id'],
                     title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
                     start: s,
@@ -295,6 +305,7 @@ $(document).ready(async function() {
             } else if (appointments[i]['provider'] === '1') {
                 // for month
                 events = {
+                    resourceId: appointments[i]['clinic_id'],
                     id: appointments[i]['id'],
                     title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
                     start: s,
@@ -309,16 +320,13 @@ $(document).ready(async function() {
                 }
             }
             app_calendar.addEvent(events);
-            
-            // resources
-            _clinics.forEach(item => {
-                app_calendar.addResource({
-                    id: item.id,
-                    title: item.name
-                })
-            })
         }
-       
+        _clinics.forEach(item => {
+            app_calendar.addResource({
+                id: item.id,
+                title: item.name,
+            })
+        })
     }
     
     function load_data(){
@@ -356,6 +364,7 @@ $(document).ready(async function() {
         dayHeaders: false,
         weekHeaders: false,
         slotDuration: {minutes: 5},
+        scrollTime: '09:00:00',
         select: function (arg) {
             handleNewEvent(arg);
         },
@@ -1153,5 +1162,6 @@ $(document).ready(async function() {
 
     // Appointment Form end //
 
+    // 
     $(".fc-license-message").hide()
 })
