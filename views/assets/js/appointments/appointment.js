@@ -89,16 +89,18 @@ function setEndData(){
 function loadSpecialistProviderByMeasureId(mid) {
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {measureid: mid, clinicid: localStorage.getItem('chosen_clinic')}, "specialist/getSpecialistByMeasureId", (xhr, err) => {
         if (!err) {
-          _externProvider = []
-          let result = JSON.parse(xhr.responseText)['data'];
-          var options = '';
-          for(var i=0; i<result.length; i++) {
-            options += `<option value='${result[i]['id']}'>${result[i]['fname']} ${result[i]['lname']}</option>`
-            _externProvider.push(result[i]['id'].toString())
+            _externProvider = []
+            let result = JSON.parse(xhr.responseText)['data'];
+            var options = '';
+            for(var i=0; i<result.length; i++) {
+                options += `<option value='${result[i]['id']}'>${result[i]['fname']} ${result[i]['lname']}</option>`
+                _externProvider.push(result[i]['id'].toString())
           }
           $("#appointment_specialist_external_provider").html(options);
-          if (__spec == 0) __spec = result[0]['id']
-          $("#appointment_specialist_external_provider").val(__spec).trigger('change')
+          if (result.length) {
+                if (__spec == 0) __spec = result[0]['id']
+                $("#appointment_specialist_external_provider").val(__spec).trigger('change')
+            }
         }
     });
 }
