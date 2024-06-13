@@ -306,6 +306,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
             options += '<option value="'+doctor['id']+'" >'+doctor['fname']+' '+doctor['lname']+'</option>';
         })
         $("#pcp_list").html(html)
+        console.log("CLinic Provider", html)
 
         $("#appointment_clinic_provider").html(options);
         $("#appointment_clinic_provider").val(doctors[0]['id'])
@@ -337,6 +338,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
             `
         })
         $("#specialist_list").html(html)
+        console.log("Specialist Provider", html)
     }
 });
 
@@ -444,241 +446,6 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/app
 // Data Load end //
 
 $(document).ready(async function() {
-    // Appointment dashboad begin //
-
-    function add_event(){
-        app_calendar.removeAllEvents();
-
-        //vis-timeline
-        _items = new vis.DataSet()
-        _groups = new vis.DataSet()
-
-        _spec_doct.forEach(item => {
-            _groups.add({
-                id: item.name,
-                content: getGroupContent(item)
-            })
-        })
-        app_timeline.setGroups(_groups)
-
-        let events = {}
-
-        for(var i in appointments){
-            var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
-            var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
-            var bg = ''
-            if (appointments[i]['provider'] === '0') bg = 'info'
-            else if (appointments[i]['provider'] === '1') bg = 'primary'
-            if(appointments[i]['attended']=="1") bg = 'success';
-
-            // Month
-            if (appointments[i]['provider'] == '0') {
-                // for month
-                events = {
-                    id: appointments[i]['id'],
-                    title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
-                    start: s,
-                    end: e,
-                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
-                    // Extended Props
-                    address: appointments[i]['daddress'],
-                    phone: appointments[i]['dphone'],
-                    city: appointments[i]['dcity'],
-                    zip: appointments[i]['dzip'],
-                    provider: 0
-                }
-            } else if (appointments[i]['provider'] === '1') {
-                // for month
-                events = {
-                    id: appointments[i]['id'],
-                    title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
-                    start: s,
-                    end: e,
-                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
-                    // Extended Props
-                    address: appointments[i]['saddress'],
-                    phone: appointments[i]['sphone'],
-                    city: appointments[i]['scity'],
-                    zip: appointments[i]['szip'],
-                    provider: 1
-                }
-            }
-            app_calendar.addEvent(events);
-
-            // For Day
-            _items.add({
-                id: appointments[i].id,
-                group: appointments[i].provider == '0' ? appointments[i].doctor_fname + ' ' + appointments[i].doctor_lname : appointments[i].spec_fname + ' ' + appointments[i].spec_lname,
-                start: s,
-                end: e,
-                style: appointments[i].attended == 0 ? 'background-color: #87CEFA40;' : 'background-color: #98FB9890;',
-                content: getItemContent(appointments[i])
-            })
-        }
-
-        $(".vis-inner").css('width', '100%')
-        $(".vis-inner").removeClass('vis-inner')
-
-        app_timeline.setItems(_items)
-    }
-    
-    function load_data(){
-        var entry ={
-            date: selected_date,
-            clinic_id: localStorage.getItem('chosen_clinic'),
-            specialties: specialties
-        }
-        if(selected_doctor!="") entry['doctors'] = selected_doctor;
-        appointments = []
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
-            if (!err) {
-              var result = JSON.parse(xhr.responseText)['data'];
-              for(var i=0; i<result.length; i++){
-                appointments[result[i]['id']] = result[i];
-              }
-              
-              add_event();
-            }
-        });
-    }
-
-    // Calendar begin //
-    // Timeline For Calendar begin //
-    var app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timelineDay',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timelineDay'
-        },
-        views: {
-            timelineDay: {
-                buttonText: 'Day',
-                content: function(props) {
-                    return {
-                        html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
-                    }
-                },
-                didMount: () => {
-                    _options['maxHeight'] = $("#appointment_vistimeline").height()
-                    var t = new Date(Date.now())
-                    _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
-                    _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
-                    app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
-
-                    app_timeline.on("scroll", debounce(groupFocus, 200));
-                    app_timeline.on('select', (props) => {
-                        if (props.items.length) {
-                            viewAppointment(props.items[0])
-                        }
-                    })
-                }
-            }
-        },
-        initialDate: TODAY,
-        navLinks: true,
-        selectable: true,
-        selectMirror: true,
-        dayHeaders: false,
-        slotDuration: {minutes: 5},
-        scrollTime: '09:00:00',
-        select: function (arg) {
-            handleNewEvent(arg);
-        },
-        eventClick: function (arg) {
-            handleViewEvent(arg);
-        },
-        eventContent: function(arg) {
-            var icon = ''
-            let el = document.createElement('div')
-            el.setAttribute('style', 'height: 100%;')
-            if (arg.event.extendedProps.provider === 1) {
-                icon = 'fa-user-doctor'
-            } else if (arg.event.extendedProps.provider === 0) {
-                icon = 'fa-house-medical'
-            }
-            el.innerHTML = `
-                <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
-                <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
-                <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
-            `
-            return {
-                domNodes: [el]
-            }
-        },
-        editable: false,
-        dayMaxEvents: true,
-        datesSet: function(){
-            selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
-            load_data();
-        },
-    });
-    app_calendar.render();
-    // Timeline For Calendar end //
-
-    const handleNewEvent = (data) => {
-        __spec = 0
-        $(".appt-list").addClass('d-none');
-        $("#appointment_patient_info").addClass('d-none');
-        $("#appointment_patient_find").removeClass('d-none');
-        $("#appointment_patient_id").val("");
-        $("#appointment_emr_id").val("");
-        $("#appointment_modal_fullname").html("");
-        $("#appointment_modal_language").html("");
-        $("#appointment_modal_language").parent().removeClass("d-none");
-        $("#appointment_modal_clinic").html("");
-        $("#appointment_modal_gender").html("");
-        $("#appointment_modal_dob").html("");
-        $("#appointment_modal_dob").parent().removeClass("d-none");
-        $("#appointment_modal_age").html("");
-        $("#appointment_modal_age").parent().removeClass("d-none");
-        $("#appointment_modal_telephone").html("");
-        $("#appointment_modal_telephone").parent().removeClass("d-none");
-        $("#appointment_modal_phone").html("");
-        $("#appointment_modal_phone").parent().removeClass("d-none");
-        $("#appointment_modal_email").html("");
-        $("#appointment_modal_email").parent().removeClass("d-none");
-        $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
-        $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
-
-        $("#appointment_id").val('');
-        $("#appointment_participate_status").val('needs-action');
-        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
-        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
-        $("#appointment_specialist_external_provider").prop("disabled", false);
-        $("#appointment_clinic_provider").prop("disabled", true);
-        $("#appointment_clinic_provider").val("");
-        $("#appointment_attended").prop('checked', false);
-        $("#appointment_status").val('2').trigger('change');
-        $("#appointment_reason").val('')
-        // getSpecialty();
-        $("#appointment_barrier_reason").val('');
-        $("#appointment_class").val('2').trigger('change');
-        $("#appointment_service_category").val('7').trigger('change');
-        
-        $("#appointment_priority").val('7').trigger('change');
-
-        var startTime = data.startStr.split("T")[1]
-        var endTime = data.endStr.split("T")[1]
-        if (startTime === null || startTime === undefined || startTime === '') $("#appointment_start_date").val('09:00');
-        else $("#appointment_start_date").val(startTime.substr(0, 5));
-        if (endTime === undefined || endTime === null || endTime === '') endTime = $("#appointment_end_date").val('09:30');
-        else $("#appointment_end_date").val(endTime.substr(0, 5));
-        $("#appointment_approve_date").val(data.startStr.substr(0, 10));
-
-        $("#appointment_notes").val('');
-        $("#appointment_pt_instruction").val('');
-        $("#appointment_pt_instruction_date").val('');
-        $("#appointment_edit_modal-1").modal("show");
-    }
-
-    const handleViewEvent = (data) => {
-        viewAppointment(data.event.id)
-    }
-    // Calendar end //
-
-    // Appointment dashboad end //
-
     // Appointment Form begin //
 
     $("#appt_save_btn").click(function (e) {
@@ -1311,4 +1078,239 @@ $(document).ready(async function() {
         app_timeline.setOptions(_options)
     })
     //
+
+    // Appointment dashboad begin //
+
+    function add_event(){
+        app_calendar.removeAllEvents();
+
+        //vis-timeline
+        _items = new vis.DataSet()
+        _groups = new vis.DataSet()
+
+        _spec_doct.forEach(item => {
+            _groups.add({
+                id: item.name,
+                content: getGroupContent(item)
+            })
+        })
+        app_timeline.setGroups(_groups)
+
+        let events = {}
+
+        for(var i in appointments){
+            var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
+            var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
+            var bg = ''
+            if (appointments[i]['provider'] === '0') bg = 'info'
+            else if (appointments[i]['provider'] === '1') bg = 'primary'
+            if(appointments[i]['attended']=="1") bg = 'success';
+
+            // Month
+            if (appointments[i]['provider'] == '0') {
+                // for month
+                events = {
+                    id: appointments[i]['id'],
+                    title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                    start: s,
+                    end: e,
+                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                    // Extended Props
+                    address: appointments[i]['daddress'],
+                    phone: appointments[i]['dphone'],
+                    city: appointments[i]['dcity'],
+                    zip: appointments[i]['dzip'],
+                    provider: 0
+                }
+            } else if (appointments[i]['provider'] === '1') {
+                // for month
+                events = {
+                    id: appointments[i]['id'],
+                    title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
+                    start: s,
+                    end: e,
+                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                    // Extended Props
+                    address: appointments[i]['saddress'],
+                    phone: appointments[i]['sphone'],
+                    city: appointments[i]['scity'],
+                    zip: appointments[i]['szip'],
+                    provider: 1
+                }
+            }
+            app_calendar.addEvent(events);
+
+            // For Day
+            _items.add({
+                id: appointments[i].id,
+                group: appointments[i].provider == '0' ? appointments[i].doctor_fname + ' ' + appointments[i].doctor_lname : appointments[i].spec_fname + ' ' + appointments[i].spec_lname,
+                start: s,
+                end: e,
+                style: appointments[i].attended == 0 ? 'background-color: #87CEFA40;' : 'background-color: #98FB9890;',
+                content: getItemContent(appointments[i])
+            })
+        }
+
+        $(".vis-inner").css('width', '100%')
+        $(".vis-inner").removeClass('vis-inner')
+
+        app_timeline.setItems(_items)
+    }
+    
+    function load_data(){
+        var entry ={
+            date: selected_date,
+            clinic_id: localStorage.getItem('chosen_clinic'),
+            specialties: specialties
+        }
+        if(selected_doctor!="") entry['doctors'] = selected_doctor;
+        appointments = []
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
+            if (!err) {
+              var result = JSON.parse(xhr.responseText)['data'];
+              for(var i=0; i<result.length; i++){
+                appointments[result[i]['id']] = result[i];
+              }
+              
+              add_event();
+            }
+        });
+    }
+
+    // Calendar begin //
+    // Timeline For Calendar begin //
+    var app_calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timelineDay',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timelineDay'
+        },
+        views: {
+            timelineDay: {
+                buttonText: 'Day',
+                content: function(props) {
+                    return {
+                        html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
+                    }
+                },
+                didMount: () => {
+                    _options['maxHeight'] = $("#appointment_vistimeline").height()
+                    var t = new Date(Date.now())
+                    _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
+                    _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
+                    app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
+
+                    app_timeline.on("scroll", debounce(groupFocus, 200));
+                    app_timeline.on('select', (props) => {
+                        if (props.items.length) {
+                            viewAppointment(props.items[0])
+                        }
+                    })
+                }
+            }
+        },
+        initialDate: TODAY,
+        navLinks: true,
+        selectable: true,
+        selectMirror: true,
+        dayHeaders: false,
+        slotDuration: {minutes: 5},
+        scrollTime: '09:00:00',
+        select: function (arg) {
+            handleNewEvent(arg);
+        },
+        eventClick: function (arg) {
+            handleViewEvent(arg);
+        },
+        eventContent: function(arg) {
+            var icon = ''
+            let el = document.createElement('div')
+            el.setAttribute('style', 'height: 100%;')
+            if (arg.event.extendedProps.provider === 1) {
+                icon = 'fa-user-doctor'
+            } else if (arg.event.extendedProps.provider === 0) {
+                icon = 'fa-house-medical'
+            }
+            el.innerHTML = `
+                <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
+                <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
+                <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
+            `
+            return {
+                domNodes: [el]
+            }
+        },
+        editable: false,
+        dayMaxEvents: true,
+        datesSet: function(){
+            selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
+            load_data();
+        },
+    });
+    app_calendar.render();
+    // Timeline For Calendar end //
+
+    const handleNewEvent = (data) => {
+        __spec = 0
+        $(".appt-list").addClass('d-none');
+        $("#appointment_patient_info").addClass('d-none');
+        $("#appointment_patient_find").removeClass('d-none');
+        $("#appointment_patient_id").val("");
+        $("#appointment_emr_id").val("");
+        $("#appointment_modal_fullname").html("");
+        $("#appointment_modal_language").html("");
+        $("#appointment_modal_language").parent().removeClass("d-none");
+        $("#appointment_modal_clinic").html("");
+        $("#appointment_modal_gender").html("");
+        $("#appointment_modal_dob").html("");
+        $("#appointment_modal_dob").parent().removeClass("d-none");
+        $("#appointment_modal_age").html("");
+        $("#appointment_modal_age").parent().removeClass("d-none");
+        $("#appointment_modal_telephone").html("");
+        $("#appointment_modal_telephone").parent().removeClass("d-none");
+        $("#appointment_modal_phone").html("");
+        $("#appointment_modal_phone").parent().removeClass("d-none");
+        $("#appointment_modal_email").html("");
+        $("#appointment_modal_email").parent().removeClass("d-none");
+        $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
+        $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
+
+        $("#appointment_id").val('');
+        $("#appointment_participate_status").val('needs-action');
+        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
+        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
+        $("#appointment_specialist_external_provider").prop("disabled", false);
+        $("#appointment_clinic_provider").prop("disabled", true);
+        $("#appointment_clinic_provider").val("");
+        $("#appointment_attended").prop('checked', false);
+        $("#appointment_status").val('2').trigger('change');
+        $("#appointment_reason").val('')
+        // getSpecialty();
+        $("#appointment_barrier_reason").val('');
+        $("#appointment_class").val('2').trigger('change');
+        $("#appointment_service_category").val('7').trigger('change');
+        
+        $("#appointment_priority").val('7').trigger('change');
+
+        var startTime = data.startStr.split("T")[1]
+        var endTime = data.endStr.split("T")[1]
+        if (startTime === null || startTime === undefined || startTime === '') $("#appointment_start_date").val('09:00');
+        else $("#appointment_start_date").val(startTime.substr(0, 5));
+        if (endTime === undefined || endTime === null || endTime === '') endTime = $("#appointment_end_date").val('09:30');
+        else $("#appointment_end_date").val(endTime.substr(0, 5));
+        $("#appointment_approve_date").val(data.startStr.substr(0, 10));
+
+        $("#appointment_notes").val('');
+        $("#appointment_pt_instruction").val('');
+        $("#appointment_pt_instruction_date").val('');
+        $("#appointment_edit_modal-1").modal("show");
+    }
+
+    const handleViewEvent = (data) => {
+        viewAppointment(data.event.id)
+    }
+    // Calendar end //
+
+    // Appointment dashboad end //
 })
