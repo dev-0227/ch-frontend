@@ -55,7 +55,9 @@ var _options = {
         axis: 'both',
         item: 'top'
     },
-    zoomKey: "ctrlKey"
+    zoomKey: "ctrlKey",
+    zoomMax: 1000 * 60 * 60 * 24,
+    zoomMin: 1000 * 60 * 15
 }
 // Parameters end //
 
@@ -227,6 +229,28 @@ function viewAppointment(id) {
     $("#appointment_edit_modal-1").modal("show");
     $("#appointment_modal").modal("hide");
 }
+
+function debounce(func, wait = 100) {
+    let timeout;
+    return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func.apply(this, args);
+        }, wait);
+    };
+}
+
+let groupFocus = (e) => {
+    let vGroups = app_timeline.getVisibleGroups();
+    let vItems = vGroups.reduce((res, groupId) => {
+        let group = app_timeline.itemSet.groups[groupId];
+        if (group.items) {
+            res = res.concat(Object.keys(group.items));
+        }
+        return res;
+    }, []);
+    app_timeline.focus(vItems);
+};
 // utils end //
 
 // Data Load begin //
@@ -541,6 +565,13 @@ $(document).ready(async function() {
                     _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
                     _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
                     app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
+
+                    app_timeline.on("scroll", debounce(groupFocus, 200));
+                    app_timeline.on('select', (props) => {
+                        if (props.items.length) {
+                            viewAppointment(props.items[0])
+                        }
+                    })
                 }
             }
         },
@@ -583,34 +614,6 @@ $(document).ready(async function() {
         },
     });
     app_calendar.render();
-
-    function debounce(func, wait = 100) {
-        let timeout;
-        return function (...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                func.apply(this, args);
-            }, wait);
-        };
-    }
-
-    let groupFocus = (e) => {
-        let vGroups = app_timeline.getVisibleGroups();
-        let vItems = vGroups.reduce((res, groupId) => {
-            let group = app_timeline.itemSet.groups[groupId];
-            if (group.items) {
-                res = res.concat(Object.keys(group.items));
-            }
-            return res;
-        }, []);
-        app_timeline.focus(vItems);
-    };
-    app_timeline.on("scroll", debounce(groupFocus, 200));
-    app_timeline.on('select', function(props) {
-        if (props.items.length) {
-            viewAppointment(props.items[0])
-        }
-    })
     // Timeline For Calendar end //
 
     const handleNewEvent = (data) => {
