@@ -280,9 +280,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
     if (!err) {
         doctors = JSON.parse(xhr.responseText)['data'];
         $("#pcp_list").html("");
-        $("#specialist_list").html("");
         $("#pcp_select_button").removeClass("d-none");
-        $("#specialist_select_button").removeClass("d-none");
 
         var c = checked="checked"
         var html = ''
@@ -306,7 +304,6 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
             options += '<option value="'+doctor['id']+'" >'+doctor['fname']+' '+doctor['lname']+'</option>';
         })
         $("#pcp_list").html(html)
-        console.log("CLinic Provider", html)
 
         $("#appointment_clinic_provider").html(options);
         $("#appointment_clinic_provider").val(doctors[0]['id'])
@@ -316,6 +313,9 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 // Load Specialist
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, 'specialist/getSpecialistByClinic', (xhr, err) => {
     if (!err) {
+        $("#specialist_list").html("");
+        $("#specialist_select_button").removeClass("d-none");
+
         specialists = JSON.parse(xhr.responseText)['data']
         
         var c = 'checked="checked"'
@@ -338,7 +338,6 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
             `
         })
         $("#specialist_list").html(html)
-        console.log("Specialist Provider", html)
     }
 });
 
