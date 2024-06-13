@@ -21,7 +21,6 @@ var _externProvider = []
 var _oldStatus = ''
 
 let _specialists = []
-let _clinics = []
 
 var duration_mins = 0;
 
@@ -38,6 +37,26 @@ var doctors = []
 var specialty = []
 
 var __spec = 0
+
+var _spec_doct = []
+var _items = new vis.DataSet()
+var _groups = new vis.DataSet()
+var _options = {
+    stack: true,
+    editable: false,
+    margin: {
+        item: 20,
+        axis: 20
+    },
+    horizontalScroll: false,
+    verticalScroll: true,
+    type: 'box',
+    orientation: {
+        axis: 'both',
+        item: 'top'
+    },
+    zoomKey: "ctrlKey"
+}
 // Parameters end //
 
 // utils begin //
@@ -75,13 +94,138 @@ function checkTime(i) {
     return (i < 10) ? "0" + i : i;
 }
 
-function setEndData(){
+function setEndData() {
     let startTime = new Date();
     let start_date = $("#appointment_start_date").val();
     startTime.setHours(start_date.split(":")[0], start_date.split(":")[1], 0, 0);
     let end_date = new Date(startTime);
     end_date.setMinutes(end_date.getMinutes() + duration_mins);
     $("#appointment_end_date").val(checkTime(end_date.getHours())+":"+checkTime(end_date.getMinutes()));
+}
+
+const getItemContent = (item) => {
+    var el = document.createElement('div')
+    var c = ''
+    if (item.provider == '1') c = 'text-info'
+    else if (item.provider == '0') c = 'text-primary'
+    el.innerHTML = `
+        <div class="${c} fs-8"><i class="fa fa-duotone fa-stopwatch ${c}"></i> ${item.start_date.substr(0, 5)} ~ ${item.end_date.substr(0, 5)}</div>
+        <div class="text-danger fs-6"><i class="fa fa-light fa-thin fa-hospital-user text-danger"></i> ${item.FNAME} ${item.LNAME}</div>
+        <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.ADDRESS} ${item.CITY ? item.CITY : ''}</div>
+        <div class="fs-8"><i class="fa fa-phone"></i> ${item.PHONE ? item.PHONE : 'no phone'}</div>
+    `
+    return el
+}
+
+const getGroupContent = (item) => {
+    let el = document.createElement('div')
+    el.setAttribute('class', 'row my-2')
+    el.setAttribute('style', 'width: 100%; align-items: center;')
+    if (item.photo.length == 1) {
+        el.innerHTML = `
+        <div class="col-md-3">
+            <div class="symbol symbol-circle" style="width: 100%;">
+                <div class="symbol-label fs-2qx fw-semibold bg-opacity-75 ${item.prov == 0 ? 'bg-primary' : 'bg-info'} text-inverse-primary">${item.photo}</div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+        </div>
+    `
+    } else {
+        el.innerHTML = `
+        <div class="col-md-3">
+            <div class="symbol symbol-circle" style="width: 100%;">
+                <div class="symbol-label" style="background-image: url(data:image/png;base64,${item.photo});"></div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+        </div>
+    `
+    }
+    return el
+}
+
+function viewAppointment(id) {
+    observation_id = null;
+    var appointment = appointments[id];
+    $("#appointment_id").val(id);
+    $("#appointment_clinic_id").val(appointment['clinic_id']);
+    $("#appointment_patient_id").val(appointment['patient_id']);
+    $("#appointment_emr_id").val(appointment['emr_id']);
+    $("#appointment_pcp_id").val(appointment['pcp_id']);
+
+    $("#appointment_modal_fullname").html(appointment['FNAME']+" "+appointment['LNAME']);
+    $("#appointment_modal_age").html(calculateAge(appointment['DOB']));
+    $("#appointment_modal_language").html(appointment['Language']);
+    $("#appointment_modal_clinic").html($("#chosen_clinics option:selected").text());
+    $("#appointment_modal_gender").html(appointment['GENDER'].charAt(0).toUpperCase() + appointment['GENDER'].slice(1));
+    $("#appointment_modal_dob").html(moment(appointment['DOB']).format('Do MMM, YYYY'));
+    if(appointment['PHONE']){
+        $("#appointment_modal_telephone").html(appointment['PHONE']);
+        $("#appointment_modal_telephone").parent().removeClass("d-none");
+    }else{
+        $("#appointment_modal_telephone").parent().addClass("d-none");
+    }
+
+    if(appointment['MOBILE']){
+        $("#appointment_modal_phone").html(appointment['MOBILE']);
+        $("#appointment_modal_phone").parent().removeClass("d-none");
+    }else{
+        $("#appointment_modal_phone").parent().addClass("d-none");
+    }
+
+    if(appointment['EMAIL']){
+        $("#appointment_modal_email").html(appointment['EMAIL']);
+        $("#appointment_modal_email").parent().removeClass("d-none");
+    }else{
+        $("#appointment_modal_email").parent().addClass("d-none");
+    }
+    
+    $(".appt-list").addClass('d-none');
+    $("#appointment_patient_info").removeClass('d-none');
+    $("#appointment_patient_find").addClass('d-none');
+
+    if(appointment['provider']=="0"){
+        $("#appointment_specialist_external_provider").prop("disabled", true);
+        $("#appointment_clinic_provider").prop("disabled", false);
+        $("#appointment_clinic_provider").val(appointment['provider_id']).trigger('change');
+        $("#appointment_specialist_external_provider").val("").trigger('change');
+    }else{
+        $("#appointment_specialist_external_provider").prop("disabled", false);
+        $("#appointment_clinic_provider").prop("disabled", true);
+        $("#appointment_clinic_provider").val("").trigger('change');
+        __spec = appointment['provider_id']
+    }
+
+    $("#appointment_measure").val(appointment['measure']).trigger('change');
+    $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
+    $("#appointment_participate_status").val(appointment['pt_participate_status']);
+    $("#appointment_approve_date").val(GetFormattedDate(new Date(appointment['approve_date'])));
+    $("#appointment_start_date").val(appointment['start_date']);
+    $("#appointment_end_date").val(appointment['end_date']);
+    $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", appointment['provider']=="0"?true:false);
+    $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", appointment['provider']=="1"?true:false);
+    $("#appointment_assessment").val(appointment['assessment']).trigger('change');
+
+    $("#appointment_attended").prop('checked', appointment['attended']=="1"?true:false);
+    $("#appointment_status").val(appointment['status']).trigger('change');
+    // $("#appointment_cancel_reason").val(appointment['cancel_reason']);
+    if (appointment['cancel_reason'] != null) $("#appointment_barrier_reason").val(appointment['cancel_reason'].split(',')).trigger('change');
+    $("#appointment_class").val(appointment['class']).trigger('change').trigger('change');
+    $("#appointment_service_category").val(appointment['service_category']).trigger('change');
+    $("#appointment_appt_type").val(appointment['appt_type']).trigger('change');
+    $("#appointment_reason").val(appointment['reason']);
+    $("#appointment_priority").val(appointment['priority']).trigger('change');
+    // $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
+    // $("#appointment_barrier_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
+    $("#appointment_notes").val(appointment['notes']);
+    $("#appointment_pt_instruction").val(appointment['pt_instruction']);
+    $("#appointment_edit_modal-1").modal("show");
+    $("#appointment_modal").modal("hide");
 }
 // utils end //
 
@@ -105,18 +249,72 @@ function loadSpecialistProviderByMeasureId(mid) {
     });
 }
 
-function getSpecialty() {
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {measure_id: $("#appointment_measure").val()}, "referral/appointmentSpecialty/getSpecialtyByMeasure", (xhr, err) => {
-        if (!err) {
-                let result = JSON.parse(xhr.responseText)['data'];
-                if(result.length>0){
-                $("#appointment_specialty").val(result[0]['id']);
-            }
-        }
-    });
-}
-
 // For Appointment Form begin //
+
+// Load Clinic Provider
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "provider/getProviderByClinic", (xhr, err) => {
+    if (!err) {
+        doctors = JSON.parse(xhr.responseText)['data'];
+        $("#pcp_list").html("");
+        $("#specialist_list").html("");
+        $("#pcp_select_button").removeClass("d-none");
+        $("#specialist_select_button").removeClass("d-none");
+
+        var c = checked="checked"
+        var html = ''
+        var options = '';
+        doctors.forEach(doctor => {
+            _spec_doct.push({
+                id: doctor.id,
+                name: doctor.fname + ' ' + doctor.lname,
+                address: doctor.address,
+                phone: doctor.phone,
+                photo: doctor.photo,
+                prov: 0
+            })
+
+            html += `
+                <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">
+                    <input class="form-check-input doctor-check" type="checkbox" ${doctor['status'] == '1' ? c : ''} data-id="${doctor['id']}" >
+                    <span class="form-check-label text-gray-600 fw-semibold">${doctor['fname']} ${doctor['lname']}</span>
+                </label>
+            `
+            options += '<option value="'+doctor['id']+'" >'+doctor['fname']+' '+doctor['lname']+'</option>';
+        })
+        $("#pcp_list").html(html)
+
+        $("#appointment_clinic_provider").html(options);
+        $("#appointment_clinic_provider").val(doctors[0]['id'])
+    }
+});
+
+// Load Specialist
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, 'specialist/getSpecialistByClinic', (xhr, err) => {
+    if (!err) {
+        specialists = JSON.parse(xhr.responseText)['data']
+        
+        var c = 'checked="checked"'
+        var html = ''
+        specialists.forEach(specialist => {
+            _spec_doct.push({
+                id: specialist.id,
+                name: specialist.fname + ' ' + specialist.lname,
+                address: specialist.address,
+                phone: specialist.phone,
+                photo: specialist.photo,
+                prov: 1
+            })
+
+            html += `
+                <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">
+                    <input class="form-check-input doctor-check" type="checkbox" ${specialist['status'] == '1' ? c : ''} data-id="${specialist['id']}" >
+                    <span class="form-check-label text-gray-600 fw-semibold">${specialist['fname']} ${specialist['lname']}</span>
+                </label>
+            `
+        })
+        $("#specialist_list").html(html)
+    }
+});
 
 // Load Measure Data
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getMeasureObservation", (xhr, err) => {
@@ -140,26 +338,6 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $
     }
 });
 
-// Load Clinic Provider
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "provider/getProviderByClinic", (xhr, err) => {
-    if (!err) {
-      let doctors = JSON.parse(xhr.responseText)['data'];
-      var options = '';
-      for(var i=0; i<doctors.length; i++){
-        options += '<option value="'+doctors[i]['id']+'" >'+doctors[i]['fname']+' '+doctors[i]['lname']+'</option>';
-      }
-      $("#appointment_clinic_provider").html(options);
-      $("#appointment_clinic_provider").val(doctors[0]['id'])
-    }
-});
-
-// Load Clinic
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, 'clinic/getByStatus', (xhr, err) => {
-    if (!err) {
-        _clinics = JSON.parse(xhr.responseText)
-    }
-})
-
 // Load Appointment Type
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentType", (xhr, err) => {
     if (!err) {
@@ -173,7 +351,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/app
 });
 
 // Load Patient Participate Status
-sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/appointmentStatus", (xhr, err) => {
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/appointmentStatus", (xhr, err) => {
     if (!err) {
         var result = JSON.parse(xhr.responseText)['data'];
         var options = ''
@@ -185,7 +363,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/app
 });
 
 // Load Barrier Reason
-sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/appointmentBarrier", (xhr, err) => {
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/appointmentBarrier", (xhr, err) => {
     if (!err) {
         var result = JSON.parse(xhr.responseText)['data'];
         var options = ''
@@ -196,7 +374,6 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/app
     }
 });
 // For Appointment Form end //
-
 
 // Load Class
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/encounterClass", (xhr, err) => {
@@ -211,7 +388,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/enc
 });
 
 // Load Priority
-sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/encounterPriority", (xhr, err) => {
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/encounterPriority", (xhr, err) => {
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
     var options = '';
@@ -220,29 +397,6 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "valueset/enc
     }
     $("#appointment_priority").html(options);
   }
-});
-
-sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "user/getAllDoctorsByClinic", (xhr, err) => {
-    if (!err) {
-        doctors = JSON.parse(xhr.responseText)['data'];
-        $("#pcp_list").html("");
-        $("#specialist_list").html("");
-        $("#pcp_select_button").removeClass("d-none");
-        $("#specialist_select_button").removeClass("d-none");
-        for(var i=0;i<doctors.length;i++){
-            html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
-            html += '<input class="form-check-input doctor-check" type="checkbox" checked="checked" data-id="'+doctors[i]['id']+'" >';
-            html += '<span class="form-check-label text-gray-600 fw-semibold">';
-            html += doctors[i]['fname']+' '+doctors[i]['lname'];
-            if(doctors[i]['type']=="3") html += ' ('+doctors[i]['speciality']+") ";
-            html += '</span></label>';
-            doctors[i]['ch'] = "1";
-            if(doctors[i]['type']=="5") $("#pcp_list").append(html);
-            if(doctors[i]['type']=="3") $("#specialist_list").append(html);
-        }
-        if($("#pcp_list").html()=="")$("#pcp_select_button").addClass("d-none");
-        if($("#specialist_list").html()=="")$("#specialist_select_button").addClass("d-none");
-    }
 });
 
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
@@ -256,7 +410,7 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/app
             html += specialty[i]['name'];
             html += '</span></label>';
             specialty[i]['ch'] = "1";
-            $("#specialty_list").append(html);
+            // $("#specialty_list").append(html);
 
             options += '<option value="'+specialty[i]['id']+'" >'+specialty[i]['name']+'</option>';
         }
@@ -271,6 +425,18 @@ $(document).ready(async function() {
     function add_event(){
         app_calendar.removeAllEvents();
 
+        //vis-timeline
+        _items = new vis.DataSet()
+        _groups = new vis.DataSet()
+
+        _spec_doct.forEach(item => {
+            _groups.add({
+                id: item.name,
+                content: getGroupContent(item)
+            })
+        })
+        app_timeline.setGroups(_groups)
+
         let events = {}
 
         for(var i in appointments){
@@ -280,10 +446,11 @@ $(document).ready(async function() {
             if (appointments[i]['provider'] === '0') bg = 'info'
             else if (appointments[i]['provider'] === '1') bg = 'primary'
             if(appointments[i]['attended']=="1") bg = 'success';
+
+            // Month
             if (appointments[i]['provider'] == '0') {
                 // for month
                 events = {
-                    resourceId: appointments[i]['clinic_id'],
                     id: appointments[i]['id'],
                     title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
                     start: s,
@@ -299,7 +466,6 @@ $(document).ready(async function() {
             } else if (appointments[i]['provider'] === '1') {
                 // for month
                 events = {
-                    resourceId: appointments[i]['clinic_id'],
                     id: appointments[i]['id'],
                     title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
                     start: s,
@@ -314,13 +480,22 @@ $(document).ready(async function() {
                 }
             }
             app_calendar.addEvent(events);
-        }
-        _clinics.forEach(item => {
-            app_calendar.addResource({
-                id: item.id,
-                title: item.name,
+
+            // For Day
+            _items.add({
+                id: appointments[i].id,
+                group: appointments[i].provider == '0' ? appointments[i].doctor_fname + ' ' + appointments[i].doctor_lname : appointments[i].spec_fname + ' ' + appointments[i].spec_lname,
+                start: s,
+                end: e,
+                style: appointments[i].attended == 0 ? 'background-color: #87CEFA40;' : 'background-color: #98FB9890;',
+                content: getItemContent(appointments[i])
             })
-        })
+        }
+
+        $(".vis-inner").css('width', '100%')
+        $(".vis-inner").removeClass('vis-inner')
+
+        app_timeline.setItems(_items)
     }
     
     function load_data(){
@@ -344,19 +519,36 @@ $(document).ready(async function() {
     }
 
     // Calendar begin //
+    // Timeline For Calendar begin //
     var app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: localStorage.getItem('usertype') <= 1 ? 'resourceTimelineDay' : 'timeGridDay',
+        initialView: 'timelineDay',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: localStorage.getItem('usertype') <= 1 ? 'dayGridMonth,resourceTimelineDay' : 'dayGridMonth,timeGridDay'
+            right: 'dayGridMonth,timelineDay'
+        },
+        views: {
+            timelineDay: {
+                buttonText: 'Day',
+                content: function(props) {
+                    return {
+                        html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
+                    }
+                },
+                didMount: () => {
+                    _options['maxHeight'] = $("#appointment_vistimeline").height()
+                    var t = new Date(Date.now())
+                    _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
+                    _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
+                    app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
+                }
+            }
         },
         initialDate: TODAY,
         navLinks: true,
         selectable: true,
         selectMirror: true,
         dayHeaders: false,
-        weekHeaders: false,
         slotDuration: {minutes: 5},
         scrollTime: '09:00:00',
         select: function (arg) {
@@ -391,6 +583,35 @@ $(document).ready(async function() {
         },
     });
     app_calendar.render();
+
+    function debounce(func, wait = 100) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(this, args);
+            }, wait);
+        };
+    }
+
+    let groupFocus = (e) => {
+        let vGroups = app_timeline.getVisibleGroups();
+        let vItems = vGroups.reduce((res, groupId) => {
+            let group = app_timeline.itemSet.groups[groupId];
+            if (group.items) {
+                res = res.concat(Object.keys(group.items));
+            }
+            return res;
+        }, []);
+        app_timeline.focus(vItems);
+    };
+    app_timeline.on("scroll", debounce(groupFocus, 200));
+    app_timeline.on('select', function(props) {
+        if (props.items.length) {
+            viewAppointment(props.items[0])
+        }
+    })
+    // Timeline For Calendar end //
 
     const handleNewEvent = (data) => {
         __spec = 0
@@ -449,85 +670,7 @@ $(document).ready(async function() {
     }
 
     const handleViewEvent = (data) => {
-        observation_id = null;
-        var appointment = appointments[data.event.id];
-        $("#appointment_id").val(data.event.id);
-        $("#appointment_clinic_id").val(appointment['clinic_id']);
-        $("#appointment_patient_id").val(appointment['patient_id']);
-        $("#appointment_emr_id").val(appointment['emr_id']);
-        $("#appointment_pcp_id").val(appointment['pcp_id']);
-
-        $("#appointment_modal_fullname").html(appointment['FNAME']+" "+appointment['LNAME']);
-        $("#appointment_modal_age").html(calculateAge(appointment['DOB']));
-        $("#appointment_modal_language").html(appointment['Language']);
-        $("#appointment_modal_clinic").html($("#chosen_clinics option:selected").text());
-        $("#appointment_modal_gender").html(appointment['GENDER'].charAt(0).toUpperCase() + appointment['GENDER'].slice(1));
-        $("#appointment_modal_dob").html(moment(appointment['DOB']).format('Do MMM, YYYY'));
-        if(appointment['PHONE']){
-            $("#appointment_modal_telephone").html(appointment['PHONE']);
-            $("#appointment_modal_telephone").parent().removeClass("d-none");
-        }else{
-            $("#appointment_modal_telephone").parent().addClass("d-none");
-        }
-
-        if(appointment['MOBILE']){
-            $("#appointment_modal_phone").html(appointment['MOBILE']);
-            $("#appointment_modal_phone").parent().removeClass("d-none");
-        }else{
-            $("#appointment_modal_phone").parent().addClass("d-none");
-        }
-
-        if(appointment['EMAIL']){
-            $("#appointment_modal_email").html(appointment['EMAIL']);
-            $("#appointment_modal_email").parent().removeClass("d-none");
-        }else{
-            $("#appointment_modal_email").parent().addClass("d-none");
-        }
-        
-        $(".appt-list").addClass('d-none');
-        $("#appointment_patient_info").removeClass('d-none');
-        $("#appointment_patient_find").addClass('d-none');
-
-        if(appointment['provider']=="0"){
-            $("#appointment_specialist_external_provider").prop("disabled", true);
-            $("#appointment_clinic_provider").prop("disabled", false);
-            $("#appointment_clinic_provider").val(appointment['provider_id']).trigger('change');
-            $("#appointment_specialist_external_provider").val("").trigger('change');
-        }else{
-            $("#appointment_specialist_external_provider").prop("disabled", false);
-            $("#appointment_clinic_provider").prop("disabled", true);
-            $("#appointment_clinic_provider").val("").trigger('change');
-            __spec = appointment['provider_id']
-        }
-
-        $("#appointment_measure").val(appointment['measure']).trigger('change');
-        $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
-        $("#appointment_participate_status").val(appointment['pt_participate_status']);
-        $("#appointment_approve_date").val(GetFormattedDate(new Date(appointment['approve_date'])));
-        $("#appointment_start_date").val(appointment['start_date']);
-        $("#appointment_end_date").val(appointment['end_date']);
-        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", appointment['provider']=="0"?true:false);
-        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", appointment['provider']=="1"?true:false);
-        $("#appointment_assessment").val(appointment['assessment']).trigger('change');
-
-        $("#appointment_attended").prop('checked', appointment['attended']=="1"?true:false);
-        $("#appointment_status").val(appointment['status']).trigger('change');
-        // $("#appointment_cancel_reason").val(appointment['cancel_reason']);
-        if (appointment['cancel_reason'] != null) $("#appointment_barrier_reason").val(appointment['cancel_reason'].split(',')).trigger('change');
-        $("#appointment_class").val(appointment['class']).trigger('change').trigger('change');
-        $("#appointment_service_category").val(appointment['service_category']).trigger('change');
-        $("#appointment_appt_type").val(appointment['appt_type']).trigger('change');
-        $("#appointment_reason").val(appointment['reason']);
-        $("#appointment_priority").val(appointment['priority']).trigger('change');
-        // $("#appointment_cancel_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
-        // $("#appointment_barrier_date").val(GetFormattedDate(new Date(appointment['cancel_date'])));
-        $("#appointment_notes").val(appointment['notes']);
-        $("#appointment_pt_instruction").val(appointment['pt_instruction']);
-        $("#appointment_edit_modal-1").modal("show");
-        $("#appointment_modal").modal("hide");
-
-
-        // startDateMod = moment(data.event.startStr).format('Do MMM, YYYY - h:mm a');
+        viewAppointment(data.event.id)
     }
     // Calendar end //
 
@@ -821,17 +964,17 @@ $(document).ready(async function() {
         });
     });
 
-    // $(document).on("change","#appointment_appt_type",function(){
-    //     for(var i=0; i<appointmentType.length; i++){
-    //         if(appointmentType[i]['id'] == $(this).val()){
-    //             duration_mins = appointmentType[i]['duration'];
-    //             setEndData();
-    //         }
-    //     }
-    // });
+    $(document).on("change","#appointment_appt_type",function(){
+        for(var i=0; i<appointmentType.length; i++){
+            if(appointmentType[i]['id'] == $(this).val()){
+                duration_mins = appointmentType[i]['duration'];
+                setEndData();
+            }
+        }
+    });
     
     $(document).on("change","#appointment_start_date",function(){
-        // setEndData();
+        setEndData();
     });
 
     $(document).on('click', '#appointment-org-next-click', () => {
@@ -906,7 +1049,7 @@ $(document).ready(async function() {
         $("#appointment_attended").prop('checked', false);
         $("#appointment_status").val('2').trigger('change');
         $("#appointment_reason").val('')
-        getSpecialty();
+        // getSpecialty();
         $("#appointment_barrier_reason").val('');
         $("#appointment_class").val('2').trigger('change');
         $("#appointment_service_category").val('7').trigger('change');
@@ -1158,4 +1301,11 @@ $(document).ready(async function() {
 
     // 
     $(".fc-license-message").hide()
+
+    //
+    addEventListener('resize', (e) => {
+        _options['maxHeight'] = $("#appointment_vistimeline").height()
+        app_timeline.setOptions(_options)
+    })
+    //
 })

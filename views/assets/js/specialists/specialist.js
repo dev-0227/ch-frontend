@@ -131,20 +131,20 @@ $(document).ready(async function () {
         render: function(data, type, row) {
           if (row.photo.length == 1) {
             return `
-            <center>
-              <div class="symbol symbol-60px symbol-circle">
-                  <div class="symbol-label fs-3qx fw-semibold bg-primary text-inverse-primary">` + row.photo + `</div>
-              </div>
-            </center>
+              <center>
+                <div class="symbol symbol-60px symbol-circle">
+                    <div class="symbol-label fs-3qx fw-semibold bg-primary text-inverse-primary">` + row.photo + `</div>
+                </div>
+              </center>
             `
           }
           else {
             return `
-            <center>
-              <div class="symbol symbol-60px symbol-circle">
-                <div class="symbol-label" style="background-image: url(data:image/png;base64,${row.photo});"></div>
-              </div>
-            </center>
+              <center>
+                <div class="symbol symbol-60px symbol-circle">
+                  <div class="symbol-label" style="background-image: url(data:image/png;base64,${row.photo});"></div>
+                </div>
+              </center>
             `
           }
         }
