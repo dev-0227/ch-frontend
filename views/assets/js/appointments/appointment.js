@@ -477,8 +477,6 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 
         $("#appointment_clinic_provider").html(options);
         $("#appointment_clinic_provider").val(doctors[0]['id'])
-
-        if (app_calendar !== null) app_calendar.render()
     }
 });
 
@@ -510,8 +508,6 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
             `
         })
         $("#specialist_list").html(html)
-
-        if (app_calendar !== null) app_calendar.render()
     }
 });
 
@@ -1248,12 +1244,25 @@ $(document).ready(async function() {
         app_timeline.setOptions(_options)
     })
     //
+    function renderTimeline() {
+        _options['maxHeight'] = $("#appointment_vistimeline").height()
+        var t = new Date(Date.now())
+        _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
+        _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
+        app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
 
+        app_timeline.on("scroll", debounce(groupFocus, 200));
+        app_timeline.on('select', (props) => {
+            if (props.items.length) {
+                viewAppointment(props.items[0])
+            }
+        })
+    }
     // Appointment dashboad begin //
     // Calendar begin //
     // Timeline For Calendar begin //
     app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'resourceTimeGridDay',
+        initialView: 'dayGridMonth',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
@@ -1268,18 +1277,7 @@ $(document).ready(async function() {
                     }
                 },
                 didMount: () => {
-                    _options['maxHeight'] = $("#appointment_vistimeline").height()
-                    var t = new Date(Date.now())
-                    _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
-                    _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
-                    app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
-
-                    app_timeline.on("scroll", debounce(groupFocus, 200));
-                    app_timeline.on('select', (props) => {
-                        if (props.items.length) {
-                            viewAppointment(props.items[0])
-                        }
-                    })
+                    renderTimeline()
                 }
             }
         },
