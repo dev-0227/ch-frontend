@@ -38,6 +38,9 @@ var specialty = []
 
 var __spec = 0
 
+var app_calendar = null
+var app_timeline = null
+
 var _spec_item = []
 var _doct_item = []
 var _items = new vis.DataSet()
@@ -165,7 +168,7 @@ const getResourceContent = (item) => {
         </div>
         <div class="col-md-9">
             <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
-            <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+            <div class="fs- ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
         </div>
     `
     } else {
@@ -286,6 +289,47 @@ let groupFocus = (e) => {
     }, []);
     app_timeline.focus(vItems);
 };
+
+function setGroupResource() {
+    app_calendar.removeAllEvents();
+
+    //vis-timeline
+    _items = new vis.DataSet()
+    _groups = new vis.DataSet()
+
+    _doct_item.forEach(item => {
+        _groups.add({
+            id: item.name,
+            content: getGroupContent(item)
+        })
+    })
+    _spec_item.forEach(item => {
+        _groups.add({
+            id: item.name,
+            content: getGroupContent(item)
+        })
+    })
+
+    //resource
+    _doct_item.forEach(item => {
+        app_calendar.addResource({
+            id: 'D_' + item.name,
+            title: item.name,
+            // Extended Props
+            photo: item.photo,
+            prov: 0
+        })
+    })
+    _spec_item.forEach(item => {
+        app_calendar.addResource({
+            id: 'S_' + item.name,
+            title: item.name,
+            // Extended Props
+            photo: item.photo,
+            prov: 1
+        })
+    })
+}
 // utils end //
 
 // Data Load begin //
@@ -304,6 +348,97 @@ function loadSpecialistProviderByMeasureId(mid) {
                 if (__spec == 0) __spec = result[0]['id']
                 $("#appointment_specialist_external_provider").val(__spec).trigger('change')
             }
+        }
+    });
+}
+
+function add_event(){
+    setGroupResource()
+
+    let events = {}
+
+    for(var i in appointments){
+        var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
+        var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
+        var bg = ''
+        if (appointments[i]['provider'] === '0') bg = 'info'
+        else if (appointments[i]['provider'] === '1') bg = 'primary'
+        if(appointments[i]['attended']=="1") bg = 'success';
+
+        // Month
+        if (appointments[i]['provider'] == '0') {
+            // for month
+            events = {
+                id: appointments[i]['id'],
+                title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                resourceId: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                start: s,
+                end: e,
+                className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                // Extended Props
+                address: appointments[i]['daddress'],
+                phone: appointments[i]['dphone'],
+                city: appointments[i]['dcity'],
+                zip: appointments[i]['dzip'],
+                provider: 0,
+                sort: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname']
+            }
+        } else if (appointments[i]['provider'] === '1') {
+            // for month
+            events = {
+                id: appointments[i]['id'],
+                title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
+                resourceId: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
+                start: s,
+                end: e,
+                className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                // Extended Props
+                address: appointments[i]['saddress'],
+                phone: appointments[i]['sphone'],
+                city: appointments[i]['scity'],
+                zip: appointments[i]['szip'],
+                provider: 1,
+                sort: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname']
+            }
+        }
+        app_calendar.addEvent(events);
+
+        // For Day
+        _items.add({
+            id: appointments[i].id,
+            group: appointments[i].provider == '0' ? appointments[i].doctor_fname + ' ' + appointments[i].doctor_lname : appointments[i].spec_fname + ' ' + appointments[i].spec_lname,
+            start: s,
+            end: e,
+            style: appointments[i].attended == 0 ? 'background-color: #87CEFA40;' : 'background-color: #98FB9890;',
+            content: getItemContent(appointments[i])
+        })
+    }
+
+    if (app_timeline != null) {
+        app_timeline.setGroups(_groups)
+        app_timeline.setItems(_items)
+
+        $(".vis-inner").css('width', '100%')
+        $(".vis-inner").removeClass('vis-inner')
+    }
+}
+
+function load_data(){
+    var entry ={
+        date: selected_date,
+        clinic_id: localStorage.getItem('chosen_clinic'),
+        specialties: specialties
+    }
+    if(selected_doctor!="") entry['doctors'] = selected_doctor;
+    appointments = []
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
+        if (!err) {
+          var result = JSON.parse(xhr.responseText)['data'];
+          for(var i=0; i<result.length; i++){
+            appointments[result[i]['id']] = result[i];
+          }
+          
+          add_event();
         }
     });
 }
@@ -342,6 +477,8 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 
         $("#appointment_clinic_provider").html(options);
         $("#appointment_clinic_provider").val(doctors[0]['id'])
+
+        if (app_calendar !== null) app_calendar.render()
     }
 });
 
@@ -373,6 +510,8 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
             `
         })
         $("#specialist_list").html(html)
+
+        if (app_calendar !== null) app_calendar.render()
     }
 });
 
@@ -1111,137 +1250,10 @@ $(document).ready(async function() {
     //
 
     // Appointment dashboad begin //
-
-    function add_event(){
-        app_calendar.removeAllEvents();
-
-        //vis-timeline
-        _items = new vis.DataSet()
-        _groups = new vis.DataSet()
-
-        _doct_item.forEach(item => {
-            _groups.add({
-                id: item.name,
-                content: getGroupContent(item)
-            })
-        })
-        _spec_item.forEach(item => {
-            _groups.add({
-                id: item.name,
-                content: getGroupContent(item)
-            })
-        })
-        app_timeline.setGroups(_groups)
-
-        //resource
-        _doct_item.forEach(item => {
-            app_calendar.addResource({
-                id: 'D_' + item.name,
-                title: item.name,
-                // Extended Props
-                photo: item.photo,
-                prov: 0
-            })
-        })
-        _spec_item.forEach(item => {
-            app_calendar.addResource({
-                id: 'S_' + item.name,
-                title: item.name,
-                // Extended Props
-                photo: item.photo,
-                prov: 1
-            })
-        })
-
-        let events = {}
-
-        for(var i in appointments){
-            var s = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['start_date']);
-            var e = new Date(appointments[i]['approve_date'].substr(0, 10)+' '+appointments[i]['end_date']);
-            var bg = ''
-            if (appointments[i]['provider'] === '0') bg = 'info'
-            else if (appointments[i]['provider'] === '1') bg = 'primary'
-            if(appointments[i]['attended']=="1") bg = 'success';
-
-            // Month
-            if (appointments[i]['provider'] == '0') {
-                // for month
-                events = {
-                    id: appointments[i]['id'],
-                    title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
-                    resourceId: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
-                    start: s,
-                    end: e,
-                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
-                    // Extended Props
-                    address: appointments[i]['daddress'],
-                    phone: appointments[i]['dphone'],
-                    city: appointments[i]['dcity'],
-                    zip: appointments[i]['dzip'],
-                    provider: 0,
-                    sort: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname']
-                }
-            } else if (appointments[i]['provider'] === '1') {
-                // for month
-                events = {
-                    id: appointments[i]['id'],
-                    title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
-                    resourceId: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
-                    start: s,
-                    end: e,
-                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
-                    // Extended Props
-                    address: appointments[i]['saddress'],
-                    phone: appointments[i]['sphone'],
-                    city: appointments[i]['scity'],
-                    zip: appointments[i]['szip'],
-                    provider: 1,
-                    sort: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname']
-                }
-            }
-            app_calendar.addEvent(events);
-
-            // For Day
-            _items.add({
-                id: appointments[i].id,
-                group: appointments[i].provider == '0' ? appointments[i].doctor_fname + ' ' + appointments[i].doctor_lname : appointments[i].spec_fname + ' ' + appointments[i].spec_lname,
-                start: s,
-                end: e,
-                style: appointments[i].attended == 0 ? 'background-color: #87CEFA40;' : 'background-color: #98FB9890;',
-                content: getItemContent(appointments[i])
-            })
-        }
-
-        $(".vis-inner").css('width', '100%')
-        $(".vis-inner").removeClass('vis-inner')
-
-        app_timeline.setItems(_items)
-    }
-    
-    function load_data(){
-        var entry ={
-            date: selected_date,
-            clinic_id: localStorage.getItem('chosen_clinic'),
-            specialties: specialties
-        }
-        if(selected_doctor!="") entry['doctors'] = selected_doctor;
-        appointments = []
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/get", (xhr, err) => {
-            if (!err) {
-              var result = JSON.parse(xhr.responseText)['data'];
-              for(var i=0; i<result.length; i++){
-                appointments[result[i]['id']] = result[i];
-              }
-              
-              add_event();
-            }
-        });
-    }
-
     // Calendar begin //
     // Timeline For Calendar begin //
-    var app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'hTimelineDay',
+    app_calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'resourceTimeGridDay',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
@@ -1271,7 +1283,7 @@ $(document).ready(async function() {
                 }
             }
         },
-        dayMinWidth: 200,
+        dayMinWidth: 210,
         initialDate: TODAY,
         navLinks: true,
         selectable: true,
