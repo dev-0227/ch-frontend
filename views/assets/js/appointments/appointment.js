@@ -41,6 +41,10 @@ var __spec = 0
 var app_calendar = null
 var app_timeline = null
 
+var _inactive_items = {
+    doctor: [],
+    specialist: []
+}
 var _spec_item = []
 var _doct_item = []
 var _items = new vis.DataSet()
@@ -115,10 +119,12 @@ const getItemContent = (item) => {
     if (item.provider == '1') c = 'text-info'
     else if (item.provider == '0') c = 'text-primary'
     el.innerHTML = `
-        <div class="${c} fs-8"><i class="fa fa-duotone fa-stopwatch ${c}"></i> ${item.start_date.substr(0, 5)} ~ ${item.end_date.substr(0, 5)}</div>
-        <div class="text-danger fs-6"><i class="fa fa-light fa-thin fa-hospital-user text-danger"></i> ${item.FNAME} ${item.LNAME}</div>
-        <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.ADDRESS} ${item.CITY ? item.CITY : ''}</div>
-        <div class="fs-8"><i class="fa fa-phone"></i> ${item.PHONE ? item.PHONE : 'no phone'}</div>
+        <div style="overflow: hidden;">
+            <div class="${c} fs-8"><i class="fa fa-duotone fa-stopwatch ${c}"></i> ${item.start_date.substr(0, 5)} ~ ${item.end_date.substr(0, 5)}</div>
+            <div class="text-danger fs-6"><i class="fa fa-light fa-thin fa-hospital-user text-danger"></i> ${item.FNAME} ${item.LNAME}</div>
+            <div class="fs-8"><i class="fa fa-location-dot"></i> ${item.ADDRESS} ${item.CITY ? item.CITY : ''}</div>
+            <div class="fs-8"><i class="fa fa-phone"></i> ${item.PHONE ? item.PHONE : 'no phone'}</div>
+        </div>
     `
     return el
 }
@@ -292,42 +298,59 @@ let groupFocus = (e) => {
 
 function setGroupResource() {
     app_calendar.removeAllEvents();
+    //remove all resource
+    _doct_item.forEach(item => {
+        var r = app_calendar.getResourceById('D_' + item.name)
+        if (r !== null && r !== undefined) r.remove()
+    })
+    _spec_item.forEach(item => {
+        var r = app_calendar.getResourceById('S_' + item.name)
+        if (r !== null && r !== undefined) r.remove()
+    })
 
     //vis-timeline
     _items = new vis.DataSet()
     _groups = new vis.DataSet()
 
     _doct_item.forEach(item => {
-        _groups.add({
-            id: item.name,
-            content: getGroupContent(item)
-        })
+        if (_inactive_items.doctor.indexOf(item.id.toString()) == -1) {
+            _groups.add({
+                id: item.name,
+                content: getGroupContent(item)
+            })
+        }
     })
     _spec_item.forEach(item => {
-        _groups.add({
-            id: item.name,
-            content: getGroupContent(item)
-        })
+        if (_inactive_items.specialist.indexOf(item.id.toString()) == -1) {
+            _groups.add({
+                id: item.name,
+                content: getGroupContent(item)
+            })
+        }
     })
 
     //resource
     _doct_item.forEach(item => {
-        app_calendar.addResource({
-            id: 'D_' + item.name,
-            title: item.name,
-            // Extended Props
-            photo: item.photo,
-            prov: 0
-        })
+        if (_inactive_items.doctor.indexOf(item.id.toString()) == -1) {
+            app_calendar.addResource({
+                id: 'D_' + item.name,
+                title: item.name,
+                // Extended Props
+                photo: item.photo,
+                prov: 0
+            })
+        }
     })
     _spec_item.forEach(item => {
-        app_calendar.addResource({
-            id: 'S_' + item.name,
-            title: item.name,
-            // Extended Props
-            photo: item.photo,
-            prov: 1
-        })
+        if (_inactive_items.specialist.indexOf(item.id.toString()) == -1) {
+            app_calendar.addResource({
+                id: 'S_' + item.name,
+                title: item.name,
+                // Extended Props
+                photo: item.photo,
+                prov: 1
+            })
+        }
     })
 }
 // utils end //
@@ -502,7 +525,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 
             html += `
                 <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">
-                    <input class="form-check-input doctor-check" type="checkbox" ${specialist['status'] == '1' ? c : ''} data-id="${specialist['id']}" >
+                    <input class="form-check-input specialist-check" type="checkbox" ${specialist['status'] == '1' ? c : ''} data-id="${specialist['id']}" >
                     <span class="form-check-label text-gray-600 fw-semibold">${specialist['fname']} ${specialist['lname']}</span>
                 </label>
             `
@@ -689,6 +712,28 @@ $(document).ready(async function() {
             load_data();
         }, 1000 );
     });
+
+    $(document).on('change', '.doctor-check', function(e) {
+        if (e.target.checked === false)
+            _inactive_items.doctor.push($(this).attr('data-id'))
+        else {
+            var i = _inactive_items.doctor.indexOf($(this).attr('data-id'))
+            _inactive_items.doctor.splice(i, 1)
+        }
+
+        load_data()
+    })
+
+    $(document).on('change', '.specialist-check', function(e) {
+        if (e.target.checked === false)
+            _inactive_items.specialist.push($(this).attr('data-id'))
+        else {
+            var i = _inactive_items.specialist.indexOf($(this).attr('data-id'))
+            _inactive_items.specialist.splice(i, 1)
+        }
+
+        load_data()
+    })
 
     // Patient Search begin //
     $(".menu-item").click(function (e) {
@@ -1123,22 +1168,22 @@ $(document).ready(async function() {
         
     });
 
-    $(document).on("change",".doctor-check",function(){
-        selected_doctor= "";
-        for(var i=0;i<doctors.length;i++){
-            if(doctors[i]['id']==$(this).data("id")){
-                doctors[i]['ch']=$(this).prop("checked")?"1":"0";
-            }
-            if(doctors[i]['ch']=="1"){
-                if(selected_doctor!="")selected_doctor += ","
-                selected_doctor += doctors[i]['id'];
-            }
-        }
-        if(selected_doctor=="")selected_doctor="0";
+    // $(document).on("change",".doctor-check",function(){
+    //     selected_doctor= "";
+    //     for(var i=0;i<doctors.length;i++){
+    //         if(doctors[i]['id']==$(this).data("id")){
+    //             doctors[i]['ch']=$(this).prop("checked")?"1":"0";
+    //         }
+    //         if(doctors[i]['ch']=="1"){
+    //             if(selected_doctor!="")selected_doctor += ","
+    //             selected_doctor += doctors[i]['id'];
+    //         }
+    //     }
+    //     if(selected_doctor=="")selected_doctor="0";
         
-        load_data()
-        // load_html(appointments);
-    });
+    //     load_data()
+    //     // load_html(appointments);
+    // });
 
     // Patient Management Modal begin //
     $(".pt_info").click(function (e) {
@@ -1260,7 +1305,6 @@ $(document).ready(async function() {
     }
     // Appointment dashboad begin //
     // Calendar begin //
-    // Timeline For Calendar begin //
     app_calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         headerToolbar: {
@@ -1308,9 +1352,11 @@ $(document).ready(async function() {
                 icon = 'fa-house-medical'
             }
             el.innerHTML = `
-                <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
-                <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
-                <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
+                <div style="overflow: hidden;">
+                    <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
+                    <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
+                    <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
+                </div>
             `
             return {
                 domNodes: [el]
@@ -1334,7 +1380,6 @@ $(document).ready(async function() {
         },
     });
     app_calendar.render();
-    // Timeline For Calendar end //
 
     const handleNewEvent = (data) => {
         __spec = 0
