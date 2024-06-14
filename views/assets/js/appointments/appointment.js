@@ -38,7 +38,8 @@ var specialty = []
 
 var __spec = 0
 
-var _spec_doct = []
+var _spec_item = []
+var _doct_item = []
 var _items = new vis.DataSet()
 var _groups = new vis.DataSet()
 var _options = {
@@ -286,7 +287,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
         var html = ''
         var options = '';
         doctors.forEach(doctor => {
-            _spec_doct.push({
+            _doct_item.push({
                 id: doctor.id,
                 name: doctor.fname + ' ' + doctor.lname,
                 address: doctor.address,
@@ -321,7 +322,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
         var c = 'checked="checked"'
         var html = ''
         specialists.forEach(specialist => {
-            _spec_doct.push({
+            _spec_item.push({
                 id: specialist.id,
                 name: specialist.fname + ' ' + specialist.lname,
                 address: specialist.address,
@@ -1087,7 +1088,13 @@ $(document).ready(async function() {
         _items = new vis.DataSet()
         _groups = new vis.DataSet()
 
-        _spec_doct.forEach(item => {
+        _doct_item.forEach(item => {
+            _groups.add({
+                id: item.name,
+                content: getGroupContent(item)
+            })
+        })
+        _spec_item.forEach(item => {
             _groups.add({
                 id: item.name,
                 content: getGroupContent(item)
