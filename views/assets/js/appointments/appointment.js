@@ -152,6 +152,40 @@ const getGroupContent = (item) => {
     return el
 }
 
+const getResourceContent = (item) => {
+    let el = document.createElement('div')
+    el.setAttribute('class', 'row')
+    el.setAttribute('style', 'width: 100%; align-items: center;')
+    if (item.photo.length == 1) {
+        el.innerHTML = `
+        <div class="col-md-3">
+            <div class="symbol symbol-circle" style="width: 100%;">
+                <div class="symbol-label fs-2qx fw-semibold bg-opacity-75 ${item.prov == 0 ? 'bg-primary' : 'bg-info'} text-inverse-primary">${item.photo}</div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+        </div>
+    `
+    } else {
+        el.innerHTML = `
+        <div class="col-md-3">
+            <div class="symbol symbol-circle" style="width: 100%;">
+                <div class="symbol-label" style="background-image: url(data:image/png;base64,${item.photo});"></div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+        </div>
+    `
+    }
+    $(".fc-col-header-cell-cushion").addClass('fc-scrollgrid-sync-inner')
+    $(".fc-col-header-cell-cushion").removeClass('fc-col-header-cell-cushion')
+    return el
+}
+
 function viewAppointment(id) {
     observation_id = null;
     var appointment = appointments[id];
@@ -1069,9 +1103,6 @@ $(document).ready(async function() {
 
     // Appointment Form end //
 
-    // 
-    $(".fc-license-message").hide()
-
     //
     addEventListener('resize', (e) => {
         _options['maxHeight'] = $("#appointment_vistimeline").height()
@@ -1102,6 +1133,26 @@ $(document).ready(async function() {
         })
         app_timeline.setGroups(_groups)
 
+        //resource
+        _doct_item.forEach(item => {
+            app_calendar.addResource({
+                id: 'D_' + item.name,
+                title: item.name,
+                // Extended Props
+                photo: item.photo,
+                prov: 0
+            })
+        })
+        _spec_item.forEach(item => {
+            app_calendar.addResource({
+                id: 'S_' + item.name,
+                title: item.name,
+                // Extended Props
+                photo: item.photo,
+                prov: 1
+            })
+        })
+
         let events = {}
 
         for(var i in appointments){
@@ -1118,6 +1169,7 @@ $(document).ready(async function() {
                 events = {
                     id: appointments[i]['id'],
                     title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                    resourceId: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
                     start: s,
                     end: e,
                     className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
@@ -1126,13 +1178,15 @@ $(document).ready(async function() {
                     phone: appointments[i]['dphone'],
                     city: appointments[i]['dcity'],
                     zip: appointments[i]['dzip'],
-                    provider: 0
+                    provider: 0,
+                    sort: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname']
                 }
             } else if (appointments[i]['provider'] === '1') {
                 // for month
                 events = {
                     id: appointments[i]['id'],
                     title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
+                    resourceId: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
                     start: s,
                     end: e,
                     className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
@@ -1141,7 +1195,8 @@ $(document).ready(async function() {
                     phone: appointments[i]['sphone'],
                     city: appointments[i]['scity'],
                     zip: appointments[i]['szip'],
-                    provider: 1
+                    provider: 1,
+                    sort: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname']
                 }
             }
             app_calendar.addEvent(events);
@@ -1186,15 +1241,15 @@ $(document).ready(async function() {
     // Calendar begin //
     // Timeline For Calendar begin //
     var app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'timelineDay',
+        initialView: 'hTimelineDay',
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timelineDay'
+            right: 'dayGridMonth,resourceTimeGridDay,hTimelineDay'
         },
         views: {
-            timelineDay: {
-                buttonText: 'Day',
+            hTimelineDay: {
+                buttonText: 'timeline',
                 content: function(props) {
                     return {
                         html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
@@ -1216,13 +1271,17 @@ $(document).ready(async function() {
                 }
             }
         },
+        dayMinWidth: 200,
         initialDate: TODAY,
         navLinks: true,
         selectable: true,
         selectMirror: true,
-        dayHeaders: false,
         slotDuration: {minutes: 5},
         scrollTime: '09:00:00',
+        allDaySlot: false,
+        editable: false,
+        dayMaxEvents: true,
+        nowIndicator: true,
         select: function (arg) {
             handleNewEvent(arg);
         },
@@ -1247,8 +1306,18 @@ $(document).ready(async function() {
                 domNodes: [el]
             }
         },
-        editable: false,
-        dayMaxEvents: true,
+        // Resource
+        resourceLabelContent: function(props) {
+            return {
+                domNodes: [getResourceContent({
+                    id: props.resource.id,
+                    name: props.resource.title,
+                    prov: props.resource._resource.extendedProps.prov,
+                    photo: props.resource._resource.extendedProps.photo
+                })]
+            }
+        },
+        resourceOrder: 'sort',
         datesSet: function(){
             selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
             load_data();
@@ -1316,6 +1385,9 @@ $(document).ready(async function() {
     const handleViewEvent = (data) => {
         viewAppointment(data.event.id)
     }
+
+    // 
+    $(".fc-license-message").hide()
     // Calendar end //
 
     // Appointment dashboad end //
