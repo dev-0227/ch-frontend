@@ -534,6 +534,26 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
     }
 });
 
+// Load Specialty
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "referral/getAppointmentSpecialtyByClinic", (xhr, err) => {
+    if (!err) {
+        specialty = JSON.parse(xhr.responseText)['data'];
+        var options = '';
+        for(var i=0;i<specialty.length;i++){
+            html = '<label class="form-check form-check-custom form-check-sm form-check-solid mb-3">';
+            html += '<input class="form-check-input specialty-check" type="checkbox" checked="checked" data-id="'+specialty[i]['id']+'" >';
+            html += '<span class="form-check-label text-gray-600 fw-semibold">';
+            html += specialty[i]['name'];
+            html += '</span></label>';
+            specialty[i]['ch'] = "1";
+            $("#specialty_list").append(html);
+
+            options += '<option value="'+specialty[i]['id']+'" >'+specialty[i]['name']+'</option>';
+        }
+        $("#appointment_search_specialty").html('<option value="0">All Specialties</option>' + options);
+    }
+});
+
 // Load Measure Data
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getMeasureObservation", (xhr, err) => {
     if (!err) {
