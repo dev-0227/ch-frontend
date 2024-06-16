@@ -767,7 +767,9 @@ $(document).ready(async function () {
 
           var available = clinic.split(',');
           var options = '';
-          for(var i = 0; i < available.length; i ++) options += `<option value = "`+clinics[available[i]]['id']+`" >`+clinics[available[i]]['name']+`</option>`;
+          for(var i = 0; i < available.length; i ++) {
+            options += `<option value = "`+clinics[available[i]]['id']+`" >`+clinics[available[i]]['name']+`</option>`;
+          }
           $("#rel_clinics").html(options);
 
           //

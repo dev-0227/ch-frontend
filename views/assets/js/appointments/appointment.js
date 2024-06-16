@@ -38,6 +38,8 @@ var specialty = []
 
 var __spec = 0
 
+var _cal_view_setting = 1
+
 var app_calendar = null
 var app_timeline = null
 
@@ -191,6 +193,7 @@ const getResourceContent = (item) => {
     `
     }
     $(".fc-col-header-cell-cushion").addClass('fc-scrollgrid-sync-inner')
+
     $(".fc-col-header-cell-cushion").removeClass('fc-col-header-cell-cushion')
     return el
 }
@@ -735,10 +738,21 @@ $(document).ready(async function() {
 
     $(document).on('change', '.doctor-check', function(e) {
         if (e.target.checked === false)
-            _inactive_items.doctor.push($(this).attr('data-id'))
+            if ($(this).attr('data-id') != '0') {
+                _inactive_items.doctor.push($(this).attr('data-id'))
+            } else {
+                _inactive_items.doctor = []
+                $('.doctor-check').each(function() {
+                    _inactive_items.doctor.push($(this).attr('data-id'))
+                })
+            }
         else {
-            var i = _inactive_items.doctor.indexOf($(this).attr('data-id'))
-            _inactive_items.doctor.splice(i, 1)
+            if ($(this).attr('data-id') != '0') {
+                var i = _inactive_items.doctor.indexOf($(this).attr('data-id'))
+                _inactive_items.doctor.splice(i, 1)
+            } else {
+                _inactive_items.doctor = []
+            }
         }
 
         load_data()
@@ -746,10 +760,21 @@ $(document).ready(async function() {
 
     $(document).on('change', '.specialist-check', function(e) {
         if (e.target.checked === false)
-            _inactive_items.specialist.push($(this).attr('data-id'))
+            if ($(this).attr('data-id') != '0') {
+                _inactive_items.specialist.push($(this).attr('data-id'))
+            } else {
+                _inactive_items.specialist = []
+                $('.specialist-check').each(function() {
+                    _inactive_items.specialist.push($(this).attr('data-id'))
+                })
+            }
         else {
-            var i = _inactive_items.specialist.indexOf($(this).attr('data-id'))
-            _inactive_items.specialist.splice(i, 1)
+            if ($(this).attr('data-id') != '0') {
+                var i = _inactive_items.specialist.indexOf($(this).attr('data-id'))
+                _inactive_items.specialist.splice(i, 1)
+            } else {
+                _inactive_items.specialist = []
+            }
         }
 
         load_data()
@@ -1325,81 +1350,118 @@ $(document).ready(async function() {
     }
     // Appointment dashboad begin //
     // Calendar begin //
-    app_calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,resourceTimeGridDay,hTimelineDay'
-        },
-        views: {
-            hTimelineDay: {
-                buttonText: 'timeline',
-                content: function(props) {
-                    return {
-                        html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
+    function createCalendar(view_setting) {
+        app_calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: view_setting.length ? view_setting[0] : 'unknown',
+            headerToolbar: {
+                left: 'prev,next,today',
+                center: 'title',
+                right: view_setting.join(',')
+            },
+            views: {
+                hTimelineDay: {
+                    buttonText: 'timeline',
+                    content: function(props) {
+                        return {
+                            html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
+                        }
+                    },
+                    didMount: () => {
+                        renderTimeline()
                     }
                 },
-                didMount: () => {
-                    renderTimeline()
+                unknown: {
+                    buttonText: 'unknown',
+                    content: function(props) {
+                        return {
+                            html: `<div></div>`
+                        }
+                    }
                 }
+            },
+            dayMinWidth: 210,
+            expandRows: true,
+            initialDate: TODAY,
+            navLinks: true,
+            selectable: true,
+            selectMirror: true,
+            slotDuration: {minutes: 5},
+            scrollTime: '09:00:00',
+            allDaySlot: false,
+            editable: false,
+            dayMaxEvents: true,
+            nowIndicator: true,
+            select: function (arg) {
+                handleNewEvent(arg);
+            },
+            eventClick: function (arg) {
+                handleViewEvent(arg);
+            },
+            eventContent: function(arg) {
+                var icon = ''
+                let el = document.createElement('div')
+                el.setAttribute('style', 'height: 100%;')
+                if (arg.event.extendedProps.provider === 1) {
+                    icon = 'fa-user-doctor'
+                } else if (arg.event.extendedProps.provider === 0) {
+                    icon = 'fa-house-medical'
+                }
+                el.innerHTML = `
+                    <div style="overflow: hidden;">
+                        <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
+                        <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
+                        <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
+                    </div>
+                `
+                return {
+                    domNodes: [el]
+                }
+            },
+            // Resource
+            resourceLabelContent: function(props) {
+                return {
+                    domNodes: [getResourceContent({
+                        id: props.resource.id,
+                        name: props.resource.title,
+                        prov: props.resource._resource.extendedProps.prov,
+                        photo: props.resource._resource.extendedProps.photo
+                    })]
+                }
+            },
+            resourceOrder: 'sort',
+            datesSet: function(){
+                selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
+                load_data();
+            },
+        });
+        app_calendar.render();
+
+        $(".fc-license-message").hide()
+    }
+
+    // Load Calendar View Setting Information AND create calendar
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid: localStorage.getItem('userid')}, 'manager/getapptview', (xhr, err) => {
+        if (!err) {
+            var _view_list = []
+            var result = JSON.parse(xhr.responseText)['data']
+            if (result.length) {
+                _cal_view_setting = result[0].appt_view_setting
             }
-        },
-        dayMinWidth: 210,
-        initialDate: TODAY,
-        navLinks: true,
-        selectable: true,
-        selectMirror: true,
-        slotDuration: {minutes: 5},
-        scrollTime: '09:00:00',
-        allDaySlot: false,
-        editable: false,
-        dayMaxEvents: true,
-        nowIndicator: true,
-        select: function (arg) {
-            handleNewEvent(arg);
-        },
-        eventClick: function (arg) {
-            handleViewEvent(arg);
-        },
-        eventContent: function(arg) {
-            var icon = ''
-            let el = document.createElement('div')
-            el.setAttribute('style', 'height: 100%;')
-            if (arg.event.extendedProps.provider === 1) {
-                icon = 'fa-user-doctor'
-            } else if (arg.event.extendedProps.provider === 0) {
-                icon = 'fa-house-medical'
+            if (_cal_view_setting % 2 === 0) {
+                $("#cal_view_month").prop('checked', true)
+                _view_list.push('dayGridMonth')
             }
-            el.innerHTML = `
-                <div style="overflow: hidden;">
-                    <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
-                    <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
-                    <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
-                </div>
-            `
-            return {
-                domNodes: [el]
+            if (_cal_view_setting % 3 === 0) {
+                $("#cal_view_day").prop('checked', true)
+                _view_list.push('resourceTimeGridDay')
             }
-        },
-        // Resource
-        resourceLabelContent: function(props) {
-            return {
-                domNodes: [getResourceContent({
-                    id: props.resource.id,
-                    name: props.resource.title,
-                    prov: props.resource._resource.extendedProps.prov,
-                    photo: props.resource._resource.extendedProps.photo
-                })]
+            if (_cal_view_setting % 5 === 0) {
+                $("#cal_view_timeline").prop('checked', true)
+                _view_list.push('hTimelineDay')
             }
-        },
-        resourceOrder: 'sort',
-        datesSet: function(){
-            selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
-            load_data();
-        },
-    });
-    app_calendar.render();
+            createCalendar(_view_list)
+        }
+    })
 
     const handleNewEvent = (data) => {
         __spec = 0
@@ -1461,8 +1523,30 @@ $(document).ready(async function() {
         viewAppointment(data.event.id)
     }
 
-    // 
-    $(".fc-license-message").hide()
+    $(document).on('change', '.setting-check', (e) => {
+        if (e.target.checked === true) {
+            _cal_view_setting *= e.target.value
+        } else {
+            _cal_view_setting /= e.target.value
+        }
+
+        _buttons = []
+        $('.setting-check').each(function() {
+            if ($(this)[0].checked == true)
+                _buttons.push($(this).attr('data-id'))
+        })
+        app_calendar.setOption('headerToolbar', {
+            left: 'prev,next,today',
+            center: 'title',
+            right: _buttons.join(',')
+        })
+        createCalendar(_buttons)
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {view: _cal_view_setting, userid: localStorage.getItem('userid')}, 'manager/setapptview', (xhr, err) => {
+            if (!err) {
+            }
+        })
+    })
+
     // Calendar end //
 
     // Appointment dashboad end //
