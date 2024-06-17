@@ -44,6 +44,7 @@ var app_calendar = null
 var app_timeline = null
 
 var _inactive_items = {
+    status: [],
     doctor: [],
     specialist: []
 }
@@ -573,39 +574,43 @@ function add_event(){
         // Month
         if (appointments[i]['provider'] == '0') {
             // for month
-            events = {
-                id: appointments[i]['id'],
-                title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
-                resourceId: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
-                start: s,
-                end: e,
-                className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
-                // Extended Props
-                address: appointments[i]['daddress'],
-                phone: appointments[i]['dphone'],
-                city: appointments[i]['dcity'],
-                zip: appointments[i]['dzip'],
-                provider: 0,
-                data_id: appointments[i]['id'],
-                sort: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname']
+            if (_inactive_items.status.indexOf(appointments[i]['status']) == -1) {
+                events = {
+                    id: appointments[i]['id'],
+                    title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                    resourceId: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
+                    start: s,
+                    end: e,
+                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                    // Extended Props
+                    address: appointments[i]['daddress'],
+                    phone: appointments[i]['dphone'],
+                    city: appointments[i]['dcity'],
+                    zip: appointments[i]['dzip'],
+                    provider: 0,
+                    data_id: appointments[i]['id'],
+                    sort: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname']
+                }
             }
         } else if (appointments[i]['provider'] === '1') {
             // for month
-            events = {
-                id: appointments[i]['id'],
-                title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
-                resourceId: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
-                start: s,
-                end: e,
-                className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
-                // Extended Props
-                address: appointments[i]['saddress'],
-                phone: appointments[i]['sphone'],
-                city: appointments[i]['scity'],
-                zip: appointments[i]['szip'],
-                provider: 1,
-                data_id: appointments[i]['id'],
-                sort: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname']
+            if (_inactive_items.status.indexOf(appointments[i]['status']) == -1) {
+                events = {
+                    id: appointments[i]['id'],
+                    title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
+                    resourceId: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
+                    start: s,
+                    end: e,
+                    className: "border border-danger border-0 bg-opacity-75 bg-"+bg+" text-inverse-primary",
+                    // Extended Props
+                    address: appointments[i]['saddress'],
+                    phone: appointments[i]['sphone'],
+                    city: appointments[i]['scity'],
+                    zip: appointments[i]['szip'],
+                    provider: 1,
+                    data_id: appointments[i]['id'],
+                    sort: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname']
+                }
             }
         }
         app_calendar.addEvent(events);
@@ -790,10 +795,21 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/app
     if (!err) {
         var result = JSON.parse(xhr.responseText)['data'];
         var options = ''
+        var html = ''
+
+        $("#status_list").html("");
+
         result.forEach(item => {
             options += `<option value='${item.id}'>${item.display}</option>`
+            html += `
+                <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">
+                    <input class="form-check-input status-check" type="checkbox" checked data-id="${item['id']}" >
+                    <span class="form-check-label text-gray-600 fw-semibold">${item['display']}</span>
+                </label>
+            `
         });
         $("#appointment_status").html(options)
+        $("#status_list").html(html)
     }
 });
 
@@ -940,6 +956,17 @@ $(document).ready(async function() {
             load_data();
         }, 1000 );
     });
+
+    $(document).on('change', '.status-check', function(e) {
+        if (e.target.checked === false)
+            _inactive_items.status.push($(this).attr('data-id'))
+        else {
+            var i = _inactive_items.status.indexOf($(this).attr('data-id'))
+            _inactive_items.status.splice(i, 1)
+        }
+
+        load_data()
+    })
 
     $(document).on('change', '.doctor-check', function(e) {
         if (e.target.checked === false)
