@@ -358,6 +358,112 @@ function setGroupResource() {
         }
     })
 }
+
+function renderTimeline() {
+    _options['maxHeight'] = $("#appointment_vistimeline").height()
+    var t = new Date(Date.now())
+    _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
+    _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
+    app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
+
+    app_timeline.on("scroll", debounce(groupFocus, 200));
+    app_timeline.on('select', (props) => {
+        if (props.items.length) {
+            viewAppointment(props.items[0])
+        }
+    })
+}
+
+function createCalendar(view_setting) {
+    if (app_calendar) app_calendar.destroy()
+
+    app_calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: view_setting.length ? view_setting[0] : 'unknown',
+        headerToolbar: {
+            left: 'prev,next,today',
+            center: 'title',
+            right: view_setting.join(',')
+        },
+        views: {
+            hTimelineDay: {
+                buttonText: 'timeline',
+                content: function(props) {
+                    return {
+                        html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
+                    }
+                },
+                didMount: () => {
+                    renderTimeline()
+                }
+            },
+            unknown: {
+                buttonText: 'unknown',
+                content: function(props) {
+                    return {
+                        html: `<div></div>`
+                    }
+                }
+            }
+        },
+        dayMinWidth: 210,
+        expandRows: true,
+        initialDate: TODAY,
+        navLinks: true,
+        selectable: true,
+        selectMirror: true,
+        slotDuration: {minutes: 5},
+        scrollTime: '09:00:00',
+        allDaySlot: false,
+        editable: false,
+        dayMaxEvents: true,
+        nowIndicator: true,
+        select: function (arg) {
+            handleNewEvent(arg);
+        },
+        eventClick: function (arg) {
+            handleViewEvent(arg);
+        },
+        eventContent: function(arg) {
+            var icon = ''
+            let el = document.createElement('div')
+            el.setAttribute('style', 'height: 100%;')
+            if (arg.event.extendedProps.provider === 1) {
+                icon = 'fa-user-doctor'
+            } else if (arg.event.extendedProps.provider === 0) {
+                icon = 'fa-house-medical'
+            }
+            el.innerHTML = `
+                <div style="overflow: hidden;">
+                    <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
+                    <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
+                    <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
+                </div>
+            `
+            return {
+                domNodes: [el]
+            }
+        },
+        // Resource
+        resourceLabelContent: function(props) {
+            return {
+                domNodes: [getResourceContent({
+                    id: props.resource.id,
+                    name: props.resource.title,
+                    prov: props.resource._resource.extendedProps.prov,
+                    photo: props.resource._resource.extendedProps.photo
+                })]
+            }
+        },
+        resourceOrder: 'sort',
+        datesSet: function(){
+            selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
+            load_data();
+        },
+    });
+    app_calendar.render();
+
+    $(".fc-license-message").hide()
+}
 // utils end //
 
 // Data Load begin //
@@ -1360,112 +1466,8 @@ $(document).ready(async function() {
         if (app_timeline) app_timeline.setOptions(_options)
     })
     //
-    function renderTimeline() {
-        _options['maxHeight'] = $("#appointment_vistimeline").height()
-        var t = new Date(Date.now())
-        _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
-        _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
-        app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
-
-        app_timeline.on("scroll", debounce(groupFocus, 200));
-        app_timeline.on('select', (props) => {
-            if (props.items.length) {
-                viewAppointment(props.items[0])
-            }
-        })
-    }
     // Appointment dashboad begin //
     // Calendar begin //
-    function createCalendar(view_setting) {
-        if (app_calendar) app_calendar.destroy()
-
-        app_calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: view_setting.length ? view_setting[0] : 'unknown',
-            headerToolbar: {
-                left: 'prev,next,today',
-                center: 'title',
-                right: view_setting.join(',')
-            },
-            views: {
-                hTimelineDay: {
-                    buttonText: 'timeline',
-                    content: function(props) {
-                        return {
-                            html: `<div id="appointment_vistimeline" style="height: 100%; max-height: 100%;"></div>`
-                        }
-                    },
-                    didMount: () => {
-                        renderTimeline()
-                    }
-                },
-                unknown: {
-                    buttonText: 'unknown',
-                    content: function(props) {
-                        return {
-                            html: `<div></div>`
-                        }
-                    }
-                }
-            },
-            dayMinWidth: 210,
-            expandRows: true,
-            initialDate: TODAY,
-            navLinks: true,
-            selectable: true,
-            selectMirror: true,
-            slotDuration: {minutes: 5},
-            scrollTime: '09:00:00',
-            allDaySlot: false,
-            editable: false,
-            dayMaxEvents: true,
-            nowIndicator: true,
-            select: function (arg) {
-                handleNewEvent(arg);
-            },
-            eventClick: function (arg) {
-                handleViewEvent(arg);
-            },
-            eventContent: function(arg) {
-                var icon = ''
-                let el = document.createElement('div')
-                el.setAttribute('style', 'height: 100%;')
-                if (arg.event.extendedProps.provider === 1) {
-                    icon = 'fa-user-doctor'
-                } else if (arg.event.extendedProps.provider === 0) {
-                    icon = 'fa-house-medical'
-                }
-                el.innerHTML = `
-                    <div style="overflow: hidden;">
-                        <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
-                        <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
-                        <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
-                    </div>
-                `
-                return {
-                    domNodes: [el]
-                }
-            },
-            // Resource
-            resourceLabelContent: function(props) {
-                return {
-                    domNodes: [getResourceContent({
-                        id: props.resource.id,
-                        name: props.resource.title,
-                        prov: props.resource._resource.extendedProps.prov,
-                        photo: props.resource._resource.extendedProps.photo
-                    })]
-                }
-            },
-            resourceOrder: 'sort',
-            datesSet: function(){
-                selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
-                load_data();
-            },
-        });
-        app_calendar.render();
-
-        $(".fc-license-message").hide()
-    }
 
     // Load Calendar View Setting Information AND create calendar
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid: localStorage.getItem('userid')}, 'manager/getapptview', (xhr, err) => {
