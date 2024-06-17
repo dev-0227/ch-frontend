@@ -582,6 +582,7 @@ function load_data(){
 // For Appointment Form begin //
 
 // Load Clinic Provider
+
 sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: localStorage.getItem('chosen_clinic')}, "provider/getProviderByClinic", (xhr, err) => {
     if (!err) {
         doctors = JSON.parse(xhr.responseText)['data'];
@@ -614,7 +615,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
         $("#appointment_clinic_provider").html(options);
         $("#appointment_clinic_provider").val(doctors[0]['id'])
 
-        if (app_calendar) createCalendar(app_calendar.getOption('headerToolbar').right)
+        if (app_calendar) createCalendar(app_calendar.getOption('headerToolbar').right.split(','))
     }
 });
 
@@ -647,7 +648,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
         })
         $("#specialist_list").html(html)
 
-        if (app_calendar) createCalendar(app_calendar.getOption('headerToolbar').right)
+        if (app_calendar) createCalendar(app_calendar.getOption('headerToolbar').right.split(','))
     }
 });
 
