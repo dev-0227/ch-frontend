@@ -143,8 +143,8 @@ const getGroupContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
         </div>
     `
     } else {
@@ -155,8 +155,8 @@ const getGroupContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
         </div>
     `
     }
@@ -175,8 +175,8 @@ const getResourceContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs- ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
         </div>
     `
     } else {
@@ -187,8 +187,8 @@ const getResourceContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
         </div>
     `
     }
