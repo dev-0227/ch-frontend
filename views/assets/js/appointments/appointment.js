@@ -143,7 +143,7 @@ const getGroupContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
         </div>
     `
@@ -155,7 +155,7 @@ const getGroupContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
         </div>
     `
@@ -175,7 +175,7 @@ const getResourceContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs- ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
         </div>
     `
@@ -187,7 +187,7 @@ const getResourceContent = (item) => {
             </div>
         </div>
         <div class="col-md-9">
-            <div class="fs-8"> ${item.prov == 0 ? 'Clinic Provider' : 'Specialist'}</div>
+            <div class="fs-8"> ${item.prov == 0 ? item.qualification : item.specialty}</div>
             <div class="fs-6 ${item.prov == 0 ? 'text-primary' : 'text-info'}"> ${item.name}</div>
         </div>
     `
@@ -342,6 +342,7 @@ function setGroupResource() {
                 photo: item.photo,
                 prov: 0,
                 data_id: item.id,
+                qualification: item.qualification
             })
         }
     })
@@ -354,6 +355,7 @@ function setGroupResource() {
                 photo: item.photo,
                 prov: 1,
                 data_id: item.id,
+                specialty: item.specialty
             })
         }
     })
@@ -517,7 +519,9 @@ function createCalendar(view_setting) {
                     id: props.resource.id,
                     name: props.resource.title,
                     prov: props.resource._resource.extendedProps.prov,
-                    photo: props.resource._resource.extendedProps.photo
+                    photo: props.resource._resource.extendedProps.photo,
+                    qualification: props.resource._resource.extendedProps.qualification,
+                    specialty: props.resource._resource.extendedProps.specialty
                 })]
             }
         },
@@ -669,6 +673,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
                 address: doctor.address,
                 phone: doctor.phone,
                 photo: doctor.photo,
+                qualification: doctor.qualification,
                 prov: 0
             })
 
@@ -709,6 +714,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
                 address: specialist.address,
                 phone: specialist.phone,
                 photo: specialist.photo,
+                specialty: specialist.specialty,
                 prov: 1
             })
 
