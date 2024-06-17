@@ -387,6 +387,10 @@ const handleNewEvent = (data) => {
     $("#appointment_clinic_name").html($("#chosen_clinics option:selected").text());
     $("#appointment_clinic").html(' | ' + $("#chosen_clinics option:selected").text());
 
+    $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
+    $("#appointment_clinic_provider").prop('disabled', true)
+    $("#appointment_specialist_external_provider").prop('disabled', false)
+
     $("#appointment_id").val('');
     $("#appointment_participate_status").val('needs-action');
     //check clinic provider or specialist
@@ -475,7 +479,7 @@ function createCalendar(view_setting) {
                 }
             }
         },
-        dayMinWidth: 210,
+        dayMinWidth: 225,
         expandRows: true,
         initialDate: TODAY,
         navLinks: true,
@@ -684,7 +688,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 
             html += `
                 <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">
-                    <input class="form-check-input doctor-check" type="checkbox" ${doctor['status'] == '1' ? c : ''} data-id="${doctor['id']}" >
+                    <input class="form-check-input doctor-check" type="checkbox" checked data-id="${doctor['id']}" >
                     <span class="form-check-label text-gray-600 fw-semibold">${doctor['fname']} ${doctor['lname']}</span>
                 </label>
             `
@@ -725,7 +729,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 
             html += `
                 <label class="form-check form-check-custom form-check-sm form-check-solid mb-3">
-                    <input class="form-check-input specialist-check" type="checkbox" ${specialist['status'] == '1' ? c : ''} data-id="${specialist['id']}" >
+                    <input class="form-check-input specialist-check" type="checkbox" checked data-id="${specialist['id']}" >
                     <span class="form-check-label text-gray-600 fw-semibold">${specialist['fname']} ${specialist['lname']}</span>
                 </label>
             `

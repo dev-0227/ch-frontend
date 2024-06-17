@@ -75,16 +75,18 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id:local
   if (!err) {
     let result = JSON.parse(xhr.responseText)['data'];
     for(var i in result){
-      var html='<li class="nav-item mt-2 mh-30px">';
-      html+= ' <a class="nav-link text-active-primary ms-0 me-10 py-5 referral-specialty-tab cursor-pointer';
-      if(i==0){
-        $("#referral_selected_specialty").val(result[i]['id']);
-        html+= ' active';
+      if (result[i].m_id != null) {
+        var html='<li class="nav-item mt-2 mh-30px">';
+        html+= ' <a class="nav-link text-active-primary ms-0 me-10 py-5 referral-specialty-tab cursor-pointer';
+        if(i==0){
+          $("#referral_selected_specialty").val(result[i]['id']);
+          html+= ' active';
+        }
+        html+= '" data-id="'+result[i]['id']+'">';
+        html+= result[i]['name'];
+        html+= '</a></li>';
+        $("#referral_specialty_tabs").append(html)
       }
-      html+= '" data-id="'+result[i]['id']+'">';
-      html+= result[i]['name'];
-      html+= '</a></li>';
-      $("#referral_specialty_tabs").append(html)
     }
     reload_referral();
 
@@ -609,9 +611,5 @@ $(document).on("click",".referral-pt-info-tab",function(){
   
 });
 
-
-
 document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
-document.write('<script src="/assets/js/hedis/appointmentModal.js" type="text/javascript"></script>');
-
-
+// document.write('<script src="/assets/js/appointments/appointment.js" type="text/javascript"></script>');

@@ -12,7 +12,8 @@
                 <i class="ki-duotone ki-eye fs-2">
                     <span class="path1"></span>
                     <span class="path2"></span>
-                    <span class="path3"></span></i>
+                    <span class="path3"></span>
+                </i>
             </button>
             <div  class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-150px py-3 mt-sm-2" data-kt-menu="true" >
                 <div class="p-4" id="view_list">
@@ -31,7 +32,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="me-0 me-2" id="pcp_select_button">
             <button class="btn  btn-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                 PCP
@@ -73,15 +73,14 @@
             <i class="ki-duotone ki-exit-up fs-2">
                 <span class="path1"></span>
                 <span class="path2"></span>
-            </i>Export</button>
-        
+            </i>
+            Export
+        </button>
     </div>
 </div>
-
 <div class="card mt-6 d-none" id="view_table">
     <div class="card-header border-0 d-flex align-items-center">
         <div class="card-title">
-            
         </div>
         <div class="card-options d-flex">
             <div class="d-flex align-items-center position-relative my-1 me-4">
@@ -91,173 +90,168 @@
                 </i>
                 <input id="referral_table_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13"  placeholder="Search referral" />
             </div>
-            
         </div>
     </div>
     <div class="card-body py-4">
-      <table class="table table-striped table-bordered text-nowrap w-100"  id="referral_tracking_table" >
-        <thead>
-          <tr >
-              <th width="15%">Insurance</th>
-              <th width="25%">Patient</th>
-              <th width="25%">Referral To</th>
-              <th width="20%">measure</th>
-              <th width="15%">Date</th>
-              <th width="10%">status</th>
-              <th width="15%" class="text-center col-md-3"></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+        <table class="table table-striped table-bordered text-nowrap w-100"  id="referral_tracking_table" >
+            <thead>
+                <tr >
+                    <th width="15%">Insurance</th>
+                    <th width="25%">Patient</th>
+                    <th width="25%">Referral To</th>
+                    <th width="20%">measure</th>
+                    <th width="15%">Date</th>
+                    <th width="10%">status</th>
+                    <th width="15%" class="text-center col-md-3"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
-  </div>
-  <div class="card mt-6 " id="view_excel">
+</div>
+<div class="card mt-6 " id="view_excel">
     <div class="card-body py-4 px-2">
         <div id="referral_excel" class="jexcel_modern w-100 overflow-auto min-h-500px"></div>
     </div>
-  </div>
-  <div class="card mt-6  d-none" id="view_timeline">
+</div>
+<div class="card mt-6  d-none" id="view_timeline">
     <div class="card-body py-4 px-2 ">
         <table  id="referral_time_line">
         </table>
     </div>
-  </div>
+</div>
 
-  <div class="modal fade" id="referral_view_modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document" >
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="referral_patient"></h5>
-				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+<div class="modal fade" id="referral_view_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document" >
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="referral_patient"></h5>
+            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+            </div>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" class="form-control" id="appt_category_id" >
+            <div class="row notice  bg-light-warning rounded border-warning border border-dashed p-4" id="referral_info">
+                <div class="col-md-12 d-flex mt-2">
+                    
+                    <label class="fw-semibold text-muted me-2">Gender:</label>
+                    <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_gender"></label>
+                    <label class="fw-semibold text-muted me-2">DOB:</label>
+                    <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_dob"></label>
+                    <label class="fw-semibold text-muted me-2">AGE:</label>
+                    <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_age"></label>
+                    <label class="fw-semibold text-muted me-2">Phone:</label>
+                    <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_phone"></label>
+                </div><div class="col-md-12 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Address:</label>
+                    <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_address"></label>
+                    
                 </div>
-			</div>
-			<div class="modal-body">
-                <input type="hidden" class="form-control" id="appt_category_id" >
-                <div class="row notice  bg-light-warning rounded border-warning border border-dashed p-4" id="referral_info">
-                    <div class="col-md-12 d-flex mt-2">
-                        
-                        <label class="fw-semibold text-muted me-2">Gender:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_gender"></label>
-                        <label class="fw-semibold text-muted me-2">DOB:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_dob"></label>
-                        <label class="fw-semibold text-muted me-2">AGE:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_age"></label>
-                        <label class="fw-semibold text-muted me-2">Phone:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-4" id="referral_pt_phone"></label>
-                    </div><div class="col-md-12 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Address:</label>
-                        <label class="fw-bold fs-6 text-gray-800 me-2" id="referral_pt_address"></label>
-                        
-                    </div>
-                    <div class="col-md-6 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Insurance:</label>
-                        <label class="fw-bold fs-6 text-gray-800" id="referral_insurance"></label>
-                    </div>
-                    <div class="col-md-6 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Measure:</label>
-                        <label class="fw-bold fs-6 text-gray-800" id="referral_measure"></label>
-                    </div>
-                    <div class="col-md-6 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Subscriber No:</label>
-                        <label class="fw-bold fs-6 text-gray-800" id="referral_subscriber"></label>
-                    </div>
-                    <div class="col-md-6 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Specialty:</label>
-                        <label class="fw-bold fs-6 text-gray-800" id="referral_specialty"></label>
-                    </div>
-                    <div class="col-md-6 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Referral To:</label>
-                        <label class="fw-bold fs-6 text-gray-800" id="referral_ref_to"></label>
-                    </div>
-                    <div class="col-md-6 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Specialist NPI:</label>
-                        <label class="fw-bold fs-6 text-gray-800" id="referral_spe_npi"></label>
-                    </div>
-                    <div class="col-md-12 d-flex mt-2">
-                        <label class="fw-semibold text-muted me-2">Reason:</label>
-                        <label class="fw-bold fs-6 text-gray-800" id="referral_reason"></label>
-                    </div>
+                <div class="col-md-6 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Insurance:</label>
+                    <label class="fw-bold fs-6 text-gray-800" id="referral_insurance"></label>
                 </div>
-                
-                <div class="row">    
-                    <div class="col-md-6 mt-4" id="referral_history_area">
-                        <div class="timeline" id="referral_history">
-                            <div class="timeline-item align-items-center mb-7">
-                                 <div class="timeline-line mt-1 mb-n6 mb-sm-n7"></div>
-                                
-                                <div class="timeline-icon">
-                                    <i class="ki-duotone ki-cd fs-2 text-danger">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </div>
-                                <div class="timeline-content m-0">
-                                    <span class="fs-6 text-gray-500 fw-semibold d-block"></span>
-                                    <span class="fs-6 fw-bold text-gray-800"></span>
-                                </div>
+                <div class="col-md-6 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Measure:</label>
+                    <label class="fw-bold fs-6 text-gray-800" id="referral_measure"></label>
+                </div>
+                <div class="col-md-6 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Subscriber No:</label>
+                    <label class="fw-bold fs-6 text-gray-800" id="referral_subscriber"></label>
+                </div>
+                <div class="col-md-6 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Specialty:</label>
+                    <label class="fw-bold fs-6 text-gray-800" id="referral_specialty"></label>
+                </div>
+                <div class="col-md-6 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Referral To:</label>
+                    <label class="fw-bold fs-6 text-gray-800" id="referral_ref_to"></label>
+                </div>
+                <div class="col-md-6 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Specialist NPI:</label>
+                    <label class="fw-bold fs-6 text-gray-800" id="referral_spe_npi"></label>
+                </div>
+                <div class="col-md-12 d-flex mt-2">
+                    <label class="fw-semibold text-muted me-2">Reason:</label>
+                    <label class="fw-bold fs-6 text-gray-800" id="referral_reason"></label>
+                </div>
+            </div>
+            
+            <div class="row">    
+                <div class="col-md-6 mt-4" id="referral_history_area">
+                    <div class="timeline" id="referral_history">
+                        <div class="timeline-item align-items-center mb-7">
+                                <div class="timeline-line mt-1 mb-n6 mb-sm-n7"></div>
+                            
+                            <div class="timeline-icon">
+                                <i class="ki-duotone ki-cd fs-2 text-danger">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </div>
+                            <div class="timeline-content m-0">
+                                <span class="fs-6 text-gray-500 fw-semibold d-block"></span>
+                                <span class="fs-6 fw-bold text-gray-800"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 mt-4" id="referral_status_area">
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="10" checked="checked"  data-category="0">
-                            <span class="form-check-label text-gray-600" >None</span>
-                        </label>
-                        <span class="fs-4 text-gray-500 fw-bolder pe-2">Referral Status</span>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="1" data-category="1">
-                            <span class="form-check-label text-gray-600" >No Referral</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="2" data-category="1">
-                            <span class="form-check-label text-gray-600">Open Referral</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="3" data-category="1">
-                            <span class="form-check-label text-gray-600" >Given to Patient</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="4" data-category="1">
-                            <span class="form-check-label text-gray-600">Sent to Specialist</span>
-                        </label>
-                        <span class="fs-4 text-gray-500 fw-bolder pe-2">Appointment Status</span>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="5" data-category="2">
-                            <span class="form-check-label text-gray-600" >Waiting Appointment</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="6" data-category="2">
-                            <span class="form-check-label text-gray-600">Appointment Scheduled</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="7" data-category="2" >
-                            <span class="form-check-label text-gray-600" >Patient Seen</span>
-                        </label>
-                        <span class="fs-4 text-gray-500 fw-bolder pe-2">Consult Status</span>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="8" data-category="3">
-                            <span class="form-check-label text-gray-600" >Consult Pending</span>
-                        </label>
-                        <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
-                            <input class="form-check-input provider-radio" type="radio" name="referral_status" value="9" data-category="3">
-                            <span class="form-check-label text-gray-600">Obtained Consult</span>
-                        </label>
-                        <div class="form-group">
-                            <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 card-front card-name " id="referral_status_date" />
-                        </div>
-                    </div>
-                    
                 </div>
-			</div>
-            <div class="modal-footer" id="referral_view_modal_footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="referral_tracking_create"><i class="fa fa-save">&nbsp;</i> Save</button>
+                <div class="col-md-6 mt-4" id="referral_status_area">
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="10" checked="checked"  data-category="0">
+                        <span class="form-check-label text-gray-600" >None</span>
+                    </label>
+                    <span class="fs-4 text-gray-500 fw-bolder pe-2">Referral Status</span>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="1" data-category="1">
+                        <span class="form-check-label text-gray-600" >No Referral</span>
+                    </label>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="2" data-category="1">
+                        <span class="form-check-label text-gray-600">Open Referral</span>
+                    </label>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="3" data-category="1">
+                        <span class="form-check-label text-gray-600" >Given to Patient</span>
+                    </label>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="4" data-category="1">
+                        <span class="form-check-label text-gray-600">Sent to Specialist</span>
+                    </label>
+                    <span class="fs-4 text-gray-500 fw-bolder pe-2">Appointment Status</span>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="5" data-category="2">
+                        <span class="form-check-label text-gray-600" >Waiting Appointment</span>
+                    </label>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="6" data-category="2">
+                        <span class="form-check-label text-gray-600">Appointment Scheduled</span>
+                    </label>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="7" data-category="2" >
+                        <span class="form-check-label text-gray-600" >Patient Seen</span>
+                    </label>
+                    <span class="fs-4 text-gray-500 fw-bolder pe-2">Consult Status</span>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="8" data-category="3">
+                        <span class="form-check-label text-gray-600" >Consult Pending</span>
+                    </label>
+                    <label class="form-check form-check-sm form-check-custom form-check-solid m-3">
+                        <input class="form-check-input provider-radio" type="radio" name="referral_status" value="9" data-category="3">
+                        <span class="form-check-label text-gray-600">Obtained Consult</span>
+                    </label>
+                    <div class="form-group">
+                        <input type="date" class="form-control form-control-solid mb-3 mb-lg-0 card-front card-name " id="referral_status_date" />
+                    </div>
+                </div>
+                
             </div>
-		</div>
-	</div>
+        </div>
+        <div class="modal-footer" id="referral_view_modal_footer">
+            <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+            <button type="button" class="btn btn-primary" id="referral_tracking_create"><i class="fa fa-save">&nbsp;</i> Save</button>
+        </div>
+    </div>
 </div>
-
-
-
-
+</div>

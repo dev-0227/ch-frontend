@@ -4,9 +4,8 @@ function getUrlVars() {
         vars[key] = value;
     });
     return vars;
-  }
-
-  function DateFormat(serial) {
+}
+function DateFormat(serial) {
     let year = serial.getFullYear();
     let month = serial.getMonth() + 1;
     let dt = serial.getDate();
@@ -18,8 +17,8 @@ function getUrlVars() {
         month = '0' + month;
     }
     return month+'/'+dt+'/'+year;
-  }
-  function deDateFormat(serial) {
+}
+function deDateFormat(serial) {
     let year = serial.getFullYear();
     let month = serial.getMonth() + 1;
     let dt = serial.getDate();
@@ -31,8 +30,7 @@ function getUrlVars() {
         month = '0' + month;
     }
     return year+'-'+month+'-'+dt;
-  }
-
+}
 
 $(document).ready(async function () {
     var doctors = []
@@ -69,7 +67,6 @@ $(document).ready(async function () {
         load_excel(data);
         load_time_line(data);
     }
-
     
     $("#referral_status_date").val(moment().format("YYYY-MM-DD"));
 
@@ -151,7 +148,6 @@ $(document).ready(async function () {
             }
         ],
     });
-    
 
     await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "user/getAllDoctorsByClinic", (xhr, err) => {
         if (!err) {
@@ -181,15 +177,11 @@ $(document).ready(async function () {
         if(selected_doctor!="")base_url += "&doctors="+selected_doctor;
         if(selected_date!="")base_url += "&range="+selected_date;
         referral_tracking_table.ajax.url(base_url).load();
-        
     }
-
-    
 
     $("#export_pdf").on("click", function() {
         referral_tracking_table.button( '.buttons-pdf' ).trigger();
     }); 
-
     
     $('#referral_table_search_input').on('keyup', function () {
     referral_tracking_table.search(this.value).draw();
@@ -228,8 +220,6 @@ $(document).ready(async function () {
         }
         $(".menu-sub-dropdown").removeClass("show");
     });
-
-    
 
     function load_time_line(data){
         var html = "";
@@ -295,7 +285,6 @@ $(document).ready(async function () {
         $("#referral_time_line").html(html);
     }
 
-
     $(document).on("click","#referral_tracking_create",function(){
         var entry = {
             referral_id: $("#referral_id").val(),
@@ -316,12 +305,6 @@ $(document).ready(async function () {
           });
         
     });
-
-    
-
-    
-
 });
 
 document.write('<script src="/assets/js/hedis/referralExcel.js" type="text/javascript"></script>');
-
