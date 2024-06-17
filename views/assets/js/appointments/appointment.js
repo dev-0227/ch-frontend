@@ -340,7 +340,8 @@ function setGroupResource() {
                 title: item.name,
                 // Extended Props
                 photo: item.photo,
-                prov: 0
+                prov: 0,
+                data_id: item.id,
             })
         }
     })
@@ -351,7 +352,8 @@ function setGroupResource() {
                 title: item.name,
                 // Extended Props
                 photo: item.photo,
-                prov: 1
+                prov: 1,
+                data_id: item.id,
             })
         }
     })
@@ -407,6 +409,7 @@ function add_event(){
                 city: appointments[i]['dcity'],
                 zip: appointments[i]['dzip'],
                 provider: 0,
+                data_id: appointments[i]['id'],
                 sort: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname']
             }
         } else if (appointments[i]['provider'] === '1') {
@@ -424,6 +427,7 @@ function add_event(){
                 city: appointments[i]['scity'],
                 zip: appointments[i]['szip'],
                 provider: 1,
+                data_id: appointments[i]['id'],
                 sort: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname']
             }
         }
@@ -503,6 +507,8 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 
         $("#appointment_clinic_provider").html(options);
         $("#appointment_clinic_provider").val(doctors[0]['id'])
+
+        if (app_calendar) createCalendar(app_calendar.getOption('headerToolbar').right)
     }
 });
 
@@ -534,6 +540,8 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
             `
         })
         $("#specialist_list").html(html)
+
+        if (app_calendar) createCalendar(app_calendar.getOption('headerToolbar').right)
     }
 });
 
@@ -667,18 +675,29 @@ $(document).ready(async function() {
         if($("#appointment_patient_id").val() == ""){
             toastr.info('Please select Patient');
             return;
-          }
-          if($("#appointment_reason").val() == ""){
+        }
+        if($("#appointment_reason").val() == ""){
             toastr.info('Please enter Reason');
             $("#appointment_reason").focus();
             return;
-          }
-          if($("#appointment_start_date").val() == ""){
+        }
+        if($("#appointment_start_date").val() == ""){
             toastr.info('Please enter Start Date');
             $("#appointment_start_date").focus();
             return;
-          }
-          let entry = {}
+        }
+        if ($('input[name="appointment_provider"]:checked').val() == '1') {
+            if ($("#appointment_specialist_external_provider").val() == null || $("#appointment_specialist_external_provider").val() < 1) {
+                toastr.info('Plelase select External Medical Provider')
+                return;
+            }
+        } else if ($('input[name="appointment_provider"]:checked').val() == '0') {
+            if ($("#appointment_clinic_provider").val() == null || $("#appointment_clinic_provider").val() < 1) {
+                toastr.info('Plelase select External Medical Provider')
+                return;
+            }
+        }
+        let entry = {}
         
           $('.form-control').each(function() {
             if($(this).data('field')!==undefined){
@@ -745,6 +764,7 @@ $(document).ready(async function() {
                 $('.doctor-check').each(function() {
                     _inactive_items.doctor.push($(this).attr('data-id'))
                 })
+                $("#pcp_select_button").hide()
             }
         else {
             if ($(this).attr('data-id') != '0') {
@@ -752,6 +772,7 @@ $(document).ready(async function() {
                 _inactive_items.doctor.splice(i, 1)
             } else {
                 _inactive_items.doctor = []
+                $("#pcp_select_button").show()
             }
         }
 
@@ -767,6 +788,8 @@ $(document).ready(async function() {
                 $('.specialist-check').each(function() {
                     _inactive_items.specialist.push($(this).attr('data-id'))
                 })
+                $("#specialist_select_button").hide()
+                $("#specialty_select_button").hide()
             }
         else {
             if ($(this).attr('data-id') != '0') {
@@ -774,11 +797,29 @@ $(document).ready(async function() {
                 _inactive_items.specialist.splice(i, 1)
             } else {
                 _inactive_items.specialist = []
+                $("#specialist_select_button").show()
+                $("#specialty_select_button").show()
             }
         }
 
         load_data()
     })
+
+    $(document).on("change",".specialty-check",function(){
+        if($(this).data("id")=="0"){
+            $(".specialty-check").prop("checked", $(this).prop("checked"));
+        }
+        if(!$(this).prop("checked"))$("#specialty_check_all").prop("checked", false);
+        var specialty = $(".specialty-check").map(function() {
+            if($(this).prop("checked")){
+                return $(this).data("id")
+            }
+        }).get();
+        specialties = specialty.join();
+        specialties = specialties.split(",")[0]=="0"?"0":specialties;
+        load_data()
+        
+    });
 
     // Patient Search begin //
     $(".menu-item").click(function (e) {
@@ -908,7 +949,7 @@ $(document).ready(async function() {
     })
     
     $("#appointment_status").on('change', (e) => {
-        if (e.target.value === '7' || e.target.value === '11' || e.target.value === '12') {
+        if (e.target.value == '6' || e.target.value === '7' || e.target.value === '11' || e.target.value === '12') {
             $("#appointment_barrier_reason").prop('disabled', false)
             // $("#appointment_barrier_date").prop('disabled', false)
         } else {
@@ -1197,21 +1238,6 @@ $(document).ready(async function() {
     })
     
     // Appointment Search Form end //
-    $(document).on("change",".specialty-check",function(){
-        if($(this).data("id")=="0"){
-            $(".specialty-check").prop("checked", $(this).prop("checked"));
-        }
-        if(!$(this).prop("checked"))$("#specialty_check_all").prop("checked", false);
-        var specialty = $(".specialty-check").map(function() {
-            if($(this).prop("checked")){
-                return $(this).data("id")
-            }
-        }).get();
-        specialties = specialty.join();
-        specialties = specialties.split(",")[0]=="0"?"0":specialties;
-        load_data()
-        
-    });
 
     // $(document).on("change",".doctor-check",function(){
     //     selected_doctor= "";
@@ -1331,7 +1357,7 @@ $(document).ready(async function() {
     //
     addEventListener('resize', (e) => {
         _options['maxHeight'] = $("#appointment_vistimeline").height()
-        app_timeline.setOptions(_options)
+        if (app_timeline) app_timeline.setOptions(_options)
     })
     //
     function renderTimeline() {
@@ -1351,6 +1377,8 @@ $(document).ready(async function() {
     // Appointment dashboad begin //
     // Calendar begin //
     function createCalendar(view_setting) {
+        if (app_calendar) app_calendar.destroy()
+
         app_calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: view_setting.length ? view_setting[0] : 'unknown',
             headerToolbar: {
@@ -1464,6 +1492,7 @@ $(document).ready(async function() {
     })
 
     const handleNewEvent = (data) => {
+        console.log(data)
         __spec = 0
         $(".appt-list").addClass('d-none');
         $("#appointment_patient_info").addClass('d-none');
@@ -1490,11 +1519,18 @@ $(document).ready(async function() {
 
         $("#appointment_id").val('');
         $("#appointment_participate_status").val('needs-action');
-        $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", false);
-        $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
-        $("#appointment_specialist_external_provider").prop("disabled", false);
-        $("#appointment_clinic_provider").prop("disabled", true);
-        $("#appointment_clinic_provider").val("");
+        //check clinic provider or specialist
+        if (data.resource != null && data.resource._resource.id.substr(0, 2) == 'D_') {
+            $('input[name="appointment_provider"]').filter('[value="0"]').prop("checked", true);
+            $("#appointment_clinic_provider").prop('disabled', false)
+            $("#appointment_specialist_external_provider").prop('disabled', true)
+            $("#appointment_clinic_provider").val(data.resource._resource.extendedProps.data_id).trigger('change')
+        } else if (data.resource != null && data.resource._resource.id.substr(0, 2) == 'S_') {
+            $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
+            $("#appointment_clinic_provider").prop('disabled', true)
+            $("#appointment_specialist_external_provider").prop('disabled', false)
+            $("#appointment_specialist_external_provider").val(data.resource._resource.extendedProps.data_id).trigger('change')
+        }
         $("#appointment_attended").prop('checked', false);
         $("#appointment_status").val('2').trigger('change');
         $("#appointment_reason").val('')
