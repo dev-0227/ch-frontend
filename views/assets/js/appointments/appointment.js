@@ -572,9 +572,9 @@ function add_event(){
         if(appointments[i]['attended']=="1") bg = 'success';
 
         // Month
-        if (appointments[i]['provider'] == '0') {
-            // for month
-            if (_inactive_items.status.indexOf(appointments[i]['status']) == -1) {
+        if (_inactive_items.status.indexOf(appointments[i]['status']) == -1) {
+            if (appointments[i]['provider'] == '0') {
+                // for month
                 events = {
                     id: appointments[i]['id'],
                     title: appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname'],
@@ -591,10 +591,8 @@ function add_event(){
                     data_id: appointments[i]['id'],
                     sort: 'D_' + appointments[i]['doctor_fname']+' '+appointments[i]['doctor_lname']
                 }
-            }
-        } else if (appointments[i]['provider'] === '1') {
-            // for month
-            if (_inactive_items.status.indexOf(appointments[i]['status']) == -1) {
+            } else if (appointments[i]['provider'] === '1') {
+                // for month
                 events = {
                     id: appointments[i]['id'],
                     title: appointments[i]['spec_fname']+' '+appointments[i]['spec_lname'],
@@ -612,18 +610,20 @@ function add_event(){
                     sort: 'S_' + appointments[i]['spec_fname']+' '+appointments[i]['spec_lname']
                 }
             }
+            app_calendar.addEvent(events);
         }
-        app_calendar.addEvent(events);
 
         // For Day
-        _items.add({
-            id: appointments[i].id,
-            group: appointments[i].provider == '0' ? appointments[i].doctor_fname + ' ' + appointments[i].doctor_lname : appointments[i].spec_fname + ' ' + appointments[i].spec_lname,
-            start: s,
-            end: e,
-            style: appointments[i].attended == 0 ? 'background-color: #87CEFA40;' : 'background-color: #98FB9890;',
-            content: getItemContent(appointments[i])
-        })
+        if (_inactive_items.status.indexOf(appointments[i]['status']) == -1) {
+            _items.add({
+                id: appointments[i].id,
+                group: appointments[i].provider == '0' ? appointments[i].doctor_fname + ' ' + appointments[i].doctor_lname : appointments[i].spec_fname + ' ' + appointments[i].spec_lname,
+                start: s,
+                end: e,
+                style: appointments[i].attended == 0 ? 'background-color: #87CEFA40;' : 'background-color: #98FB9890;',
+                content: getItemContent(appointments[i])
+            })
+        }
     }
 
     if (app_timeline != null) {
