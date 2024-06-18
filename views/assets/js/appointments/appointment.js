@@ -556,7 +556,7 @@ function loadSpecialistProviderByMeasureId(mid) {
           $("#appointment_specialist_external_provider").html(options);
           if (result.length) {
                 if (__spec == 0) __spec = result[0]['id']
-                $("#appointment_specialist_external_provider").val(__spec).trigger('change')
+                $("#appointment_specialist_external_provider").val(result[0]['id']).trigger('change')
             }
         }
     });
@@ -764,6 +764,19 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinic_id: loca
 sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "hedissetting/getMeasureObservation", (xhr, err) => {
     if (!err) {
         observation = JSON.parse(xhr.responseText)['data'];
+        if (observation.length) {
+            var m = $("#appointment_measure").val()
+            observation.forEach(o => {
+                if (o.m_id == m) {
+                    var icds = JSON.parse(o.ICD)
+                    var options = ''
+                    icds.forEach(icd => {
+                        options += '<option value="'+icd.value+'" >'+icd.code+'</option>'
+                    })
+                    $("#appointment_assessment").html(options)
+                }
+            })
+        }
     }
 });
 
@@ -775,9 +788,9 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $
         options += '<option value="'+measure[i]['measureId']+'" >'+measure[i]['measureId']+' - '+measure[i]['title']+'</option>';
       }
       $("#appointment_measure").html(options);
-      // $("#appointment_measure").val(measure[0]['measureId']).trigger('change');
       if (measure.length > 0) {
         loadSpecialistProviderByMeasureId(measure[0]['measureId'])
+        $("#appointment_measure").val(measure[0].measureId).trigger('change')
       }
     }
 });
@@ -1179,7 +1192,7 @@ $(document).ready(async function() {
         $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
         $("#appointment_assessment").html("");
         for(var i=0; i<observation.length; i++){
-            if(observation[i]['m_id'] == e.target.val){
+            if(observation[i]['m_id'] == e.target.value){
                 try{
                     var icd = JSON.parse(observation[i]['ICD']);
                     var options = '';
