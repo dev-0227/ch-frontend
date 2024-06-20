@@ -731,6 +731,69 @@ function fillReferralDocument(data) {
     return data.mfname + ' ' + data.mlname
 }
 
+function generateDocument(filename) {
+    setTimeout( function () {
+        // Make Referral Document
+        function filter (node) {
+            return (node.tagName !== 'i');
+        }
+        var hti = window.htmlToImage
+        let el = $(".document-page")
+        new Promise((resolve, reject) => {
+            var images = []
+            var val = 0
+            for (var i = 0; i < el.length; i ++) {
+                hti.toJpeg(el[i], {filter: filter}).then(image => {
+                    val ++
+                    images.push({
+                        id: val,
+                        image: image
+                    })
+                    if (val == el.length) resolve(images.reverse())
+                })
+            }
+        }).then(resolve => {
+            var pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'letter',
+                pagesplit: true
+            })
+            pdf.output('datauri')
+            for (var i = 0; i < resolve.length; i ++) {
+                if (i > 0) pdf.addPage('letter', 'portrait')
+                pdf.addImage(resolve[i].image, 'JPEG', 0, 0)
+            }
+            pdf.save(filename + '.pdf')
+            hideLoading()
+            $("#referral-document-modal").modal('hide')
+        }).then(reject => {
+            console.log(reject)
+            $("#referral-document-modal").modal('hide')
+        })
+    }, 500 );
+}
+
+function showLoading(text) {
+    const loadingEl = document.createElement("div")
+    document.body.prepend(loadingEl)
+    loadingEl.classList.add("page-loader")
+    loadingEl.classList.add("flex-column")
+    loadingEl.classList.add("bg-dark")
+    loadingEl.classList.add("bg-opacity-50")
+    loadingEl.innerHTML = `
+        <span class="spinner-border text-primary" role="status"></span>
+        <span class="text-gray-200 fs-1 fw-semibold mt-5">${text}</span>
+    `
+
+    // Show page loading
+    KTApp.showPageLoading()
+}
+
+function hideLoading() {
+    KTApp.hidePageLoading()
+}
+
 // For Appointment Form begin //
 
 // Load Clinic Provider
@@ -1041,6 +1104,9 @@ $(document).ready(async function() {
                                 filename = fillReferralDocument(datas[0])
 
                                 $("#referral-document-modal").modal('show')
+
+                                showLoading('Generating Document...')
+                                generateDocument(filename)
                             }
                         })
                     }
@@ -1061,6 +1127,9 @@ $(document).ready(async function() {
                             filename = fillReferralDocument(result[0])
 
                             $("#referral-document-modal").modal('show')
+
+                            showLoading('Generating Document...')
+                            generateDocument(filename)
                         }
                     })
                 } else {
@@ -1068,47 +1137,10 @@ $(document).ready(async function() {
                 }
             });
         }
-        setTimeout( function () {
-            load_data()
 
-            // Make Referral Document
-            function filter (node) {
-                return (node.tagName !== 'i');
-            }
-            var hti = window.htmlToImage
-            let el = $(".document-page")
-            new Promise((resolve, reject) => {
-                var images = []
-                var val = 0
-                for (var i = 0; i < el.length; i ++) {
-                    hti.toJpeg(el[i], {filter: filter}).then(image => {
-                        val ++
-                        images.push({
-                            id: val,
-                            image: image
-                        })
-                        if (val == el.length) resolve(images.reverse())
-                    })
-                }
-            }).then(resolve => {
-                var pdf = new jsPDF({
-                    orientation: 'p',
-                    unit: 'mm',
-                    format: 'letter',
-                    pagesplit: true
-                })
-                pdf.output('datauri')
-                for (var i = 0; i < resolve.length; i ++) {
-                    if (i > 0) pdf.addPage('letter', 'portrait')
-                    pdf.addImage(resolve[i].image, 'JPEG', 0, 0)
-                }
-                pdf.save(filename + '.pdf')
-                $("#referral-document-modal").modal('hide')
-            }).then(reject => {
-                console.log(reject)
-                $("#referral-document-modal").modal('hide')
-            })
-        }, 1000 );
+        setTimeout(() => {
+            load_data()
+        }, 1000)
     });
 
     $(document).on('change', '.status-check', function(e) {
