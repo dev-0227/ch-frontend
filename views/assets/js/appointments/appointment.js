@@ -560,8 +560,7 @@ function loadSpecialistProviderByMeasureId(mid) {
           }
           $("#appointment_specialist_external_provider").html(options);
           if (result.length) {
-                if (__spec == 0) __spec = result[0]['id']
-                $("#appointment_specialist_external_provider").val(result[0]['id']).trigger('change')
+                $("#appointment_specialist_external_provider").val(__spec).trigger('change')
             }
         }
     });
