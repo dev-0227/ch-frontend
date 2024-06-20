@@ -512,7 +512,7 @@ function createCalendar(view_setting) {
                 icon = 'fa-house-medical'
             }
             el.innerHTML = `
-                <div style="overflow: hidden;">
+                <div class="px-2" style="overflow: hidden;">
                     <div class="text-white fs-6"><i class="fa fa-light fa-thin ${icon} text-white"></i> ${arg.event.title}</div>
                     <div class="fs-8"><i class="fa fa-location-dot text-white"></i> ${arg.event.extendedProps.address ? arg.event.extendedProps.address : ''} ${arg.event.extendedProps.city ? arg.event.extendedProps.city : ''}</div>
                     <div class="fs-8"><i class="fa fa-phone text-white"></i> ${arg.event.extendedProps.phone ? arg.event.extendedProps.phone : ''}</div>
