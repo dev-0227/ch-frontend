@@ -1026,18 +1026,19 @@ $(document).ready(async function() {
         if($("#appointment_id").val()==""){
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/create", (xhr, err) => {
                 if (!err) {
-                    var result = JSON.parse(xhr.responseText)
+                    var result = JSON.parse(xhr.responseText)['data']
                     if(result['message'] == "exist") {
                         toastr.info("Appointment is exist");
                     } else {
                         $("#appointment_edit_modal-1").modal("hide");
                         toastr.success("Appointment is added successfully!");
 
-                        sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: result['insertId']}, 'appointment/referraldoc', (xhr, err) => {
+                        console.log({id: result['insertId'], userid: localStorage.getItem('userid')})
+                        sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: result['insertId'], userid: localStorage.getItem('userid')}, 'referral/appointment/referraldoc', (xhr, err) => {
                             if (!err) {
-                                var result = JSON.parse(xhr.responseText)
+                                var datas = JSON.parse(xhr.responseText)['data']
 
-                                filename = fillReferralDocument(result)
+                                filename = fillReferralDocument(datas[0])
 
                                 $("#referral-document-modal").modal('show')
                             }
