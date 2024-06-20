@@ -11,6 +11,7 @@ const hedis = require('./routes/hedis');
 const patients = require('./routes/patients');
 const insurance = require('./routes/insurance');
 const database = require('./routes/database');
+const exp = require('constants');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
