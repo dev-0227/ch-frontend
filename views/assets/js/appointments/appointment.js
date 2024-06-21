@@ -705,6 +705,7 @@ function fillReferralDocument(data) {
     // referral reason
     $("#referral_reason").html(data.areason)
     $("#referral_note").html(data.anote)
+    $("#referral_diagnosis").html(data.hicd + ' ' + data.qtitle)
     $("#referral_status").html(data.a_sdisplay)
     $("#referral_priority").html(data.a_pdisplay)
     $("#referral_start_date").html(data.astartd)
