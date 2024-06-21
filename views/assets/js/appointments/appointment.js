@@ -369,6 +369,7 @@ function setGroupResource() {
 }
 
 const handleNewEvent = (data) => {
+    $("#appt_generate_btn").addClass('d-none')
     __spec = 0
     $(".appt-list").addClass('d-none');
     $("#appointment_patient_info").addClass('d-none');
@@ -395,6 +396,7 @@ const handleNewEvent = (data) => {
 
     $('input[name="appointment_provider"]').filter('[value="1"]').prop("checked", true);
     $("#appointment_clinic_provider").prop('disabled', true)
+    $("#appointment_clinic_provider").val(doctors.length ? doctors[0]['id'] : '').trigger('change')
     $("#appointment_specialist_external_provider").prop('disabled', false)
 
     $("#appointment_id").val('');
@@ -435,6 +437,7 @@ const handleNewEvent = (data) => {
 }
 
 const handleViewEvent = (data) => {
+    $("#appt_generate_btn").removeClass('d-none')
     viewAppointment(data.event.id)
 }
 
@@ -557,9 +560,10 @@ function loadSpecialistProviderByMeasureId(mid) {
             for(var i=0; i<result.length; i++) {
                 options += `<option value='${result[i]['id']}'>${result[i]['fname']} ${result[i]['lname']}</option>`
                 _externProvider.push(result[i]['id'].toString())
-          }
-          $("#appointment_specialist_external_provider").html(options);
-          if (result.length) {
+            }
+            $("#appointment_specialist_external_provider").html(options);
+            if (result.length) {
+                if (_externProvider.indexOf(__spec) == -1) __spec = result[0]['id']
                 $("#appointment_specialist_external_provider").val(__spec).trigger('change')
             }
         }
@@ -667,12 +671,12 @@ function fillReferralDocument(data) {
     //header
     $("#referral_title").html(data.aprovider == '1' ? data.sspecialty : data.dspecialty)
     var now = new Date(Date.now())
-    $("#referral_date").html(`${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`)
+    $("#referral_date").html(`${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`)
     $("#header_name").html(data.pfname + ' ' + data.plname)
     var pdob = new Date(data.pdob)
-    $("#header_dob").html(`${pdob.getMonth()}/${pdob.getDate()}/${pdob.getFullYear()}`)
+    $("#header_dob").html(`${pdob.getMonth() + 1}/${pdob.getDate()}/${pdob.getFullYear()}`)
     $("#header_gender").html(data.pgender)
-    $("#header_language").html(data.planguage)
+    $("#header_language").html(data.planguage ? data.planguage : 'English')
     $("#header_clinic_name").html(data.cname)
     $("#header_clinic_address").html(data.caddress)
     $("#header_clinic_state").html(data.cstate)
@@ -687,12 +691,10 @@ function fillReferralDocument(data) {
     $("#specialist_address").html(data.aprovider == '1' ? data.saddress : data.daddress)
     $("#specialist_location").html(data.aprovider == '1' ? data.scity + ' ' + data.sstate + ' ' + data.szip : data.dcity + ' ' + data.dstate + ' ' + data.dzip)
     $("#specialist_phone").html(data.aprovider == '1' ? data.sphone : data.dphone)
-    $("#specialist_fax").html(data.aprovider == '1' ? data.sfax : '')
-    $("#specialist_email").html(data.aprovider == '1' ? data.semail : data.demail)
-    $("#specialist_web").html(data.aprovider == '1' ? data.sweb : '')
+    $("#specialist_fax").html(data.sfax)
     // clinic provider
     $("#referral_clinic_name").html(data.cname)
-    $("#pcp_name").html(data.mfname + ' ' + data.mlname)
+    $("#pcp_name").html(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
     $("#pcp_npi").html(data.cnpi)
     $("#pcp_address").html(data.caddress)
     $("#pcp_location").html(data.ccity + ' ' + data.cstate + ' ' + data.czip)
@@ -712,7 +714,7 @@ function fillReferralDocument(data) {
     $("#referral_spec_note").html('')
     // patient info
     $("#patient_name").html(data.pfname + ' ' + data.plname)
-    $("#patient_dob").html(`${pdob.getMonth()}/${pdob.getDate()}/${pdob.getFullYear()}`)
+    $("#patient_dob").html(`${pdob.getMonth() + 1}/${pdob.getDate()}/${pdob.getFullYear()}`)
     $("#patient_gender").html(data.pgender)
     $("#patient_language").html(data.planguage)
     $("#patient_address").html(data.paddress)
@@ -722,10 +724,10 @@ function fillReferralDocument(data) {
     $("#insurance_no").html('')
     $("#communication_need").html('')
     //provider
-    $("#provider_npi").html(data.mnpi)
-    $("#provider_name").html(data.mfname + ' ' + data.mlname)
-    $("#referral_create_date").html(`${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`)
-    $("#referral_create_time").html(`${now.getHours()}:${now.getMinutes()}`)
+    $("#provider_npi").html(data.aprovider == '1' ? data.snpi : data.dnpi)
+    $("#provider_name").html(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
+    $("#referral_create_date").html(`${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`)
+    $("#referral_create_time").html(`${now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'})} EST`)
 
     return data.mfname + ' ' + data.mlname
 }
@@ -1083,8 +1085,6 @@ $(document).ready(async function() {
         entry['npi'] = $("#appt_spec_npi").val()
         entry['assessment'] = $("#appointment_assessment").val()
 
-        var filename = 'document'
-
         if($("#appointment_id").val()==""){
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "referral/appointment/create", (xhr, err) => {
                 if (!err) {
@@ -1094,20 +1094,6 @@ $(document).ready(async function() {
                     } else {
                         $("#appointment_edit_modal-1").modal("hide");
                         toastr.success("Appointment is added successfully!");
-
-                        console.log({id: result['insertId'], userid: localStorage.getItem('userid')})
-                        sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: result['insertId'], userid: localStorage.getItem('userid')}, 'referral/appointment/referraldoc', (xhr, err) => {
-                            if (!err) {
-                                var datas = JSON.parse(xhr.responseText)['data']
-
-                                filename = fillReferralDocument(datas[0])
-
-                                $("#referral-document-modal").modal('show')
-
-                                showLoading('Generating Document...')
-                                generateDocument(filename)
-                            }
-                        })
                     }
                 } else {
                     return toastr.error("Action Failed");
@@ -1118,19 +1104,6 @@ $(document).ready(async function() {
                 if (!err) {
                     $("#appointment_edit_modal-1").modal("hide");
                     toastr.success("Appointment is updated successfully!");
-
-                    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: entry.id, userid: localStorage.getItem('userid')}, 'referral/appointment/referraldoc', (xhr, err) => {
-                        if (!err) {
-                            var result = JSON.parse(xhr.responseText)['data']
-                            
-                            filename = fillReferralDocument(result[0])
-
-                            $("#referral-document-modal").modal('show')
-
-                            showLoading('Generating Document...')
-                            generateDocument(filename)
-                        }
-                    })
                 } else {
                     return toastr.error("Action Failed");
                 }
@@ -1141,6 +1114,23 @@ $(document).ready(async function() {
             load_data()
         }, 1000)
     });
+
+    $("#appt_generate_btn").click(function(e) {
+        $("#appointment_edit_modal-1").modal("hide");
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $("#appointment_id").val(), userid: localStorage.getItem('userid')}, 'referral/appointment/referraldoc', (xhr, err) => {
+            if (!err) {
+                var datas = JSON.parse(xhr.responseText)['data']
+
+                var filename = 'document'
+                filename = fillReferralDocument(datas[0])
+
+                $("#referral-document-modal").modal('show')
+
+                showLoading('Generating Document...')
+                generateDocument(filename)
+            }
+        })
+    })
 
     $(document).on('change', '.status-check', function(e) {
         if (e.target.checked === false)
@@ -1485,6 +1475,7 @@ $(document).ready(async function() {
     // event end //
 
     $("#appt_new_button").click(function (e) {
+        $("#appt_generate_btn").addClass('d-none')
 
         $(".appt-list").addClass('d-none');
         $("#appointment_patient_info").addClass('d-none');

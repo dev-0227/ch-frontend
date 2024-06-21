@@ -468,8 +468,9 @@
 				</div>
 			</div>
 			<div class="modal-footer mt-8">
-				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+				<button type="button" class="btn btn-info" id="appt_generate_btn"><i class="fa fa-thin fa-file-invoice">&nbsp;</i> Generate</button>
 				<button type="button" class="btn btn-primary" id="appt_save_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
 			</div>
 		</div>
 	</div>
@@ -573,10 +574,12 @@
 									</div>
 								</div>
 								<div class="doc-title-justify mb-1">
-									<div>
-										<i class="fa fa-phone text-primary"></i> 
-										<span id="header_clinic_phone"></span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; 
-										<span class="text-primary">Fax:</span><span id="header_clinic_fax"></span>
+									<div style="display:flex; justify-content: start; width: 100%;">
+										<div style="width: 25%;">
+											<i class="fa fa-phone text-primary"></i> 
+											<span id="header_clinic_phone"></span>
+										</div>
+										<div style="width: 25%;"><span id="header_clinic_fax_parent" class="text-primary">Fax:</span><span id="header_clinic_fax"></span></div>
 									</div>
 								</div>
 							</div>
@@ -589,19 +592,29 @@
 									<div><i class="fa fa-thin fa-map-location-dot text-primary"></i> <span id="specialist_address"></span></div>
 									<div><i class="fa fa-thin fa-location text-primary"></i> <span id="specialist_location"></span></div>
 									<div class="doc-title-justify">
-										<div>
-											<i class="fa fa-phone text-primary"></i> 
-											<span id="specialist_phone"></span> | 
-											<i class="fa fa-thin fa-fax text-primary"></i> 
-											<span id="specialist_fax"></span>
+										<div style="display:flex; justify-content: start; width: 100%;">
+											<div style="min-width: 25%;">
+												<i class="fa fa-phone text-primary"></i> 
+												<span id="specialist_phone"></span>  
+											</div>
+											<div style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<i id="specialist_fax_i" class="fa fa-thin fa-fax text-primary"></i> 
+												<span id="specialist_fax"></span>
+											</div>
 										</div>
 									</div>
 									<div class="doc-title-justify fs-7" style="font-family: 'Comic Sans MS';">
-										<div>
-											<i class="fa fa-thin fa-at text-primary"></i>
-											<span id="specialist_email"></span> | 
-											<i class="fa fa-thin fa-globe text-primary mr-1"></i>
-											<span id="specialist_web"></span>
+										<div style="display:flex; justify-content: start; width: 100%;">
+											<div style="min-width: 25%;">
+												<i id="specialist_email_i" class="fa fa-thin fa-at text-primary"></i>
+												<span id="specialist_email"></span>
+											</div>	
+											<div style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<i id="specialist_web_i" class="fa fa-thin fa-globe text-primary mr-1"></i>
+												<span id="specialist_web"></span>
+											</div>
 										</div>
 									</div> 
 								</div>
@@ -612,19 +625,29 @@
 									<div><i class="fa fa-thin fa-map-location-dot text-primary"></i> <span id="pcp_address"></span></div>
 									<div><i class="fa fa-thin fa-location text-primary"></i> <span id="pcp_location"></span></div>
 									<div class="doc-title-justify">
-										<div>
-											<i class="fa fa-phone text-primary"></i> 
-											<span id="pcp_phone"></span> | 
-											<i class="fa fa-thin fa-fax text-primary"></i> 
-											<span id="pcp_fax"></span>
+										<div style="display:flex; justify-content: start; width: 100%;">
+											<div style="min-width: 25%;">
+												<i class="fa fa-phone text-primary"></i> 
+												<span id="pcp_phone"></span>
+											</div>
+											<div style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<i class="fa fa-thin fa-fax text-primary"></i> 
+												<span id="pcp_fax"></span>
+											</div> 
 										</div>
 									</div>
 									<div class="doc-title-justify fs-6" style="font-family: 'Comic Sans MS';">
-										<div>
-											<i class="fa fa-thin fa-at text-primary"></i>
-											<span id="pcp_email"></span> | 
-											<i class="fa fa-thin fa-globe text-primary mr-1"></i>
-											<span id="pcp_web"></span>
+										<div style="display:flex; justify-content: start; width: 100%;">
+											<div style="min-width: 25%;">
+												<i class="fa fa-thin fa-at text-primary"></i>
+												<span id="pcp_email"></span>
+											</div>
+											<div style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<i class="fa fa-thin fa-globe text-primary mr-1"></i>
+												<span id="pcp_web"></span>
+											</div>
 										</div>
 									</div> 
 								</div>
@@ -664,7 +687,7 @@
 								<span class="fs-3tx text-gray-200" style="font-family: 'Freestyle Script';">Signature</span>
 							</div>
 							<div class="mb-6"><span class="field-name">ProviderNPI:</span><span class="" id="provider_npi"></span></div>
-							<div class="mt-6" style="font-family: 'Comic Sans MS';">Electronically signed by <span class="fw-bold" id="provider_name"></span> on <span id="referral_create_date"></span> at <span id="referral_create_time"></span></div>
+							<div class="mt-6" style="font-family: 'Comic Sans MS';">Electronically signed by <span class="" id="provider_name"></span> on <span id="referral_create_date"></span> at <span id="referral_create_time"></span></div>
 						</div>
 					</div>
 					<div class="page-footer">
