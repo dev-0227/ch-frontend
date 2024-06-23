@@ -468,9 +468,19 @@
 				</div>
 			</div>
 			<div class="modal-footer mt-8">
-				<button type="button" class="btn btn-info" id="appt_generate_btn"><i class="fa fa-thin fa-file-invoice">&nbsp;</i> Create Referral</button>
-				<button type="button" class="btn btn-primary" id="appt_save_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
-				<button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+				<div style="display: flex; justify-content: space-between; width: 100%;">
+					<div class="fs-1">
+						<label class="form-check form-check-custom form-check-sm form-check-solid me-6" id="appointment-create-referral" >
+							<input class="form-control form-check-input p-4" type="checkbox" value="1"  id="create-referral" data-field="create-referral">
+							<span class="form-check-label text-gray-600 fw-semibold"> Create Referral</span>
+						</label>
+					</div>
+					<div class="buttons">
+						<button type="button" class="btn btn-info" id="appt_generate_btn"><i class="fa fa-thin fa-file-invoice">&nbsp;</i> Create Referral</button>
+						<button type="button" class="btn btn-primary" id="appt_save_btn"><i class="fa fa-save">&nbsp;</i> Save</button>
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

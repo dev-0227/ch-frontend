@@ -245,11 +245,17 @@ function viewAppointment(id) {
         $("#appointment_clinic_provider").prop("disabled", false);
         $("#appointment_clinic_provider").val(appointment['provider_id']).trigger('change');
         $("#appointment_specialist_external_provider").val("").trigger('change');
+
+        $("#appointment-create-referral").hide()
+        $("#appt_generate_btn").prop('disabled', true)
     }else{
         $("#appointment_specialist_external_provider").prop("disabled", false);
         $("#appointment_clinic_provider").prop("disabled", true);
         $("#appointment_clinic_provider").val("").trigger('change');
         __spec = appointment['provider_id']
+
+        $("#appointment-create-referral").show()
+        $("#appt_generate_btn").prop('disabled', false)
     }
 
     $("#appointment_measure").val(appointment['measure']).trigger('change');
@@ -279,6 +285,8 @@ function viewAppointment(id) {
     $("#appt_spec_organ").val(appointment['sorgans'])
     $("#appt_spec_specialty").val(appointment['sspecialty'])
     $("#appt_spec_npi").val(appointment['npi'])
+
+    $("#create-referral").prop('checked', false);
 
     $("#appointment_edit_modal-1").modal("show");
     $("#appointment_modal").modal("hide");
@@ -429,6 +437,8 @@ const handleNewEvent = (data) => {
     if (endTime === undefined || endTime === null || endTime === '') endTime = $("#appointment_end_date").val('09:30');
     else $("#appointment_end_date").val(endTime.substr(0, 5));
     $("#appointment_approve_date").val(data.startStr.substr(0, 10));
+
+    $("#create-referral").prop('checked', false);
 
     $("#appointment_notes").val('');
     $("#appointment_pt_instruction").val('');
@@ -717,7 +727,7 @@ function fillReferralDocument(data) {
     $("#patient_name").html(data.pfname + ' ' + data.plname)
     $("#patient_dob").html(`${pdob.getMonth() + 1}/${pdob.getDate()}/${pdob.getFullYear()}`)
     $("#patient_gender").html(data.pgender)
-    $("#patient_language").html(data.planguage)
+    $("#patient_language").html(data.planguage ? data.planguage : 'English')
     $("#patient_address").html(data.paddress)
     $("#patient_phone").html(data.pphone)
     $("#patient_email").html(data.pemail)
@@ -733,47 +743,63 @@ function fillReferralDocument(data) {
     return data.mfname + ' ' + data.mlname
 }
 
-function generateDocument(filename) {
-    setTimeout( function () {
-        // Make Referral Document
-        function filter (node) {
-            return (node.tagName !== 'i');
-        }
-        var hti = window.htmlToImage
-        let el = $(".document-page")
-        new Promise((resolve, reject) => {
-            var images = []
-            var val = 0
-            for (var i = 0; i < el.length; i ++) {
-                hti.toJpeg(el[i], {filter: filter}).then(image => {
-                    val ++
-                    images.push({
-                        id: val,
-                        image: image
+function generateDocument() {
+    var filename = 'document'
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $("#appointment_id").val(), userid: localStorage.getItem('userid')}, 'referral/appointment/referraldoc', (xhr, err) => {
+        if (!err) {
+            var datas = JSON.parse(xhr.responseText)['data']
+
+            filename = fillReferralDocument(datas[0])
+
+            filename ? filename = filename : filename = 'document'
+
+            $("#referral-document-modal").modal('show')
+
+            showLoading('Generating Document...')
+            // generateDocument()
+
+            setTimeout( function () {
+                // Make Referral Document
+                function filter (node) {
+                    return (node.tagName !== 'i');
+                }
+                var hti = window.htmlToImage
+                let el = $(".document-page")
+                new Promise((resolve, reject) => {
+                    var images = []
+                    var val = 0
+                    for (var i = 0; i < el.length; i ++) {
+                        hti.toJpeg(el[i], {filter: filter}).then(image => {
+                            val ++
+                            images.push({
+                                id: val,
+                                image: image
+                            })
+                            if (val == el.length) resolve(images.reverse())
+                        })
+                    }
+                }).then(resolve => {
+                    var pdf = new jsPDF({
+                        orientation: 'p',
+                        unit: 'mm',
+                        format: 'letter',
+                        pagesplit: true
                     })
-                    if (val == el.length) resolve(images.reverse())
+                    pdf.output('datauri')
+                    for (var i = 0; i < resolve.length; i ++) {
+                        if (i > 0) pdf.addPage('letter', 'portrait')
+                        pdf.addImage(resolve[i].image, 'JPEG', 0, 0)
+                    }
+                    pdf.save(filename + '.pdf')
+                    hideLoading()
+                    $("#referral-document-modal").modal('hide')
+                }).then(reject => {
+                    console.log(reject)
+                    $("#referral-document-modal").modal('hide')
                 })
-            }
-        }).then(resolve => {
-            var pdf = new jsPDF({
-                orientation: 'p',
-                unit: 'mm',
-                format: 'letter',
-                pagesplit: true
-            })
-            pdf.output('datauri')
-            for (var i = 0; i < resolve.length; i ++) {
-                if (i > 0) pdf.addPage('letter', 'portrait')
-                pdf.addImage(resolve[i].image, 'JPEG', 0, 0)
-            }
-            pdf.save(filename + '.pdf')
-            hideLoading()
-            $("#referral-document-modal").modal('hide')
-        }).then(reject => {
-            console.log(reject)
-            $("#referral-document-modal").modal('hide')
-        })
-    }, 500 );
+            }, 500 );
+        }
+    })
 }
 
 function showLoading(text) {
@@ -1095,6 +1121,10 @@ $(document).ready(async function() {
                     } else {
                         $("#appointment_edit_modal-1").modal("hide");
                         toastr.success("Appointment is added successfully!");
+
+                        if ($("#create-referral").prop('checked') == true) {
+                            generateDocument()
+                        }
                     }
                 } else {
                     return toastr.error("Action Failed");
@@ -1105,12 +1135,16 @@ $(document).ready(async function() {
                 if (!err) {
                     $("#appointment_edit_modal-1").modal("hide");
                     toastr.success("Appointment is updated successfully!");
+
+                    if ($("#create-referral").prop('checked') == true) {
+                        generateDocument()
+                    }
+
                 } else {
                     return toastr.error("Action Failed");
                 }
             });
         }
-
         setTimeout(() => {
             load_data()
         }, 1000)
@@ -1118,19 +1152,7 @@ $(document).ready(async function() {
 
     $("#appt_generate_btn").click(function(e) {
         $("#appointment_edit_modal-1").modal("hide");
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $("#appointment_id").val(), userid: localStorage.getItem('userid')}, 'referral/appointment/referraldoc', (xhr, err) => {
-            if (!err) {
-                var datas = JSON.parse(xhr.responseText)['data']
-
-                var filename = 'document'
-                filename = fillReferralDocument(datas[0])
-
-                $("#referral-document-modal").modal('show')
-
-                showLoading('Generating Document...')
-                generateDocument(filename)
-            }
-        })
+        generateDocument()
     })
 
     $(document).on('change', '.status-check', function(e) {
@@ -1377,6 +1399,10 @@ $(document).ready(async function() {
             $("#appointment_specialist_external_provider").prop("disabled", true);
             $("#appointment_clinic_provider").prop("disabled", false);
             $("#appointment_clinic_provider").val($("#appointment_clinic_provider option:first").val());
+
+            $("#create-referral").prop('checked', false)
+            $("#appointment-create-referral").hide()
+            $("#appt_generate_btn").prop('disabled', true)
         }else{
             $("#appointment_clinic_provider").prop("disabled", true);
             $("#appointment_specialist_external_provider").prop("disabled", false);
@@ -1393,6 +1419,9 @@ $(document).ready(async function() {
                     }
                 }
             });
+
+            $("#appointment-create-referral").show()
+            $("#appt_generate_btn").prop('disabled', false)
         }
     });
 
@@ -1524,6 +1553,10 @@ $(document).ready(async function() {
         $("#appointment_notes").val('');
         $("#appointment_pt_instruction").val('');
         $("#appointment_pt_instruction_date").val('');
+
+        $("#create-referral").prop('checked', false);
+
+
         $("#appointment_edit_modal-1").modal("show");
         // $("#referral-document-modal").modal('show')
     });
