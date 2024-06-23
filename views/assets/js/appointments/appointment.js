@@ -438,6 +438,7 @@ const handleNewEvent = (data) => {
     else $("#appointment_end_date").val(endTime.substr(0, 5));
     $("#appointment_approve_date").val(data.startStr.substr(0, 10));
 
+    $("#appointment-create-referral").show();
     $("#create-referral").prop('checked', false);
 
     $("#appointment_notes").val('');
@@ -1554,8 +1555,8 @@ $(document).ready(async function() {
         $("#appointment_pt_instruction").val('');
         $("#appointment_pt_instruction_date").val('');
 
+        $("#appointment-create-referral").show()
         $("#create-referral").prop('checked', false);
-
 
         $("#appointment_edit_modal-1").modal("show");
         // $("#referral-document-modal").modal('show')
