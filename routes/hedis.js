@@ -16,9 +16,9 @@ router.get("/appointment", (req, res, next) => {
 });
 
 router.get("/referral", (req, res, next) => {
-    res.render("layout/referralblank", {
+    res.render("layout/mainblank", {
         pageTitle: "Referral Tracking",
-        pageKey: "../referral/referral"
+        pageKey: "../hedis/referral"
     });
 });
 

@@ -48,7 +48,7 @@
 							<h3 class="mb-0 card-title">Patient File</h3>
 							<div class="card-toolbar">
 								<a class="btn btn-success useraddbtn" id="ptloadbtn" ><i class="fa fa-upload">&nbsp;</i>Upload</a>
-							  </div>
+							</div>
 						</div>
 						<div class="card-body">
 							<h6>
@@ -83,7 +83,7 @@
 </div>
 <!-- ROW CLOSED -->
 <div class="modal fade" id="load-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" >Loaded Successfully</h5>
@@ -91,12 +91,25 @@
 					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 				</div>
 			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <a href="../pages/ptlist?s=1" target="_blank"><span class="number newptcnt">0</span></a><br><span class="time">New Patients</span>
-						
-                    </div>
+			<div class="modal-body px-15">
+                <div class="row flex-center d-flex flex-wrap justify-content-lg-between mx-auto">
+                    <div class="col-md-4 d-flex flex-column text-center flex-center h-150px w-150px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-thin fa-hospital-user" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-curpt" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Current PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-150px w-150px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp fa-light fa-user-plus" style="font-size: 4rem; color: #74C0FC;"></i>
+						<a class=" mt-4" href="../pages/ptlist?s=1" target="_blank">
+							<span class="number newptcnt fs-2qx fw-bold fw-bold text-primary-700" id="kt-countup-newpt" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						</a>
+						<span class="time fs-2 text-gray-600">New PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-150px w-150px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp fa-light fa-users" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold  fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-total" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Total PTs</span>
+					</div>
                 </div>
 			</div>
 			<div class="modal-footer">
