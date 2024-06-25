@@ -168,8 +168,8 @@
           <span class="menu-title">Appointment</span>
         </a>
       </div>
-      <div class="menu-item">
-        <a class="menu-link pq-menu d-none" href="../hedis/referrals" target="_blank" data-permit="REFERRAL_TRACKING">
+      <div data-kt-menu-trigger="click" class="menu-item menu-accordion" >
+        <span class="menu-link pq-menu d-none" data-permit="PAYMENT">
           <span class="menu-icon">
             <i class="ki-duotone ki-parcel-tracking fs-2">
               <span class="path1"></span>
@@ -177,9 +177,41 @@
               <span class="path3"></span>
             </i>
           </span>
+          <span class="menu-title">Trackings</span>
+          <span class="menu-arrow"></span>
+        </span>
+        <div class="menu-sub menu-sub-accordion">
+          <div class="menu-item">
+            <a class="menu-link pq-menu d-none" href="../hedis/referrals" target="_blank" data-permit="REFERRAL_TRACKING">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Referral Tracking</span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link pq-menu d-none" href="../tracking/patient" target="_blank" data-permit="PATIENT_TRACKING">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Patient Tracking</span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link pq-menu d-none" href="../tracking/appointment" target="_blank" data-permit="APPOINTMENT_TRACKING">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Appointment Tracking</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="menu-item">
+        <a class="menu-link pq-menu d-none" href="../hedis/referrals" target="_blank" data-permit="REFERRAL_TRACKING">
           <span class="menu-title">Referral Tracking</span>
         </a>
-      </div>
+      </div> -->
       <div class="menu-item">
         <a class="menu-link pq-menu d-none" href="../pages/invoice" data-permit="INVOICE">
           <span class="menu-icon">

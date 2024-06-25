@@ -11,6 +11,7 @@ const hedis = require('./routes/hedis');
 const patients = require('./routes/patients');
 const insurance = require('./routes/insurance');
 const database = require('./routes/database');
+const trackings = require('./routes/trackings');
 const exp = require('constants');
 
 app.set('view engine', 'ejs');
@@ -31,6 +32,7 @@ app.use('/patients', patients);
 app.use('/hedis', hedis);
 app.use('/insurance', insurance);
 app.use('/database', database);
+app.use('/tracking', trackings)
 
 app.use('*', (req, res) => {
     res.redirect('../');

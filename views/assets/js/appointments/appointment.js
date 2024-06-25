@@ -1569,10 +1569,10 @@ $(document).ready(async function() {
         "type": "GET",
         "headers": { 'Authorization': localStorage.getItem('authToken') },
         "data":function (d) {
-        d.measureid = $("#appointment_measure").val(),
-        d.specialty = $("#appointment_search_specialty").val(),
-        d.zip = $("#appointment_search_zip").val(),
-        d.all = $("#appointment_search_all").prop('checked')
+            d.measureid = $("#appointment_measure").val(),
+            d.specialty = $("#appointment_search_specialty").val(),
+            d.zip = $("#appointment_search_zip").val(),
+            d.all = $("#appointment_search_all").prop('checked')
         },
     },
     serverSide: true,
