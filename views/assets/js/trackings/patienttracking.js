@@ -52,24 +52,72 @@ $(document).ready(async function() {
         'pageLength': 10,
         'order': [],
         'columns': [{
+            data: 'insuranceid',
+            render: (data, type, row) => {
+                return ''
+            }
+        }, {
             data: 'patientid',
             render: (data, type, row)=> {
                 return row.patientid
             }
         }, {
-            data: 'loaddate',
+            data: 'pfname',
             render: (data, type, row) => {
-                return row.loaddate
+                return row.pfname + ' ' + row.plname
             }
         }, {
-            data: 'loadby',
+            data: 'pdob',
             render: (data, type, row) => {
-                return row.fname + ' ' + row.lname
+                return new Date(row.pdob).toISOString().substr(0, 10)
             }
         }, {
-            data: 'loadmethod',
+            data: 'pphone',
             render: (data, type, row) => {
-                return row.loadmethod
+                return row.pphone
+            }
+        }, {
+            data: 'viewnotes',
+            render: (data, type, row) => {
+                return `
+                <div class='d-flex'>
+                    <i class='fa fa-thin text-primary  fa-file-lines p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                    <i class='fa fa-thin text-primary fa-file p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                    <i class='fa fa-thin text-danger fa-trash-can p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                </div>
+                `
+            }
+        }, {
+            data: 'contact',
+            render: (data, type, row) => {
+                return `
+                    <div class='d-flex'>
+                        <i class='fa fa-thin text-primary fa-print p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                        <i class='fa fa-thin text-primary fa-envelope p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                        <i class='fa fa-thin text-primary fa-mobile-screen p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                        <i class='fa fa-thin text-primary fa-phone p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                    </div>
+                `
+            }
+        }, {
+            data: 'lob',
+            render: (data, type, row) => {
+                return ''
+            }
+        }, {
+            data: 'statuslog',
+            render: (data, type, row) => {
+                return `
+                    <div class='d-flex'>
+                        <i class='fa fa-thin text-primary fa-regular fa-eye p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                        <i class='fa fa-solid text-primary fa-list p-1 cursor-pointer' style='font-size: 1.4rem;'></i>
+                    </div>
+                `
+            }
+        }, {
+            data: 'newpttype',
+            render: (data, type, row) => {
+                return row.newpttype
             }
         }, {
             data: 'ptseen',
@@ -77,10 +125,10 @@ $(document).ready(async function() {
                 return row.sdisplay ? `<div class='ms-2 badge badge-light-success fw-bold fs-4'>True</div>` : `<div class='ms-2 badge badge-light-danger fw-bold fs-4'>False</div>`
             }
         }, {
-            data: 'tname',
+            data: 'visittype',
             render: (data, type, row) => {
                 return `
-                    <div class='ms-2 fw-bold fs-5 p-1 rounded' style='background-color: ${row.color}10; color: ${row.color}; display: inline-flex; align-items: center;'>${row.tname  ? row.tname : ''}</div>
+                    <div class='ms-2 fw-bold fs-5 p-1 rounded' style='background-color: ${row.color}10; color: ${row.color}; display: inline-flex; align-items: center;'>${row.visittype  ? row.visittype : ''}</div>
                 `
             }
         }, {
@@ -89,19 +137,9 @@ $(document).ready(async function() {
                 return row.reason
             }
         }, {
-            data: 'sdisplay',
+            data: 'visitstatus',
             render: (data, type, row) => {
-                return row.sdisplay
-            }
-        }, {
-            data: 'created_date',
-            render: (data, type, row) => {
-                return row.created_date ? new Date(row.created_date).toISOString().substr(0, 10) : ''
-            }
-        }, {
-            data: 'newpttype',
-            render: (data, type, row) => {
-                return row.newpttype
+                return row.visitstatus
             }
         }]
     })
