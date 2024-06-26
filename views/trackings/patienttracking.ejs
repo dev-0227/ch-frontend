@@ -1,76 +1,98 @@
 
-<div class="card">
-    <div class="card-header border-0 pt-6">
-        <div class="card-title">
-            <div class="fs-1"><span>New Patient Tracking | </span><span class="text-primary" id="clinic-name"></span></div>
-        </div>
+<div class="tracking-patient-container">
+    <div class="card mb-10">
+        <div class="card-header border-0 pt-6">
+            <div class="card-title">
+                <div class="fs-1"><span>New Patient Tracking </span></div>
+            </div>
             <div class="card-toolbar">
+                <select id="calendar-year" aria-label="Year" data-control="select2" data-hide-search="false" class="form-select mb-2">
+                </select>
+            </div>
+        </div>
+        <div class="card-body py-4">
+            <div class="calendar table-responsive">
+                <table id="tracking_calendar_table" class="table table-row-dashed tatle-row-gray-400 align-middle text-upcase">
+                    <thead>
+                        <tr class="fw-bold fs-6 text-gray-800">
+                            <th>Clinic Name</th>
+                            <th class="text-center">Jan</th>
+                            <th class="text-center">Feb</th>
+                            <th class="text-center">Mar</th>
+                            <th class="text-center">Apr</th>
+                            <th class="text-center">May</th>
+                            <th class="text-center">Jun</th>
+                            <th class="text-center">Jul</th>
+                            <th class="text-center">Aug</th>
+                            <th class="text-center">Sup</th>
+                            <th class="text-center">Oct</th>
+                            <th class="text-center">Nov</th>
+                            <th class="text-center">Dec</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
-    <div class="card-body py-4">
-        <div class="search-component">
-            <div class="row p-3 mx-1">
-                <div class="col-md-3">
-                    <div class="d-flex align-items-center position-relative">
-                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                        </i>
-                        <input id="search_all" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid ps-13" placeholder="Search ..."/>
+    <div class="card" id="card-patient" data-kt-scroll-offset="0">
+        <div class="card-header border-0 pt-6">
+            <div class="card-title">
+                <div class="fs-1"><span class="text-primary" id="clinic-name"></span></div>
+            </div>
+        </div>
+        <div class="card-body py-4">
+            <div class="search-component">
+                <div class="row p-3 mx-1">
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center position-relative">
+                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                            <input id="search_all" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid ps-13" placeholder="Search ..."/>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center position-relative">
-                    <div class="form-check form-check-custom form-check-primary form-check-solid mx-auto">
-                        <!-- <input id="search_seen" class="form-check-input h-30px w-30px" type="checkbox" value="" />
-                        <label class="form-check-label" for="">Patient Seen</label> -->
+                    <div class="col-md-2 d-flex align-items-center position-relative">
+                        <div class="form-check form-check-custom form-check-primary form-check-solid mx-auto">
+                            <!-- <input id="search_seen" class="form-check-input h-30px w-30px" type="checkbox" value="" />
+                            <label class="form-check-label" for="">Patient Seen</label> -->
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                        <select id="search_type" aria-label="Select a Visit Type" data-control="select2" data-hide-search="true" data-placeholder="Select a Visit Type..." class="form-select mb-2">
-                        </select>
+                    <div class="col-md-3">
+                        <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                            <select id="search_type" aria-label="Select a Visit Type" data-control="select2" data-hide-search="true" data-placeholder="Select a Visit Type..." class="form-select mb-2">
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                        <select id="search_status" aria-label="Select a Visit Status" data-control="select2" data-hide-search="true" data-placeholder="Select a Visit Status..." class="form-select mb-2">
-                        </select>
+                    <div class="col-md-3">
+                        <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                            <select id="search_status" aria-label="Select a Visit Status" data-control="select2" data-hide-search="true" data-placeholder="Select a Visit Status..." class="form-select mb-2">
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
+            <table class="table table-striped table-row-bordered border table-bordered rounded gy-4 gs-6" id="tracking_patient_table" >
+                <thead>
+                    <tr>
+                        <th>Ins ID</th>
+                        <th>EMR ID</th>
+                        <th>Patient Name</th>
+                        <th>DOB</th>
+                        <th>Phone</th>
+                        <th>View & Notes</th>
+                        <th>Contact</th>
+                        <th>LOB</th>
+                        <th>Status&Log</th>
+                        <th>PT Data Source</th>
+                        <th>PT Seen</th>
+                        <th>Visit Type</th>
+                        <th>Reason</th>
+                        <th>Visit Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
-        <table class="table table-striped table-row-bordered border rounded gy-4 gs-6" id="tracking_patient_table" >
-            <thead>
-                <!-- <tr>
-                    <th>Patient ID</th>
-                    <th>Loaded Date</th>
-                    <th>Loaded By</th>
-                    <th>Load Method</th>
-                    <th>Pt Seen</th>
-                    <th>Visit Type</th>
-                    <th>Reason</th>
-                    <th>Visit Status</th>
-                    <th>Visit Dos</th>
-                    <th>New Pt Type</th>
-                </tr> -->
-                <tr>
-                    <th>Ins ID</th>
-                    <th>EMR ID</th>
-                    <th>Patient Name</th>
-                    <th>DOB</th>
-                    <th>Phone</th>
-                    <th>View & Notes</th>
-                    <th>Contact</th>
-                    <th>LOB</th>
-                    <th>Status&Log</th>
-                    <th>PT Data Source</th>
-                    <th>PT Seen</th>
-                    <th>Visit Type</th>
-                    <th>Reason</th>
-                    <th>Visit Status</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
     </div>
 </div>

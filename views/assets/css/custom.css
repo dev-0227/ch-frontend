@@ -476,3 +476,10 @@ transform-origin: 0% 50%;
 	height: 1.0in;
 }
 
+.cross-color {
+	color: #e50b16;
+}
+
+.text-center {
+	text-align: center;
+}
