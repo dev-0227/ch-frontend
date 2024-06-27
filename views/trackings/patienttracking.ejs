@@ -2,12 +2,24 @@
 <div class="tracking-patient-container">
     <div class="card mb-10">
         <div class="card-header border-0 pt-6">
-            <div class="card-title">
-                <div class="fs-1"><span>New Patient Tracking | </span>&nbsp;&nbsp;<span class="fs-1 text-primary" id="clinic-year"></span></div>
-            </div>
-            <div class="card-toolbar">
-                <select id="calendar-year" aria-label="Year" data-control="select2" data-hide-search="false" class="form-select mb-2">
-                </select>
+            <div class="card-toolbar" style="width: 100%;">
+                <div class="row" style="width: 100%;">
+                    <div class="col-md-4">
+                        <div class="card-title">
+                            <div class="fs-1"><span>New Patient Tracking |</span>&nbsp;&nbsp;<span class="fs-1 text-primary" id="clinic-year"></span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="calendar-clinics" aria-label="clinics" class="form-select form-select-lg form-select-solid" data-hide-search="false" data-control="select2" data-placeholder="All Clinics" data-allow-clear="true" multiple="multiple">
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="d-flex justify-content-end mx-10">
+                            <select id="calendar-year" aria-label="Year" data-control="select2" data-hide-search="false" class="form-select mb-2 mx-5">
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-body py-4">
@@ -92,8 +104,9 @@
                         <th class="px-3 text-center" style="width: 5%;">Contact</th>
                         <th class="px-3 text-center">LOB</th>
                         <th class="px-3 text-center" style="width: 5%;">Status&Log</th>
-                        <th class="px-3 text-center" style="width: 8%;">PT Data Source</th>
-                        <th class="px-3 text-center" style="width: 5%;">PT Seen</th>
+                        <th class="px-3 text-center" style="width: 5%;">Source</th>
+                        <th class="px-3 text-center" style="width: 3%;">Seen</th>
+                        <th class="px-3 text-center" style="width: 6%;">Date of Visit</th>
                         <th class="px-3 text-center">Visit Type</th>
                         <th class="px-3 text-center">Reason</th>
                         <th class="px-3 text-center" style="width: 7%;">Visit Status</th>

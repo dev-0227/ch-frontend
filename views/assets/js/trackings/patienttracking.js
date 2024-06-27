@@ -1,6 +1,7 @@
 
 var _month = new Date(Date.now()).toISOString().substr(5, 2)
 var _clinicid = -1
+var _selectedClinics = ''
 
 function showLoading(text) {
     const loadingEl = document.createElement("div")
@@ -48,8 +49,20 @@ $(document).ready(async function() {
         $('#clinic-year').html(year)
     }
 
+    // Load All clinics
+    await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/clinic/getAll", (xhr, err) => {
+        var options = ''
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data']
+            result.forEach(item => {
+                options += `<option value=${item.id}>${item.name}</option>`
+            })
+        }
+        $('#calendar-clinics').html(options)
+    });
+
     // Load Appointment Type
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentType", (xhr, err) => {
+    await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentType", (xhr, err) => {
         if (!err) {
             var result = JSON.parse(xhr.responseText)['data'];
             var options = `<option value='0'>All Visit Type</option>`
@@ -61,7 +74,7 @@ $(document).ready(async function() {
     });
 
     // Load Patient Participate Status
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/appointmentStatus", (xhr, err) => {
+    await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "valueset/appointmentStatus", (xhr, err) => {
         if (!err) {
             var result = JSON.parse(xhr.responseText)['data'];
             var options = `<option value='0'>All Visit Status</option>`
@@ -95,34 +108,44 @@ $(document).ready(async function() {
         'columns': [{
             data: 'insuranceid',
             render: (data, type, row) => {
-                return ''
+                return `
+                    <div class='text-center'></div>
+                `
             }
         }, {
             data: 'patientid',
             render: (data, type, row)=> {
-                return row.patientid
+                return `
+                    <div class='text-center'>${row.patientid ? row.patientid : ''}</div>
+                `
             }
         }, {
             data: 'pfname',
             render: (data, type, row) => {
-                return row.pfname + ' ' + row.plname
+                return `
+                    <div class='text-center'>${row.pfname ? row.pfname : ''} ${row.plname ? row.plname : ''}</div>
+                `
             }
         }, {
             data: 'pdob',
             render: (data, type, row) => {
                 var date =  new Date(row.pdob)
-                return date.toLocaleDateString('en-US')
+                return `
+                    <div class='text-center'>${date.toLocaleDateString('en-US')}</div>
+                `
             }
         }, {
             data: 'pphone',
             render: (data, type, row) => {
-                return row.pphone
+                return `
+                    <div class='text-center'>${row.pphone ? row.pphone : ''}</div>
+                `
             }
         }, {
             data: 'viewnotes',
             render: (data, type, row) => {
                 return `
-                <div class='d-flex'>
+                <div class='d-flex text-center'>
                     <i class='fa fa-thin text-primary fa-file-lines p-1 cursor-pointer' style='font-size: 1.3rem;'></i>
                     <i class='fa fa-thin text-primary fa-file p-1 cursor-pointer' style='font-size: 1.3rem;'></i>
                     <i class='fa fa-thin text-danger fa-trash-can p-1 cursor-pointer' style='font-size: 1.3rem;'></i>
@@ -133,7 +156,7 @@ $(document).ready(async function() {
             data: 'contact',
             render: (data, type, row) => {
                 return `
-                    <div class='d-flex'>
+                    <div class='d-flex text-center'>
                         <i class='fa fa-thin text-primary fa-print p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-thin text-primary fa-envelope p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-thin text-primary fa-mobile-screen p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
@@ -144,13 +167,15 @@ $(document).ready(async function() {
         }, {
             data: 'lob',
             render: (data, type, row) => {
-                return ''
+                return `
+                    <div class='text-center'></div>
+                `
             }
         }, {
             data: 'statuslog',
             render: (data, type, row) => {
                 return `
-                    <div class='d-flex'>
+                    <div class='d-flex text-center'>
                         <i class='fa fa-thin text-primary fa-regular fa-eye p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-solid text-primary fa-list p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                     </div>
@@ -159,29 +184,42 @@ $(document).ready(async function() {
         }, {
             data: 'newpttype',
             render: (data, type, row) => {
-                return row.newpttype
+                return `
+                    <div class='text-center'>${row.newpttype ? row.newpttype : ''}</div>
+                `
             }
         }, {
             data: 'ptseen',
             render: (data, type, row) => {
-                return row.sdisplay ? `<div class='ms-2 badge badge-light-success fw-bold fs-4'>True</div>` : `<div class='ms-2 badge badge-light-danger fw-bold fs-4'>False</div>`
+                return row.sdisplay ? `<div class='ms-2 badge badge-light-success fw-bold fs-4 text-center'>True</div>` : `<div class='ms-2 badge badge-light-danger fw-bold fs-4 text-center'>False</div>`
+            }
+        },{
+            data: 'dos',
+            render: (data, type, row) => {
+                return `
+                    <div class='text-center'></div>
+                `
             }
         }, {
             data: 'visittype',
             render: (data, type, row) => {
                 return `
-                    <div class='ms-2 fw-bold fs-5 p-1 rounded' style='background-color: ${row.color}10; color: ${row.color}; display: inline-flex; align-items: center;'>${row.visittype  ? row.visittype : ''}</div>
+                    <div class='ms-2 fw-bold fs-5 p-1 rounded text-center' style='background-color: ${row.color}10; color: ${row.color}; display: inline-flex; align-items: center;'>${row.visittype  ? row.visittype : ''}</div>
                 `
             }
         }, {
             data: 'reason',
             render: (data, type, row) => {
-                return row.reason
+                return `
+                    <div class='text-center'>${row.reason ? row.reason : ''}</div>
+                `
             }
         }, {
             data: 'visitstatus',
             render: (data, type, row) => {
-                return row.visitstatus
+                return `    
+                    <div class='text-center'>${row.visitstatus ? row.visitstatus : ''}</div>
+                `
             }
         }]
     })
@@ -236,8 +274,9 @@ $(document).ready(async function() {
             'type': 'GET',
             'headers': {'Authorization': localStorage.getItem('authToken')},
             'data': (d) => {
-                d.usertype = localStorage.getItem('usertype')
-                d.clinicid = localStorage.getItem('chosen_clinic')
+                d.clinics = _selectedClinics,
+                d.usertype = localStorage.getItem('usertype'),
+                d.clinicid = localStorage.getItem('chosen_clinic'),
                 d.year = $('#calendar-year').val()
             }
         },
@@ -512,6 +551,10 @@ $(document).ready(async function() {
 
         $('#clinic-name').html($(this).parent().parent().parent().children(0).children(0)[0].text)
     })
+
+    $('#calendar-clinics').on('change', () => {
+        _selectedClinics = $('#calendar-clinics').val().join(',')
+        calendarTable.search('').draw()
+    })
     // Calendar Table end //
 })
-
