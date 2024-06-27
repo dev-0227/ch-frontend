@@ -2,6 +2,26 @@
 var _month = new Date(Date.now()).toISOString().substr(5, 2)
 var _clinicid = -1
 
+function showLoading(text) {
+    const loadingEl = document.createElement("div")
+    document.body.prepend(loadingEl)
+    loadingEl.classList.add("page-loader")
+    loadingEl.classList.add("flex-column")
+    loadingEl.classList.add("bg-dark")
+    loadingEl.classList.add("bg-opacity-50")
+    loadingEl.innerHTML = `
+        <span class="spinner-border text-primary" role="status"></span>
+        <span class="text-gray-200 fs-1 fw-semibold mt-5">${text}</span>
+    `
+
+    // Show page loading
+    KTApp.showPageLoading()
+}
+
+function hideLoading() {
+    KTApp.hidePageLoading()
+}
+
 $(document).ready(async function() {
     'use strict'
 
@@ -68,6 +88,7 @@ $(document).ready(async function() {
                 d.month = _month
             }
         },
+        processing: true,
         serverSide: true,
         'pageLength': 10,
         'order': [],
@@ -183,6 +204,7 @@ $(document).ready(async function() {
     })
 
     $('#patient-export').click(() => {
+        showLoading('Preparing Download...')
         let entry = {
             name: $('#clinic-name').text(),
             clinicid: _clinicid,
@@ -199,8 +221,9 @@ $(document).ready(async function() {
                 tag.click()
                 document.body.removeChild(tag)
 
-                toastr.success(`${entry.year}-${entry.month} patient data is downloaded successfully!`)
+                toastr.success(`${entry.year}-${entry.month} patient data is being downloaded successfully!`)
             }
+            hideLoading()
         })
     })
     // Patient Search end //
@@ -218,6 +241,7 @@ $(document).ready(async function() {
                 d.year = $('#calendar-year').val()
             }
         },
+        processing: true,
         serverSide: true,
         'pageLength': 10,
         'order': [],
