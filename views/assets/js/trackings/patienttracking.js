@@ -1,6 +1,6 @@
 
 var _month = new Date(Date.now()).toISOString().substr(5, 2)
-var _clinicid = localStorage.getItem('chosen_clinic')
+var _clinicid = -1
 
 $(document).ready(async function() {
     'use strict'
@@ -25,6 +25,7 @@ $(document).ready(async function() {
         }
         $('#calendar-year').html(options)
         $('#calendar-year').val(year).trigger('change')
+        $('#clinic-year').html(year)
     }
 
     // Load Appointment Type
@@ -51,6 +52,7 @@ $(document).ready(async function() {
         }
     });
 
+    // Patient table begin //
     var patientTable = $("#tracking_patient_table").DataTable({
         'ajax': {
             'url': serviceUrl + 'tracking/patient/all',
@@ -87,7 +89,8 @@ $(document).ready(async function() {
         }, {
             data: 'pdob',
             render: (data, type, row) => {
-                return new Date(row.pdob).toISOString().substr(0, 10)
+                var date =  new Date(row.pdob)
+                return date.toLocaleDateString('en-US')
             }
         }, {
             data: 'pphone',
@@ -178,7 +181,30 @@ $(document).ready(async function() {
     $(document).on('change', '#search_status', e => {
         patientTable.search(e.target.value).draw()
     })
+
+    $('#patient-export').click(() => {
+        let entry = {
+            name: $('#clinic-name').text(),
+            clinicid: _clinicid,
+            month: _month,
+            year: $('#calendar-year').val()
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'patientlist/export', (xhr, err) => {
+            if (!err) {
+                var result = JSON.parse(xhr.responseText).data
+                var tag = document.createElement('a')
+                document.body.appendChild(tag)
+                tag.href = serviceUrl + result.url + '/' + result.filename
+                tag.download = result.filename
+                tag.click()
+                document.body.removeChild(tag)
+
+                toastr.success(`${entry.year}-${entry.month} patient data is downloaded successfully!`)
+            }
+        })
+    })
     // Patient Search end //
+    // Patient table end //
 
     // Calendar Table begin //
     var calendarTable = $('#tracking_calendar_table').DataTable({
@@ -450,7 +476,7 @@ $(document).ready(async function() {
 
     $('#calendar-year').on('change', e => {
         calendarTable.search('').draw()
-
+        $('#clinic-year').html(e.target.value)
         patientTable.search($('#search_all').val()).draw()
     })
 
@@ -464,3 +490,4 @@ $(document).ready(async function() {
     })
     // Calendar Table end //
 })
+

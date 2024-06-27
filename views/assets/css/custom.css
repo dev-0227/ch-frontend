@@ -483,3 +483,13 @@ transform-origin: 0% 50%;
 .text-center {
 	text-align: center;
 }
+
+.component-start {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.component-end {
+	display: flex;
+	justify-content:flex-end;
+}

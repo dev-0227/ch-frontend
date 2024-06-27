@@ -14,6 +14,7 @@
 		text-align: center;
 	}
 </style>
+
 <div class="pt-loader d-none">
 	<div class="row justify-content-center align-items-center d-flex h-100">
 		<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
@@ -100,7 +101,7 @@
 					</div>
 					<div class="col-md-4 d-flex flex-column text-center flex-center h-150px w-150px h-lg-200px w-lg-200px bg-light rounded-circle">
 						<i class="fa fa-sharp fa-light fa-user-plus" style="font-size: 4rem; color: #74C0FC;"></i>
-						<a class=" mt-4" href="../pages/ptlist?s=1" target="_blank">
+						<a class=" mt-4" href="#" target="_blank">
 							<span class="number newptcnt fs-2qx fw-bold fw-bold text-primary-700" id="kt-countup-newpt" data-kt-countup="true" data-kt-countup-value="0">0</span>
 						</a>
 						<span class="time fs-2 text-gray-600">New PTs</span>
@@ -114,6 +115,30 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+			 </div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="loader-verification" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title fs-2">New Patient Upload Validation</h5>
+			</div>
+			<div class="modal-body">
+				<div class="fs-1 my-10">This file is correct right? Pease Verify.</div>
+				<div class="text-info fs-2qx" style="width: 100%; text-align: center;" id="verify-clinic-name"></div>
+				<div class="form-check form-switch form-check-custom form-check-primary form-check-solid my-10">
+					<input class="form-check-input h-40px w-80px" type="checkbox" value="" id="verify-check"/>
+					<label class="form-check-label fs-2qx" for="verify-check">
+						Please verify is correct clinic
+					</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" id="verify-done" disabled><i class="fa fa-close">&nbsp;</i> Done</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
 			 </div>
 		</div>
 	</div>
