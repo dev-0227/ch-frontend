@@ -232,18 +232,21 @@ $(document).ready(async function() {
         sendRequestWithToken('POST', localStorage.getItem('authToken'), {patientid: e.currentTarget.attributes['data'].value}, 'tracking/patient/byptid', (xhr, err) => {
             if (!err) {
                 var result = JSON.parse(xhr.responseText)['data']
-                var html = `
-                    <div class='fs-2 my-2 modal-text'><span class='fs-2'>Patient ID :</span>&nbsp;<span class='fs-2'>${result[0].ptemrid}</span></div>
-                    <div class='separator border border-dashed my-4'></div>
-                `
-                result.forEach(item => {
+                var html = ''
+                if (result.length > 0) {
                     html += `
-                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${new Date(item.create_date).toLocaleDateString('en-US')}</span></div>
-                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insurance_name}</span></div>
-                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberid}</span></div>
-                        <div class='separator border border-dashed my-3'></div>
+                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Patient ID :</span>&nbsp;<span class='fs-2'>${result[0].ptemrid}</span></div>
+                        <div class='separator border border-dashed my-4'></div>
                     `
-                })
+                    result.forEach(item => {
+                        html += `
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${new Date(item.create_date).toLocaleDateString('en-US')}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insurance_name}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberid}</span></div>
+                            <div class='separator border border-dashed my-3'></div>
+                        `
+                    })
+                }
                 $('#modal-body-tracking').html(html)
                 $('#patient-insurance-tracking').modal('show')
             }
