@@ -109,7 +109,7 @@ $(document).ready(async function() {
             data: 'insuranceid',
             render: (data, type, row) => {
                 return `
-                    <div class='text-center'></div>
+                    <div class='text-center'>${row.pinsid ? row.pinsid : ''}</div>
                 `
             }
         }, {
