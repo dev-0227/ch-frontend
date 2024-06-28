@@ -145,7 +145,7 @@ $(document).ready(async function() {
             data: 'viewnotes',
             render: (data, type, row) => {
                 return `
-                <div class='d-flex text-center'>
+                <div class='d-flex text-center mx-auto'>
                     <i class='fa fa-thin text-primary fa-file-lines p-1 cursor-pointer' style='font-size: 1.3rem;'></i>
                     <i class='fa fa-thin text-primary fa-file p-1 cursor-pointer' style='font-size: 1.3rem;'></i>
                     <i class='fa fa-thin text-danger fa-trash-can p-1 cursor-pointer' style='font-size: 1.3rem;'></i>
@@ -156,7 +156,7 @@ $(document).ready(async function() {
             data: 'contact',
             render: (data, type, row) => {
                 return `
-                    <div class='d-flex text-center'>
+                    <div class='d-flex text-center mx-auto'>
                         <i class='fa fa-thin text-primary fa-print p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-thin text-primary fa-envelope p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-thin text-primary fa-mobile-screen p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
@@ -175,9 +175,12 @@ $(document).ready(async function() {
             data: 'statuslog',
             render: (data, type, row) => {
                 return `
-                    <div class='d-flex text-center'>
+                    <div class='d-flex text-center mx-auto'>
                         <i class='fa fa-thin text-primary fa-regular fa-eye p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-solid text-primary fa-list p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
+                        <a href='#' class='btn-active-color-primary' id='pt-ins-tracking' data='${row.patientid}'>
+                            <i class='fa fa-thin text-primary fa-clock-rotate-left p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
+                        </a>
                     </div>
                 `
             }
@@ -222,6 +225,29 @@ $(document).ready(async function() {
                 `
             }
         }]
+    })
+
+    $(document).on('click', '#pt-ins-tracking', (e) => {
+        e.preventDefault()
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {patientid: e.currentTarget.attributes['data'].value}, 'tracking/patient/byptid', (xhr, err) => {
+            if (!err) {
+                var result = JSON.parse(xhr.responseText)['data']
+                var html = `
+                    <div class='fs-2 my-2 modal-text'><span class='fs-2'>Patient ID :</span>&nbsp;<span class='fs-2'>${result[0].ptemrid}</span></div>
+                    <div class='separator border border-dashed my-4'></div>
+                `
+                result.forEach(item => {
+                    html += `
+                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${new Date(item.create_date).toLocaleDateString('en-US')}</span></div>
+                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insurance_name}</span></div>
+                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberid}</span></div>
+                        <div class='separator border border-dashed my-3'></div>
+                    `
+                })
+                $('#modal-body-tracking').html(html)
+                $('#patient-insurance-tracking').modal('show')
+            }
+        })
     })
 
     // Patient Search begin //
