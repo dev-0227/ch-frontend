@@ -22,7 +22,7 @@ var _oldStatus = ''
 
 let _specialists = []
 
-var duration_mins = 0;
+var duration_mins = 30;
 
 let organizations = []
 
@@ -423,7 +423,6 @@ const handleNewEvent = (data) => {
     }
     $("#appointment_attended").prop('checked', false);
     $("#appointment_status").val('2').trigger('change');
-    $("#appointment_reason").val('')
     $("#appointment_barrier_reason").val('');
     $("#appointment_class").val('2').trigger('change');
     $("#appointment_service_category").val('7').trigger('change');
@@ -434,9 +433,12 @@ const handleNewEvent = (data) => {
     var endTime = data.endStr.split("T")[1]
     if (startTime === null || startTime === undefined || startTime === '') $("#appointment_start_date").val('09:00');
     else $("#appointment_start_date").val(startTime.substr(0, 5));
-    if (endTime === undefined || endTime === null || endTime === '') endTime = $("#appointment_end_date").val('09:30');
-    else $("#appointment_end_date").val(endTime.substr(0, 5));
+    // if (endTime === undefined || endTime === null || endTime === '') endTime = $("#appointment_end_date").val('09:30');
+    // else $("#appointment_end_date").val(endTime.substr(0, 5));
+    setEndData()
+
     $("#appointment_approve_date").val(data.startStr.substr(0, 10));
+    $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
 
     $("#appointment-create-referral").show();
     $("#create-referral").prop('checked', false);
@@ -694,7 +696,11 @@ function fillReferralDocument(data) {
     $("#header_clinic_city").html(data.ccity)
     $("#header_clinic_zip").html(data.czip)
     $("#header_clinic_phone").html(data.cphone)
-    $("#header_clinic_fax").html(data.cfax)
+    if (data.cfax == '' || data.cfax == null) $("#header_clinic_fax_parent").addClass('d-none')
+    else {
+        $("#header_clinic_fax_parent").removeClass('d-none')
+        $("#header_clinic_fax").html(data.cfax)
+    }
     // specialist
     $("#specialist_name").html(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
     $("#specialist_specialty").html(data.aprovider == '1' ? data.sspecialty : data.dspecialty)
@@ -702,7 +708,24 @@ function fillReferralDocument(data) {
     $("#specialist_address").html(data.aprovider == '1' ? data.saddress : data.daddress)
     $("#specialist_location").html(data.aprovider == '1' ? data.scity + ' ' + data.sstate + ' ' + data.szip : data.dcity + ' ' + data.dstate + ' ' + data.dzip)
     $("#specialist_phone").html(data.aprovider == '1' ? data.sphone : data.dphone)
-    $("#specialist_fax").html(data.sfax)
+    if (data.sfax == '' || data.sfax == null) {
+        $("#specialist_fax").addClass('d-none')
+    } else {
+        $("#specialist_fax").removeClass('d-none')
+        $("#specialist_fax").html(data.sfax)
+    }
+    if (data.semail == '' || data.semail == null) {
+        $("#specialist_email_i").addClass('d-none')
+    } else {
+        $("#specialist_email_i").removeClass('d-none')
+        $("#pcp_email").html(data.semail)
+    }
+    if (data.sweb == '' || data.sweb == null) {
+        $("#specialist_web_i").addClass('d-none')
+    } else {
+        $("#specialist_web_i").removeClass('d-none')
+        $("#pcp_web").html(data.sweb)
+    }
     // clinic provider
     $("#referral_clinic_name").html(data.cname)
     $("#pcp_name").html(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
@@ -710,9 +733,23 @@ function fillReferralDocument(data) {
     $("#pcp_address").html(data.caddress)
     $("#pcp_location").html(data.ccity + ' ' + data.cstate + ' ' + data.czip)
     $("#pcp_phone").html(data.cphone)
-    $("#pcp_fax").html(data.cfax)
-    $("#pcp_email").html(data.cemail)
-    $("#pcp_web").html(data.cweb)
+    if (data.cfax == '' || data.cfax == null) $("#pcp_fax_i").addClass('d-none')
+    else {
+        $("#pcp_fax_i").removeClass('d-none')
+        $("#pcp_fax").html(data.cfax)
+    }
+    if (data.cemail == '' || data.cemail == null) {
+        $("#pcp_email_i").addClass('d-none')
+    } else {
+        $("#pcp_email_i").removeClass('d-none')
+        $("#pcp_email").html(data.cemail)
+    }
+    if (data.cweb == '' || data.cweb == null) {
+        $("#pcp_web_i").addClass('d-none')
+    } else {
+        $("#pcp_web_i").removeClass('d-none')
+        $("#pcp_web").html(data.cweb)
+    }
     // referral reason
     $("#referral_reason").html(data.areason)
     $("#referral_note").html(data.anote)
@@ -732,8 +769,8 @@ function fillReferralDocument(data) {
     $("#patient_address").html(data.paddress)
     $("#patient_phone").html(data.pphone)
     $("#patient_email").html(data.pemail)
-    $("#insurance").html(data.iname)
-    $("#insurance_no").html('')
+    $("#insurance").html(data.pinsname)
+    $("#insurance_no").html(data.psubscriberno)
     $("#communication_need").html('')
     //provider
     $("#provider_npi").html(data.aprovider == '1' ? data.snpi : data.dnpi)
@@ -741,7 +778,7 @@ function fillReferralDocument(data) {
     $("#referral_create_date").html(`${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`)
     $("#referral_create_time").html(`${now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'})} EST`)
 
-    return data.mfname + ' ' + data.mlname
+    return `${data.pfname} ${data.plname}-${data.sspecialty}-Referral`
 }
 
 function generateDocument() {
@@ -955,6 +992,7 @@ sendRequestWithToken('POST', localStorage.getItem('authToken'), {isSpecialist: $
       if (measure.length > 0) {
         loadSpecialistProviderByMeasureId(measure[0]['measureId'])
         $("#appointment_measure").val(measure[0].measureId).trigger('change')
+        $("#appointment_reason").val(measure[0]['title'])
       }
     }
 });
@@ -1542,7 +1580,7 @@ $(document).ready(async function() {
         $("#appointment_clinic_provider").val("");
         $("#appointment_attended").prop('checked', false);
         $("#appointment_status").val('2').trigger('change');
-        $("#appointment_reason").val('')
+        $("#appointment_reason").val($("#appointment_measure option:selected").text().split(" - ")[1]);
 
         $("#appointment_barrier_reason").val('');
         $("#appointment_class").val('2').trigger('change');

@@ -50,7 +50,7 @@ $(document).ready(async function() {
     }
 
     // Load All clinics
-    await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/clinic/getAll", (xhr, err) => {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, "clinic/getByStatus", (xhr, err) => {
         var options = ''
         if (!err) {
             let result = JSON.parse(xhr.responseText)['data']

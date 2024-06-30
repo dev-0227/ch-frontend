@@ -423,7 +423,12 @@ transform-origin: 0% 50%;
 }
 
 
-
+.doc-title {
+	font-family: 'Lucida Handwriting';
+	align-items: center;
+	display: flex;
+	justify-content:space-between;
+}
 
 .doc-title-center {
 	align-items: center;
