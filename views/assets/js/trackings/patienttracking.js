@@ -229,13 +229,16 @@ $(document).ready(async function() {
 
     $(document).on('click', '#pt-ins-tracking', (e) => {
         e.preventDefault()
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), {patientid: e.currentTarget.attributes['data'].value}, 'tracking/patient/byptid', (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid: _clinicid, patientid: e.currentTarget.attributes['data'].value}, 'tracking/patient/byptid', (xhr, err) => {
             if (!err) {
                 var result = JSON.parse(xhr.responseText)['data']
                 var html = ''
                 if (result.length > 0) {
                     html += `
                         <div class='fs-2 my-2 modal-text'><span class='fs-2'>Patient ID :</span>&nbsp;<span class='fs-2'>${result[0].ptemrid}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2'>Name :</span>&nbsp;<span class='fs-2'>${result[0].FNAME} ${result[0].LNAME}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2'>DOB :</span>&nbsp;<span class='fs-2'>${new Date(result[0].DOB).toLocaleDateString('en-US')}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2'>Sex :</span>&nbsp;<span class='fs-2'>${result[0].GENDER}</span></div>
                         <div class='separator border border-dashed my-4'></div>
                     `
                     result.forEach(item => {
