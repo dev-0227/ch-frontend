@@ -15,7 +15,7 @@ $(document).ready(async function() {
         $('#insurance-clinics').html(options)
     })
 
-    await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/getHedisList", (xhr, err) => {
+    await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/", (xhr, err) => {
         var options = ''
         if (!err) {
             let result = JSON.parse(xhr.responseText)['data']
