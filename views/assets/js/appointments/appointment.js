@@ -475,7 +475,7 @@ function createCalendar(view_setting) {
     app_calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: view_setting.length ? view_setting[0] : 'unknown',
         headerToolbar: {
-            left: 'prev,next,today',
+            left: 'prev,today,next',
             center: 'title',
             right: view_setting.join(',')
         },
@@ -1812,6 +1812,17 @@ $(document).ready(async function() {
     //
     // Appointment dashboad begin //
     // Calendar begin //
+    $(document).on('click', '.fc-prev-button', () => {
+        console.log("Prev!")
+    })
+
+    $(document).on('click', '.fc-next-button', () => {
+        console.log('Next!')
+    })
+
+    $('.fc-today-button').click(() => {
+        console.log('Today!')
+    })
 
     // Load Calendar View Setting Information AND create calendar
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid: localStorage.getItem('userid')}, 'manager/getapptview', (xhr, err) => {

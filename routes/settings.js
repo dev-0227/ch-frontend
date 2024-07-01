@@ -101,6 +101,13 @@ router.get("/referralsetting", (req, res, next) => {
     });
 });
 
+router.get("/insurancesetting", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Insurance Settings",
+        pageKey: "../settings/insurancesetting",
+    });
+});
+
 router.get("/appointmentsetting", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Appointment Settings",
