@@ -17,15 +17,22 @@
                                 <select id="insurance-insurance" class="form-select" data-control="select2" data-placeholder="Select an Insurance">
                                 </select>
                             </div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3 justify-content-end">
+                                <button class="btn btn-primary" id="insurance-add">
+                                    <i class="fa fa-plus"></i> Add
+                                </button>
+                            </div>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-row-bordered gy-5" id="insurance-table">
                                 <thead>
                                     <tr class="fw-bold fs-6 text-gray-800">
-                                        <th>Insurance Name</th>
-                                        <th>Ins Emr ID</th>
-                                        <th>EMR hfir ID</th>
-                                        <th>Ins Clinic ID</th>
+                                        <th class="col-md-4">Insurance Name</th>
+                                        <th class="col-md-2">Ins Emr ID</th>
+                                        <th class="col-md-2">EMR hfir ID</th>
+                                        <th class="col-md-2">Ins Clinic ID</th>
+                                        <th class="col-md-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -36,4 +43,38 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="insurance-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+        <input type="hidden" id="edit-type" value="1"></input>
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add New Insurance Map</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			</div>
+			<div class="modal-body">
+                <div class="col-md-12 my-5">
+                    <select id="insurance-add-insurance" class="form-select" data-control="select2" data-placeholder="Select a Clinic">
+                    </select>
+                </div>
+                <div class="col-md-12 my-5">
+                    <select id="insurance-add-clinics" class="form-select" data-control="select2" data-placeholder="Select a Clinic">
+                    </select>
+                </div>
+                <div class="col-md-12 my-5">
+                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Insurace Emr ID" id="insurance-add-emrid">
+                </div>
+                <div class="col-md-12 my-5">
+                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Emr fhir ID" id="insurance-add-fhirid">
+                </div>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="insurance-save"><i class="fa fa-save">&nbsp;</i> Save</button>
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+			</div>
+		</div>
+	</div>
 </div>
