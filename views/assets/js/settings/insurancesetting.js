@@ -1,17 +1,19 @@
 
 var _selectedid = 0
+var _selectLob = 0
 
 function loadInsuranceLob(insid) {
-    console.log(insid)
     $('#insurance-add-lob').html('')
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: insid}, 'insurance/getlob', (xhr, err) => {
         var option = ''
         if (!err) {
             var result = JSON.parse(xhr.responseText)['data']
             result.forEach(item => {
-                option += `<option value=${item.id}>${item.lob}</option>`
+                option += `<option value='${item.id}'>${item.lob}</option>`
             })
             $('#insurance-add-lob').html(option)
+
+            if (_selectLob != 0) $('#insurance-add-lob').val(_selectLob).trigger('change')
         }
     })
 }
@@ -140,6 +142,7 @@ $(document).ready(async function() {
                 if (result.length) {
                     $('#insurance-add-clinics').val(result[0].clinicid).trigger('change')
                     $('#insurance-add-insurance').val(result[0].insid).trigger('change')
+                    _selectLob = result[0].lob
                     $('#insurance-add-emrid').val(result[0].emrid)
                     $('#insurance-add-fhirid').val(result[0].fhirid)
 
