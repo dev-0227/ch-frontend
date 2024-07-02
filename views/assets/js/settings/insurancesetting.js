@@ -13,7 +13,7 @@ function loadInsuranceLob(insid) {
             })
             $('#insurance-add-lob').html(option)
 
-            if (_selectLob != 0) $('#insurance-add-lob').val(_selectLob).trigger('change')
+            $('#insurance-add-lob').val(_selectLob).trigger('change')
         }
     })
 }
