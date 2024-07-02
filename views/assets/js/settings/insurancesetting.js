@@ -1,6 +1,21 @@
 
 var _selectedid = 0
 
+function loadInsuranceLob(insid) {
+    console.log(insid)
+    $('#insurance-add-lob').html('')
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: insid}, 'insurance/getlob', (xhr, err) => {
+        var option = ''
+        if (!err) {
+            var result = JSON.parse(xhr.responseText)['data']
+            result.forEach(item => {
+                option += `<option value=${item.id}>${item.lob}</option>`
+            })
+            $('#insurance-add-lob').html(option)
+        }
+    })
+}
+
 $(document).ready(async function() {
 
     "use strict"
@@ -19,15 +34,18 @@ $(document).ready(async function() {
     })
 
     await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/", (xhr, err) => {
+        var _id = 0
         var options = ''
         if (!err) {
             let result = JSON.parse(xhr.responseText)['data']
             result.forEach(item => {
                 options += `<option value=${item.id}>${item.insName}</option>`
             })
+            if (result.length > 0) _id = result[0].id
         }
         $('#insurance-insurance').html(`<option value = '0'>All Insurances</option>` + options)
         $('#insurance-add-insurance').html(options)
+        loadInsuranceLob(_id)
     })
 
     var insTable = $('#insurance-table').DataTable({
@@ -43,7 +61,11 @@ $(document).ready(async function() {
         "processing": true,
         "autoWidth": false,
         "columns": [
-            { data: 'insName'},
+            { data: 'insName',
+                render: (data, type, row) => {
+                    return row.lob ? row.insName + ' - ' + row.lobname : row.insName
+                }
+            },
             { data: 'emrid'},
             { data: 'fhirid'},
             { data: 'clinicname'},
@@ -78,8 +100,9 @@ $(document).ready(async function() {
             id: _selectedid,
             clinicid: $('#insurance-add-clinics').val(),
             insid: $('#insurance-add-insurance').val(),
+            lob: $('#insurance-add-lob').val(),
             emrid: $('#insurance-add-emrid').val(),
-            fhirid: $('#insurance-add-fhirid').val()
+            fhirid: $('#insurance-add-fhirid').val(),
         }
         if (type == '1') {
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/map/add', (xhr, err) => {
@@ -160,6 +183,11 @@ $(document).ready(async function() {
     })
 
     $(document).on('change', '#insurance-insurance', () => {
+        insTable.ajax.reload()
+    })
+
+    $(document).on('change', '#insurance-add-insurance', (e) => {
+        loadInsuranceLob(e.target.value)
         insTable.ajax.reload()
     })
 })

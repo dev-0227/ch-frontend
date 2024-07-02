@@ -56,19 +56,25 @@
 				</div>
 			</div>
 			<div class="modal-body">
-                <div class="col-md-12 my-5">
-                    <select id="insurance-add-insurance" class="form-select" data-control="select2" data-placeholder="Select a Clinic">
-                    </select>
-                </div>
-                <div class="col-md-12 my-5">
-                    <select id="insurance-add-clinics" class="form-select" data-control="select2" data-placeholder="Select a Clinic">
-                    </select>
-                </div>
-                <div class="col-md-12 my-5">
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Insurace Emr ID" id="insurance-add-emrid">
-                </div>
-                <div class="col-md-12 my-5">
-                    <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Emr fhir ID" id="insurance-add-fhirid">
+                <div class="row">
+                    <div class="col-md-7 my-5">
+                        <select id="insurance-add-insurance" class="form-select" data-dropdown-parent="#insurance-add-modal" data-control="select2" data-placeholder="Select an Insurance">
+                        </select>
+                    </div>
+                    <div class="col-md-5 my-5">
+                        <select id="insurance-add-lob" class="form-select" data-dropdown-parent="#insurance-add-modal" data-control="select2" data-placeholder="Select a Lob"data-allow-clear="true">
+                        </select>
+                    </div>
+                    <div class="col-md-12 my-5">
+                        <select id="insurance-add-clinics" class="form-select" data-dropdown-parent="#insurance-add-modal" data-control="select2" data-placeholder="Select a Clinic">
+                        </select>
+                    </div>
+                    <div class="col-md-12 my-5">
+                        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Insurace Emr ID" id="insurance-add-emrid">
+                    </div>
+                    <div class="col-md-12 my-5">
+                        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Emr fhir ID" id="insurance-add-fhirid">
+                    </div>
                 </div>
 			</div>
             <div class="modal-footer">
