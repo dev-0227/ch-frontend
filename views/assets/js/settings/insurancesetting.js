@@ -1,4 +1,6 @@
 
+var _selectedid = 0
+
 $(document).ready(async function() {
 
     "use strict"
@@ -44,7 +46,7 @@ $(document).ready(async function() {
             { data: 'insName'},
             { data: 'emrid'},
             { data: 'fhirid'},
-            { data: 'clinicid'},
+            { data: 'clinicname'},
             { data: 'id',
               render: function (data, type, row) {
                 return `
@@ -73,6 +75,7 @@ $(document).ready(async function() {
     $(document).on('click', '#insurance-save', () => {
         var type = $('#edit-type').val()
         var entry = {
+            id: _selectedid,
             clinicid: $('#insurance-add-clinics').val(),
             insid: $('#insurance-add-insurance').val(),
             emrid: $('#insurance-add-emrid').val(),
@@ -107,6 +110,7 @@ $(document).ready(async function() {
         let entry = {
             id: $(this).parent().attr("idkey"),
         }
+        _selectedid = entry.id
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/map/get", (xhr, err) => {
             if (!err) {
                 var result = JSON.parse(xhr.responseText)['data']

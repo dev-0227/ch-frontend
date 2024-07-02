@@ -519,6 +519,7 @@ function createCalendar(view_setting) {
             handleViewEvent(arg);
         },
         eventContent: function(arg) {
+            console.log(arg.event)
             var icon = ''
             let el = document.createElement('div')
             el.setAttribute('style', 'height: 100%;')

@@ -146,12 +146,6 @@ router.post("/superbillview", (req, res, next) => {
 });
 
 
-router.get("/inslob", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Insurance LOB",
-        pageKey: "../pages/inslob"
-    });
-});
 router.get("/creditsms", (req, res, next) => {
     res.render("nosiderblank", {
         pageTitle: "Credit Panel",
