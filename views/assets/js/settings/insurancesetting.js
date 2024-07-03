@@ -63,6 +63,7 @@ $(document).ready(async function() {
         "processing": true,
         "autoWidth": false,
         "columns": [
+            { data: 'id' },
             { data: 'insName',
                 render: (data, type, row) => {
                     return row.lob ? row.insName + ' - ' + row.lobname : row.insName
