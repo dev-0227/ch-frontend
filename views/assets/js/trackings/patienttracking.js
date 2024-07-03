@@ -108,8 +108,10 @@ $(document).ready(async function() {
         'columns': [{
             data: 'insuranceid',
             render: (data, type, row) => {
+                console.log(row)
                 return `
-                    <div class='text-center'>${row.pinsid ? row.pinsid : ''}</div>
+                    <div><span class='text-primary'>${row.pinsname ? row.pinsname : ''}</span></div>
+                    <div><span>${!row.psub || row.psub != '0' ? row.psub : ''}</span></div>
                 `
             }
         }, {
@@ -224,6 +226,13 @@ $(document).ready(async function() {
                     <div class='text-center'>${row.visitstatus ? row.visitstatus : ''}</div>
                 `
             }
+        }, {
+            data: 'insuranceid',
+            render: (data, type, row) => {
+                return `
+                    <div>1</div>
+                `
+            }
         }]
     })
 
@@ -235,19 +244,24 @@ $(document).ready(async function() {
                 var html = ''
                 if (result.length > 0) {
                     html += `
-                        <div class='fs-2 my-2 modal-text'><span class='fs-2'>Patient ID :</span>&nbsp;<span class='fs-2'>${result[0].ptemrid}</span></div>
-                        <div class='fs-2 my-2'><span class='fs-2'>Name :</span>&nbsp;<span class='fs-2'>${result[0].FNAME} ${result[0].LNAME}</span></div>
-                        <div class='fs-2 my-2'><span class='fs-2'>DOB :</span>&nbsp;<span class='fs-2'>${new Date(result[0].DOB).toLocaleDateString('en-US')}</span></div>
-                        <div class='fs-2 my-2'><span class='fs-2'>Sex :</span>&nbsp;<span class='fs-2'>${result[0].GENDER}</span></div>
+                        <div class='fs-2 my-2 modal-text'><span class='fs-2 text-primary'>Patient ID :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].ptemrid}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>Name :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].FNAME} ${result[0].LNAME}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>DOB :</span>&nbsp;<span class='fs-2 text-primary'>${new Date(result[0].DOB).toLocaleDateString('en-US')}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>Sex :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].GENDER}</span></div>
                         <div class='separator border border-dashed my-4'></div>
                     `
+                    var i = 0
                     result.forEach(item => {
                         html += `
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${new Date(item.create_date).toLocaleDateString('en-US')}</span></div>
+                            <div class='fs-2 my-2 modal-text'>
+                                <span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${item.startDate ? new Date(item.startDate).toLocaleDateString('en-US') : new Date(item.create_date).toLocaleDateString('en-US')}</span>
+                                <span>&nbsp;&nbsp;&nbsp;&nbsp;${i == 0 ? `<div class='ms-2 badge badge-light-danger fw-bold fs-4 text-center'>Primary</div>` : ''}</span>
+                            </div>
                             <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insurance_name}</span></div>
                             <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberid}</span></div>
                             <div class='separator border border-dashed my-3'></div>
                         `
+                        i ++
                     })
                 }
                 $('#modal-body-tracking').html(html)
@@ -564,9 +578,6 @@ $(document).ready(async function() {
                 }
             }
         }]
-    })
-
-    $(document).on('click', '#calendar-clinic-name', function() {
     })
 
     $('#calendar-year').on('change', e => {
