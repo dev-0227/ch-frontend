@@ -395,6 +395,7 @@ $(document).on("click",".edit_appt_specialty_btn",function(){
 });
 
 
+
 $(document).on("click",".delete_appt_specialty_btn",function(){
   $("#appt_specialty_id").val($(this).parent().attr("idkey"));
   let entry = {
@@ -426,13 +427,4 @@ $(document).on("click",".delete_appt_specialty_btn",function(){
   });
 });
 
-
-/******************************* Note To Specialist *************************************************** */
-
-var referral_note_specialist;
-  ClassicEditor.create(document.querySelector('#referral-note-specialist')).then( editor => {
-    referral_note_specialist = editor;
-  }).catch( err => {
-    console.error( err.stack );
-  });
 });
