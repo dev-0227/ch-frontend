@@ -711,4 +711,276 @@
     </div>
 </div>
 
+<div class="modal fade" id="referral-document-modal-form"  tabindex="1"  role="dialog"  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+			<div class="referral-document" id="referral-document">
+				<!-- Referral Document Page 1 begin -->
+				<div class="document-edit-page" id="document-page">
+					<div class="page-body page-space">
+						<div class="page-title">
+							<div class="fs-3 text-gray-500 doc-title w-p100">
+								<div class="text-gray-700 fs-2x w-p100 component-between">
+									<div class="text-gray-700 w-p75 component-start">
+										<input id="referral_title_modal" type="text" class="form-control form-control-transparent border-bottom p-2" placeholder="Document Title"/>
+										<span> Referral</span>
+									</div>
+									<input id="referral_date_modal" class="form-control form-control-transparent border-bottom p-2 w-150px" placeholder=""/>
+								</div>
+							</div>
+							<div class="border-gray-400 border-bottom border-bottom-solid border-primary-subtle mt-3 mb-4"></div>
+						</div>
+						<div class="page-content fs-5" style="font-family: 'Consolas';">
+							<div class="fs-4 text-gray-800">
+								<div class="doc-title-justify mb-1" style="font-family: 'Courier New', Courier, monospace;">
+									<div class="component-start">
+										<span class="field-name fw-bold">FOR:</span>
+										<input id="header_name_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start">
+										<span class="field-name fw-bold">DOB:</span>
+										<input id="header_dob_modal" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start">
+										<span class="field-name fw-bold">GENDER:</span>
+										<input id="header_gender_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start">
+										<span class="field-name fw-bold">LANGUAGE:</span>
+										<input id="header_language_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+								</div>
+								<div class="mt-2 mb-1 w-p50 component-start">
+									<span class="text-primary">CLINIC&nbsp;NAME:</span>
+									<input id="header_clinic_name_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+								</div>
+								<div class="doc-title-justify mb-1 mt-2" style="font-family: 'Sitka Heading';">
+									<div class="component-start">
+										<span class="text-primary">ADDRESS&nbsp;:</span>&nbsp;
+										<input id="header_clinic_address_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+								</div>
+								<div class="doc-title-justify mb-1 mt-1">
+									<div class="component-start w-p100">
+										<div class="w-p25 component-start">
+											<span class="text-primary">Phone:</span>
+											<input id="header_clinic_phone_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+										</div>
+										<div id="header_clinic_fax_parent" class="w-p25 component-start">
+											<span class="text-primary">Fax:</span>
+											<input id="header_clinic_fax_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="border-gray-400 border-bottom border-bottom-solid border-primary-subtle mt-5 mb-5"></div>
+							<div class="row fs-5">
+								<div class="col-md-6">
+									<div class="component-start">
+										<span class="field-name fw-bold fs-3 mb-2">REFERRAL&nbsp;TO:</span> 
+										<input id="specialist_name_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">SPECIALTY:</span> 
+										<input id="specialist_specialty_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">NPI:</span> 
+										<input id="specialist_npi_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">ADDRESS:</span> 
+										<input id="specialist_address_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">LOCATION:</span> 
+										<input id="specialsit_location_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="doc-title-justify">
+										<div class="component-start w-p100">
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span class="field-name">PHONE:</span>  
+												<input id="specialsit_phone_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div>
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<span class="field-name">FAX:</span> 
+												<input id="specialsit_fax_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div>
+										</div>
+									</div>
+									<div class="doc-title-justify fs-7" style="font-family: 'Comic Sans MS';">
+										<div class="component-start w-p100">
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span class="field-name">EMAIL:</span> 
+												<input id="specialsit_email_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div>	
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<span class="field-name">WEB:</span> 
+												<input id="specialsit_web_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div>
+										</div>
+									</div> 
+								</div>
+								<div class="col-md-6">
+									<div class="component-start">
+										<span class="field-name fw-bold fs-3 mb-2">REFERRAL&nbsp;FROM:</span> 
+										<input id="referral_clinic_name_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">MEDICAL&nbsp;PROVIDER:</span>
+										<input id="pcp_name_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">NPI:</span> 
+										<input id="pcp_npi_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">ADDRESS:</span> 
+										<input id="pcp_address_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">LOCATION:</span> 
+										<input id="pcp_location_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="doc-title-justify">
+										<div class="component-start w-p100">
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span class="field-name">PHONE:</span> 
+												<input id="pcp_phone_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div>
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<span class="field-name">FAX:</span> 
+												<input id="pcp_fax_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div> 
+										</div>
+									</div>
+									<div class="doc-title-justify fs-7" style="font-family: 'Comic Sans MS';">
+										<div class="component-start w-p100">
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span class="field-name">EMAIL:</span> 
+												<input id="pcp_email_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div>
+											<div class="component-start mt-2" style="min-width: 25%;">
+												<span>&nbsp;&nbsp;</span>
+												<span class="field-name">WEB:</span> 
+												<input id="pcp_web_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+											</div>
+										</div>
+									</div> 
+								</div>
+							</div>
+							<div class="border-gray-400 border-bottom border-bottom-solid border-primary-subtle mt-5 mb-5"></div>
+							<div class="row fs-5">
+								<div class="col-md-6">
+									<div><span class="field-name fw-bold fs-3 mb-2">REFERRAL REASON:</span></div>
+									<div class="component-start mt-2">
+										<span class="field-name">REASON:</span>
+										<input id="referral_reason_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">REASON&nbsp;NOTE:</span>
+										<input id="referral_note_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">DIAGNOSIS:</span>
+										<input id="referral_diagnosis_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">STATUS:</span>
+										<input id="referral_status_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">PRIORITY:</span>
+										<input id="referral_priority_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">START&nbsp;TIME:</span>
+										<input id="referral_start_date_modal" class="form-control form-control-transparent border-bottom p-0 w-150px" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">END&nbsp;TIME:</span>
+										<input id="referral_end_date_modal" class="form-control form-control-transparent border-bottom p-0 w-150px" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">AUTHORIZATIO&nbsp;NO:</span>
+										<input id="referral_auth_no_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">AUTHORIZATION&nbsp;TYPE:</span>
+										<input id="referral_auth_type_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="mt-2">
+										<span class="field-name">NOTE&nbsp;TO&nbsp;SPECIALIST:</span>
+										<textarea class="form-control border-gray-200 h-150px" placeholder="Leave a comment here" id="referral_spec_note_modal"></textarea>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div><span class="field-name fw-bold fs-3 mb-2">PATIENT INFO:</span></div>
+									<div class="component-start mt-2">
+										<span class="field-name">NAME:</span>
+										<input id="patient_name_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">DOB:</span>
+										<input id="patient_dob_modal" class="form-control form-control-transparent border-bottom p-0 w-150px" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">GENDER:</span>
+										<input id="patient_gender_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">LANGUAGE:</span>
+										<input id="patient_language_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">ADDRESS:</span>
+										<input id="patient_address_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">PHONE:</span>
+										<input id="patient_phone_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">EMAIL:</span>
+										<input id="patient_email_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">INSURANCE:</span>
+										<input id="insurance_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="component-start mt-2">
+										<span class="field-name">SUBSCRIBER&nbsp;ID:</span>
+										<input id="insurance_no_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+									</div>
+									<div class="mt-2">
+										<span class="field-name">COMMUNICATION&nbsp;NEEDS:</span>
+										<textarea class="form-control border-gray-200 h-150px" placeholder="Leave a comment here" id="communication_need_modal"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="border-gray-400 border-bottom border-bottom-solid border-primary-subtle mt-3 mb-3"></div>
+							<div class="page-sign mb-3 doc-title-justify">
+								<span class="fs-3tx text-gray-200" style="font-family: 'Freestyle Script';">Signature</span>
+							</div>
+							<div class="mb-5 component-start w-p50">
+								<span class="field-name">Provider&nbsp;NPI:</span>
+								<input id="provider_npi_modal" type="text" class="form-control form-control-transparent border-bottom p-0" placeholder=""/>
+							</div>
+							<div class="mt-7" style="font-family: 'Comic Sans MS';">Electronically&nbsp;signed&nbsp;by <span class="" id="provider_name"></span> on <span id="referral_create_date"></span> at <span id="referral_create_time"></span></div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+						<button type="button" class="btn btn-info" id="referral-edit-document-save"><i class="fa fa-save">&nbsp;</i> Done</button>
+					</div>
+				</div>
+				<!-- Referral Document Page 1 end -->
+			</div>
+        </div>
+    </div>
+</div>
+
 <%- include("../patients/patientModal"); %>

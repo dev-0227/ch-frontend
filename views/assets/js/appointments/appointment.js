@@ -73,6 +73,66 @@ var _options = {
 }
 // Parameters end //
 
+// initialize component begin //
+$('#referral_date_modal').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'), 12)
+}, {
+    function(start, end, label) {
+        var years = moment().diff(start, 'years')
+        alert('You are ' + years + 'years old!')
+    }
+})
+
+$('#header_dob_modal').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'), 12)
+}, {
+    function(start, end, label) {
+        var years = moment().diff(start, 'years')
+        alert('You are ' + years + 'years old!')
+    }
+})
+
+$('#patient_dob_modal').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'), 12)
+}, {
+    function(start, end, label) {
+        var years = moment().diff(start, 'years')
+        alert('You are ' + years + 'years old!')
+    }
+})
+
+$('#referral_start_date_modal').daterangepicker({
+    timePicker: true,
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'), 12),
+    locale: {
+        format: "hh:mm A"
+    }
+})
+
+$('#referral_end_date_modal').daterangepicker({
+    timePicker: true,
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'), 12),
+    locale: {
+        format: "hh:mm A"
+    }
+})
+// initialize component end //
+
 // utils begin //
 function GetFormattedDate(date) {
     var month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -776,6 +836,73 @@ function fillReferralDocument(data) {
     //provider
     $("#provider_npi").html(data.aprovider == '1' ? data.snpi : data.dnpi)
     $("#provider_name").html(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
+    $("#referral_create_date").html(`${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`)
+    $("#referral_create_time").html(`${now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'})} EST`)
+
+    return `${data.pfname} ${data.plname}-${data.sspecialty}-Referral`
+}
+
+function fillReferraEditlDocument(data) {
+    //header
+    $("#referral_title_modal").val(data.aprovider == '1' ? data.sspecialty : data.dspecialty)
+    $("#referral_date_modal").val(new Date(Date.now()))
+    $("#header_name_modal").val(data.pfname + ' ' + data.plname)
+    $("#header_dob_modal").val(new Date(data.pdob))
+    $("#header_gender_modal").val(data.pgender)
+    $("#header_language_modal").val(data.planguage ? data.planguage : 'English')
+    $("#header_clinic_name_modal").val(data.cname)
+    $("#header_clinic_address_modal").val(data.caddress)
+    $("#header_clinic_state_modal").val(data.cstate)
+    $("#header_clinic_city_modal").val(data.ccity)
+    $("#header_clinic_zip_modal").val(data.czip)
+    $("#header_clinic_phone_modal").val(data.cphone)
+    $("#header_clinic_fax_modal").val(data.cfax)
+    // specialist
+    $("#specialist_name_modal").val(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
+    $("#specialist_specialty_modal").val(data.aprovider == '1' ? data.sspecialty : data.dspecialty)
+    $("#specialist_npi_modal").val(data.aprovider == '1' ? data.snpi : data.dnpi)
+    $("#specialist_address_modal").val(data.aprovider == '1' ? data.saddress : data.daddress)
+    $("#specialist_location_modal").val(data.aprovider == '1' ? data.scity + ' ' + data.sstate + ' ' + data.szip : data.dcity + ' ' + data.dstate + ' ' + data.dzip)
+    $("#specialist_phone_modal").val(data.aprovider == '1' ? data.sphone : data.dphone)
+    $("#specialist_fax_modal").val(data.sfax)
+    $("#pcp_email_modal").val(data.semail)
+    $("#pcp_web_modal").val(data.sweb)
+    // clinic provider
+    $("#referral_clinic_name_modal").val(data.cname)
+    $("#pcp_name_modal").val(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
+    $("#pcp_npi_modal").val(data.cnpi)
+    $("#pcp_address_modal").val(data.caddress)
+    $("#pcp_location_modal").val(data.ccity + ' ' + data.cstate + ' ' + data.czip)
+    $("#pcp_phone_modal").val(data.cphone)
+    $("#pcp_fax_modal").val(data.cfax)
+    $("#pcp_email_modal").val(data.cemail)
+    $("#pcp_web_modal").val(data.cweb)
+    // referral reason
+    $("#referral_reason_modal").val(data.areason)
+    $("#referral_note_modal").val(data.anote)
+    $("#referral_diagnosis_modal").val(data.hicd + ' ' + data.qtitle)
+    $("#referral_status_modal").val(data.a_sdisplay)
+    $("#referral_priority_modal").val(data.a_pdisplay)
+    $("#referral_start_date_modal").val(data.astartd)
+    $("#referral_end_date_modal").val(data.aendd)
+    $("#referral_auth_no_modal").val('')
+    $("#referral_auth_type_modal").val('')
+    $("#referral_spec_note_modal").val('')
+    // patient info
+    $("#patient_name_modal").val(data.pfname + ' ' + data.plname)
+    $("#patient_dob_modal").val(`${pdob.getMonth() + 1}/${pdob.getDate()}/${pdob.getFullYear()}`)
+    $("#patient_gender_modal").val(data.pgender)
+    $("#patient_language_modal").val(data.planguage ? data.planguage : 'English')
+    $("#patient_address_modal").val(data.paddress)
+    $("#patient_phone_modal").val(data.pphone)
+    $("#patient_email_modal").val(data.pemail)
+    $("#insurance_modal").val(data.pinsname)
+    $("#insurance_no_modal").val(data.psubscriberno)
+    $("#communication_need_modal").val('')
+    //provider
+    $("#provider_npi").val(data.aprovider == '1' ? data.snpi : data.dnpi)
+    $("#provider_name").val(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
+    var now = new Date(Date.now())
     $("#referral_create_date").html(`${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`)
     $("#referral_create_time").html(`${now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit'})} EST`)
 
@@ -1597,8 +1724,8 @@ $(document).ready(async function() {
         $("#appointment-create-referral").show()
         $("#create-referral").prop('checked', false);
 
-        $("#appointment_edit_modal-1").modal("show");
-        // $("#referral-document-modal").modal('show')
+        // $("#appointment_edit_modal-1").modal("show")
+        $("#referral-document-modal-form").modal('show')
     });
 
     // Appointment Search Form begin //

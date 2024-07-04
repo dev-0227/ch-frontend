@@ -472,6 +472,14 @@ transform-origin: 0% 50%;
 	width: 8.5in;
 	height: 11in;
 }
+
+.document-edit-page {
+	background-color: white;
+	position: relative;
+	--bs-modal-width: 8.5in;
+	width: 8.5in;
+}
+
 .field-name {
 	color:cornflowerblue;
 }
@@ -499,6 +507,11 @@ transform-origin: 0% 50%;
 	justify-content:flex-end;
 }
 
+.component-between {
+	display: flex;
+	justify-content:space-between;
+}
+
 .modal-text {
 	font-family:'Consolas';
 	display: flex;
@@ -507,4 +520,28 @@ transform-origin: 0% 50%;
 .justify-content-end {
 	display: flex;
 	justify-content: end;
+}
+
+.border-bottom {
+	border-bottom: 1px;
+}
+
+.w-p25 {
+	width: 25%;
+}
+
+.w-p50 {
+	width: 50%;
+}
+
+.w-p75 {
+	width: 75%;
+}
+
+.w-p100 {
+	width: 100%;
+}
+
+.w-p200 {
+	width: 200%;
 }
