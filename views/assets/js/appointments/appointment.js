@@ -515,11 +515,13 @@ const handleViewEvent = (data) => {
     viewAppointment(data.event.id)
 }
 
-function renderTimeline() {
+function renderTimeline(range) {
     _options['maxHeight'] = $("#appointment_vistimeline").height()
-    var t = new Date(Date.now())
-    _options['start'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0, 0)
-    _options['end'] = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 18, 0, 0)
+    // var t = new Date(Date.now())
+    _options['start'] = new Date(range.getFullYear(), range.getMonth(), range.getDate(), 8, 0, 0)
+    _options['end'] = new Date(range.getFullYear(), range.getMonth(), range.getDate(), 18, 0, 0)
+    _options['min'] = new Date(range.getFullYear(), range.getMonth(), 1, 0, 0, 0)
+    _options['max'] = new Date(range.getFullYear(), range.getMonth() + 1, 0, 23, 59, 59)
     app_timeline = new vis.Timeline(document.getElementById('appointment_vistimeline'), _items, _groups, _options)
 
     app_timeline.on("scroll", debounce(groupFocus, 200));
@@ -549,7 +551,7 @@ function createCalendar(view_setting) {
                     }
                 },
                 didMount: () => {
-                    renderTimeline()
+                    renderTimeline(app_calendar.currentData.currentDate)
                 }
             },
             unknown: {
@@ -568,7 +570,7 @@ function createCalendar(view_setting) {
         selectable: true,
         selectMirror: true,
         slotDuration: {minutes: 5},
-        scrollTime: '09:00:00',
+        scrollTime: '08:00:00',
         allDaySlot: false,
         editable: false,
         dayMaxEvents: true,
@@ -580,7 +582,6 @@ function createCalendar(view_setting) {
             handleViewEvent(arg);
         },
         eventContent: function(arg) {
-            console.log(arg.event)
             var icon = ''
             let el = document.createElement('div')
             el.setAttribute('style', 'height: 100%;')
@@ -614,7 +615,7 @@ function createCalendar(view_setting) {
             }
         },
         resourceOrder: 'sort',
-        datesSet: function(){
+        datesSet: function() {
             selected_date = moment(app_calendar.getDate()).format('YYYY-MM-DD');
             load_data();
         },
@@ -923,7 +924,6 @@ function showReferralEditModal() {
 function generateDocument(data) {
     var filename = 'document'
     filename = fillReferralDocument(data)
-    console.log(filename)
 
     filename ? filename = filename : filename = 'document'
 
@@ -1448,7 +1448,6 @@ $(document).ready(async function() {
         }).get();
         specialties = specialty.join();
         specialties = specialties.split(",")[0]=="0"?"0":specialties;
-        console.log(_inactive_items.specialty)
         load_data()
         
     });
@@ -1990,16 +1989,29 @@ $(document).ready(async function() {
     //
     // Appointment dashboad begin //
     // Calendar begin //
-    $(document).on('click', '.fc-prev-button', () => {
-        console.log("Prev!")
+    $(document).on('click', '.fc-prev-button', (e) => {
+        if (app_timeline == null) return
+
+        var date = new Date(app_calendar.currentData.currentDate)
+        var min = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
+        var max = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
+        app_timeline.setOptions({min: min, max: max})
+
+        app_timeline.moveTo(app_calendar.currentData.currentDate)
     })
 
-    $(document).on('click', '.fc-next-button', () => {
-        console.log('Next!')
+    $(document).on('click', '.fc-next-button', (e) => {
+        if (app_timeline == null) return
+        
+        var date = new Date(app_calendar.currentData.currentDate)
+        var min = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
+        var max = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
+        app_timeline.setOptions({min: min, max: max})
+
+        app_timeline.moveTo(app_calendar.currentData.currentDate)
     })
 
     $('.fc-today-button').click(() => {
-        console.log('Today!')
     })
 
     // Load Calendar View Setting Information AND create calendar
