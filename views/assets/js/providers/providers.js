@@ -41,6 +41,7 @@ $(document).ready(async function () {
     })
 
     let filesize = 0
+    let filesize_s = 0
     let sp = []
     await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/appointmentSpecialty", (xhr, err) => {
         if (!err) {
@@ -187,7 +188,9 @@ $(document).ready(async function () {
         $("#kt_docs_select2_country").val("US").trigger('change');
 
         document.getElementById('providerPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
+        document.getElementById('providerSign').style.backgroundImage = `url(/assets/images/signature.jpg)`;
         $("#photoname").val('none');
+        $("#signname").val('none');
         
         $("#provider-edit-modal").modal("show");
     });
@@ -234,6 +237,18 @@ $(document).ready(async function () {
                     $("#photo_cancel_btn").hide();
                 }
                 $("#photoname").val('none');
+
+                if (result[0]['sign'] != '') {
+                    document.getElementById('providerSign').style.backgroundImage = `url(data:image/png;base64,${result[0]['sign']})`;
+                    $("#sign_remove_btn").show();
+                    $("#sign_cancel_btn").show();
+                }
+                else if (result[0]['sign'] == '') {
+                    document.getElementById('providerSign').style.backgroundImage = `url(/assets/images/signature.jpg)`;
+                    $("#sign_remove_btn").hide();
+                    $("#sign_cancel_btn").hide();
+                }
+                $("#signname").val('none');
 
                 $("#provider-edit-modal").modal("show");
                 } else {
@@ -421,8 +436,11 @@ $(document).ready(async function () {
             toastr.warning('Your image is too large. Image size is smaller than 30KB.');
             return;
         }
-
-        if ($("#photoname").val() != 'update') {
+        if (filesize_s > 1024*30) {
+            toastr.warning('Your image is too large. Image size is smaller than 30KB.');
+            return;
+        }
+        if ($("#photoname").val() != 'update' && $('#signname').val() != 'update') {
             let entry = {
                 id: $('#chosen_manager').val(),
                 fname: document.getElementById('efname').value,
@@ -446,7 +464,9 @@ $(document).ready(async function () {
                 specialty: $('#especialty').val().toString(),
                 type: 0,
                 photo: '',
+                sign: '',
                 photostate: $("#photoname").val(),
+                signstate: $('#signname').val(),
                 user: localStorage.getItem('userid')
             }
 
@@ -482,14 +502,13 @@ $(document).ready(async function () {
             }, 1000);
         } else {
             //upload image
-            var filename = '';
             var formData = new FormData();
             formData.append("ephoto", document.getElementById('ephoto').files[0]);
+            formData.append('esign', document.getElementById('esign').files[0])
             sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "provider/uploadimage", (xhr, err) => {
                 if (!err) {
-                    if (JSON.parse(xhr.responseText)['data'] === undefined) filename = '';
-                    else filename = JSON.parse(xhr.responseText)['data'].filename;
-        
+                    var result = JSON.parse(xhr.responseText)['data']
+
                     let entry = {
                         id: $('#chosen_manager').val(),
                         fname: document.getElementById('efname').value,
@@ -512,8 +531,10 @@ $(document).ready(async function () {
                         status: document.getElementById('estatus').value,
                         specialty: $('#especialty').val().toString(),
                         type: 0,
-                        photo: filename,
+                        photo: result.ephoto ? result.ephoto[0].filename : '',
                         photostate: $("#photoname").val(),
+                        sign: result.esign ? result.esign[0].filename : '',
+                        signstate: $('#signname').val(),
                         user: localStorage.getItem('userid')
                     }
                 
@@ -521,13 +542,16 @@ $(document).ready(async function () {
                         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "provider/add", (xhr, err) => {
                             if (!err) {
                                 let result = JSON.parse(xhr.responseText)['data'];
-                            if(result == "existed"){
-                                return toastr.info('This data is already existed so please try with another email');
-                            }
-                            else{
+                                if(result == "existed"){
+                                    return toastr.info('This data is already existed so please try with another email');
+                                }
+                                else{
+                                    $('#ephoto').val('')
+                                    $('#esign').val('')
+
                                     $("#provider-edit-modal").modal("hide");
                                     return toastr.success('Clinic Provider is added successfully');
-                            }
+                                }
                             
                             } else {
                                 return toastr.error('Action Failed');
@@ -536,6 +560,9 @@ $(document).ready(async function () {
                     } else {
                     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "provider/update", (xhr, err) => {
                         if (!err) {
+                            $('#ephoto').val('')
+                            $('#esign').val('')
+
                             $("#provider-edit-modal").modal("hide");
                             return toastr.success('Clinic Provider is updated successfully');
                         } else {
@@ -604,6 +631,23 @@ $(document).ready(async function () {
         $("#photo_remove_btn").hide();
         $("#photo_cancel_btn").hide();
         filesize = 0;
+    });
+
+    $("#esign").on('change', function(e) {
+        if (e.target.value != '') {
+            $("#signname").val('update');
+            filesize_s = e.target.files[0].size;
+        }
+        $("#sign_remove_btn").show();
+        $("#sign_cancel_btn").show();
+    });
+
+    $("#sign_remove_btn").click(function() {
+        document.getElementById('providerSign').style.backgroundImage = `url(/assets/images/signature.jpg)`;
+        $("#signname").val('update');
+        $("#sign_remove_btn").hide();
+        $("#sign_cancel_btn").hide();
+        filesize_s = 0;
     });
 
     // clinic

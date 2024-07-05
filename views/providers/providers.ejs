@@ -64,46 +64,32 @@
           <div class="col-md-3">
             <div class="d-flex flex-row-fluid flex-center pt-18">
               <!--begin::Image input-->
-              <div class="image-input image-input-outline image-input-empty" data-kt-image-input="true">
+              <div class="image-input image-input-outline image-input-empty w-150px h-150px" data-kt-image-input="true">
                 <!--begin::Image preview wrapper-->
                 <div class="image-input-wrapper w-150px h-150px" id="providerPhoto"></div>
                 <!-- <img class="image-input-wrapper w-150px h-150px border-gray-100" id="providerPhoto"></img> -->
                 <!--end::Image preview wrapper-->
 
                 <!--begin::Edit button-->
-                <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-                data-kt-image-input-action="change"
-                data-bs-toggle="tooltip"
-                data-bs-dismiss="click"
-                title="Change avatar">
-                    <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
+                <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Change avatar">
+                  <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
 
-                    <!--begin::Inputs-->
-                    <input type="file" id="ephoto" name="avatar" accept=".png, .jpg, .jpeg" />
-                    <input type="hidden" name="avatar_remove" id="photoname" />
-                    <!--end::Inputs-->
+                  <!--begin::Inputs-->
+                  <input type="file" id="ephoto" name="avatar" accept=".jpg, .jpeg" />
+                  <input type="hidden" name="avatar_remove" id="photoname" />
+                  <!--end::Inputs-->
                 </label>
                 <!--end::Edit button-->
 
                 <!--begin::Cancel button-->
-                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-                  data-kt-image-input-action="cancel"
-                  data-bs-toggle="tooltip"
-                  data-bs-dismiss="click"
-                  title="Cancel avatar"
-                  id = "photo_cancel_btn">
-                      <i class="ki-outline ki-cross fs-3"></i>
-                  </span>
-                  <!--end::Cancel button-->
+                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Cancel avatar" id = "photo_cancel_btn">
+                  <i class="ki-outline ki-cross fs-3"></i>
+                </span>
+                <!--end::Cancel button-->
   
-                  <!--begin::Remove button-->
-                  <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-                  data-kt-image-input-action="remove"
-                  data-bs-toggle="tooltip"
-                  data-bs-dismiss="click"
-                  title="Remove avatar"
-                  id = "photo_remove_btn">
-                    <i class="ki-outline ki-cross fs-3"></i>
+                <!--begin::Remove button-->
+                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Remove avatar" id = "photo_remove_btn">
+                  <i class="ki-outline ki-cross fs-3"></i>
                 </span>
                 <!--end::Remove button-->
               </div>
@@ -305,6 +291,35 @@
                   <option value="1">Active</option>
                   <option value="2">Inactive</option>
                 </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="esign" class="form-control-label mt-2 p-1">Signature:</label>
+              <div class="image-input image-input-outline image-input-empty w-100 h-70px" data-kt-image-input="true">
+                <!--begin::Image preview wrapper-->
+                <div class="image-input-wrapper w-100 h-70px" id="providerSign"></div>
+                <!--end::Image preview wrapper-->
+                <!--begin::Edit button-->
+                <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Change avatar">
+                  <i class="ki-duotone ki-pencil fs-6"><span class="path1"></span><span class="path2"></span></i>
+                  <!--begin::Inputs-->
+                  <input type="file" id="esign" name="avatar" accept=".jpg, .jpeg" />
+                  <input type="hidden" name="avatar_remove" id="signname" />
+                  <!--end::Inputs-->
+                </label>
+                <!--end::Edit button-->
+                <!--begin::Cancel button-->
+                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Cancel avatar" id="sign_cancel_btn">
+                  <i class="ki-outline ki-cross fs-3"></i>
+                </span>
+                <!--end::Cancel button-->
+                <!--begin::Remove button-->
+                <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Remove avatar" id="sign_remove_btn">
+                  <i class="ki-outline ki-cross fs-3"></i>
+                </span>
+                <!--end::Remove button-->
               </div>
             </div>
           </div>
