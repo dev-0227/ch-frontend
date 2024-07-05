@@ -188,8 +188,12 @@ $(document).ready(async function () {
         $("#kt_docs_select2_country").val("US").trigger('change');
 
         document.getElementById('providerPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
-        document.getElementById('providerSign').style.backgroundImage = `url(/assets/images/signature.jpg)`;
+        $("#photo_remove_btn").show();
+        $("#photo_cancel_btn").show();
         $("#photoname").val('none');
+        document.getElementById('providerSign').style.backgroundImage = `url(/assets/images/signature.jpg)`;
+        $("#sign_remove_btn").show();
+        $("#sign_cancel_btn").show();
         $("#signname").val('none');
         
         $("#provider-edit-modal").modal("show");
@@ -226,24 +230,24 @@ $(document).ready(async function () {
                     $("#specialty").val("").trigger('change');
                 }
                 
-                if (result[0]['photo'] != '') {
+                if (result[0]['photo'].length > 1) {
                     document.getElementById('providerPhoto').style.backgroundImage = `url(data:image/png;base64,${result[0]['photo']})`;
                     $("#photo_remove_btn").show();
                     $("#photo_cancel_btn").show();
                 }
-                else if (result[0]['photo'] == '') {
+                else if (result[0]['photo'].length <= 1) {
                     document.getElementById('providerPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
                     $("#photo_remove_btn").hide();
                     $("#photo_cancel_btn").hide();
                 }
                 $("#photoname").val('none');
 
-                if (result[0]['sign'] != '') {
+                if (result[0]['sign'].length > 1) {
                     document.getElementById('providerSign').style.backgroundImage = `url(data:image/png;base64,${result[0]['sign']})`;
                     $("#sign_remove_btn").show();
                     $("#sign_cancel_btn").show();
                 }
-                else if (result[0]['sign'] == '') {
+                else if (result[0]['sign'].length <= 1) {
                     document.getElementById('providerSign').style.backgroundImage = `url(/assets/images/signature.jpg)`;
                     $("#sign_remove_btn").hide();
                     $("#sign_cancel_btn").hide();
@@ -470,7 +474,7 @@ $(document).ready(async function () {
                 user: localStorage.getItem('userid')
             }
 
-            if($('#chosen_manager').val()==""){
+            if($('#chosen_manager').val()=="") {
                 sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "provider/add", (xhr, err) => {
                     if (!err) {
                         let result = JSON.parse(xhr.responseText)['data'];
@@ -478,6 +482,9 @@ $(document).ready(async function () {
                         return toastr.info('This email is already existed so please try with another email');
                     }
                     else{
+                        $('#ephoto').val('')
+                        $('#esign').val('')
+
                         $("#provider-edit-modal").modal("hide");
                         return toastr.success('Clinic Provider is added successfully');
                     }
@@ -489,6 +496,9 @@ $(document).ready(async function () {
             }else{
                 sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "provider/update", (xhr, err) => {
                     if (!err) {
+                        $('#ephoto').val('')
+                        $('#esign').val('')
+                        
                         $("#provider-edit-modal").modal("hide");
                         return toastr.success('Clinic Provider is updated successfully');
                     } else {
@@ -503,7 +513,7 @@ $(document).ready(async function () {
         } else {
             //upload image
             var formData = new FormData();
-            formData.append("ephoto", document.getElementById('ephoto').files[0]);
+            formData.append("ephoto", document.getElementById('ephoto').files[0])
             formData.append('esign', document.getElementById('esign').files[0])
             sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "provider/uploadimage", (xhr, err) => {
                 if (!err) {
@@ -558,17 +568,17 @@ $(document).ready(async function () {
                             }
                         });
                     } else {
-                    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "provider/update", (xhr, err) => {
-                        if (!err) {
-                            $('#ephoto').val('')
-                            $('#esign').val('')
+                        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "provider/update", (xhr, err) => {
+                            if (!err) {
+                                $('#ephoto').val('')
+                                $('#esign').val('')
 
-                            $("#provider-edit-modal").modal("hide");
-                            return toastr.success('Clinic Provider is updated successfully');
-                        } else {
-                            return toastr.error('Action Failed');
-                        }
-                    });
+                                $("#provider-edit-modal").modal("hide");
+                                return toastr.success('Clinic Provider is updated successfully');
+                            } else {
+                                return toastr.error('Action Failed');
+                            }
+                        });
                     }
                     
                     setTimeout( function () {

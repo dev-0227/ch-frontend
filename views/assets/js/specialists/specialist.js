@@ -272,6 +272,8 @@ $(document).ready(async function () {
     $("#kt_docs_select2_country").val("US").trigger('change');
 
     document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
+    $("#photo_remove_btn").show();
+    $("#photo_cancel_btn").show();
     $("#photoname").val('none');
     
     $("#specialist-edit-modal").modal("show");
@@ -310,18 +312,17 @@ $(document).ready(async function () {
         $("#eemrid").val(result[0]['emrid']);
         $("#kt_docs_select2_country").val(result[0]['country']).trigger('change');
         
-        if (result[0]['photo'] != '') {
+        if (result[0]['photo'].length > 1) {
           document.getElementById('specialistPhoto').style.backgroundImage = `url(data:image/png;base64,${result[0]['photo']})`;
           $("#photo_remove_btn").show();
           $("#photo_cancel_btn").show();
         }
-        else if (result[0]['photo'] == '') {
+        else if (result[0]['photo'].length <= 1) {
           document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
           $("#photo_remove_btn").hide();
           $("#photo_cancel_btn").hide();
         }
         $("#photoname").val('none');
-
 
         if(result[0]['language']){
           $("#elanguage").val(result[0]['language'].split(",")).trigger('change');
@@ -549,6 +550,8 @@ $(document).ready(async function () {
               return toastr.info('This email is already existed so please try with another email');
             }
             else{
+              $('#ephoto').val('')
+              
               $("#specialist-edit-modal").modal("hide");
               return toastr.success('Specialist is added successfully');
             }
@@ -560,12 +563,14 @@ $(document).ready(async function () {
       }else{
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
           if (!err) {
+            $('#ephoto').val('')
+
             $("#specialist-edit-modal").modal("hide");
             return toastr.success('Specialist is updated successfully');
           } else {
             return toastr.error('Action Failed');
           }
-      });
+        });
       }
       
       setTimeout( function () {
@@ -573,13 +578,11 @@ $(document).ready(async function () {
       }, 1000 );
     } else {
       //upload image
-      var filename = '';
       var formData = new FormData();
       formData.append("ephoto", document.getElementById('ephoto').files[0]);
       sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "specialist/uploadimage", (xhr, err) => {
         if (!err) {
-          if (JSON.parse(xhr.responseText)['data'] === undefined) filename = '';
-          else filename = JSON.parse(xhr.responseText)['data'].filename;
+          var result = JSON.parse(xhr.responseText)['data']
 
           let entry = {
             id: $('#chosen_manager').val(),
@@ -611,7 +614,7 @@ $(document).ready(async function () {
             insurance_id: $('#insurance_id').val().toString(),
             taxonomy: $('#taxonomy').val(),
             emrid: $("#eemrid").val(),
-            photo: filename,
+            photo: result.ephoto ? result.ephoto[0].filename : '',
             photostate: $("#photoname").val()
           }
       
@@ -623,6 +626,8 @@ $(document).ready(async function () {
                   return toastr.info('This data is already existed so please try with another email');
                 }
                 else{
+                  $('#ephoto').val('')
+
                   $("#specialist-edit-modal").modal("hide");
                   return toastr.success('Specialist is added successfully');
                 }
@@ -634,6 +639,8 @@ $(document).ready(async function () {
           }else{
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "specialist/update", (xhr, err) => {
               if (!err) {
+                $('#ephoto').val('')
+                
                 $("#specialist-edit-modal").modal("hide");
                 return toastr.success('Specialist is updated successfully');
               } else {
