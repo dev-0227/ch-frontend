@@ -611,5 +611,100 @@ $(document).on("click",".referral-pt-info-tab",function(){
   
 });
 
+// Patient Management Modal begin //
+$(".pt_info").click(function (e) {
+  if($(this).data("id"))$("#appointment_patient_id").val($(this).data("id"));
+  let entry = {
+    pt_id: $("#appointment_patient_id").val(),
+    emr_id:$("#appt_pt_emrid").val()
+  }
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/get", (xhr, err) => {
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data'];
+      if(result.length>0){
+        $("#appointment_patient_id").val(result[0]['id']);
+        $("#fname").val(result[0]['FNAME']);
+        $("#mname").val(result[0]['MNAME']);
+        $("#lname").val(result[0]['LNAME']);
+        $("#emr_id").val(result[0]['patientid']);
+        $("#gender").val(result[0]['GENDER'].toLocaleLowerCase());
+        $("#email").val(result[0]['EMAIL']);
+        if(result[0]['DOB'])
+          $("#dob").val(result[0]['DOB'].split("T")[0]);
+        $("#phone").val(result[0]['PHONE']);
+        $("#mobile").val(result[0]['MOBILE']);
+        $("#address").val(result[0]['ADDRESS']);
+        $("#address2").val(result[0]['ADDRESS2']);
+        $("#zip").val(result[0]['ZIP']);
+        $("#city").val(result[0]['CITY']);
+        $("#state").val(result[0]['State']);
+        $("#race").val(result[0]['race']);
+        $("#ethnicity").val(result[0]['ethnicity_CDC']);
+        $("#marital").val(result[0]['marital_status']);
+        if(result[0]['Deceased_at'])
+          $("#deceased_at").val(result[0]['Deceased_at'].split("T")[0]);
+        $('#deceased').prop('checked', result[0]['Deceased_at']=="1"?true:false);
+        if(result[0]['Deceased_at']=="1"){
+          $("#deceased_at").prop("disabled", false);
+        }else{
+          $("#deceased_at").prop("disabled", true);
+        }
+        $("#patient-add-modal").modal("show");
+        $("#appointment_edit_modal-1").modal("hide");
+      }
+    }
+  });
+});
+
+$(document).on("click","#save_patient_btn",function(){
+  if($("#fname").val() == ""){
+    $("#fname").focus();
+    return toastr.info('Please enter First Name');
+  }
+  if($("#lname").val() == ""){
+    $("#lname").focus();
+    return toastr.info('Please enter Last Name');
+  }
+  if($("#dob").val() == ""){
+    return toastr.info('Please enter DOB');
+  }
+
+  let entry = {
+    user_id:localStorage.getItem('userid'),
+    id: $("#appointment_patient_id").val(),
+    fname: document.getElementById('fname').value,
+    mname: document.getElementById('mname').value,
+    lname: document.getElementById('lname').value,
+    gender: document.getElementById('gender').value,
+    emr_id: document.getElementById('emr_id').value,
+    email: document.getElementById('email').value,
+    dob: document.getElementById('dob').value,
+    phone: document.getElementById('phone').value,
+    mobile: document.getElementById('mobile').value,
+    language: document.getElementById('language').value,
+    address: document.getElementById('address').value,
+    address2: document.getElementById('address2').value,
+    city: document.getElementById('city').value,
+    zip: document.getElementById('zip').value,
+    state: document.getElementById('state').value,
+    race: document.getElementById('race').value,
+    ethnicity: document.getElementById('ethnicity').value,
+    marital: document.getElementById('marital').value,
+    deceased: $('#deceased').is(":checked")?"1":"0",
+    deceased_at: document.getElementById('deceased_at').value,
+  }
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "patientlist/update", (xhr, err) => {
+    if (!err) {
+      $("#patient-add-modal").modal("hide");
+      $("#appointment_edit_modal-1").modal("hide");
+      $("#appointment_modal").modal("hide");
+      return toastr.success('Patient is added successfully');
+    } else {
+      return toastr.error('Action Failed');
+    }
+  })
+})
+// Patient Management Modal end //
+
 document.write('<script src="/assets/js/hedis/encounterModal.js" type="text/javascript"></script>');
-// document.write('<script src="/assets/js/appointments/appointment.js" type="text/javascript"></script>');

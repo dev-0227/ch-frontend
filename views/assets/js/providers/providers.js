@@ -188,12 +188,12 @@ $(document).ready(async function () {
         $("#kt_docs_select2_country").val("US").trigger('change');
 
         document.getElementById('providerPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
-        $("#photo_remove_btn").show();
-        $("#photo_cancel_btn").show();
+        $("#photo_remove_btn").hide();
+        $("#photo_cancel_btn").hide();
         $("#photoname").val('none');
         document.getElementById('providerSign').style.backgroundImage = `url(/assets/images/signature.jpg)`;
-        $("#sign_remove_btn").show();
-        $("#sign_cancel_btn").show();
+        $("#sign_remove_btn").hide();
+        $("#sign_cancel_btn").hide();
         $("#signname").val('none');
         
         $("#provider-edit-modal").modal("show");

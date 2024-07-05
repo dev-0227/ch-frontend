@@ -272,8 +272,8 @@ $(document).ready(async function () {
     $("#kt_docs_select2_country").val("US").trigger('change');
 
     document.getElementById('specialistPhoto').style.backgroundImage = `url(/assets/media/svg/avatars/blank.svg)`;
-    $("#photo_remove_btn").show();
-    $("#photo_cancel_btn").show();
+    $("#photo_remove_btn").hide();
+    $("#photo_cancel_btn").hide();
     $("#photoname").val('none');
     
     $("#specialist-edit-modal").modal("show");
