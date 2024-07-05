@@ -1,0 +1,263 @@
+<style>
+    .tab-content i {
+        color:#fff;
+    }
+    .table-responsive{
+        padding:10px;
+    }
+</style>
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">PT Risk and Barriers</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading">                        
+                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                            <li class="nav-item"><a href="#icd10_disability_tab" class="nav-link active" data-bs-toggle="tab">ICD10 Disability</a></li>
+                            <li class="nav-item"><a href="#disability_category_tab" class="nav-link" data-bs-toggle="tab">Disability Category</a></li>
+                        </ul>                        
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <!--icd10 disability Table-->
+                            <div class="tab-pane active " id="icd10_disability_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6 px-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title">ICD10 Disability</h3>                                                    
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button id="add_icd10_btn" type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add ICD10 Disability</button>
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                          <span class="path1"></span>
+                                                          <span class="path2"></span>
+                                                        </i>
+                                                        <input id="icd10_disability_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search ICD10 Disability" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="icd10_disability_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Id</th>    
+                                                            <th scope="col">Disability Category</th>                                                                                                                    
+                                                            <th scope="col">ICD10</th>                                                            
+                                                            <th scope="col">Description short</th>                                                                
+                                                            <th scope="col">Description long</th>          
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--disability category Table-->
+                            <div class="tab-pane" id="disability_category_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6 px-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Disability Category</h3>
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button id="addDisabilityCategoryBtn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add Disability Category</button>                                                    
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                          <span class="path1"></span>
+                                                          <span class="path2"></span>
+                                                        </i>
+                                                        <input id="disability_category_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search Disability Category" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="disability_category_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Id</th>  
+                                                            <th scope="col">Display</th> 
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW-1 CLOSED -->
+<!--icd10 disability Modal -->
+<div class="modal fade" id="icd10_add_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add ICD10 Disability</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Category:</label>
+                            <div class="col-md-12">
+                                <select id="select_category" aria-label="Select a Category" data-control="select2" data-hide-search="true" data-placeholder="Select a Category..." class="form-select mb-2">
+                                </select>        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">ICD10:</label>
+                            <input type="text" class="form-control" id="add_icd10_icd10" name="add_icd10_icd10">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Description Short:</label>
+                            <input type="text" class="form-control" id="add_icd10_short" name="add_icd10_short">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Description Long:</label>
+                            <input type="text" class="form-control" id="add_icd10_long" name="add_icd10_long">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="save_icd10_btn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="icd10_edit_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit ICD10 Disability</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" id="edit_icd10_id" name="edit_icd10_id">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Category:</label>
+                                <div class="col-md-12">
+                                    <select id="edit_select_category" aria-label="Select a Category" data-control="select2" data-hide-search="true" data-placeholder="Select a Category..." class="form-select mb-2">
+                                    </select>        
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">ICD10:</label>
+                                <input type="text" class="form-control" id="edit_icd10_icd10" name="edit_icd10_icd10">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Descrition Short:</label>
+                                <input type="text" class="form-control" id="edit_icd10_short" name="edit_icd10_short">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Descrition Long:</label>
+                                <input type="text" class="form-control" id="edit_icd10_long" name="edit_icd10_long">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="update_icd10_btn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
+<!-- disability category Modal -->
+<div class="modal fade" id="disability_category_add_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add Disability Category</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="add_category_display" name="add_category_display">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="save_category_btn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="disability_category_edit_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit Disability Category</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="hidden" id="edit_category_id" name="edit_category_id">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="edit_category_display" name="edit_category_display">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="update_category_btn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>

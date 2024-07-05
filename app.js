@@ -32,7 +32,7 @@ app.use('/patients', patients);
 app.use('/hedis', hedis);
 app.use('/insurance', insurance);
 app.use('/database', database);
-app.use('/tracking', trackings)
+app.use('/tracking', trackings);
 
 app.use('*', (req, res) => {
     res.redirect('../');

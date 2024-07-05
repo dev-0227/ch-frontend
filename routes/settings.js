@@ -122,6 +122,56 @@ router.get("/paymentsetting", (req, res, next) => {
     });
 });
 
+/* 
+* settings for PK Risk and Barriers
+*/
+router.get("/barriers/ptrisk", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "PT Risk",
+        pageKey: "../settings/barriers/ptrisk"
+    });
+});
+
+router.get("/barriers/disability", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Disability",
+        pageKey: "../settings/barriers/disability"
+    });
+});
+
+router.get("/barriers/communicationneeds", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Communication Needs",
+        pageKey: "../settings/barriers/communicationneeds"
+    });
+});
+//
+
+/* 
+* settings for PK Risk and Barriers
+*/
+router.get("/medadherance/medications", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Medications",
+        pageKey: "../settings/medadherance/medications"
+    });
+});
+
+router.get("/medadherance/medicationsDispense", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Medications Dispense",
+        pageKey: "../settings/medadherance/medicationsDispense"
+    });
+});
+
+router.get("/medadherance/medicationsRequest", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Medications Request",
+        pageKey: "../settings/medadherance/medicationsRequest"
+    });
+});
+//
+
 router.get("/communicationsetting", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Communication Settings",

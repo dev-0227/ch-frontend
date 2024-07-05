@@ -1,0 +1,143 @@
+<style>
+    .tab-content i {
+        color:#fff;
+    }
+    .table-responsive{
+        padding:10px;
+    }
+</style>
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">PT Risk and Barriers</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="panel panel-primary">
+                    <div class="tab-menu-heading">                        
+                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                            <li class="nav-item"><a href="#pt_comm_needs_tab" class="nav-link active" data-bs-toggle="tab">PT Communication Needs</a></li>
+                        </ul>                        
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <!--PT Communication Needs Table-->
+                            <div class="tab-pane active" id="pt_comm_needs_tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6 px-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">PT Communication Needs</h3>
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button id="addPTCommNeedsBtn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add Communication Needs</button>                                                    
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                          <span class="path1"></span>
+                                                          <span class="path2"></span>
+                                                        </i>
+                                                        <input id="pt_comm_needs_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search Communication Needs" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="pt_comm_needs_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Id</th>  
+                                                            <th scope="col">Code</th>
+                                                            <th scope="col">Display</th> 
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW-1 CLOSED -->
+
+<!-- PT Communication Needs Modal -->
+<div class="modal fade" id="pt_comm_needs_add_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add PT Communication Needs</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <!-- <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Id:</label>
+                            <input type="text" class="form-control" id="add_pt_comm_needs_id" name="add_pt_comm_needs_id">
+                        </div>
+                    </div> -->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Code:</label>
+                            <input type="text" class="form-control" id="add_pt_comm_needs_code" name="add_pt_comm_needs_code">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="add_pt_comm_needs_display" name="add_pt_comm_needs_display">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="save_pt_comm_needs_btn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="pt_comm_needs_edit_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit PT Communication Needs</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">                        
+                        <input type="hidden" id="edit_pt_comm_needs_id" name="edit_pt_comm_needs_id">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Code:</label>
+                            <input type="text" class="form-control" id="edit_pt_comm_needs_code" name="edit_pt_comm_needs_code">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="edit_pt_comm_needs_display" name="edit_pt_comm_needs_display">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="update_pt_comm_needs_btn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
