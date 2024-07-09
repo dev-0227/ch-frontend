@@ -208,14 +208,13 @@ $(document).ready(async function() {
                 options += `<option value='${item.id}'>${item.display}</option>`
             })
             $('#lob-type').html(options)
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), {user_id:  localStorage.getItem('userid')}, "insurance/getDefaultIns", (xhr, err) => {
+                if(!err) {
+                    let result = JSON.parse(xhr.responseText)['data']
+                    $("#default_ins_list").val(result[0].ins_id).trigger('change')
+                }      
+            })
         }
-    })
-
-    await sendRequestWithToken('POST', localStorage.getItem('authToken'), {user_id:  localStorage.getItem('userid')}, "insurance/getDefaultIns", (xhr, err) => {
-        if(!err) {
-            let result = JSON.parse(xhr.responseText)['data']
-            $("#default_ins_list").val(result[0].ins_id).trigger('change')
-        }      
     })
 
     var lob_table = $('#lob-table').DataTable({
