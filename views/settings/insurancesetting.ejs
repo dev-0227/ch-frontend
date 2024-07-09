@@ -11,6 +11,7 @@
                         <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
                             <li class="nav-item"><a href="#insurance_map" class="nav-link active" data-bs-toggle="tab">Insurance Map</a></li>
                             <li class="nav-item"><a href="#insurance_lob" class="nav-link " data-bs-toggle="tab">Insurance Lob</a></li>
+                            <li class="nav-item"><a href="#insurance_default_lob" class="nav-link " data-bs-toggle="tab">Set Default Lob</a></li>
                             <li class="nav-item"><a href="#insurance_type" class="nav-link " data-bs-toggle="tab">Insurance Type</a></li>
                             <li class="nav-item"><a href="#insurance_payment" class="nav-link " data-bs-toggle="tab">Insurance Payment Method</a></li>
                         </ul>
@@ -40,10 +41,11 @@
                                         <thead>
                                             <tr class="fw-bold fs-6 text-gray-800">
                                                 <th class="col-md-1">ID</th>
-                                                <th class="col-md-4">Insurance</th>
-                                                <th class="col-md-1">Ins Emr ID</th>
-                                                <th class="col-md-1">EMR hfir ID</th>
                                                 <th class="col-md-4">Ins Clinic</th>
+                                                <th class="col-md-4">Insurance</th>
+                                                <th class="col-md-1">Ins emr ID</th>
+                                                <th class="col-md-1">Ins hfir ID</th>
+                                                <th class="col-md-4">LOB</th>
                                                 <th class="col-md-2">Actions</th>
                                             </tr>
                                         </thead>
@@ -54,28 +56,28 @@
                             <div class="tab-pane" id="insurance_lob">
                                 <div class="row mb-4">
                                     <div class="col-md-4">
-                                        <select id="inslist" class="form-control select2-show-search" data-placeholder="Choose one (with searchbox)">
+                                        <select id="lob-ins-filter" data-control="select2" class="form-select" data-placeholder="Select an Insurance">
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <a class="btn btn-primary inslobsetbtn">Set Default LOB</a>
-                                        <a class="btn btn-primary inslobaddbtn"><i class="fa fa-plus mr-2"></i>Add LOB</a>                        
+                                        <a class="btn btn-primary" id="lob-add"><i class="fa fa-plus mr-2"></i>Add LOB</a>                        
                                     </div>
                                     <div class="col-md-4" style="display: flex; justify-content: space-between;">
                                         <div class="d-flex align-items-center position-relative">
                                             <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
                                             </i>
-                                            <input id="inslob_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search LOB" />
+                                            <input id="lob-search-input"  type="text" class="form-control form-control-solid w-350px ps-13" placeholder="Search LOB" />
                                         </div>                        
                                     </div>
                                 </div>
-                                <input type="hidden" id="chosen_inslob" />
+                                <input type="hidden" id="chosen-lob" />
                                 <div class="table-responsive table-lg pt-2">
-                                    <table class="table table-striped table-bordered text-nowrap w-100" id="inslobtable">
+                                    <table class="table table-striped table-bordered text-nowrap w-100" id="lob-table">
                                         <thead>
                                             <tr>
+                                                <th>Insurance</th>
                                                 <th>LOB Group Name</th>
                                                 <th>Description</th>
                                                 <th>Type</th>
@@ -87,6 +89,17 @@
                                         </thead>
                                         <tbody></tbody>
                                     </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="insurance_default_lob">
+                                <div class="row mb-4">
+                                    <div class="col-md-4">
+                                        <select id="default_ins_list" data-control="select2" class="form-control select2-show-search" data-placeholder="Select an Inusurance">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a class="btn btn-primary inslobsetbtn">Set Default LOB</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="insurance_type">
@@ -209,106 +222,54 @@
                 </div>
 			</div>
 			<div class="modal-body">
+                <input type="hidden" id="lob-modal-type">
                 <div class="row">
                     <div class="col-md-12">
+                        <select id="lob-insurance" data-control="select2" class="form-control select2-show-search" data-placeholder="Select an Insurace">
+                        </select>
+                    </div>
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <label for="elobname" class="form-control-label">LOB Group Name:</label>
-                            <input type="text" class="form-control" id="elobname">
+                            <label for="lob-name" class="form-control-label">LOB Group Name:</label>
+                            <input type="text" class="form-control" id="lob-name">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="elobdesc" class="form-control-label">Description:</label>
-                            <input type="text" class="form-control" id="elobdesc">
+                            <label for="lob-desc" class="form-control-label">Description:</label>
+                            <input type="text" class="form-control" id="lob-desc">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="elobvar" class="form-control-label">Variations:</label>
-                            <input type="text" class="form-control" id="elobvar">
+                            <label for="lob-var" class="form-control-label">Variations:</label>
+                            <input type="text" class="form-control" id="lob-var">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="elobtype" class="form-control-label">Type:</label>
-                            <select id="elobtype" aria-label="Select a Type" data-control="select2" data-hide-search="true" data-placeholder="Select a Type..." class="form-select mb-2"></select>
+                            <label for="lob-type" class="form-control-label">Type:</label>
+                            <select id="lob-type" aria-label="Select a Type" data-control="select2" data-hide-search="true" data-placeholder="Select a Type..." class="form-select mb-2"></select>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="elobdesc" class="form-control-label">EMR ID:</label>
-                            <input type="text" class="form-control" id="elobemrid">
+                            <label for="lob-emrid" class="form-control-label">EMR ID:</label>
+                            <input type="text" class="form-control" id="lob-emrid">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="elobdesc" class="form-control-label">FHIR ID:</label>
-                            <input type="text" class="form-control" id="elobfhirid">
+                            <label for="lob-fhirid" class="form-control-label">FHIR ID:</label>
+                            <input type="text" class="form-control" id="lob-fhirid">
                         </div>
                     </div>
                 </div>
 			</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="inslobeditbtn"><i class="fa fa-save">&nbsp;</i> Done</button>
-            </div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="inslob-add-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Insurance Lob Add</h5>
-				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-                </div>
-			</div>
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="lobname" class="form-control-label">LOB Group Name:</label>
-                            <input type="text" class="form-control" id="lobname">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="lobdesc" class="form-control-label">Description:</label>
-                            <input type="text" class="form-control" id="lobdesc">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="lobvar" class="form-control-label">Variations:</label>
-                            <input type="text" class="form-control" id="lobvar">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="lobtype" class="form-control-label">Type:</label>
-                            <select id="lobtype" aria-label="Select a Type" data-control="select2" data-hide-search="true" data-placeholder="Select a Type..." class="form-select mb-2">
-                            </select>  
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="elobdesc" class="form-control-label">EMR ID:</label>
-                            <input type="text" class="form-control" id="lobemrid">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="elobdesc" class="form-control-label">FHIR ID:</label>
-                            <input type="text" class="form-control" id="lobfhirid">
-                        </div>
-                    </div>
-                </div>
-			</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="inslobaddbtn"><i class="fa fa-save">&nbsp;</i> Done</button>
+                <button type="button" class="btn btn-primary" id="lob-save-btn"><i class="fa fa-save">&nbsp;</i> Save</button>
             </div>
 		</div>
 	</div>

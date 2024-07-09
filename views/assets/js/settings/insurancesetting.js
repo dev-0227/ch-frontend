@@ -47,6 +47,9 @@ $(document).ready(async function() {
         }
         $('#insurance-insurance').html(`<option value = '0'>All Insurances</option>` + options)
         $('#insurance-add-insurance').html(options)
+        $('#lob-ins-filter').html(`<option value='0'>All Insurances</option>` + options)
+        $('#lob-insurance').html(options)
+        $('#default_ins_list').html(options)
         loadInsuranceLob(_id)
     })
 
@@ -64,14 +67,15 @@ $(document).ready(async function() {
         "autoWidth": false,
         "columns": [
             { data: 'id' },
+            { data: 'clinicname'},
             { data: 'insName',
                 render: (data, type, row) => {
-                    return row.lob ? row.insName + ' - ' + row.lobname : row.insName
+                    return row.insName
                 }
             },
             { data: 'emrid'},
             { data: 'fhirid'},
-            { data: 'clinicname'},
+            { data: 'lobname' },
             { data: 'id',
               render: function (data, type, row) {
                 return `
@@ -196,166 +200,174 @@ $(document).ready(async function() {
     // Insurance Map end //
 
     // Insurance Lob begin //
-    $("#inslobtable").DataTable();
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/", (xhr, err) => {
+    await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'insurance/gettype', (xhr, err) => {
         if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];
-            $("#inslist").empty();
-            $("#inslist").append(`
-                <option value = "0">Select Insurance</option>
-            `);
-            for(var i = 0; i < result.length; i++){
-                $("#inslist").append(`
-                    <option value = "`+result[i]['id']+`">`+result[i]['insName']+`</option>
-                `);
+            var options = ``
+            let result = JSON.parse(xhr.responseText)['data']
+            result.forEach(item => {
+                options += `<option value='${item.id}'>${item.display}</option>`
+            })
+            $('#lob-type').html(options)
+        }
+    })
+
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), {user_id:  localStorage.getItem('userid')}, "insurance/getDefaultIns", (xhr, err) => {
+        if(!err) {
+            let result = JSON.parse(xhr.responseText)['data']
+            $("#default_ins_list").val(result[0].ins_id).trigger('change')
+        }      
+    })
+
+    var lob_table = $('#lob-table').DataTable({
+        "ajax": {
+            "url": serviceUrl + "insurance/lob/list",
+            "type": "GET",
+            "headers": { 'Authorization': localStorage.getItem('authToken') },
+            "data": function(d) {
+                d.insid = $('#lob-ins-filter').val() ? $('#lob-ins-filter').val() : 0
+                d.filter = $('#lob-search-input').val()
             }
-            let params = {
-                user_id:  localStorage.getItem('userid')
-            }
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "insurance/getDefaultIns", (xhr, err) => {
-                if(!err) {
-                    let result = JSON.parse(xhr.responseText)['data'];          
-                    $("#inslist").val(result[0].ins_id).trigger('change');    
+        },
+        "pageLength": 10,
+        "processing": true,
+        "columns": [
+            { data: 'insName' },
+            { data: 'lob' },
+            { data: 'description' },
+            { data: 'type' },
+            { data: 'variation' },
+            { data: 'ins_emrid' },
+            { data: 'ins_fhirid' },
+            { data: 'id',
+                render: function (data, type, row) {
+                    return `
+                        <div class="btn-group align-top " idkey="`+row.id+`">
+                            <button id='lob-edit-btn' class="btn btn-primary badge" data-toggle="modal" type="button" data-type="`+row.id+`"><i class="fa fa-edit"></i> Edit</button>
+                            <button id='lob-delete-btn' class="btn btn-danger badge" type="button"><i class="fa fa-trash"></i> Delete</button>
+                        </div>
+                    `
                 } 
-            });
-        } else {
-            return $.growl.error({
-                message: "Action Failed"
-            });
-        }
-    });
+            }
+        ]
+    })
 
-    $("#inslist").change(function(){
+    $('#lob-add').click(() => {
+        $('#lob-modal-type').val('1')
+
+        $('#lob-name').val('')
+        $('#lob-desc').val('')
+        $('#lob-var').val('')
+        $('#lob-emrid').val('')
+        $('#lob-fhirid').val('')
+
+        $('#inslob-edit-modal').modal('show')
+    })
+
+    $(document).on('click', '#lob-edit-btn', function() {
+        $('#lob-modal-type').val('0')
         let entry = {
-            id:$(this).val()
+            id: $(this).parent().attr("idkey"),
         }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/getlob", (xhr, err) => {
+        $('#chosen-lob').val(entry.id)
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/chosenlob', (xhr, err) => {
             if (!err) {
-                let result = JSON.parse(xhr.responseText)['data'];
-                $("#inslobtable tbody").empty();
-                for(var i = 0;i < result.length;i++){          
-                    if (result[i]['ins_emrid'] == null) result[i]['ins_emrid'] = '';
-                    if (result[i]['ins_fhirid'] == null) result[i]['ins_fhirid'] = '';
-                    $("#inslobtable tbody").append("<tr id = '"+result[i]['id']+"'><td>"+result[i]['lob']+"</td><td>"+result[i]['description']+"</td><td>"+result[i]['type']+"</td><td>"+result[i]['variation']+"</td><td>"+result[i]['ins_emrid']+"</td><td>"+result[i]['ins_fhirid']+"</td><td><div class='btn-group align-top'><button class='btn btn-sm btn-warning inslobeditbtn'><i class='fa fa-edit'></i></button><button class='btn btn-sm btn-danger inslobdeletebtn'><i class='fa fa-trash'></i></button></div></td>");
+                var result = JSON.parse(xhr.responseText)['data']
+                if (result.length > 0) {
+                    $('#lob-name').val(result[0].lob)
+                    $('#lob-desc').val(result[0].description)
+                    $('#lob-variation').val(result[0].variation)
+                    $('#lob-emrid').val(result[0].ins_emrid)
+                    $('#lob-fhirid').val(result[0].ins_fhirid)
+                    $('#lob-type').val(result[0].type_id).trigger('change')
+                    $('#lob-insurance').val(result[0].insid).trigger('change')
+
+                    $('#inslob-edit-modal').modal('show')
                 }
-            } else {
-                return $.growl.error({
-                    message: "Action Failed"
-                });
             }
-        });
-    });
+        })
+    })
 
-    $(document).on("click",".inslobaddbtn",function(){
-        if($("#inslist").val() == 0)
-            toastr.error("Please select insurance");      
-        else
-            $("#inslob-add-modal").modal("show");
-        let en = {};
-        let content = "";
-        
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), en, "insurance/gettypeItem", (xhr, err) => {
-            if (!err) {
-                let result = JSON.parse(xhr.responseText)['data'];    
-                result.forEach(r => {                   
-                    content += '<option value="'+ r.id +'">' + r.display + '</option>';                                        
-                }); 
-                $('#lobtype').html(content);
-                
-            } else {
-                return toastr.error("Action Failed");
-            }
-        });
-    });
-
-    $("#inslobaddbtn").click(function (e) {
-        let entry = {
-            insid: document.getElementById('inslist').value,
-            name: document.getElementById('lobname').value,
-            desc: document.getElementById('lobdesc').value,
-            variation: document.getElementById('lobvar').value,
-            type: document.getElementById('lobtype').value,
-            emrid: document.getElementById('lobemrid').value,
-            fhirid: document.getElementById('lobfhirid').value,
+    $('#lob-save-btn').click(() => {
+        var type = $('#lob-modal-type').val()
+        console.log($('#lob-insurance').val())
+        var entry = {
+            id: $('#chosen-lob').val(),
+            insid: $('#lob-insurance').val(),
+            name: $('#lob-name').val(),
+            desc: $('#lob-desc').val(),
+            variation: $('#lob-var').val(),
+            type: $('#lob-type').val(),
+            emrid: $('#lob-emrid').val(),
+            fhirid: $('#lob-fhirid').val()
         }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/addlob", (xhr, err) => {
-            if (!err) {
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:document.getElementById('inslist').value}, "insurance/getlob", (xhr, err) => {
+        if (type == '1') {
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/addlob', (xhr, err) => {
                 if (!err) {
-                    let result = JSON.parse(xhr.responseText)['data'];
-                    $("#inslobtable tbody").empty();
-                    for(var i = 0;i < result.length;i++){
-                        if (result[i]['ins_emrid'] == null) result[i]['ins_emrid'] = '';
-                        if (result[i]['ins_fhirid'] == null) result[i]['ins_fhirid'] = '';
-                        $("#inslobtable tbody").append("<tr id = '"+result[i]['id']+"'><td>"+result[i]['lob']+"</td><td>"+result[i]['description']+"</td><td>"+result[i]['type']+"</td><td>"+result[i]['variation']+"</td><td>"+result[i]['ins_emrid']+"</td><td>"+result[i]['ins_fhirid']+"</td><td><div class='btn-group align-top'><button class='btn btn-sm btn-warning inslobeditbtn'><i class='fa fa-edit'></i></button><button class='btn btn-sm btn-danger inslobdeletebtn'><i class='fa fa-trash'></i></button></div></td>");
-                    }
-                    $("#inslob-add-modal").modal("hide");
-                    $('#lobname').val('');
-                    $('#lobdesc').val('');
-                    $('#lobvar').val('');
-                    $('#lobtype').val('');
-                    $('#lobemrid').val('');
-                    $('#lobfhirid').val('');
-
-                    } else {
-                    return $.growl.error({
-                        message: "Action Failed"
-                    });
+                    toastr.success('Successful!')
+                    lob_table.ajax.reload()
+                    $('#inslob-edit-modal').modal('hide')
+                } else {
+                    toastr.error('Action Failed!')
                 }
-            });
-            } else {
-                return $.growl.error({
-                    message: "Action Failed"
-                });
+            })
+        } else if (type == '0') {
+            console.log(entry)
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/updatelob', (xhr, err) => {
+                if (!err) {
+                    toastr.success('Successful!')
+                    lob_table.ajax.reload()
+                    $('#inslob-edit-modal').modal('hide')
+                } else {
+                    toastr.error('Action Failed!')
+                }
+            })
+        }
+    })
+
+    $(document).on('click', '#lob-delete-btn', function() {
+        let entry = {
+            id: $(this).parent().attr("idkey")
+        }
+        console.log(entry)
+        Swal.fire({
+            text: "Are you sure you would like to delete?",
+            icon: "error",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
             }
-        });
-    });
-
-    $(document).on("click",".inslobeditbtn",function(){
-
-        let en = {};
-        let content = "";
-        
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), en, "insurance/gettypeItem", (xhr, err) => {
-            if (!err) {
-                let result = JSON.parse(xhr.responseText)['data'];    
-                result.forEach(r => {                   
-                    content += '<option value="'+ r.id +'">' + r.display + '</option>';                                        
-                }); 
-                $('#elobtype').html(content);
-                
-            } else {
-                return toastr.error("Action Failed");
+        }).then(function (result) {
+            if (result.value) {
+                sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/deletelob', (xhr, err) => {
+                    if (!err) {
+                        lob_table.ajax.reload()
+                        toastr.success('Successfull!')
+                    } else {
+                        toastr.error('Action Failed!')
+                    }
+                })
             }
-        });
+        })
+    })
 
-        $("#chosen_inslob").val($(this).parent().parent().parent().attr("id"));
-            let entry = {
-            id: $(this).parent().parent().parent().attr("id"),
-            }
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/chosenlob", (xhr, err) => {
-            if (!err) {
-                let result = JSON.parse(xhr.responseText)['data'];
-                $("#elobname").val(result[0]['lob']);
-                $("#elobdesc").val(result[0]['description']);
-                $("#elobvar").val(result[0]['variation']);
-                $("#elobtype").val(result[0]['type_id']).trigger('change');
-                $('#elobemrid').val(result[0]['ins_emrid']);
-                $('#elobfhirid').val(result[0]['ins_fhirid']);               
+    $(document).on('change', '#lob-ins-filter', function() {
+        lob_table.ajax.reload()
+    })
 
-                $("#inslob-edit-modal").modal("show");
-            } else {
-                return $.growl.error({
-                    message: "Action Failed"
-                });
-            }
-        });
-    });
+    $(document).on('keyup', '#lob-search-input', function() {
+        lob_table.search(this.value).draw()
+    })
+    // Insurance Lob end //
 
+    // Insurance Lob Default begin //
     $(document).on("click",".inslobsetbtn",function() {
         
         let entry = {
-        ins_id:  $("#inslist").val(),
+        ins_id:  $("#default_ins_list").val(),
             user_id: localStorage.getItem('userid')
         }
 
@@ -370,90 +382,8 @@ $(document).ready(async function() {
                 }
             });
         }    
-    });   
-
-    $("#inslobeditbtn").click(function (e) {
-
-        let entry = {
-            id: document.getElementById('chosen_inslob').value,
-            name: document.getElementById('elobname').value,
-            desc: document.getElementById('elobdesc').value,
-            variation: document.getElementById('elobvar').value,
-            type: document.getElementById('elobtype').value,
-            emrid: document.getElementById('elobemrid').value,
-            fhirid: document.getElementById('elobfhirid').value,
-        }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/updatelob", (xhr, err) => {
-            if (!err) {
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:document.getElementById('inslist').value}, "insurance/getlob", (xhr, err) => {
-                if (!err) {
-                    $("#inslob-edit-modal").modal("hide");
-                    let result = JSON.parse(xhr.responseText)['data'];
-                    $("#inslobtable tbody").empty();
-                    for(var i = 0; i < result.length; i++){
-                        if (result[i]['ins_emrid'] == null) result[i]['ins_emrid'] = '';
-                        if (result[i]['ins_fhirid'] == null) result[i]['ins_fhirid'] = '';
-
-                        $("#inslobtable tbody").append("<tr id = '"+result[i]['id']+"'><td>"+result[i]['lob']+"</td><td>"+result[i]['description']+"</td><td>"+result[i]['type']+"</td><td>"+result[i]['variation']+"</td><td>"+result[i]['ins_emrid']+"</td><td>"+result[i]['ins_fhirid']+"</td><td><div class='btn-group align-top'><button class='btn btn-sm btn-warning inslobeditbtn'><i class='fa fa-edit'></i></button><button class='btn btn-sm btn-danger inslobdeletebtn'><i class='fa fa-trash'></i></button></div></td>");
-                    }
-
-                    } else {
-                    return $.growl.error({
-                        message: "Action Failed"
-                    });
-                }
-            });
-            } else {
-                return $.growl.error({
-                    message: "Action Failed"
-                });
-            }
-        });
-    });
-
-    $(document).on("click",".inslobdeletebtn",function(){
-        let entry = {
-            id: $(this).parent().parent().parent().attr("id"),
-        }
-
-        Swal.fire({
-            text: "Are you sure you would like to delete?",
-            icon: "error",
-            showCancelButton: true,
-            buttonsStyling: false,
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, return",
-            customClass: {
-                confirmButton: "btn btn-danger",
-                cancelButton: "btn btn-primary"
-            }
-        }).then(function (result) {
-            if (result.value) {
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/deletelob", (xhr, err) => {
-                if (!err) {
-                    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:document.getElementById('inslist').value}, "insurance/getlob", (xhr, err) => {
-                        if (!err) {
-                            let result = JSON.parse(xhr.responseText)['data'];
-                            $("#inslobtable tbody").empty();
-                            for(var i = 0;i < result.length;i++){
-                                $("#inslobtable tbody").append("<tr id = '"+result[i]['id']+"'><td>"+result[i]['lob']+"</td><td>"+result[i]['description']+"</td><td>"+result[i]['type']+"</td><td>"+result[i]['variation']+"</td><td><div class='btn-group align-top'><button class='btn btn-sm btn-warning inslobeditbtn'><i class='fa fa-edit'></i></button><button class='btn btn-sm btn-danger inslobdeletebtn'><i class='fa fa-trash'></i></button></div></td>");
-                            }
-                        } else {
-                            return $.growl.error({
-                                message: "Action Failed"
-                            });
-                        }
-                    });
-                    } else {
-                        return $.growl.error({
-                            message: "Action Failed"
-                        });
-                    }
-                });
-            }
-        });
-    });
-    // Insurance Lob end //
+    }); 
+    // Insurance Lob Default end //
 
     // Insurance Type begin //
     var ins_type_table = $('#type_table').DataTable({
@@ -579,7 +509,7 @@ $(document).ready(async function() {
     })
 
     $("#insurance-type-search").on('keyup', function() {
-        ins_type_table.search(this.value).draw();
+        ins_type_table.search(this.value).draw()
     })
     // Insurance Type end //
 
