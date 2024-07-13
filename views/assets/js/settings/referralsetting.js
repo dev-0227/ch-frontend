@@ -427,4 +427,27 @@ $(document).on("click",".delete_appt_specialty_btn",function(){
   });
 });
 
+
+// Note To Sepcialist begin //
+sendRequestWithToken('POST', localStorage.getItem('authToken'), {note: $('#referral-note-specialist').val()}, 'referral/note/spec/get', (xhr, err) => {
+  if (!err) {
+    var result = JSON.parse(xhr.responseText)['data']
+    if (result.length) {
+      $('#referral-note-specialist').val(result[0].note)
+    }
+  }
+})
+
+$('#referral-note-save').click(() => {
+  console.log($('#referral-note-specialist').val())
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {note: $('#referral-note-specialist').val()}, 'referral/note/spec/set', (xhr, err) => {
+    if (!err) {
+      toastr.success('Action Success!')
+    } else {
+      toastr.error('Action Failed!')
+    }
+  })
+})
+// Note To Sepcialist end //
+
 });

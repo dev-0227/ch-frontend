@@ -140,6 +140,7 @@ $(document).ready(async function() {
         let entry = {
             id: $(this).parent().attr("idkey"),
         }
+        $('#chosen_map').val(entry.id)
         sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "setting/map/get", (xhr, err) => {
             if (!err) {
                 var result = JSON.parse(xhr.responseText)['data']

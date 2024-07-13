@@ -3693,4 +3693,275 @@ $(document).ready(async function () {
 			}
 		});
   });
+
+  /*
+  * Report Builder 
+  */
+ 
+  // Get Insurance
+  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/getInsuranceList", (xhr, err) => {
+    if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];    
+        let content = "";
+        content += '<option value="0">Select Insurance</option>';
+        result.forEach(r => {                               
+            content += '<option value="'+ r.id +'">' + r.insName + '</option>';                                        
+        }); 
+        $('#select_ins').html(content);
+        
+    } else {  
+        return toastr.error("Action Failed");
+    }
+  });
+  // Get Insurance LOB by Insurance
+  $('#select_ins').change(function() {
+    quality_program_table.ajax.reload(null, false); 
+  });
+
+  // Quality Program Table 
+  var quality_program_table = $('#quality_program_table').DataTable({
+    "ajax": {
+        "url": serviceUrl + "reportBuilder/getQualityProgramList",
+        "type": "POST",
+        // "data": {
+        //   ins_id: $('#select_ins').val(),
+        //   ins_lob_id: $('#select_ins_lob').val(),
+        // }
+        "data": function () {
+          return {
+              ins_id: $('#select_ins').val(),         // Current selected insurance type
+          };
+        }
+    },
+    "order": [[6, 'desc']],
+    "columns": [
+      { data: 'name'},
+      { data: 'display'},
+      { data: 'definition'},
+      { data: 'description'},
+      { data: 'program_date'},
+      { data: 'lob'},
+      { data: 'id',
+        render: function (data, type, row) {
+          return `
+            <div class="btn-group align-top" idkey="`+row.id+`">
+              <button class="btn btn-sm btn-primary badge" id="edit_quality_program" type="button">
+                  <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-danger badge" id="del_quality_program" type="button">
+                  <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          `
+        } 
+      }
+    ]
+  });
+
+  $('#quality_program_search_input').on('keyup', function () {
+    quality_program_table.search(this.value).draw();
+  });
+
+  // Get Quality Program Data By Insurance, LOB
+  $('#select_ins_lob').change(function() {
+    quality_program_table.ajax.reload(null, false);     
+  });
+  
+  $(document).on('click', '#add_quality_program', function() {
+    if ( $('#select_ins').val() == 'Select Insurance')
+    {
+      toastr.error("Please select Insurance");
+    } else {      
+      $('#quality_program_add_modal').modal('show');
+      $('#add_quality_program_ins').val($('#select_ins option:selected').text());
+
+      let params = {
+        id:$('#select_ins').val()
+      }
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/getInsuranceLOBList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];  
+            let content = "";            
+            result.forEach(r => {                   
+                content += '<option value="'+ r.id +'">' + r.lob + '</option>';                                        
+            }); 
+            $('#add_quality_program_ins_lob').html(content);
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+      });
+
+      $('#add_quality_program_ins_id').val($('#select_ins').val());
+      $('#add_quality_program_ins_lob_id').val($('#select_ins_lob').val());  
+    } 
+  });
+
+  $(document).on('click', '#save_quality_program', function() {
+    var ins_id = $('#add_quality_program_ins_id').val();
+    var ins_lob_id = $('#add_quality_program_ins_lob').val();    
+    var name = $('#add_quality_program_name').val();
+    var display = $('#add_quality_program_display').val();
+    var definition = $('#add_quality_program_definition').val();
+    var description = $('#add_quality_program_description').val();
+    var program_date = $('#add_quality_program_date').val();
+    
+    
+    if (ins_id == '' || ins_lob_id == '') {
+      toastr.error("Please select Insurance or LOB");
+    } else if (name == '' || display == '' || definition == '' || description == '' || program_date == '') {
+        toastr.error("Please enter complete information");
+    } else {
+        let entry = {
+          ins_id : ins_id,
+          ins_lob_id: ins_lob_id,
+          name: name,
+          display: display,
+          definition: definition,
+          description: description,
+          program_date: program_date
+        }    
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/addQualityProgram", (xhr, err) => {
+            if (!err) {
+                setTimeout( function () {
+                  quality_program_table.ajax.reload();
+                }, 1000 );
+                $('#add_quality_program_ins_id').val('');    
+                $('#add_quality_program_ins_lob').html('');            
+                $('#add_quality_program_name').val('');
+                $('#add_quality_program_display').val('');
+                $('#add_quality_program_definition').val('');
+                $('#add_quality_program_description').val('');
+                $('#add_quality_program_date').val('');
+                $('#quality_program_add_modal').modal('hide');
+            } else {
+                return toastr.error("Action Failed");
+            }
+        });
+    }   
+     
+  });
+
+  $(document).on("click", "#del_quality_program", function() {
+    let entry = {
+        id: $(this).parent().attr("idkey"),
+    }
+    Swal.fire({
+        text: "Are you sure you would like to delete?",
+        icon: "error",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, return",
+        customClass: {
+            confirmButton: "btn btn-danger",
+            cancelButton: "btn btn-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/delQualityProgram", (xhr, err) => {
+            if (!err) {
+                setTimeout( function () {
+                  quality_program_table.ajax.reload();
+                }, 1000 );
+            } else {
+                return toastr.error("Action Failed");
+            }
+            });
+        }
+    });
+  });
+
+  let updated_id;
+  $('#quality_program_table tbody').on('click', '#edit_quality_program', function() {
+    var row = quality_program_table.row($(this).parents('tr')).data();
+    console.log(row);
+    updated_id = row.id;
+    
+    let params = {
+      id:$('#select_ins').val()
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/getInsuranceLOBList", (xhr, err) => {
+      if (!err) {
+          let result = JSON.parse(xhr.responseText)['data'];    
+          let content = "";
+          content += '<option>Select LOB</option>';
+          result.forEach(r => {                   
+              content += '<option value="'+ r.id +'">' + r.lob + '</option>';                                        
+          }); 
+          $('#edit_quality_program_ins_lob').html(content);
+         
+          
+          sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:row.id}, "reportBuilder/getSelectLOBList", (xhr, err) => {
+            if (!err) {
+              let d = JSON.parse(xhr.responseText)['data'];
+              let selectElement = $('#edit_quality_program_ins_lob');
+              selectElement.find('option').each(function() {
+                let optionValue = parseInt($(this).val());
+                $(this).prop('selected', d.includes(optionValue));
+              });
+              selectElement.trigger('change');
+            }
+          });
+         
+          
+      } else {  
+          return toastr.error("Action Failed");
+      }
+    });
+       
+
+    $('#edit_quality_program_ins').val($('#select_ins option:selected').text()); 
+    $('#edit_quality_program_ins_id').val(row.ins_id);    
+    $('#edit_quality_program_name').val(row.name);
+    $('#edit_quality_program_display').val(row.display);
+    $('#edit_quality_program_definition').val(row.definition);
+    $('#edit_quality_program_description').val(row.description);
+    $('#edit_quality_program_date').val(row.program_date);
+    $('#quality_program_edit_modal').modal('show');
+  });
+
+  $(document).on('click', '#update_quality_program', function() {    
+    var ins_id = $('#edit_quality_program_ins_id').val();
+    var ins_lob_id = $('#edit_quality_program_ins_lob').val();
+    var name = $('#edit_quality_program_name').val();
+    var display = $('#edit_quality_program_display').val();
+    var definition = $('#edit_quality_program_definition').val();
+    var description = $('#edit_quality_program_description').val();
+    var program_date = $('#edit_quality_program_date').val();
+    
+    if (ins_id == '' || ins_lob_id == 'Select LOB') {
+      toastr.error("Please select Insurance or LOB");
+    } else if (name == '' || display == '' || definition == '' || description == '' || program_date == '') {
+        toastr.error("Please enter complete information");
+    } else {
+        let entry = {
+          id: updated_id,
+          ins_id : ins_id,
+          ins_lob_id: ins_lob_id,
+          name: name,
+          display: display,
+          definition: definition,
+          description: description,
+          program_date: program_date
+        }    
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/updateQualityProgram", (xhr, err) => {
+            if (!err) {
+                setTimeout( function () {
+                  quality_program_table.ajax.reload();
+                }, 1000 );
+                $('#edit_quality_program_ins_id').val('');
+                $('#edit_quality_program_ins_lob_id').val('');
+                $('#edit_quality_program_name').val('');
+                $('#edit_quality_program_display').val('');
+                $('#edit_quality_program_definition').val('');
+                $('#edit_quality_program_description').val('');
+                $('#edit_quality_program_date').val('');
+                $('#quality_program_edit_modal').modal('hide');
+            } else {
+                return toastr.error("Action Failed");
+            }
+        });
+    }        
+  });
 });

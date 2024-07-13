@@ -7,7 +7,7 @@ $(document).ready(function () {
     },
     "order": [[3, 'asc']],
     "columns": [
-        { data: "insId"},
+        { data: "id"},
         { data: "insName"},
         { data: 'abbrName' },
         { data: 'insaddress',

@@ -823,7 +823,7 @@ function fillReferralDocument(data) {
     $("#referral_end_date").html(data.aendd)
     $("#referral_auth_no").html(data.aauthno)
     $("#referral_auth_type").html(data.aauthtype)
-    $("#referral_spec_note").html(data.snote)
+    $("#referral_spec_note").html(data.nsnote)
     // patient info
     $("#patient_name").html(data.pname)
     $("#patient_dob").html(`${pdob.getMonth() + 1}/${pdob.getDate()}/${pdob.getFullYear()}`)
@@ -834,7 +834,7 @@ function fillReferralDocument(data) {
     $("#patient_email").html(data.pemail)
     $("#insurance").html(data.pinsname)
     $("#insurance_no").html(data.psubscriberno)
-    $("#communication_need").html(data.sneed)
+    $("#communication_need").html($('#communication_need_modal').val())
     //provider
     $("#provider_npi").html(data.aprovider == '1' ? data.snpi : data.dnpi)
     $("#provider_name").html(data.aprovider == '1' ? data.sname : data.dname)
@@ -890,7 +890,7 @@ function fillReferralEditDocument(data) {
     $("#referral_end_date_modal").data('daterangepicker').setStartDate(data.aendd)
     $("#referral_auth_no_modal").val('')
     $("#referral_auth_type_modal").val('')
-    $("#referral_spec_note_modal").val('')
+    $("#referral_spec_note_modal").val(data.nsnote)
     // patient info
     $("#patient_name_modal").val(data.pfname + ' ' + data.plname)
     $("#patient_dob_modal").data('daterangepicker').setStartDate(new Date(data.pdob))
@@ -901,7 +901,6 @@ function fillReferralEditDocument(data) {
     $("#patient_email_modal").val(data.pemail)
     $("#insurance_modal").val(data.pinsname)
     $("#insurance_no_modal").val(data.psubscriberno)
-    $("#communication_need_modal").val('')
     //provider
     $("#provider_npi_modal").val(data.aprovider == '1' ? data.snpi : data.dnpi)
     $("#provider_name_modal").html(data.aprovider == '1' ? data.sfname + ' ' + data.slname : data.dfname + ' ' + data.dlname)
@@ -1220,6 +1219,18 @@ sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "referral/app
     }
 });
 
+// Communication Needs
+sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'barriers/getPTCommNeeds', (xhr, err) => {
+    if (!err) {
+        var result = JSON.parse(xhr.responseText)['data']
+        var options = ``
+        result.forEach(item => {
+            options += `<option value='${item.display}'>${item.display}</option>`
+        })
+        $('#communication_need_modal').html(options)
+    }
+})
+
 // Data Load end //
 
 $(document).ready(async function() {
@@ -1347,6 +1358,7 @@ $(document).ready(async function() {
             cweb: $('#pcp_web_modal').val(),
             maddress: $('#header_clinic_address_modal').val(),
             mname: $('#provider_name_modal').html(),
+            nsnote: $('#referral_spec_note_modal').val(),
             paddress: $('#patient_address_modal').val(),
             pdob: $('#patient_dob_modal').val(),
             pemail: $('#patient_email_modal').val(),
