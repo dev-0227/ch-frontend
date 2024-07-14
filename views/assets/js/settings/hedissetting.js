@@ -3269,32 +3269,6 @@ $(document).ready(async function () {
 
   //Hedis file aliases
   
-  // Datatables   
-  // var filealiastable = $('#filealiastable').on('init.dt', function () {
-  //     $("input[id^=a]").tagsinput();
-  // }).DataTable(
-  //   {
-  //     "ajax": {
-  //         "url": serviceUrl + "hedissetting/getfilealiases",
-  //         "type": "GET",
-  //     },
-  //     "columns": [
-  //         { "data": "fields", "width": "20%" },
-  //         { "data": "variables"},
-
-  //     ],
-  //     "aoColumnDefs": [
-  //         {
-  //             "aTargets": [1],
-  //             "mData": "headers",
-  //             "mRender": function (data, type, full) {
-  //                 return '<input class="form-control" type="text" data-role="tagsinput"  id="a' + full.id + '" onchange="changeAlias(' + full.id + ')" value="' + data + '">';
-  //             }
-  //         }
-  //     ]
-  //   }
-  // );
-
   //ins domain
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/getchoseninsurances", (xhr, err) => {
     if (!err) {
@@ -3964,4 +3938,47 @@ $(document).ready(async function () {
         });
     }        
   });
-});
+
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/", (xhr, err) => {
+    var _id = 0
+    var options = ''
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data']
+      result.forEach(item => {
+        options += `<option value='${item.id}'>${item.insName}</option>`
+      })
+      if (result.length > 0) _id = result[0].id
+
+      $('#insurance_list').html(options)
+      
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), {user_id: localStorage.getItem('userid')}, 'reportBuilder/getDefaultIns', (xhr, err) => {
+        if (!err) {
+          var result = JSON.parse(xhr.responseText)['data']
+          if (result.length) {
+            $('#insurance_list').val(result[0].insid).trigger('change')
+            $('#select_ins').val(result[0].insid).trigger('change')
+          }
+        }
+      })
+    }
+  })
+
+  $(document).on("click","#default_insurance",function() {
+    let entry = {
+    ins_id:  $("#insurance_list").val(),
+      user_id: localStorage.getItem('userid')
+    }
+
+    if (entry.ins_id == 0) {
+      toastr.error("Please select insurance");      
+    } else {
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/setDefaultIns", (xhr, err) => {
+          if (!err) {
+              toastr.success("Set Success");            
+          } else {
+              return toastr.error("Action Failed");
+          }
+      });
+    }
+  })
+})

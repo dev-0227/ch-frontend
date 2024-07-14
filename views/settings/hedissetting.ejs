@@ -132,7 +132,7 @@
                             <li class="nav-item"><a href="#hdomain_tab" class="nav-link active" data-bs-toggle="tab">Healthcare Domain</a></li>
                             <li class="nav-item"><a href="#measure_tab" class="nav-link" data-bs-toggle="tab">Measure</a></li>
                             <li class="nav-item"><a href="#cpticd_tab" class="nav-link" data-bs-toggle="tab">CPT ICD MAP</a></li>
-                            <li class="nav-item"><a href="#reportBuilder_tab" class="nav-link" data-bs-toggle="tab">Report Builder</a></li>
+                            <li class="nav-item"><a href="#reportBuilder_tab" class="nav-link" data-bs-toggle="tab">Quality Programs</a></li>
                             <li class="nav-item"><a href="#constructor_tab" class="nav-link" data-bs-toggle="tab">Constructor</a></li>
                             <li class="nav-item"><a href="#hdate_tab" class="nav-link" data-bs-toggle="tab">Hedis Date</a></li>
                             <li class="nav-item"><a href="#color_tab" class="nav-link" data-bs-toggle="tab">Color Theme</a></li>
@@ -257,9 +257,10 @@
                                 </div>
                             </div>
                             <div class="tab-pane " id="reportBuilder_tab">
-                                <div class="tabs-menu1">
-                                    <ul class="nav panel-tabs">
-                                        <li class="nav-item"><a href="#report_quality_program"  class="nav-link active" data-bs-toggle="tab" style="border-bottom: 1px solid">Quality Program</a></li>
+                                <div class="tab-menu-heading">
+                                    <ul class="nav panel-tabs nav-line-tabs mb-5 fs-6">
+                                        <li class="nav-item"><a href="#report_quality_program"  class="nav-link active" data-bs-toggle="tab">Quality Program</a></li>
+                                        <li class="nav-item"><a href="#report_default_insurance"  class="nav-link" data-bs-toggle="tab">Default Insurance</a></li>
                                     </ul>
                                 </div>
                                 <div class="tab-content" style="margin-top: 10px;">
@@ -269,7 +270,7 @@
                                                 <div class="card">
                                                     <div class="card-header border-0 pt-6 px-4">
                                                         <div class="card-title">  
-                                                            <select id="select_ins" data-hide-search="false" aria-label="Select a Insurance" data-control="select2" data-hide-search="true" data-placeholder="Select Insurance" class="form-select mb-2">
+                                                            <select id="select_ins" data-hide-search="false" aria-label="Select an Insurance" data-control="select2" data-hide-search="true" data-placeholder="Select Insurance" class="form-select mb-2">
                                                             </select>                                                         
                                                         </div>
                                                         <div class="card-toolbar">
@@ -300,6 +301,17 @@
                                                         </table>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="report_default_insurance">
+                                        <div class="row mb-4">
+                                            <div class="col-md-4">
+                                                <select id="insurance_list" data-control="select2" class="form-control select2-show-search" data-placeholder="Select an Inusurance">
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a class="btn btn-primary" id="default_insurance">Set Default Insurance</a>
                                             </div>
                                         </div>
                                     </div>
