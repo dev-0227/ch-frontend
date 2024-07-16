@@ -214,7 +214,7 @@ router.get("/qrcode", (req, res, next) => {
     });
 });
 
-router.get("/report/measureReportDefinition", (req, res, next) => {
+router.get("/measureReportDefinition", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Measure Report Definition",
         pageKey: "../settings/report/measureReportDefinition"
