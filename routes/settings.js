@@ -214,4 +214,11 @@ router.get("/qrcode", (req, res, next) => {
     });
 });
 
+router.get('/ecwbulk', (req, res, next) => {
+    res.render('layout/mainblank', {
+        pageTitle: 'ECW Bulk',
+        pageKey: '../settings/ecwbulk'
+    })
+})
+
 module.exports = router;
