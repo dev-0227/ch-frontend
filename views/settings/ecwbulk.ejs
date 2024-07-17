@@ -5,9 +5,107 @@
             <h3 class="card-title">ECW FHIR Bulk Setting</h3>
         </div>
         <div class="card-toolbar">
-            <a class="btn btn-primary" id="add_btn" ><i class="fa fa-plus">&nbsp;</i>Add Scope</a>
+            <a class="btn btn-primary" id="bulk_add_btn" ><i class="fa fa-plus">&nbsp;</i>Add Scope</a>
         </div>
     </div>
     <div class="card-body py-4">
+        <input type="hidden" id="bulk_chosen"></input>
+        <div class="row my-5">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <label for="bulk_api_key" class="form-label">API Key</label>
+                <input type="text" class="form-control" id="bulk_api_key"/>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <!-- patient begin -->
+        <div class="row mt-20">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <label for="bulk_patient_url" class="form-label">Patients</label>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text">
+                        <span>https://test.conecxo.com/api/FHIR/patients/</span>
+                    </span>
+                    <div class="overflow-hidden flex-grow-1">
+                        <select class="form-select rounded-start-0" data-control="select2" data-placeholder="Select a Patient" id="bulk_patient_url">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-11 my-5">
+                <div class="card-toolbar justify-content-end">
+                    <div class="buttons">
+                        <button id="bulk_patient_edit_btn" class="btn btn-primary bulk-edit-btn"> Edit</button>
+                        <button id="bulk_patient_delete_btn" class="btn btn-danger bulk-delete-btn"> Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- patient end -->
+        <!-- encounter begin -->
+        <div class="row my-7">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <label for="bulk_encounter_url" class="form-label">Encounters</label>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text">
+                        <span>https://test.conecxo.com/api/FHIR/encounters/</span>
+                    </span>
+                    <div class="overflow-hidden flex-grow-1">
+                        <select class="form-select rounded-start-0" data-control="select2" data-placeholder="Select an Encounter" id="bulk_encounter_url">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-11 my-5">
+                <div class="card-toolbar justify-content-end">
+                    <div class="buttons">
+                        <button id="bulk_encounter_edit_btn" class="btn btn-primary bulk-edit-btn"> Edit</button>
+                        <button id="bulk_encounter_delete_btn" class="btn btn-danger bulk-delete-btn"> Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- encounter end -->
     </div>
+</div>
+
+<div class="modal fade" id="bulk_edit_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <input type="hidden" id="bulk_modal_type"></input>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add New Scope</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+						<div class="form-group">
+							<label for="bulk_modal_scope" class="form-label">Scope</label>
+							<select id="bulk_modal_scope" data-control="select2" class="form-control select2-show-search" data-placeholder="Select a Scope">
+                                <option value="patient">Patient</option>
+                                <option value="encounter">Encounter</option>
+							</select>
+						</div>
+					</div>
+                    <div class="col-lg-12 my-10">
+						<div class="form-group">
+							<label for="bulk_modal_endpoint" class="form-label">End Point</label>
+                            <input type="text" class="form-control" id="bulk_modal_endpoint"/>
+						</div>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+				<button type="button" class="btn btn-primary" id="bulk_modal_save"><i class="fa fa-save">&nbsp;</i> Save</button>
+			</div>
+		</div>
+	</div>
 </div>
