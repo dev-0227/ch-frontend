@@ -43,50 +43,91 @@
                 <h3 class="card-title">Patient Data Loader</h3>
             </div>
             <div class="card-body p-6">
-                <div class="col-lg-12">
-					<div class="card shadow">
-						<div class="card-header">
-							<h3 class="mb-0 card-title">Patient File</h3>
-							<div class="card-toolbar">
-								<a class="btn btn-success useraddbtn" id="ptloadbtn" ><i class="fa fa-upload">&nbsp;</i>Upload</a>
+				<div class="tab-menu-heading">
+					<ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+						<li class="nav-item"><a href="#patient_loader_excel" class="nav-link active" data-bs-toggle="tab">Excel</a></li>
+						<li class="nav-item"><a href="#patient_loader_ecwbulk" class="nav-link " data-bs-toggle="tab">ECW Bulk</a></li>
+					</ul>
+				</div>
+				<div class="panel-body tabs-menu-body tab_area">
+					<div class="tab-content">
+						<div class="tab-pane active" id="patient_loader_excel">
+							<div class="col-lg-12">
+								<div class="card shadow">
+									<div class="card-header">
+										<h3 class="mb-0 card-title">Load Patient File</h3>
+										<div class="card-toolbar">
+											<a class="btn btn-success useraddbtn" id="ptloadbtn" ><i class="fa fa-upload">&nbsp;</i>Upload</a>
+										</div>
+									</div>
+									<div class="card-body">
+										<h6>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>uid</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ufname</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>uminitial</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ulname</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>DOB</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upPhone</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>umobileno</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>uemail</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upaddress</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upcity</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>zipcode</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upstate</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>sex</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>Age</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>language</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ethnicity</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>race</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>deceased</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>deceasedDate</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>insid</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>insuranceName</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>subscriberno</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>startDate</span>
+										</h6>
+										<input id="ptfile" type="file" class="dropify" data-height="150" />
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="card-body">
-							<h6>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>uid</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ufname</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>uminitial</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ulname</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>DOB</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upPhone</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>umobileno</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>uemail</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upaddress</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upcity</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>zipcode</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>upstate</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>sex</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>Age</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>language</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ethnicity</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>race</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>deceased</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>deceasedDate</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>insid</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>insuranceName</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>subscriberno</span>
-								<span class='badge badge-primary badge-square badge-lg px-3 my-2'>startDate</span>
-							</h6>
-							<input id="ptfile" type="file" class="dropify" data-height="150" />
+						<div class="tab-pane" id="patient_loader_ecwbulk">
+							<div class="col-lg-12">
+								<div class="card shadow">
+									<div class="card-header">
+										<h3 class="mb-0 card-title">ECW Bulk</h3>
+										<div class="card-toolbar">
+											<a class="btn btn-success" id="ptloader_ecwbulk_btn" ><i class="fa fa-upload">&nbsp;</i>Gather</a>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="mb-5">
+											<label for="ptloader_ecwbulk_url" class="form-label">Patient Source Url</label>
+											<div class="input-group mb-5">
+												<span class="input-group-text" id="basic-addon3">https://</span>
+												<input type="text" class="form-control" id="ptloader_ecwbulk_url" aria-describedby="basic-addon3" value="test.conecxo.com/api/FHIR/patients"/>
+											</div>
+										</div>
+										<div class="mb-5">
+											<label for="ptloader_ecwbulk_key" class="form-label">API Key</label>
+											<div class="input-group mb-5">
+												<span class="input-group-text" id="basic-addon3">Key</span>
+												<input type="text" class="form-control" id="ptloader_ecwbulk_key" aria-describedby="basic-addon3" value="cf4b3acb7de1d8e86bd587f9f7347e6a0a2f6aa425b29c21d9d336692f499c10701920c2081fc7e9a9d84a7fdec6a5cf406ec6bec257960aa21d781c9543a573"/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				
+                
             </div>
         </div>
     </div><!-- COL-END -->
 </div>
 <!-- ROW CLOSED -->
+
 <div class="modal fade" id="load-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">

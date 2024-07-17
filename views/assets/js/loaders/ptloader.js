@@ -37,6 +37,8 @@ function uploadCSVFile() {
 
 $(document).ready(async function () {
   "use strict";
+
+  // Exce Begin //
   if(!localStorage.getItem('chosen_clinic') || localStorage.getItem('chosen_clinic') != 'undefined'){
     let entry = {
       clinicid:localStorage.getItem('chosen_clinic')
@@ -78,4 +80,17 @@ $(document).ready(async function () {
       $('#verify-done').prop('disabled', false)
     }
   })
-})
+  // Exce Begin //
+  // ECW Bulk Begin //
+  $('#ptloader_ecwbulk_btn').click(async function() {
+    var url = `https://${$('#ptloader_ecwbulk_url').val()}`
+    var key = $('#ptloader_ecwbulk_key').val()
+
+    sendRequest(`${url}?key=${key}`, (xhr, err) => {
+      if (!err) {
+        console.log(JSON.parse(xhr.responseText))
+      }
+    })
+  })
+  // ECW Bulk End //
+  })
