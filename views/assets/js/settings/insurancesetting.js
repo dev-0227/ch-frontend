@@ -32,7 +32,9 @@ $(document).ready(async function() {
             })
         }
         $('#insurance-clinics').html(`<option value = '0'>All Clinics</option>` + options)
+        $('#lob-clinic-filter').html(`<option value = '0'>All Clinics</option>` + options)
         $('#insurance-add-clinics').html(options)
+        $('#lob-clinic').html(options)
     })
 
     await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/", (xhr, err) => {
@@ -225,6 +227,7 @@ $(document).ready(async function() {
             "headers": { 'Authorization': localStorage.getItem('authToken') },
             "data": function(d) {
                 d.insid = $('#lob-ins-filter').val() ? $('#lob-ins-filter').val() : 0
+                d.clinicid = $('#lob-clinic-filter').val() ? $('#lob-clinic-filter').val() : 0
                 d.filter = $('#lob-search-input').val()
             }
         },
@@ -232,9 +235,9 @@ $(document).ready(async function() {
         "processing": true,
         "columns": [
             { data: 'insName' },
+            { data: 'clinicName' },
             { data: 'lob' },
             { data: 'description' },
-            { data: 'type' },
             { data: 'variation' },
             { data: 'ins_emrid' },
             { data: 'ins_fhirid' },
@@ -280,6 +283,7 @@ $(document).ready(async function() {
                     $('#lob-fhirid').val(result[0].ins_fhirid)
                     $('#lob-type').val(result[0].type_id).trigger('change')
                     $('#lob-insurance').val(result[0].insid).trigger('change')
+                    $('#lob-clinic').val(result[0].clinicid).trigger('change')
 
                     $('#inslob-edit-modal').modal('show')
                 }
@@ -289,10 +293,11 @@ $(document).ready(async function() {
 
     $('#lob-save-btn').click(() => {
         var type = $('#lob-modal-type').val()
-        console.log($('#lob-insurance').val())
+        
         var entry = {
             id: $('#chosen-lob').val(),
             insid: $('#lob-insurance').val(),
+            clinicid: $('#lob-clinic').val(),
             name: $('#lob-name').val(),
             desc: $('#lob-desc').val(),
             variation: $('#lob-var').val(),
@@ -355,6 +360,10 @@ $(document).ready(async function() {
     })
 
     $(document).on('change', '#lob-ins-filter', function() {
+        lob_table.ajax.reload()
+    })
+
+    $(document).on('change', '#lob-clinic-filter', function() {
         lob_table.ajax.reload()
     })
 
