@@ -812,5 +812,354 @@ $(document).ready(function() {
             }
         });
     }); 
+    //specific cutpoint measure
+
+    var specific_cutpoint_measure_table = $('#specific_cutpoint_measure_table').DataTable({
+        "ajax": {
+            "url": serviceUrl + "reportBuilder/GetSpecificCutpointMeasureList",
+            "type": "GET"
+        },
+        "order": [[0, 'asc']],
+        "columns": [
+            { 
+                data: 'measure',
+                render: function (data, type, row) {
+                    var measure = row.measure;
+                    var measure = measure.match(/.{1,40}/g).join('<br />');
+                    return `<span>` + measure + `</span>`;
+                } 
+            },
+            { data: 'quality_id'},
+            { data: 'clinic'},
+            { data: 'report'},
+            { data: 'cutpoint'},
+            { data: 'measure_range'},
+            { data: 'active'},
+            { data: 'created_date'},
+            { data: 'id',
+              render: function (data, type, row) {
+                return `
+                  <div class="btn-group align-top" idkey="`+row.id+`">
+                    <button class="btn btn-sm btn-primary badge update_specific_cutpoint_measure" type="button">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger badge del_specific_cutpoint_measure" type="button">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                `
+              } 
+            }
+        ]
+    });
+
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetMeasureNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#add_specific_cutpoint_measure_name').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    }); 
+
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetClinicNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#add_specific_cutpoint_measure_clinic').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    });       
     
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetReportNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#add_specific_cutpoint_measure_report').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    });  
+
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetCutpointNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#add_specific_cutpoint_measure_cutpoint').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    });  
+
+    //
+    $('#add_specific_cutpoint_measure_name').change(function() {         
+        let params = {
+            id: $('#add_specific_cutpoint_measure_name option:selected').val()
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/GetMeasureQualityId", (xhr, err) => {
+            if (!err) {
+                let result = JSON.parse(xhr.responseText)['data'];                 
+                $('#add_specific_cutpoint_measure_quality_id').val(result[0].measureId);
+            } else {  
+                return toastr.error("Action Failed");
+            }
+        });
+    });
+
+    
+    $(document).on('click', '#add_specific_cutpoint_measure', function() {        
+        $('#add_specific_cutpoint_measure_modal').modal('show');
+    });
+
+    $(document).on('click', '#save_specific_cutpoint_measure', function() {
+
+        var measure = $('#add_specific_cutpoint_measure_name').val();
+        var clinic = $('#add_specific_cutpoint_measure_clinic').val();
+        var report = $('#add_specific_cutpoint_measure_report').val();
+        var cutpoint = $('#add_specific_cutpoint_measure_cutpoint').val();
+        var range = $('#add_specific_cutpoint_measure_range').val();
+        var active = $('#add_specific_cutpoint_measure_active').val();
+        var created_date = $('#add_specific_cutpoint_measure_date').val();
+        
+        
+
+        if ( measure == '' || clinic == '' || report == '' || cutpoint == '' || range == null || active == '' || created_date == '') {
+            toastr.error("Please enter complete information");
+        } else {
+            let entry = {
+                measure: measure, 
+                clinic: clinic, 
+                report: report,
+                cutpoint: cutpoint,
+                range: range,
+                active: active,
+                created_date: created_date
+            }    
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/AddSpecificCutpointMeasureItem", (xhr, err) => {
+                if (!err) {
+                    // setTimeout( function () {
+                    //     specific_cutpoint_measure_table.ajax.reload();
+                    // }, 1000 );
+                    specific_cutpoint_measure_table.ajax.reload();
+                    $('#add_specific_cutpoint_measure_name').val(null);
+                    $('#add_specific_cutpoint_measure_clinic').val(null);
+                    $('#add_specific_cutpoint_measure_report').val(null);
+                    $('#add_specific_cutpoint_measure_cutpoint').val(null);
+                    $('#add_specific_cutpoint_measure_range').val('');
+                    $('#add_specific_cutpoint_measure_active').val(null);
+                    $('#add_specific_cutpoint_measure_date').val('')
+                    $('#add_specific_cutpoint_measure_modal').modal('hide');
+                } else {
+                    return toastr.error("Action Failed");
+                }
+            });
+        }        
+    });
+
+    $(document).on("click", ".del_specific_cutpoint_measure", function() {
+        let entry = {
+            id: $(this).parent().attr("idkey"),
+        }
+        Swal.fire({
+            text: "Are you sure you would like to delete?",
+            icon: "error",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/DelSpecificCutpointMeasureItem", (xhr, err) => {
+                if (!err) {
+                    setTimeout( function () {
+                        specific_cutpoint_measure_table.ajax.reload();
+                    }, 1000 );
+                } else {
+                    return toastr.error("Action Failed");
+                }
+                });
+            }
+        });
+    });
+
+
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetMeasureNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#edit_specific_cutpoint_measure_name').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    }); 
+
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetClinicNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#edit_specific_cutpoint_measure_clinic').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    });       
+    
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetReportNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#edit_specific_cutpoint_measure_report').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    });  
+
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetCutpointNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";
+            content += '<option></option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#edit_specific_cutpoint_measure_cutpoint').html(content);
+
+            
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    });  
+
+    $('#edit_specific_cutpoint_measure_name').change(function() {     
+        let params = {
+            id: $('#edit_specific_cutpoint_measure_name option:selected').val()
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/GetMeasureQualityId", (xhr, err) => {
+            if (!err) {
+                let result = JSON.parse(xhr.responseText)['data'];                 
+                $('#edit_specific_cutpoint_measure_quality_id').val(result[0].measureId);
+            } else {  
+                return toastr.error("Action Failed");
+            }
+        });
+    });
+
+    $(document).on('click', '.update_specific_cutpoint_measure', function() {        
+
+        var row = specific_cutpoint_measure_table.row($(this).parents('tr')).data();
+        
+        $('#edit_specific_cutpoint_measure_id').val(row.id);
+        $('#edit_specific_cutpoint_measure_quality_id').val(row.quality_id);        
+
+        let params = {
+            id: row.id
+        }
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/GetSpecificCutpointMeasureById", (xhr, err) => {
+            if (!err) {
+                let result = JSON.parse(xhr.responseText)['data'];    
+                $('#edit_specific_cutpoint_measure_name').val(result[0]['measure_id']).trigger('change');
+                $('#edit_specific_cutpoint_measure_clinic').val(result[0]['clinic_id']).trigger('change');
+                $('#edit_specific_cutpoint_measure_report').val(result[0]['report_id']).trigger('change');
+                $('#edit_specific_cutpoint_measure_cutpoint').val(result[0]['cutpoint_id']).trigger('change');
+                $('#edit_specific_cutpoint_measure_range').val(result[0]['measure_range']);
+                $('#edit_specific_cutpoint_measure_active').val(result[0]['active']).trigger('change');                
+                $('#edit_specific_cutpoint_measure_date').val(result[0]['create_date']);       
+                $('#edit_specific_cutpoint_measure_modal').modal('show');
+                
+            } else {  
+                return toastr.error("Action Failed");
+            }
+        });         
+    });
+
+    $(document).on('click', '#update_specific_cutpoint_measure', function() {
+
+        var id = $('#edit_specific_cutpoint_measure_id').val();
+        var measure = $('#edit_specific_cutpoint_measure_name').val();
+        var clinic = $('#edit_specific_cutpoint_measure_clinic').val();
+        var report = $('#edit_specific_cutpoint_measure_report').val();
+        var cutpoint = $('#edit_specific_cutpoint_measure_cutpoint').val();
+        var range = $('#edit_specific_cutpoint_measure_range').val();
+        var active = $('#edit_specific_cutpoint_measure_active').val();
+        var created_date = $('#edit_specific_cutpoint_measure_date').val();
+        
+        if ( measure == '' || clinic == '' || report == '' || cutpoint == '' || range == '' || active == '' || created_date == '') {
+            toastr.error("Please enter complete information");
+        } else {
+            let entry = {
+                id: id,
+                measure: measure,                 
+                clinic: clinic, 
+                report: report,
+                cutpoint: cutpoint,
+                range: range,
+                active: active,
+                created_date: created_date
+            }    
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/UpdateSpecificCutpointMeasureItem", (xhr, err) => {
+                if (!err) {
+                    specific_cutpoint_measure_table.ajax.reload();
+                    
+                    $('#edit_specific_cutpoint_measure_id').val('');
+                    $('#edit_specific_cutpoint_measure_name').val(null);
+                    $('#edit_specific_cutpoint_measure_clinic').val(null);
+                    $('#edit_specific_cutpoint_measure_report').val(null);
+                    $('#edit_specific_cutpoint_measure_cutpoint').val(null);
+                    $('#edit_specific_cutpoint_measure_range').val('');
+                    $('#edit_specific_cutpoint_measure_active').val(null);
+                    $('#edit_specific_cutpoint_measure_date').val('')
+                    $('#edit_specific_cutpoint_measure_modal').modal('hide');
+                } else {
+                    return toastr.error("Action Failed");
+                }
+            });
+        }        
+    });
 });

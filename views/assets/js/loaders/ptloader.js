@@ -83,14 +83,16 @@ $(document).ready(async function () {
   // Exce Begin //
   // ECW Bulk Begin //
   $('#ptloader_ecwbulk_btn').click(async function() {
+    KTApp.showPageLoading()
     var url = `https://${$('#ptloader_ecwbulk_url').val()}`
     var key = $('#ptloader_ecwbulk_key').val()
 
-    sendRequest(`${url}?key=${key}`, (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid: localStorage.getItem('userid'), url: url, key: key}, 'patientlist/ecwbulk', (xhr, err) => {
       if (!err) {
-        console.log(JSON.parse(xhr.responseText))
+        console.log(xhr.responseText)
       }
+      KTApp.hidePageLoading()
     })
   })
   // ECW Bulk End //
-  })
+})
