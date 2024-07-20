@@ -108,7 +108,6 @@ $(document).ready(async function() {
         'columns': [{
             data: 'insuranceid',
             render: (data, type, row) => {
-                console.log(row)
                 return `
                     <div><span class='text-primary'>${row.pinsname ? row.pinsname : ''}</span></div>
                     <div><span>${!row.psub || row.psub != '0' ? row.psub : ''}</span></div>
@@ -257,8 +256,9 @@ $(document).ready(async function() {
                                 <span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${item.startDate ? new Date(item.startDate).toLocaleDateString('en-US') : new Date(item.create_date).toLocaleDateString('en-US')}</span>
                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;${i == 0 ? `<div class='ms-2 badge badge-light-danger fw-bold fs-4 text-center'>Primary</div>` : ''}</span>
                             </div>
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insurance_name}</span></div>
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberid}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insurance_name ? item.insurance_name : ''}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Lob Name :</span>&nbsp;<span class='fs-2'>${item.lob_name ? item.lob_name : ''}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberid ? item.subscriberid : ''}</span></div>
                             <div class='separator border border-dashed my-3'></div>
                         `
                         i ++
