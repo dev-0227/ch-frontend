@@ -1,9 +1,9 @@
 
 var _selectLob = 0
 
-function loadInsuranceLob(insid) {
+function loadInsuranceLob(insid, clinicid) {
     $('#insurance-add-lob').html('')
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: insid}, 'insurance/getlob', (xhr, err) => {
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), {insid: insid, clinicid: clinicid}, 'insurance/getlob', (xhr, err) => {
         var option = ''
         if (!err) {
             var result = JSON.parse(xhr.responseText)['data']
@@ -11,6 +11,7 @@ function loadInsuranceLob(insid) {
                 option += `<option value='${item.id}'>${item.lob}</option>`
             })
             $('#insurance-add-lob').html(option)
+            $('#insurance-lob-add-lob').html(option)
 
             $('#insurance-add-lob').val(_selectLob).trigger('change')
         }
@@ -32,8 +33,10 @@ $(document).ready(async function() {
             })
         }
         $('#insurance-clinics').html(`<option value = '0'>All Clinics</option>` + options)
+        $('#insurance-lob-clinics').html(`<option value = '0'>All Clinics</option>` + options)
         $('#lob-clinic-filter').html(`<option value = '0'>All Clinics</option>` + options)
         $('#insurance-add-clinics').html(options)
+        $('#insurance-lob-add-clinics').html(options)
         $('#lob-clinic').html(options)
     })
 
@@ -48,7 +51,9 @@ $(document).ready(async function() {
             if (result.length > 0) _id = result[0].id
         }
         $('#insurance-insurance').html(`<option value = '0'>All Insurances</option>` + options)
+        $('#insurance-lob-insurance').html(`<option value = '0'>All Insurances</option>` + options)
         $('#insurance-add-insurance').html(options)
+        $('#insurance-lob-add-insurance').html(options)
         $('#lob-ins-filter').html(`<option value='0'>All Insurances</option>` + options)
         $('#lob-insurance').html(options)
         $('#default_ins_list').html(options)
@@ -89,9 +94,6 @@ $(document).ready(async function() {
               } 
             }
         ]
-    })
-
-    $(document).on('change', '#insurance-clinics', (e) => {
     })
 
     $(document).on('click', '#insurance-add', () => {
@@ -197,10 +199,158 @@ $(document).ready(async function() {
     })
 
     $(document).on('change', '#insurance-add-insurance', (e) => {
-        loadInsuranceLob(e.target.value)
-        insTable.ajax.reload()
+        loadInsuranceLob(e.target.value, $('#insurance-add-clinics').val())
+    })
+
+    $(document).on('change', '#insurance-add-clinics', (e) => {
+        loadInsuranceLob($('#insurance-add-insrance').val(), e.target.value)
     })
     // Insurance Map end //
+
+    // Insurance Lob Map begin //
+    var insLobTable = $('#insurance-lob-table').DataTable({
+        "ajax": {
+            "url": serviceUrl + "insurance/inslobmap/list",
+            "type": "GET",
+            "headers": { 'Authorization': localStorage.getItem('authToken') },
+            "data": function(d) {
+                d.clinicid = $('#insurance-lob-clinics').val() ? $('#insurance-lob-clinics').val() : '0'
+                d.insid = $('#insurance-lob-insurance').val() ? $('#insurance-lob-insurance').val() : '0'
+            }
+        },
+        "processing": true,
+        "autoWidth": false,
+        "columns": [
+            { data: 'id' },
+            { data: 'inslob'},
+            { data: 'clinicName' },
+            { data: 'insName'},
+            { data: 'lobName'},
+            { data: 'ecw_insid' },
+            { data: 'id',
+              render: function (data, type, row) {
+                return `
+                  <div class="btn-group align-top " idkey="`+row.id+`">
+                    <button class="btn  btn-primary badge edit-lob-button" data-toggle="modal" type="button" data-type="`+row.id+`"><i class="fa fa-edit"></i> Edit</button>
+                    <button class="btn  btn-danger badge delete-lob-button" type="button"><i class="fa fa-trash"></i> Delete</button>
+                  </div>
+                `
+              } 
+            }
+        ]
+    })
+
+    $(document).on('click', '#insurance-lob-add', () => {
+        $("#edit-lob-type").val('1')
+
+        $('#insurance-lob-add-name').val('')
+        $('#insurance-lob-add-ecwid').val('')
+
+        $("#insurance-lob-add-modal").modal('show')
+    })
+
+    $(document).on('click', '#insurance-lob-save', () => {
+        var type = $('#edit-lob-type').val()
+        var entry = {
+            id: $('#chosen_lob_map').val(),
+            clinicid: $('#insurance-lob-add-clinics').val(),
+            insid: $('#insurance-lob-add-insurance').val(),
+            lobid: $('#insurance-lob-add-lob').val(),
+            ecw_insid: $('#insurance-lob-add-ecwid').val(),
+            inslob: $('#insurance-lob-add-name').val(),
+        }
+        if (type == '1') {
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/inslobmap/add', (xhr, err) => {
+                if (!err) {
+                    toastr.success('Successfully!')
+                } else {
+                    toastr.error('Action Failed!')
+                }
+                insLobTable.ajax.reload()
+                $("#insurance-lob-add-modal").modal('hide')
+            })
+        } else if (type == '0') {
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/inslobmap/update', (xhr, err) => {
+                if (!err) {
+                    toastr.success('Successfully!')
+                } else {
+                    toastr.error('Action Failed!')
+                }
+                insLobTable.ajax.reload()
+                $("#insurance-lob-add-modal").modal('hide')
+            })
+        }
+    })
+
+    $(document).on('click', '.edit-lob-button', function() {
+        $('#edit-lob-type').val('0')
+
+        let entry = {
+            id: $(this).parent().attr("idkey"),
+        }
+        $('#chosen_lob_map').val(entry.id)
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/inslobmap/get", (xhr, err) => {
+            if (!err) {
+                var result = JSON.parse(xhr.responseText)['data']
+                if (result.length) {
+                    $('#insurance-lob-add-clinics').val(result[0].clinicid).trigger('change')
+                    $('#insurance-lob-add-insurance').val(result[0].insid).trigger('change')
+                    $('#insurance-lob-add-lob').val(result[0].lobid).trigger('change')
+                    $('#insurance-lob-add-ecwid').val(result[0].ecw_insid)
+                    $('#insurance-lob-add-name').val(result[0].inslob)
+                    _selectLob = result[0].lobid
+
+                    $("#insurance-lob-add-modal").modal('show')
+                }
+            }
+        })
+    })
+
+    $(document).on('click', '.delete-lob-button', function() {
+        let entry = {
+            id: $(this).parent().attr("idkey"),
+        }
+        Swal.fire({
+            text: "Are you sure you would like to delete?",
+            icon: "error",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/inslobmap/delete", (xhr, err) => {
+                    if (!err) {
+                        toastr.success('Success!')
+                        insLobTable.ajax.reload()
+                    } else {
+                        toastr.error("Action Failed")
+                    }
+                })
+            }
+        })
+    })
+
+    $(document).on('change', '#insurance-lob-clinics', () => {
+        insLobTable.ajax.reload()
+    })
+
+    $(document).on('change', '#insurance-lob-insurance', () => {
+        insLobTable.ajax.reload()
+    })
+
+    $(document).on('change', '#insurance-lob-add-insurance', (e) => {
+        loadInsuranceLob(e.target.value, $('#insurance-lob-add-clinics').val())
+    })
+
+    $(document).on('change', '#insurance-lob-add-clinics', (e) => {
+        loadInsuranceLob($('#insurance-lob-add-insurance').val(), e.target.value)
+    })
+    // Insurance Lob Map end //
 
     // Insurance Lob begin //
     await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'insurance/gettype', (xhr, err) => {
