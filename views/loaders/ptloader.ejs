@@ -171,6 +171,48 @@
 	</div>
 </div>
 
+<div class="modal fade" id="gather-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Gathered Successfully</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			</div>
+			<div class="modal-body px-15">
+                <div class="row flex-center d-flex flex-wrap justify-content-between mx-auto">
+                    <div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-thin fa-hospital-user" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-gthpt-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Gathered PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-thin fa-hospital-user" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-uptpt-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Updated PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp-duotone fa-solid fa-user-plus" style="font-size: 4rem; color: #74C0FC;"></i>
+						<a class=" mt-4" href="#" target="_blank">
+							<span class="number newptcnt fs-2qx fw-bold fw-bold text-primary-700" id="kt-countup-newpt-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						</a>
+						<span class="time fs-2 text-gray-600">New PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp fa-light fa-users" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold  fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-exist-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Existed PTs</span>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+			 </div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="loader-verification" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">

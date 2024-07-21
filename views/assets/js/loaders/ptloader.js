@@ -89,7 +89,16 @@ $(document).ready(async function () {
 
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {userid: localStorage.getItem('userid'), url: url, key: key}, 'patientlist/ecwbulk', (xhr, err) => {
       if (!err) {
-        console.log(xhr.responseText)
+        var data = JSON.parse(xhr.responseText)
+        const countup_gthpt = new countUp.CountUp("kt-countup-gthpt-ecwbulk");
+        const countup_uptpt = new countUp.CountUp("kt-countup-uptpt-ecwbulk");
+        const countup_newpt = new countUp.CountUp("kt-countup-newpt-ecwbulk");
+        const countup_exist = new countUp.CountUp("kt-countup-exist-ecwbulk");
+        countup_gthpt.update(data['total'])
+        countup_newpt.update(data['new'])
+        countup_uptpt.update(data['update'])
+        countup_exist.update(data['total'] - data['count'])
+        $("#gather-result-modal").modal("show");
       }
       KTApp.hidePageLoading()
     })
