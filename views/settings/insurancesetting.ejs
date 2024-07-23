@@ -95,10 +95,6 @@
                                         <select id="lob-ins-filter" data-control="select2" class="form-select" data-placeholder="Select an Insurance">
                                         </select>
                                     </div>
-                                    <div class="col-md-4">
-                                        <select id="lob-clinic-filter" data-control="select2" class="form-select" data-placeholder="Select a Clinic">
-                                        </select>
-                                    </div>
                                     <div class="col-md-2">
                                         <a class="btn btn-primary" id="lob-add"><i class="fa fa-plus mr-2"></i>Add LOB</a>                        
                                     </div>
@@ -118,12 +114,12 @@
                                         <thead>
                                             <tr>
                                                 <th>Insurance</th>
-                                                <th>Clinic</th>
+                                                <!-- <th>Clinic</th> -->
                                                 <th>LOB Group Name</th>
                                                 <th>Description</th>
                                                 <th>Variations</th>
-                                                <th>EMR ID</th>
-                                                <th>FHIR ID</th>
+                                                <!-- <th>EMR ID</th> -->
+                                                <!-- <th>FHIR ID</th> -->
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
@@ -317,11 +313,6 @@
                         </select>
                     </div>
                     <div class="col-md-12 my-3">
-                        <label for="lob-clinic" class="form-control-label">Clinic:</label>
-                        <select id="lob-clinic" data-control="select2" class="form-control select2-show-search" data-placeholder="Select a Clinic">
-                        </select>
-                    </div>
-                    <div class="col-md-12 my-3">
                         <div class="form-group">
                             <label for="lob-name" class="form-control-label">LOB Group Name:</label>
                             <input type="text" class="form-control" id="lob-name">
@@ -344,18 +335,6 @@
                             <label for="lob-type" class="form-control-label">Type:</label>
                             <select id="lob-type" aria-label="Select a Type" data-control="select2" data-hide-search="true" data-placeholder="Select a Type..." class="form-select mb-2"></select>
                             </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <div class="form-group">
-                            <label for="lob-emrid" class="form-control-label">EMR ID:</label>
-                            <input type="text" class="form-control" id="lob-emrid">
-                        </div>
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <div class="form-group">
-                            <label for="lob-fhirid" class="form-control-label">FHIR ID:</label>
-                            <input type="text" class="form-control" id="lob-fhirid">
                         </div>
                     </div>
                 </div>

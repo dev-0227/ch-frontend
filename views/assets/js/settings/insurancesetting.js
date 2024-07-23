@@ -350,14 +350,6 @@ $(document).ready(async function() {
     $(document).on('change', '#insurance-lob-insurance', () => {
         insLobTable.ajax.reload()
     })
-
-    // $(document).on('change', '#insurance-lob-add-insurance', (e) => {
-    //     loadInsuranceLob(e.target.value, $('#insurance-lob-add-clinics').val())
-    // })
-
-    // $(document).on('change', '#insurance-lob-add-clinics', (e) => {
-    //     loadInsuranceLob($('#insurance-lob-add-insurance').val(), e.target.value)
-    // })
     // Insurance Lob Map end //
 
     // Insurance Lob begin //
@@ -393,12 +385,9 @@ $(document).ready(async function() {
         "processing": true,
         "columns": [
             { data: 'insName' },
-            { data: 'clinicName' },
             { data: 'lob' },
             { data: 'description' },
             { data: 'variation' },
-            { data: 'ins_emrid' },
-            { data: 'ins_fhirid' },
             { data: 'id',
                 render: function (data, type, row) {
                     return `
@@ -418,8 +407,8 @@ $(document).ready(async function() {
         $('#lob-name').val('')
         $('#lob-desc').val('')
         $('#lob-var').val('')
-        $('#lob-emrid').val('')
-        $('#lob-fhirid').val('')
+        // $('#lob-emrid').val('')
+        // $('#lob-fhirid').val('')
 
         $('#inslob-edit-modal').modal('show')
     })
@@ -437,11 +426,11 @@ $(document).ready(async function() {
                     $('#lob-name').val(result[0].lob)
                     $('#lob-desc').val(result[0].description)
                     $('#lob-variation').val(result[0].variation)
-                    $('#lob-emrid').val(result[0].ins_emrid)
-                    $('#lob-fhirid').val(result[0].ins_fhirid)
+                    // $('#lob-emrid').val(result[0].ins_emrid)
+                    // $('#lob-fhirid').val(result[0].ins_fhirid)
                     $('#lob-type').val(result[0].type_id).trigger('change')
                     $('#lob-insurance').val(result[0].insid).trigger('change')
-                    $('#lob-clinic').val(result[0].clinicid).trigger('change')
+                    // $('#lob-clinic').val(result[0].clinicid).trigger('change')
 
                     $('#inslob-edit-modal').modal('show')
                 }
@@ -455,13 +444,13 @@ $(document).ready(async function() {
         var entry = {
             id: $('#chosen-lob').val(),
             insid: $('#lob-insurance').val(),
-            clinicid: $('#lob-clinic').val(),
+            // clinicid: $('#lob-clinic').val(),
             name: $('#lob-name').val(),
             desc: $('#lob-desc').val(),
             variation: $('#lob-var').val(),
             type: $('#lob-type').val(),
-            emrid: $('#lob-emrid').val(),
-            fhirid: $('#lob-fhirid').val()
+            // emrid: $('#lob-emrid').val(),
+            // fhirid: $('#lob-fhirid').val()
         }
         if (type == '1') {
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/addlob', (xhr, err) => {
@@ -474,7 +463,6 @@ $(document).ready(async function() {
                 }
             })
         } else if (type == '0') {
-            console.log(entry)
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/updatelob', (xhr, err) => {
                 if (!err) {
                     toastr.success('Successful!')
@@ -518,10 +506,6 @@ $(document).ready(async function() {
     })
 
     $(document).on('change', '#lob-ins-filter', function() {
-        lob_table.ajax.reload()
-    })
-
-    $(document).on('change', '#lob-clinic-filter', function() {
         lob_table.ajax.reload()
     })
 
