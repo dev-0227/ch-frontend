@@ -11,7 +11,6 @@ function loadInsuranceLob(insid, clinicid) {
                 option += `<option value='${item.id}'>${item.lob}</option>`
             })
             $('#insurance-add-lob').html(option)
-            $('#insurance-lob-add-lob').html(option)
 
             $('#insurance-add-lob').val(_selectLob).trigger('change')
         }
@@ -43,21 +42,29 @@ $(document).ready(async function() {
     await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/", (xhr, err) => {
         var _id = 0
         var options = ''
+        var options_i = ''
+        var options_l = ''
         if (!err) {
             let result = JSON.parse(xhr.responseText)['data']
             result.forEach(item => {
+                console.log(item.lob)
                 options += `<option value=${item.id}>${item.insName}</option>`
+                if (item.lob == 0) options_i += `<option value=${item.id}>${item.insName}</option>`
+                else if (item.lob == 1) options_l += `<option value=${item.id}>${item.insName}</option>`
             })
             if (result.length > 0) _id = result[0].id
         }
         $('#insurance-insurance').html(`<option value = '0'>All Insurances</option>` + options)
-        $('#insurance-lob-insurance').html(`<option value = '0'>All Insurances</option>` + options)
         $('#insurance-add-insurance').html(options)
-        $('#insurance-lob-add-insurance').html(options)
         $('#lob-ins-filter').html(`<option value='0'>All Insurances</option>` + options)
         $('#lob-insurance').html(options)
         $('#default_ins_list').html(options)
         loadInsuranceLob(_id)
+
+        //for insurance mapping
+        $('#insurance-lob-insurance').html(`<option value = '0'>All Insurances</option>` + options_i)
+        $('#insurance-lob-add-insurance').html(options_i)
+        $('#insurance-lob-add-lob').html(options_l)
     })
 
     // var insTable = $('#insurance-table').DataTable({
@@ -222,11 +229,11 @@ $(document).ready(async function() {
         "autoWidth": false,
         "columns": [
             { data: 'id' },
-            { data: 'inslob'},
             { data: 'clinicName' },
             { data: 'insName'},
             { data: 'lobName'},
             { data: 'ecw_insid' },
+            { data: 'ecw_loginsid'},
             { data: 'id',
               render: function (data, type, row) {
                 return `
@@ -245,6 +252,7 @@ $(document).ready(async function() {
 
         $('#insurance-lob-add-name').val('')
         $('#insurance-lob-add-ecwid').val('')
+        $('#insurance-lob-add-ecwlogid').val('')
 
         $("#insurance-lob-add-modal").modal('show')
     })
@@ -257,7 +265,7 @@ $(document).ready(async function() {
             insid: $('#insurance-lob-add-insurance').val(),
             lobid: $('#insurance-lob-add-lob').val(),
             ecw_insid: $('#insurance-lob-add-ecwid').val(),
-            inslob: $('#insurance-lob-add-name').val(),
+            ecw_loginsid: $('#insurance-lob-add-ecwlogid').val(),
         }
         if (type == '1') {
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/inslobmap/add', (xhr, err) => {
@@ -297,7 +305,7 @@ $(document).ready(async function() {
                     $('#insurance-lob-add-insurance').val(result[0].insid).trigger('change')
                     $('#insurance-lob-add-lob').val(result[0].lobid).trigger('change')
                     $('#insurance-lob-add-ecwid').val(result[0].ecw_insid)
-                    $('#insurance-lob-add-name').val(result[0].inslob)
+                    $('#insurance-lob-add-ecwlogid').val(result[0].ecw_loginsid)
                     _selectLob = result[0].lobid
 
                     $("#insurance-lob-add-modal").modal('show')
@@ -343,13 +351,13 @@ $(document).ready(async function() {
         insLobTable.ajax.reload()
     })
 
-    $(document).on('change', '#insurance-lob-add-insurance', (e) => {
-        loadInsuranceLob(e.target.value, $('#insurance-lob-add-clinics').val())
-    })
+    // $(document).on('change', '#insurance-lob-add-insurance', (e) => {
+    //     loadInsuranceLob(e.target.value, $('#insurance-lob-add-clinics').val())
+    // })
 
-    $(document).on('change', '#insurance-lob-add-clinics', (e) => {
-        loadInsuranceLob($('#insurance-lob-add-insurance').val(), e.target.value)
-    })
+    // $(document).on('change', '#insurance-lob-add-clinics', (e) => {
+    //     loadInsuranceLob($('#insurance-lob-add-insurance').val(), e.target.value)
+    // })
     // Insurance Lob Map end //
 
     // Insurance Lob begin //

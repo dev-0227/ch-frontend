@@ -10,7 +10,7 @@
                     <div class="tab-menu-heading">
                         <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
                             <!-- <li class="nav-item"><a href="#insurance_map" class="nav-link active" data-bs-toggle="tab">Insurance Map</a></li> -->
-                            <li class="nav-item"><a href="#insurance_lob_map" class="nav-link " data-bs-toggle="tab">Insurance Mapping</a></li> <!-- Original Name : Insurance Lob Map -->
+                            <li class="nav-item"><a href="#insurance_lob_map" class="nav-link active" data-bs-toggle="tab">Insurance Mapping</a></li> <!-- Original Name : Insurance Lob Map -->
                             <li class="nav-item"><a href="#insurance_lob" class="nav-link " data-bs-toggle="tab">Insurance Lob</a></li>
                             <li class="nav-item"><a href="#insurance_default_lob" class="nav-link " data-bs-toggle="tab">Set Default Lob</a></li>
                             <li class="nav-item"><a href="#insurance_type" class="nav-link " data-bs-toggle="tab">Insurance Type</a></li>
@@ -77,11 +77,11 @@
                                         <thead>
                                             <tr class="fw-bold fs-6 text-gray-800">
                                                 <th>ID</th>
-                                                <th>Insurance Lob</th>
                                                 <th>Clinic Name</th>
                                                 <th>Insurance Name</th>
-                                                <th>Lob Name</th>
+                                                <th>LOB Name</th>
                                                 <th>ECW Insurance ID</th>
+                                                <th>ECW Log Insurance ID</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -257,7 +257,7 @@
         <input type="hidden" id="edit-lob-type" value="1"></input>
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Add New Insurance Lob Map</h5>
+				<h5 class="modal-title">Add New Insurance Mapping</h5>
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
 					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
 				</div>
@@ -265,27 +265,27 @@
 			<div class="modal-body">
                 <div class="row">
                     <div class="col-md-12 my-5">
-                        <label for="insurance-lob-add-name">Insurance Lob Name:</label>
-                        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Insurace Lob" id="insurance-lob-add-name">
-                    </div>
-                    <div class="col-md-7 my-5">
-                        <label for="insurance-lob-add-insurance">Insurance:</label>
-                        <select id="insurance-lob-add-insurance" class="form-select" data-dropdown-parent="#insurance-lob-add-modal" data-control="select2" data-placeholder="Select an Insurance">
-                        </select>
-                    </div>
-                    <div class="col-md-5 my-5">
-                        <label for="insurance-lob-add-lob">Lob:</label>
-                        <select id="insurance-lob-add-lob" class="form-select" data-dropdown-parent="#insurance-lob-add-modal" data-control="select2" data-placeholder="Select a Lob" data-allow-clear="true">
-                        </select>
-                    </div>
-                    <div class="col-md-12 my-5">
                         <label for="insurance-lob-add-clinics">Clinic:</label>
                         <select id="insurance-lob-add-clinics" class="form-select" data-dropdown-parent="#insurance-lob-add-modal" data-control="select2" data-placeholder="Select a Clinic">
                         </select>
                     </div>
                     <div class="col-md-12 my-5">
+                        <label for="insurance-lob-add-insurance">Insurance:</label>
+                        <select id="insurance-lob-add-insurance" class="form-select" data-dropdown-parent="#insurance-lob-add-modal" data-control="select2" data-placeholder="Select an Insurance">
+                        </select>
+                    </div>
+                    <div class="col-md-12 my-5">
+                        <label for="insurance-lob-add-lob">Insurance Lob:</label>
+                        <select id="insurance-lob-add-lob" class="form-select" data-dropdown-parent="#insurance-lob-add-modal" data-control="select2" data-placeholder="Select an Insurance Lob">
+                         </select>
+                    </div>
+                    <div class="col-md-12 my-5">
                         <label for="insurance-lob-add-ecwid">ECW Insurance ID:</label>
                         <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="ECW Insurance ID" id="insurance-lob-add-ecwid">
+                    </div>
+                    <div class="col-md-12 my-5">
+                        <label for="insurance-lob-add-ecwlogid">ECW Log Insurance ID:</label>
+                        <input type="text" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="ECW Log Insurance ID" id="insurance-lob-add-ecwlogid">
                     </div>
                 </div>
 			</div>

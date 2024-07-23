@@ -28,6 +28,7 @@
                                     <th>Name</th>
                                     <th>Abbr</th>
                                     <th>Address</th>
+                                    <th>Lob</th>
                                     <th>Hedis</th>
                                     <th>Active</th>
                                     <th class="text-center"></th>
@@ -196,10 +197,18 @@
                     </div>
                 </div>
 			</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="inseditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
-             </div>
+             <div class="modal-footer">
+				<div style="display: flex; justify-content: space-between; width: 100%;">
+					<div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" value="" id="einslob" />
+                        <label class="form-check-label" for="einslob"> Lob</label>
+                    </div>
+					<div class="buttons">
+						<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                        <button type="button" class="btn btn-primary" id="inseditbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -356,9 +365,17 @@
                 </div>
 			</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="insaddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
-             </div>
+                <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" value="" id="inslob" />
+                        <label class="form-check-label" for="inslob"> Lob</label>
+                    </div>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                        <button type="button" class="btn btn-primary" id="insaddbtn"><i class="fa fa-save">&nbsp;</i> Save</button>
+                    </div>
+                </div>
+            </div>
 		</div>
 	</div>
 </div>

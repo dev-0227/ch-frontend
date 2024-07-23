@@ -15,6 +15,14 @@ $(document).ready(function () {
               return row.insaddress+" "+row.insaddress2;
           } 
         },
+        { data: 'lob',
+          render: function (data, type, row) {
+            if(row.lob == 1)
+              return "<span class='badge badge-light-success badge-lg px-4'> True </span>";
+            else
+              return "<span class='badge badge-light-danger badge-lg px-4'> False </span>";
+          }
+        },
         { data: 'hedis_active',
           render: function (data, type, row) {
             if(row.hedis_active==1)
@@ -89,7 +97,8 @@ $(document).ready(function () {
       state: document.getElementById('insstate').value,
       zip: document.getElementById('inszip').value,
       hedis: document.getElementById('hedis').value,
-      status: document.getElementById('insstatus').value
+      status: document.getElementById('insstatus').value,
+      lob: $('#inslob').prop('checked') == true ? 1 : 0
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/add", (xhr, err) => {
         if (!err) {
@@ -123,6 +132,7 @@ $(document).ready(function () {
         $("#einsemail").val(result[0]['insemail']);
         $("#ehedis").val(result[0]['hedis_active']);
         $("#einsstatus").val(result[0]['Inactive']);
+        result[0]['lob'] == 0 ? $('#einslob').prop('checked', false) : $('#einslob').prop('checked', true)
 
         $("#insurance-edit-modal").modal("show");
       } else {
@@ -160,7 +170,8 @@ $(document).ready(function () {
       state: document.getElementById('einsstate').value,
       zip: document.getElementById('einszip').value,
       hedis: document.getElementById('ehedis').value,
-      status: document.getElementById('einsstatus').value
+      status: document.getElementById('einsstatus').value,
+      lob: $('#einslob').prop('checked') == true ? 1 : 0
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/update", (xhr, err) => {
         if (!err) {
