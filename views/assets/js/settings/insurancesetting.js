@@ -47,7 +47,6 @@ $(document).ready(async function() {
         if (!err) {
             let result = JSON.parse(xhr.responseText)['data']
             result.forEach(item => {
-                console.log(item.lob)
                 options += `<option value=${item.id}>${item.insName}</option>`
                 if (item.lob == 0) options_i += `<option value=${item.id}>${item.insName}</option>`
                 else if (item.lob == 1) options_l += `<option value=${item.id}>${item.insName}</option>`
