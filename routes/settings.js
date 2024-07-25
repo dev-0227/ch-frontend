@@ -228,4 +228,12 @@ router.get('/ecwbulk', (req, res, next) => {
     })
 })
 
+// Affiliation
+router.get('/affiliation', (req, res, next) => {
+    res.render('layout/mainblank', {
+        pageTitle: 'Affiliations',
+        pageKey: '../affiliation/index'
+    })
+})
+
 module.exports = router;
