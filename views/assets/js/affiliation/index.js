@@ -74,6 +74,7 @@ $(document).ready(function () {
       $("#affiliation-email").val('')
       $("#affiliation-city").val('')
       $("#affiliation-address").val('')
+      $("#affiliation-address2").val('')
       $("#affiliation-web").val('')
       $("#affiliation-zip").val('')
       $("#affiliation-state").val('New York').trigger('change')
@@ -100,6 +101,7 @@ $(document).ready(function () {
                     $('#affiliation-state').val(result[0].state).trigger('change')
                     $('#affiliation-city').val(result[0].city)
                     $("#affiliation-address").val(result[0].address)
+                    $("#affiliation-address2").val(result[0].address2)
                     $("#affiliation-web").val(result[0].web)
                     $("#affiliation-zip").val(result[0].zip)
                     $('#affiliation-status').val(result[0].status).trigger('change')
@@ -124,6 +126,7 @@ $(document).ready(function () {
             city: $('#affiliation-city').val(),
             status: $('#affiliation-status').val(),
             address: $('#affiliation-address').val(),
+            address2: $('#affiliation-address2').val(),
             web: $('#affiliation-web').val(),
             zip: $('#affiliation-zip').val(),
         }
