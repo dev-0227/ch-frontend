@@ -63,10 +63,10 @@ $(document).ready(function () {
     })
   
     $('#table_search_input').on('keyup', function () {
-        affiliation_table.search(this.value).draw();
+        affiliation_table.search(this.value).draw()
     })
   
-    $(document).on("click", "#affiliation-add",function(){
+    $(document).on("click", "#affiliation-add", function() {
       $("#affiliation-modal-type").val('1')
       $("#affiliation-name").val('')
       $("#affiliation-tel").val('')
