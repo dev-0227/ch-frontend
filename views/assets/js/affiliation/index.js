@@ -31,14 +31,14 @@ $(document).ready(function () {
                 return row.email;
             }  
             },
-            { data: 'state',
+            { data: 'web',
                 render: function (data, type, row) {
-                    return row.state;
+                    return row.web;
                 }  
             },
-            { data: 'city',
+            { data: 'address',
                 render: function (data, type, row) {
-                    return row.city;
+                    return row.address;
                 }  
             },
             { data: 'status',
@@ -73,6 +73,9 @@ $(document).ready(function () {
       $("#affiliation-fax").val('')
       $("#affiliation-email").val('')
       $("#affiliation-city").val('')
+      $("#affiliation-address").val('')
+      $("#affiliation-web").val('')
+      $("#affiliation-zip").val('')
       $("#affiliation-state").val('New York').trigger('change')
       $("#astatus").val(1).trigger('change')
 
@@ -96,6 +99,9 @@ $(document).ready(function () {
                     $('#affiliation-email').val(result[0].email)
                     $('#affiliation-state').val(result[0].state).trigger('change')
                     $('#affiliation-city').val(result[0].city)
+                    $("#affiliation-address").val(result[0].address)
+                    $("#affiliation-web").val(result[0].web)
+                    $("#affiliation-zip").val(result[0].zip)
                     $('#affiliation-status').val(result[0].status).trigger('change')
 
                     $('#affiliation-modal').modal('show')
@@ -116,7 +122,10 @@ $(document).ready(function () {
             email: $('#affiliation-email').val(),
             state: $('#affiliation-state').val(),
             city: $('#affiliation-city').val(),
-            status: $('#affiliation-status').val()
+            status: $('#affiliation-status').val(),
+            address: $('#affiliation-address').val(),
+            web: $('#affiliation-web').val(),
+            zip: $('#affiliation-zip').val(),
         }
 
         if (entry.name == '') {
