@@ -1,0 +1,95 @@
+
+<div class="card">
+    <div class="card-header border-0 pt-6">
+      <div class="card-title">
+        <div class="d-flex align-items-center position-relative my-1">
+          <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </i>
+          <input id="table_search_input" type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-250px ps-13" placeholder="Search ..."/>
+        </div>
+      </div>
+      <div class="card-toolbar">
+        <a class="btn btn-primary" id="affiliation-ins-add" ><i class="fa fa-plus">&nbsp;</i> Add</a>
+      </div>
+    </div>
+    <div class="card-body py-4">
+      <input type="hidden" id="affiliation-ins-chosen" />
+      <table class="table table-striped table-bordered text-nowrap  w-100"  id="affiliation-ins-table" >
+        <thead>
+          <tr>
+            <th>Clinic Name</th>
+            <th>Insurance Name</th>
+            <th>Affiliation</th>
+            <th>Insurance Type</th>
+            <th>Payment Method</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+</div>
+
+<div class="modal fade" id="affiliation-ins-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" organization="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="example-Modal3">Edit Clinic Insurance Affiliation</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="affiliation-ins-modal-type"></input>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="affiliation-ins-clinic" class="form-control-label mt-4 p-1">Clinic Name:</label>
+                            <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                <select id="affiliation-ins-clinic" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Select a Clinic" class="form-select mb-2"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="affiliation-ins-insurance" class="form-control-label mt-4 p-1">Insurance Name:</label>
+                            <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                <select id="affiliation-ins-insurance" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Select an Insurance" class="form-select mb-2"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="affiliation-ins-affiliation" class="form-control-label mt-4 p-1">Affiliation:</label>
+                            <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                <select id="affiliation-ins-affiliation" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Select an Affiliation" class="form-select mb-2"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="affiliation-ins-instype" class="form-control-label mt-4 p-1">Insurance Type:</label>
+                            <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                <select id="affiliation-ins-instype" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Select an Insurance Type" class="form-select mb-2"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="affiliation-ins-paymethod" class="form-control-label mt-4 p-1">Payment Method:</label>
+                            <div class="header-search d-flex align-items-center show menu-dropdown" data-kt-menu-trigger="auto" data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                <select id="affiliation-ins-paymethod" aria-label="Status" data-control="select2" data-hide-search="true" data-placeholder="Select a Payment Method" class="form-select mb-2"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="affiliation-ins-save"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>

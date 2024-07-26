@@ -125,21 +125,21 @@ router.get("/paymentsetting", (req, res, next) => {
 /* 
 * settings for PK Risk and Barriers
 */
-router.get("/barriers/ptrisk", (req, res, next) => {
+router.get("/barriers_ptrisk", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "PT Risk",
         pageKey: "../settings/barriers/ptrisk"
     });
 });
 
-router.get("/barriers/disability", (req, res, next) => {
+router.get("/barriers_disability", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Disability",
         pageKey: "../settings/barriers/disability"
     });
 });
 
-router.get("/barriers/communicationneeds", (req, res, next) => {
+router.get("/barriers_communicationneeds", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Communication Needs",
         pageKey: "../settings/barriers/communicationneeds"
@@ -150,21 +150,21 @@ router.get("/barriers/communicationneeds", (req, res, next) => {
 /* 
 * settings for PK Risk and Barriers
 */
-router.get("/medadherance/medications", (req, res, next) => {
+router.get("/medadherance_medications", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Medications",
         pageKey: "../settings/medadherance/medications"
     });
 });
 
-router.get("/medadherance/medicationsDispense", (req, res, next) => {
+router.get("/medadherance_medicationsDispense", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Medications Dispense",
         pageKey: "../settings/medadherance/medicationsDispense"
     });
 });
 
-router.get("/medadherance/medicationsRequest", (req, res, next) => {
+router.get("/medadherance_medicationsRequest", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Medications Request",
         pageKey: "../settings/medadherance/medicationsRequest"
@@ -229,10 +229,17 @@ router.get('/ecwbulk', (req, res, next) => {
 })
 
 // Affiliation
-router.get('/affiliation', (req, res, next) => {
+router.get('/affiliation_list', (req, res, next) => {
     res.render('layout/mainblank', {
         pageTitle: 'Affiliations',
-        pageKey: '../affiliation/index'
+        pageKey: '../affiliation/list'
+    })
+})
+
+router.get('/affiliation_insurance', (req, res, next) => {
+    res.render('layout/mainblank', {
+        pageTitle: 'Insurance Affiliation',
+        pageKey: '../affiliation/ins'
     })
 })
 

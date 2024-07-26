@@ -26,7 +26,7 @@
       data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
       style="height: 247px"
     >
-      <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+      <!-- <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
         <span class="menu-link " data-permit="">
           <span class="menu-icon">
             <i class="ki-duotone ki-element-11 fs-2">
@@ -57,7 +57,7 @@
             </a>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="menu-item pt-5">
         <div class="menu-content">
           <span class="fw-bold text-muted text-uppercase fs-7">Apps</span>
@@ -418,8 +418,8 @@
           <span class="menu-title">Organizations</span>
         </a>
       </div>
-      <div class="menu-item">
-        <a class="menu-link pq-menu d-none" href="../settings/affiliation" data-permit="AFFILIATIONS">
+      <div data-kt-menu-trigger="click" class="menu-item menu-accordion" >
+        <span class="menu-link pq-menu d-none" data-permit="AFFILIATIONS">
           <span class="menu-icon">
             <i class="ki-duotone ki-abstract-2 fs-2">
               <span class="path1"></span>
@@ -427,7 +427,26 @@
             </i>
           </span>
           <span class="menu-title">Affiliations</span>
-        </a>
+          <span class="menu-arrow"></span>
+        </span>
+        <div class="menu-sub menu-sub-accordion">
+          <div class="menu-item">
+            <a class="menu-link pq-menu d-none" href="../settings/affiliation_list" data-permit="AFFILIATIONS">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Affiliation List</span>
+            </a>
+          </div>
+          <div class="menu-item">
+            <a class="menu-link pq-menu d-none" href="../settings/affiliation_insurance" data-permit="AFFILIATIONS">
+              <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+              </span>
+              <span class="menu-title">Insurance Affiliation</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
