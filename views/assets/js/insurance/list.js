@@ -1,29 +1,29 @@
 $(document).ready(function () {
   "use strict";
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'insurance/gettype', (xhr, err) => {
-    if (!err) {
-      var result = JSON.parse(xhr.responseText)['data']
-      var option = ``
-      result.forEach(item => {
-        option += `<option value='${item.id}'>${item.display}</option>`
-      })
-      $('#einstype').html(option)
-      $('#instype').html(option)
-    }
-  })
+  // sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'insurance/gettype', (xhr, err) => {
+  //   if (!err) {
+  //     var result = JSON.parse(xhr.responseText)['data']
+  //     var option = ``
+  //     result.forEach(item => {
+  //       option += `<option value='${item.id}'>${item.display}</option>`
+  //     })
+  //     $('#einstype').html(option)
+  //     $('#instype').html(option)
+  //   }
+  // })
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'insurance/getPaymentMethod', (xhr, err) => {
-    if (!err) {
-      var result = JSON.parse(xhr.responseText)['data']
-      var option = ``
-      result.forEach(item => {
-        option += `<option value='${item.id}'>${item.display}</option>`
-      })
-      $('#epaymethod').html(option)
-      $('#paymethod').html(option)
-    }
-  })
+  // sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'insurance/getPaymentMethod', (xhr, err) => {
+  //   if (!err) {
+  //     var result = JSON.parse(xhr.responseText)['data']
+  //     var option = ``
+  //     result.forEach(item => {
+  //       option += `<option value='${item.id}'>${item.display}</option>`
+  //     })
+  //     $('#epaymethod').html(option)
+  //     $('#paymethod').html(option)
+  //   }
+  // })
 
   var insurancetable = $('#insurancetable').DataTable({
     "ajax": {
@@ -124,8 +124,8 @@ $(document).ready(function () {
       hedis: document.getElementById('hedis').value,
       status: document.getElementById('insstatus').value,
       lob: $('#inslob').prop('checked') == true ? 1 : 0,
-      instype: $('#instype').val(),
-      payment_method: $('#paymethod').val()
+      // instype: $('#instype').val(),
+      // payment_method: $('#paymethod').val()
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/add", (xhr, err) => {
         if (!err) {
@@ -159,8 +159,8 @@ $(document).ready(function () {
         $("#einsemail").val(result[0]['insemail']);
         $("#ehedis").val(result[0]['hedis_active']);
         $("#einsstatus").val(result[0]['Inactive']);
-        $('#einstype').val(result[0]['instype']).trigger('change')
-        $('#epaymethod').val(result[0]['payment_method']).trigger('change')
+        // $('#einstype').val(result[0]['instype']).trigger('change')
+        // $('#epaymethod').val(result[0]['payment_method']).trigger('change')
         result[0]['lob'] == 0 ? $('#einslob').prop('checked', false) : $('#einslob').prop('checked', true)
 
         $("#insurance-edit-modal").modal("show");
@@ -201,8 +201,8 @@ $(document).ready(function () {
       hedis: document.getElementById('ehedis').value,
       status: document.getElementById('einsstatus').value,
       lob: $('#einslob').prop('checked') == true ? 1 : 0,
-      instype: $('#einstype').val(),
-      payment_method: $('#epaymethod').val()
+      // instype: $('#einstype').val(),
+      // payment_method: $('#epaymethod').val()
     }
     sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "insurance/update", (xhr, err) => {
         if (!err) {
