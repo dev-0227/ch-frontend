@@ -1,0 +1,194 @@
+
+<style>
+	.vital-loader{
+		position: fixed;
+		z-index: 50000;
+		background: rgba(255, 255, 255);
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 100%;
+		width: 100%;
+		margin: 0 auto;
+		text-align: center;
+	}
+</style>
+
+<!-- ROW-1 OPEN -->
+<div class="row">
+	<!--begin::Page loading(append to body)-->
+	<div class="page-loader flex-column bg-dark bg-opacity-50">
+		<span class="spinner-border text-primary" role="status"></span>
+		<span class="text-gray-300 fs-1 fw-semibold mt-5">Loading...</span>
+	</div>
+	<!--end::Page loading-->
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Vital Loader</h3>
+            </div>
+            <div class="card-body p-6">
+				<div class="tab-menu-heading">
+					<ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+						<li class="nav-item"><a href="#patient_loader_excel" class="nav-link active" data-bs-toggle="tab">Excel</a></li>
+						<li class="nav-item"><a href="#patient_loader_ecwbulk" class="nav-link " data-bs-toggle="tab">ECW Bulk</a></li>
+					</ul>
+				</div>
+				<div class="panel-body tabs-menu-body tab_area">
+					<div class="tab-content">
+						<div class="tab-pane active" id="patient_loader_excel">
+							<div class="col-lg-12">
+								<div class="card shadow">
+									<div class="card-header">
+										<h3 class="mb-0 card-title">Load Vital File</h3>
+										<div class="card-toolbar">
+											<a class="btn btn-success useraddbtn" id="vitalloadbtn" ><i class="fa fa-upload">&nbsp;</i>Upload</a>
+										</div>
+									</div>
+									<div class="card-body">
+										<h6>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>insuranceName</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>INS_N</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>patientId</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ulname</span>
+                                            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>ufname</span>
+                                            <span class='badge badge-primary badge-square badge-lg px-3 my-2'>uminitial</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>DOB</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>Age</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>encounterid</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>doctorid</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>DoctorFName</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>DoctorLName</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ENC_VISIT_TYPE</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>ENC_STATUS</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>date</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>prevdate</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>nextdate</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>VitalType</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>VitalValue</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>systollic</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>diastollic</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>FacilityName</span>
+											<span class='badge badge-primary badge-square badge-lg px-3 my-2'>facilityId</span>
+										</h6>
+										<input id="vitalfile" type="file" class="dropify" data-height="150" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="patient_loader_ecwbulk">
+							<div class="col-lg-12">
+								<div class="card shadow">
+									<div class="card-header">
+										<h3 class="mb-0 card-title">ECW Bulk</h3>
+										<div class="card-toolbar">
+											<a class="btn btn-success" id="vitalloader_ecwbulk_btn" ><i class="fa fa-upload">&nbsp;</i>Gather</a>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="mb-5">
+											<label for="vitalloader_ecwbulk_url" class="form-label">Encounter Source Url</label>
+											<div class="input-group mb-5">
+												<span class="input-group-text" id="basic-addon3">https://</span>
+												<input type="text" class="form-control" id="vitalloader_ecwbulk_url" aria-describedby="basic-addon3" value="test.conecxo.com/api/FHIR/encounters"/>
+											</div>
+										</div>
+										<div class="mb-5">
+											<label for="vitalloader_ecwbulk_key" class="form-label">API Key</label>
+											<div class="input-group mb-5">
+												<span class="input-group-text" id="basic-addon3">Key</span>
+												<input type="text" class="form-control" id="vitalloader_ecwbulk_key" aria-describedby="basic-addon3" value="cf4b3acb7de1d8e86bd587f9f7347e6a0a2f6aa425b29c21d9d336692f499c10701920c2081fc7e9a9d84a7fdec6a5cf406ec6bec257960aa21d781c9543a573"/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW CLOSED -->
+
+<div class="modal fade" id="load-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Loaded Successfully</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			</div>
+			<div class="modal-body px-15">
+                <div class="row flex-center d-flex flex-wrap justify-content-lg-between mx-auto">
+                    <div class="col-md-4 d-flex flex-column text-center flex-center h-150px w-150px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-thin fa-hospital-user" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-curvital" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Loaded PT Vital</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-150px w-150px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp fa-light fa-user-plus" style="font-size: 4rem; color: #74C0FC;"></i>
+						<a class=" mt-4" href="#" target="_blank">
+							<span class="number newvitalcnt fs-2qx fw-bold fw-bold text-primary-700" id="kt-countup-newvital" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						</a>
+						<span class="time fs-2 text-gray-600">New PT Vital</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-150px w-150px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp fa-light fa-users" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold  fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-total" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Total PT Vital</span>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+			 </div>
+		</div>
+	</div>
+</div>
+
+<!-- <div class="modal fade" id="gather-result-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" >Gathered Successfully</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+					<i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+				</div>
+			</div>
+			<div class="modal-body px-15">
+                <div class="row flex-center d-flex flex-wrap justify-content-between mx-auto">
+                    <div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-thin fa-hospital-user" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-gthvital-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Gathered PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-thin fa-hospital-user" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-uvitalvital-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Updated PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp-duotone fa-solid fa-user-plus" style="font-size: 4rem; color: #74C0FC;"></i>
+						<a class=" mt-4" href="#" target="_blank">
+							<span class="number newvitalcnt fs-2qx fw-bold fw-bold text-primary-700" id="kt-countup-newvital-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						</a>
+						<span class="time fs-2 text-gray-600">New PTs</span>
+					</div>
+					<div class="col-md-4 d-flex flex-column text-center flex-center h-120px w-120px h-lg-200px w-lg-200px bg-light rounded-circle">
+						<i class="fa fa-sharp fa-light fa-users" style="font-size: 4rem; color: #74C0FC;"></i>
+						<span class="number fs-2qx fw-bold  fs-2qx fw-bold mt-4 text-gray-700" id="kt-countup-exist-ecwbulk" data-kt-countup="true" data-kt-countup-value="0">0</span>
+						<span class="time fs-2 text-gray-600">Existed PTs</span>
+					</div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+			 </div>
+		</div>
+	</div>
+</div> -->

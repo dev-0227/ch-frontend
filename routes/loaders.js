@@ -29,4 +29,11 @@ router.get("/ffsloader", (req, res, next) => {
     });
 });
 
+router.get("/vitalloader", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "VItal Loader",
+        pageKey: "../loaders/vitalloader"
+    });
+});
+
 module.exports = router;
