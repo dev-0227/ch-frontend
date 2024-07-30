@@ -222,6 +222,7 @@ $(document).ready(async function() {
             "data": function(d) {
                 d.clinicid = $('#insurance-lob-clinics').val() ? $('#insurance-lob-clinics').val() : '0'
                 d.insid = $('#insurance-lob-insurance').val() ? $('#insurance-lob-insurance').val() : '0'
+                d.filter = $('#insurance-lob-search').val()
             }
         },
         "processing": true,
@@ -347,6 +348,10 @@ $(document).ready(async function() {
     })
 
     $(document).on('change', '#insurance-lob-insurance', () => {
+        insLobTable.ajax.reload()
+    })
+
+    $(document).on('keyup', '#insurance-lob-search', (e) => {
         insLobTable.ajax.reload()
     })
     // Insurance Lob Map end //
