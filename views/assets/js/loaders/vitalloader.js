@@ -37,7 +37,20 @@ function uploadCSVFile() {
     "use strict";
   
     // Excel Begin //
-  
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'vital/', (xhr, err) => {
+      if (!err) {
+        var _selectedid = 0
+        var options = `<option value ='0'>All Types</option>`
+        var result = JSON.parse(xhr.responseText)['data']
+        result.forEach(item => {
+          if (item.vname == 'BP') _selectedid = item.id
+          options += `<option value = '${item.id}'>${item.vname}</option>`
+        })
+        $('#vital-select').html(options)
+        $('#vital-select').val(_selectedid).trigger('change')
+      }
+    })
+
     $('#vitalloadbtn').click(function() {
       uploadCSVFile()
     })
