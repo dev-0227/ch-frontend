@@ -3,6 +3,7 @@ function uploadCSVFile() {
   var formData = new FormData()
   formData.append("clinicid", localStorage.getItem('chosen_clinic'))
   formData.append("userid", localStorage.getItem('userid'))
+  formData.append('vtype', $('#vital-select'))
   var qualityentry = document.getElementById('vitalfile').files.length
   if (qualityentry != 0) {
     $(".cdate").html(new Date().toDateString()+" "+new Date().toLocaleTimeString())
@@ -40,7 +41,7 @@ function uploadCSVFile() {
     sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, 'vital/', (xhr, err) => {
       if (!err) {
         var _selectedid = 0
-        var options = `<option value ='0'>All Types</option>`
+        var options = ``
         var result = JSON.parse(xhr.responseText)['data']
         result.forEach(item => {
           if (item.vname == 'BP') _selectedid = item.id
