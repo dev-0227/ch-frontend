@@ -3,7 +3,7 @@ function uploadCSVFile() {
   var formData = new FormData()
   formData.append("clinicid", localStorage.getItem('chosen_clinic'))
   formData.append("userid", localStorage.getItem('userid'))
-  formData.append('vtype', $('#vital-select'))
+  formData.append('vtype', $('#vital-select').val())
   var qualityentry = document.getElementById('vitalfile').files.length
   if (qualityentry != 0) {
     $(".cdate").html(new Date().toDateString()+" "+new Date().toLocaleTimeString())
