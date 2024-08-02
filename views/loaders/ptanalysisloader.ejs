@@ -1,0 +1,79 @@
+
+<style>
+	.pt-loader{
+		position: fixed;
+		z-index: 50000;
+		background: rgba(255, 255, 255);
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		height: 100%;
+		width: 100%;
+		margin: 0 auto;
+		text-align: center;
+	}
+</style>
+
+<!-- ROW-1 OPEN -->
+<div class="row">
+	<!--begin::Page loading(append to body)-->
+	<div class="page-loader flex-column bg-dark bg-opacity-50">
+		<span class="spinner-border text-primary" role="status"></span>
+		<span class="text-gray-300 fs-1 fw-semibold mt-5">Loading...</span>
+	</div>
+	<!--end::Page loading-->
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Patient Analysis Loader</h3>
+            </div>
+            <div class="card-body p-6">
+				<div class="col-lg-12">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h3 class="mb-0 card-title">Load Patient File</h3>
+                            <div class="card-toolbar">
+                                <a class="btn btn-success useraddbtn" id="ptloadbtn" ><i class="fa fa-upload">&nbsp;</i>Upload</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>ENC_CL</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>ENC_ID</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>PT_ID</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>PCP_ID</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>enctype</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>VTYPE</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>VCODE</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>STATUS</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>date</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>CLStatus</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>CLDate</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>PTCopay</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>deduct</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>PayID</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>payorId</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>PayorT</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>type</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>T_date</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>T_mss</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>T_id</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>CPT</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>CPT_DESC</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>Mod1</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>ICD</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>ICD_DESC</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>CPT_PAY</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>MsgCode</span>
+                                <span class='badge badge-primary badge-square badge-lg px-3 my-2'>InsName</span>
+                            </h6>
+                            <input id="ptfile" type="file" class="dropify" data-height="150" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW CLOSED -->

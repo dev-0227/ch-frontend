@@ -29,6 +29,13 @@ router.get("/ffsloader", (req, res, next) => {
     });
 });
 
+router.get("/ptanalysisloader", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "FFS Loader",
+        pageKey: "../loaders/ptanalysisloader"
+    });
+});
+
 router.get("/vitalloader", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "VItal Loader",
