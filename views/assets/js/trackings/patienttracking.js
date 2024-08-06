@@ -179,7 +179,7 @@ $(document).ready(async function() {
                     <div class='d-flex text-center mx-auto'>
                         <i class='fa fa-thin text-primary fa-regular fa-eye p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-solid text-primary fa-list p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
-                        <a href='#' class='btn-active-color-primary' id='pt-ins-tracking' data='${row.patientid}'>
+                        <a href='#' class='btn-active-color-primary' id='pt-ins-tracking' data='${row.id}'>
                             <i class='fa fa-thin text-primary fa-clock-rotate-left p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         </a>
                     </div>
@@ -244,9 +244,9 @@ $(document).ready(async function() {
                 if (result.length > 0) {
                     html += `
                         <div class='fs-2 my-2 modal-text'><span class='fs-2 text-primary'>Patient ID :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].ptemrid}</span></div>
-                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>Name :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].FNAME} ${result[0].LNAME}</span></div>
-                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>DOB :</span>&nbsp;<span class='fs-2 text-primary'>${new Date(result[0].DOB).toLocaleDateString('en-US')}</span></div>
-                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>Sex :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].GENDER}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>Name :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].fname} ${result[0].lname}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>DOB :</span>&nbsp;<span class='fs-2 text-primary'>${new Date(result[0].dob).toLocaleDateString('en-US')}</span></div>
+                        <div class='fs-2 my-2'><span class='fs-2 text-primary'>Sex :</span>&nbsp;<span class='fs-2 text-primary'>${result[0].gender}</span></div>
                         <div class='separator border border-dashed my-4'></div>
                     `
                     var i = 0
@@ -256,9 +256,9 @@ $(document).ready(async function() {
                                 <span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${item.startDate ? new Date(item.startDate).toLocaleDateString('en-US') : new Date(item.create_date).toLocaleDateString('en-US')}</span>
                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;${i == 0 ? `<div class='ms-2 badge badge-light-danger fw-bold fs-4 text-center'>Primary</div>` : ''}</span>
                             </div>
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insurance_name ? item.insurance_name : ''}</span></div>
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Lob Name :</span>&nbsp;<span class='fs-2'>${item.lob_name ? item.lob_name : ''}</span></div>
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberid ? item.subscriberid : ''}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insName ? item.insName : ''}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Lob Name :</span>&nbsp;<span class='fs-2'>${item.lobName ? item.lobName : ''}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberno ? item.subscriberno : ''}</span></div>
                             <div class='separator border border-dashed my-3'></div>
                         `
                         i ++
