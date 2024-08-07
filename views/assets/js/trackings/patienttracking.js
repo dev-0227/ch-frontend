@@ -109,8 +109,15 @@ $(document).ready(async function() {
             data: 'insuranceid',
             render: (data, type, row) => {
                 return `
-                    <div><span class='text-primary'>${row.pinsname ? row.pinsname : ''}</span></div>
+                    <div><span class='text-primary'>${row.pinsname ? row.pinsname : (row.pinsnamel ? row.pinsnamel : '')}</span></div>
                     <div><span>${!row.psub || row.psub != '0' ? row.psub : ''}</span></div>
+                `
+            }
+        }, {
+            data: 'lob',
+            render: (data, type, row) => {
+                return `
+                    <div><span class='text-primary'>${row.plobname ? row.plobname : (row.plobnamel ? row.plobnamel : '')}</span></div>
                 `
             }
         }, {
@@ -163,13 +170,6 @@ $(document).ready(async function() {
                         <i class='fa fa-thin text-primary fa-mobile-screen p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-thin text-primary fa-phone p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                     </div>
-                `
-            }
-        }, {
-            data: 'lob',
-            render: (data, type, row) => {
-                return `
-                    <div class='text-center'></div>
                 `
             }
         }, {
@@ -240,6 +240,7 @@ $(document).ready(async function() {
         sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid: _clinicid, patientid: e.currentTarget.attributes['data'].value}, 'tracking/patient/byptid', (xhr, err) => {
             if (!err) {
                 var result = JSON.parse(xhr.responseText)['data']
+                console.log(result)
                 var html = ''
                 if (result.length > 0) {
                     html += `
@@ -253,11 +254,11 @@ $(document).ready(async function() {
                     result.forEach(item => {
                         html += `
                             <div class='fs-2 my-2 modal-text'>
-                                <span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${item.startDate ? new Date(item.startDate).toLocaleDateString('en-US') : new Date(item.create_date).toLocaleDateString('en-US')}</span>
+                                <span class='fs-2'>Date :</span>&nbsp;<span class='fs-2'>${item.loaddate ? new Date(item.loaddate).toLocaleDateString('en-US') : ''}</span>
                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;${i == 0 ? `<div class='ms-2 badge badge-light-danger fw-bold fs-4 text-center'>Primary</div>` : ''}</span>
                             </div>
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.insName ? item.insName : ''}</span></div>
-                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Lob Name :</span>&nbsp;<span class='fs-2'>${item.lobName ? item.lobName : ''}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Insurance Name :</span>&nbsp;<span class='fs-2'>${item.pinsname ? item.pinsname : (item.pinsnamel ? item.pinsnamel : '')}</span></div>
+                            <div class='fs-2 my-2 modal-text'><span class='fs-2'>Lob Name :</span>&nbsp;<span class='fs-2'>${item.plobname ? item.plobname : (item.plobnamel ? item.plobnamel : '')}</span></div>
                             <div class='fs-2 my-2 modal-text'><span class='fs-2'>Subscriber ID :</span>&nbsp;<span class='fs-2'>${item.subscriberno ? item.subscriberno : ''}</span></div>
                             <div class='separator border border-dashed my-3'></div>
                         `
