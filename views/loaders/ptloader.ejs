@@ -13,19 +13,59 @@
 		margin: 0 auto;
 		text-align: center;
 	}
+	.kt-progress-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 100%; /* Adjust as needed */
+    }
+    
+    .kt-progress {
+        flex: 1;
+        background-color: #9fc9f727; /* Background color of the progress bar container */
+        height: 16px; /* Height of the progress bar container */
+        border-radius: 8px; /* Rounded corners for the container */
+        position: relative;
+    }
+    
+    .kt-progress-bar {
+        background-color: #007bffcc; /* Color of the progress bar */
+        height: 100%; /* Full height of the container */
+        color: white; /* Text color */
+        text-align: center; /* Center align text horizontally */
+        line-height: 16px; /* Center text vertically */
+        border-radius: 8px; /* Rounded corners for the progress bar */
+        white-space: nowrap; /* Prevent text from wrapping */
+        overflow: hidden; /* Hide overflowed text */
+    }
+    
+    .kt-progress-text {
+		flex: center;
+        margin-left: 10px; /* Space between progress bar and text */
+        white-space: nowrap; /* Prevent text from wrapping */
+		color:dodgerblue;
+    }
 </style>
 
 <div class="pt-loader d-none">
 	<div class="row justify-content-center align-items-center d-flex h-100">
 		<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-			<div class="card bg-primary img-card box-primary-shadow">
+			<div class="card bg-light-primary img-card box-danger-shadow">
 				<div class="card-body">
-					<div class="text-white text-center">
+					<div class="text-primary text-center">
 						<h2 class="mb-2 number-font clinic-name"></h2>
-						<h4 class="text-white mb-2">Current Patients :  <span class="totalcount"></span></h4>
-						<p class="text-white mb-2">Loading By :  <span class="managername"></span></p>
-						<p class="text-white mb-2 ">Loading New Patients: Started at <span class="cdate"></span></p>
-						<div class="progress-bar progress-load">
+						<h4 class="text-primary mb-2">Current Patients :  <span class="totalcount"></span></h4>
+						<p class="text-primary mb-2">Loading By :  <span class="managername"></span></p>
+						<p class="text-primary mb-2 ">Loading New Patients: Started at <span class="cdate"></span></p>
+						<div class="kt-progress-container my-5">
+							<div class="kt-progress">
+								<div class="kt-progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+									<!-- The progress text will be placed here -->
+								</div>
+							</div>
+							<span class="kt-progress-text">0%</span>
+						</div>
+						<div class="progress-bar progress-load mt-4">
 							<div class="progress-bar-value "></div>
 						</div>
 					</div>
