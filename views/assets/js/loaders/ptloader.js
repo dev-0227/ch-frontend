@@ -16,20 +16,20 @@ function uploadCSVFile() {
     }
     $(".progress-load").removeClass("d-none");
 
+    _value = 0
+    const progressBar = document.querySelector('.kt-progress-bar')
+    const progressText = document.querySelector('.kt-progress-text')
+    progressBar.style.width = 0 + '%'
+    progressBar.setAttribute('aria-valuenow', 0)
+    progressText.textContent = 0 + '%'
+
     _interval = setInterval(() => {
-      _value = 0
-      const progressBar = document.querySelector('.kt-progress-bar')
-      const progressText = document.querySelector('.kt-progress-text')
-      progressBar.style.width = 0 + '%'
-      progressBar.setAttribute('aria-valuenow', 0)
-      progressText.textContent = 0 + '%'
       if (_isReceivedRequest) upgradeProgressbar()
     }, 750)
     
     sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "patientlist/ptloader", (xhr, err) => {
       if (!err) {
         // initialize progress bar
-        _value = 0
         clearInterval(_interval)
 
         $(".pt-loader").addClass("d-none");
