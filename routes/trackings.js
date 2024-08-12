@@ -15,4 +15,11 @@ router.get("/appointment", (req, res, next) => {
     });
 });
 
+router.get("/ffs", (req, res, next) => {
+    res.render("layout/trackingblank", {
+        pageTitle: "FFS Trackings",
+        pageKey: "../trackings/ffstracking"
+    });
+});
+
 module.exports = router;
