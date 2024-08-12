@@ -250,7 +250,7 @@ $(document).ready(async function() {
                     })
                 }
                 $('#modal-body-tracking').html(html)
-                $('#ffs-tracking').modal('show')
+                $('#ffs-tracking-modal').modal('show')
             }
         })
     })
