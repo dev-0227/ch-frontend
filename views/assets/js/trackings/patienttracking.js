@@ -163,14 +163,17 @@ $(document).ready(async function() {
         }, {
             data: 'contact',
             render: (data, type, row) => {
-                return `
+                var html = `
                     <div class='d-flex text-center mx-auto'>
-                        <i class='fa fa-thin text-primary fa-print p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
-                        <i class='fa fa-thin text-primary fa-envelope p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
-                        <i class='fa fa-thin text-primary fa-mobile-screen p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
+                        <i class='fa fa-thin text-primary fa-print p-1 cursor-pointer' style='font-size: 1.2rem;'></i>`
+                        row.email ? html += `<a href='#' class='btn-active-color-primary' id='pt-ins-email' data='${row.id}' email='${row.email}'>
+                            <i class='fa fa-thin text-primary fa-envelope p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
+                        </a>` : html += ``
+                        html += `<i class='fa fa-thin text-primary fa-mobile-screen p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                         <i class='fa fa-thin text-primary fa-phone p-1 cursor-pointer' style='font-size: 1.2rem;'></i>
                     </div>
                 `
+                return html
             }
         }, {
             data: 'statuslog',
@@ -270,6 +273,44 @@ $(document).ready(async function() {
             }
         })
     })
+
+    // Email begin //
+    $(document).on('click', '#pt-ins-email', (e) => {
+        e.preventDefault()
+        $('#patient-email-patient').val(e.currentTarget.attributes.email.value)
+        $('#patient-email-pcp').val(localStorage.getItem('email'))
+        $('#patient-insurance-email').modal('show')
+    })
+
+    $(document).on('keyup', '.email-validation', function(e) {
+        if (e.target.value.length > 0) {
+            $(this).removeClass('is-invalid')
+            $(this).addClass('is-valid')
+            $('#patient-email-button').prop('disabled', false)
+        } else {
+            $(this).removeClass('is-valid')
+            $(this).addClass('is-invalid')
+            $('#patient-email-button').prop('disabled', true)
+        }
+    })
+
+    $('#patient-email-button').click(() => {
+        $('#patient-insurance-email').modal('hide')
+
+        // Email.send({
+        //     Host: 'smtp.gmail.com',
+        //     Username: 'roswellg@gmail.com',
+        //     Password: "roswell goris",
+        //     To: $('#patient-email-pcp').val(),
+        //     From: localStorage.getItem('email'),
+        //     Subject: $('#patient-email-subject').val(),
+        //     Body: $('#patient-email-comment').val()
+        // }).then((message) => {
+        //     console.log(message)
+        //     alert('mail sent successfully!')
+        // })
+    })
+    // Email end //
 
     // Patient Search begin //
     $(document).on('keyup', '#search_all', (e) => {

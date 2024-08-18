@@ -136,3 +136,46 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="patient-insurance-email" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Email Box</h3>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <!--begin::Input group-->
+                <div class="form-floating mb-7">
+                    <input type="email" class="form-control email-validation" placeholder="Input PCP Email" id="patient-email-pcp"/>
+                    <label for="patient-email-pcp">PCP Email</label>
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="form-floating mb-7">
+                    <input type="email" class="form-control email-validation" placeholder="Input Patient Email" id="patient-email-patient"/>
+                    <label for="patient-email-patient">Patient Email</label>
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="form-floating mb-7">
+                    <input type="text" class="form-control form-control-solid" id="patient-email-subject"/>
+                    <label for="patient-email-subject">Subject</label>
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="form-floating">
+                    <textarea class="form-control" id="patient-email-comment" style="height: 120px"></textarea>
+                    <label for="patient-email-comment">Comments</label>
+                </div>
+                <!--end::Input group-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="patient-email-button"><i class="fa fa-sharp-duotone fa-solid fa-envelope">&nbsp;</i> Send</button>
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+            </div>
+        </div>
+    </div>
+</div>

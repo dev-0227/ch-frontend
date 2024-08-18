@@ -3697,17 +3697,12 @@ $(document).ready(async function () {
     "ajax": {
         "url": serviceUrl + "reportBuilder/getQualityProgramList",
         "type": "POST",
-        // "data": {
-        //   ins_id: $('#select_ins').val(),
-        //   ins_lob_id: $('#select_ins_lob').val(),
-        // }
         "data": function () {
           return {
               ins_id: $('#select_ins').val(),         // Current selected insurance type
           };
         }
     },
-    "order": [[6, 'desc']],
     "columns": [
       { data: 'name'},
       { data: 'display'},
