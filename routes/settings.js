@@ -193,6 +193,13 @@ router.get("/diagnosisgroup", (req, res, next) => {
     });
 });
 
+router.get("/lab", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Laboratory",
+        pageKey: "../settings/lab"
+    });
+});
+
 router.get("/vital", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Vitals",
