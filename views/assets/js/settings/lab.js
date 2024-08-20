@@ -53,6 +53,11 @@ $(document).ready(function () {
         $('#lab-modal-display').val('')
         $('#lab-modal-description').val('')
         $('#lab-modal-unit').val('')
+        $('#lab-modal-snomed').val('')
+        $('#lab-modal-lab-type').val('')
+        $('#lab-modal-clia').val('')
+        $('#lab-modal-min').val(0)
+        $('#lab-modal-max').val(0)
 
         $('#lab-edit-modal').modal('show')
     })
@@ -72,6 +77,11 @@ $(document).ready(function () {
                     $('#lab-modal-description').val(result[0].description)
                     $('#lab-modal-unit').val(result[0].units)
                     $('#lab-modal-specimen').val(result[0].specimen_id).trigger('change')
+                    $('#lab-modal-snomed').val(result[0].snomed_id)
+                    $('#lab-modal-lab-type').val(result[0].type)
+                    $('#lab-modal-clia').val(result[0].clia)
+                    $('#lab-modal-min').val(result[0].normal_range_min)
+                    $('#lab-modal-max').val(result[0].normal_range_max)
 
                     $('#lab-edit-modal').modal('show')
                 }
@@ -91,12 +101,12 @@ $(document).ready(function () {
             description: $('#lab-modal-description').val(),
             units: $('#lab-modal-unit').val(),
             specimen_id: $('#lab-modal-specimen').val(),
-            snomed_id: '',
+            snomed_id: $('#lab-modal-snomed').val(),
             fhir_id: '',
-            type: null,
-            normal_range_min: '',
-            normal_range_max: '',
-            clia: ''
+            type: $('#lab-modal-lab-type').val(),
+            normal_range_min: $('#lab-modal-min').val(),
+            normal_range_max: $('#lab-modal-max').val(),
+            clia: $('#lab-modal-clia').val()
         }
         if (entry.display == '') {
             toastr.warning('Please enter display.')
