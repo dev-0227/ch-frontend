@@ -130,12 +130,30 @@ $(document).ready(function () {
 
     // delete lab begin //
     $(document).on('click', '#lab-table-delete', function() {
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: $(this).parent().attr("idkey")}, 'setting/lab/delete', (xhr, err) => {
-            if (!err) {
-                toastr.success('The lab was deleted successfully!')
-                labTable.ajax.reload()
-            } else {
-                toastr.error('Action failed!')
+        var entry = {
+            id: $(this).parent().attr("idkey")
+        }
+        Swal.fire({
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'setting/lab/delete', (xhr, err) => {
+                    if (!err) {
+                        toastr.success('The lab was deleted successfully!')
+                        labTable.ajax.reload()
+                    } else {
+                        toastr.error('Action failed!')
+                    }
+                })
             }
         })
     })
