@@ -31,14 +31,21 @@ router.get("/ffsloader", (req, res, next) => {
 
 router.get("/ptanalysisloader", (req, res, next) => {
     res.render("layout/mainblank", {
-        pageTitle: "FFS Loader",
+        pageTitle: "Analysis Loader",
         pageKey: "../loaders/ptanalysisloader"
+    });
+});
+
+router.get("/labloader", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Lab Loader",
+        pageKey: "../loaders/labloader"
     });
 });
 
 router.get("/vitalloader", (req, res, next) => {
     res.render("layout/mainblank", {
-        pageTitle: "VItal Loader",
+        pageTitle: "Vital Loader",
         pageKey: "../loaders/vitalloader"
     });
 });

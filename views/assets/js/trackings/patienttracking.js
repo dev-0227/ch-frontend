@@ -297,18 +297,16 @@ $(document).ready(async function() {
     $('#patient-email-button').click(() => {
         $('#patient-insurance-email').modal('hide')
 
-        // Email.send({
-        //     Host: 'smtp.gmail.com',
-        //     Username: 'roswellg@gmail.com',
-        //     Password: "roswell goris",
-        //     To: $('#patient-email-pcp').val(),
-        //     From: localStorage.getItem('email'),
-        //     Subject: $('#patient-email-subject').val(),
-        //     Body: $('#patient-email-comment').val()
-        // }).then((message) => {
-        //     console.log(message)
-        //     alert('mail sent successfully!')
-        // })
+        Email.send({
+            SecureToken: 'b5a369b3ddcca8ec63d8a4b32e7c21c8-2b91eb47-51ea34e1',
+            To: $('#patient-email-patient').val(),
+            From: $('#patient-email-pcp').val(),
+            Subject: $('#patient-email-subject').val(),
+            Body: $('#patient-email-comment').val()
+        }).then((message) => {
+            console.log(message)
+            alert('mail sent successfully!')
+        })
     })
     // Email end //
 

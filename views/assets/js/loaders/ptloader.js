@@ -81,7 +81,7 @@ const upgradeProgressbar = () => {
 $(document).ready(async function () {
   "use strict";
 
-  // Exce Begin //
+  // Excel Begin //
   if(!localStorage.getItem('chosen_clinic') || localStorage.getItem('chosen_clinic') != 'undefined'){
     let entry = {
       clinicid:localStorage.getItem('chosen_clinic')
@@ -123,7 +123,7 @@ $(document).ready(async function () {
       $('#verify-done').prop('disabled', false)
     }
   })
-  // Exce Begin //
+  // Excel End //
   // ECW Bulk Begin //
   $('#ptloader_ecwbulk_btn').click(async function() {
     KTApp.showPageLoading()
