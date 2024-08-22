@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(async function () {
   "use strict";
   var clinictable = $('#clinictable').DataTable({
     "ajax": {
@@ -36,7 +36,10 @@ $(document).ready(function () {
           render: function (data, type, row) {
             return `
               <div class="btn-group align-top" idkey="`+row.id+`">
-                <button class="btn btn-sm btn-info badge clinicmanagerbtn" type="button"><i class="fa fa-user"></i></button><button class="btn btn-sm btn-primary badge cliniceditbtn" type="button"><i class="fa fa-edit"></i></button><button class="btn btn-sm btn-danger badge clinicdeletebtn" type="button"><i class="fa fa-trash"></i></button>
+              <button class="btn btn-sm btn-success badge clinicqprogrambtn" type="button"><i class="ki-duotone ki-design-2"><span class="path1"></span><span class="path2"></span></i></button>
+                <button class="btn btn-sm btn-info badge clinicmanagerbtn" type="button"><i class="fa fa-user"></i></button>
+                <button class="btn btn-sm btn-primary badge cliniceditbtn" type="button"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-sm btn-danger badge clinicdeletebtn" type="button"><i class="fa fa-trash"></i></button>
               </div>
             `
           } 
@@ -76,7 +79,7 @@ $(document).ready(function () {
     }
  });
 
- clinic_logo.on("addedfile", function(file, xhr) {
+  clinic_logo.on("addedfile", function(file, xhr) {
     var fr;
     fr = new FileReader;
     fr.onload = function() {
@@ -434,4 +437,149 @@ $(document).ready(function () {
       }
     });
   });
+
+  // Quality Program
+  // Get Insurance
+  var qprogramTable = null
+  var _qualities = []
+  var _currentIns = -1
+
+  $(document).on('click', '.clinicqprogrambtn', async function() {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid: $(this).parent().attr("idkey")}, 'clinic/program/chosen', (xhr, err) => {
+      if (!err) {
+        var result = JSON.parse(xhr.responseText)['data']
+        result.forEach(item => {
+          if (item.insuranceid.toString() == _currentIns) {
+            var __l = $('.change-program').children().prevObject.length
+            for (var i = 0; i < __l; i ++) {
+              _qualities = item.qprogram.split(',')
+              if (_qualities.indexOf($('.change-program').children().prevObject[i].attributes['data'].value) != -1) {
+                $('.change-program').children().prevObject[i].checked = true
+              } else {
+                $('.change-program').children().prevObject[i].checked = false
+              }
+            }
+          }
+        })
+        if (!result.length) {
+          var __l = $('.change-program').children().prevObject.length
+          for (var i = 0; i < __l; i ++) {
+            $('.change-program').children().prevObject[i].checked = false
+          }
+        }
+      }
+    })
+
+    $('#chosen_clinic').val($(this).parent().attr("idkey"))
+    $('#clinic-program-modal').modal('show')
+  });
+
+  const renderQualityProgramTable = () => {
+    qprogramTable = $('#kt_sidebar_nav').DataTable({
+      "ajax": {
+        "url": serviceUrl + "clinic/program/list",
+        "type": "GET",
+        "headers": { 'Authorization': localStorage.getItem('authToken') },
+        "data": function (d) {
+          d.ins_id = $('#rel_insurances').val()
+        }
+      },
+      serverSide: true,
+      "pageLength": 10,
+      "order": [],
+      "columns": [
+        { data: 'id',
+          render: function(data, type, row) {
+            return `
+              <center>
+                <div class="form-check form-check-sm form-check-custom form-check-lg">
+                  <input id="checkProgram" class="form-check-input change-program form-check-input" type="checkbox" data='${row.id}' value='${row.id}' />
+                </div>
+              </center>
+            `
+          }
+        },
+        { data: 'name',
+          render: function(data, type, row) {
+            return `
+              <div class="form-check-label px-3 d-block">
+                <div class="text-primary fs-2">${row.name}</div>
+              </div>
+            `
+          }
+        },
+      ]
+    });
+  }
+
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "insurance/", (xhr, err) => {
+    var _id = 0
+    var options = ''
+    if (!err) {
+      let result = JSON.parse(xhr.responseText)['data']
+      result.forEach(item => {
+        options += `<option value='${item.id}'>${item.insName}</option>`
+      })
+      if (result.length > 0) _id = result[0].id
+      $('#rel_insurances').html(options)
+
+
+      sendRequestWithToken('POST', localStorage.getItem('authToken'), {user_id: localStorage.getItem('userid')}, 'reportBuilder/getDefaultIns', (xhr, err) => {
+        if (!err) {
+          var result = JSON.parse(xhr.responseText)['data']
+          if (result.length) {
+            _currentIns = result[0].insid
+            $('#rel_insurances').val(result[0].insid).trigger('change')
+          }
+        }
+      })
+    }
+  })
+  renderQualityProgramTable()
+
+  $('#rel_insurances').change(function(e) {
+    _currentIns = e.target.value
+
+    qprogramTable.ajax.reload(null, false)
+
+    var __l = $('.change-program').children().prevObject.length
+    console.log(__l)
+    for (var i = 0; i < __l; i ++) {
+      if (_qualities.indexOf($('.change-program').children().prevObject[i].attributes['data'].value) != -1) {
+        $('.change-program').children().prevObject[i].checked = true
+      } else {
+        $('.change-program').children().prevObject[i].checked = false
+      }
+    }
+  })
+
+  $(document).on('change', '.change-program', function(e)  {
+    if (e.target.checked) {
+      if (_qualities.indexOf(e.target.value) == -1) {
+        _qualities.push(e.target.value)
+      }
+    } else {
+      var index = _qualities.indexOf(e.target.value)
+      if (index > -1) {
+        _qualities.splice(index, 1)
+      }
+    }
+  })
+
+  $('#mprogrambtn').click(async() => {
+    var entry = {
+      clinicid: $('#chosen_clinic').val(),
+      insuranceid: $('#rel_insurances').val(),
+      qprogram: _qualities.join(','),
+      updateby: localStorage.getItem('userid')
+    }
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'clinic/program', (xhr, err) => {
+      if (!err) {
+        toastr.success('Action Succeed!')
+      } else {
+        toastr.error('Action Failed!')
+      }
+      $('#clinic-program-modal').modal('hide')
+    })
+  })
 });
