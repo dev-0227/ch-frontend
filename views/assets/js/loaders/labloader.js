@@ -61,6 +61,8 @@ $(document).ready(async function () {
     $('#verify-lab').prop('checked', false)
     $('#verify-done').prop('disabled', true)
 
+    $('#verify-lab-name').html($("#lab-select option:selected").text())
+
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: localStorage.getItem('chosen_clinic')}, 'clinic/chosen', (xhr, err) => {
       if (!err) {
         var result = JSON.parse(xhr.responseText)['data']
