@@ -58,6 +58,7 @@ $(document).ready(async function () {
   $("#labloadbtn").click(function() {
     $('#verify-clinic-name').html('')
     $('#verify-check').prop('checked', false)
+    $('#verify-lab').prop('checked', false)
     $('#verify-done').prop('disabled', true)
 
     sendRequestWithToken('POST', localStorage.getItem('authToken'), {id: localStorage.getItem('chosen_clinic')}, 'clinic/chosen', (xhr, err) => {
@@ -78,6 +79,16 @@ $(document).ready(async function () {
     if (e.target.checked == false) {
       $('#verify-done').prop('disabled', true)
     } else {
+      if ($('#verify-lab').prop('checked') == true)
+      $('#verify-done').prop('disabled', false)
+    }
+  })
+
+  $(document).on('change', '#verify-lab', (e) => {
+    if (e.target.checked == false) {
+      $('#verify-done').prop('disabled', true)
+    } else {
+      if ($('#verify-check').prop('checked') == true)
       $('#verify-done').prop('disabled', false)
     }
   })
