@@ -32,10 +32,22 @@ $(document).ready(async function () {
         }
     ]
   });
-  
+
+  async function loadQualityProgram() {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), {ins_id: $('#insforqualityloader').val()}, 'reportBuilder/getQualityProgramList', (xhr, err) => {
+      if (!err) {
+        var html = ``
+        var result = JSON.parse(xhr.responseText)['data']
+        result.forEach(item => {
+          html += `<option value='${item.id}'>${item.name}</option>`
+        })
+        $('#qualityprogramloader').html(html)
+      }
+    })
+  }
 
   //setting/getchoseninsurances
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "insurance/getHedisList", (xhr, err) => {
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "insurance/getHedisList", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       $("#insforqualityloader").empty();
@@ -44,14 +56,14 @@ $(document).ready(async function () {
             <option value = "`+result[i]['id']+`">`+result[i]['insName']+`</option>
         `);
         if(i==0)insuranceid = result[i]['id'];
-          
       }
       backuptable.ajax.reload();
       getHedisDataCount();
+      loadQualityProgram()
     }
   })
 
-  sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/gethedisyear", (xhr, err) => {
+  await sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "setting/gethedisyear", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       if(result.length>0)
@@ -60,7 +72,7 @@ $(document).ready(async function () {
       toastr.error('Action Failed');
     }
   });
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:localStorage.getItem('chosen_clinic')}, "clinic/chosen", (xhr, err) => {
+  await sendRequestWithToken('POST', localStorage.getItem('authToken'), {id:localStorage.getItem('chosen_clinic')}, "clinic/chosen", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
       if(result[0]['apcheck'] == 1){
@@ -71,12 +83,12 @@ $(document).ready(async function () {
     }
   });
 
-  function getHedisDataCount(){
+  async function getHedisDataCount(){
     var entry = {
       id:localStorage.getItem('chosen_clinic'),
       insid: insuranceid
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/checkhedisdata", (xhr, err) => {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/checkhedisdata", (xhr, err) => {
       if (!err) {
         let total = JSON.parse(xhr.responseText)['data'];
         $("#patient_count").html(total);
@@ -87,7 +99,7 @@ $(document).ready(async function () {
     });
   }
   
-  $("#qualityloadbtn").click(function(){
+  $("#qualityloadbtn").click(async function(){
     if($("#qualityfile").val() == ""){
       toastr.info('Please Drag and drop a file');
       $("#qualityfile").focus();
@@ -100,7 +112,7 @@ $(document).ready(async function () {
     $("#insurance-validation-text").html($("#insforqualityloader option:checked").text());
     $("#quality-load-modal").modal("show");
   });
-  $("#qualitysubmitbtn").click(function(){
+  $("#qualitysubmitbtn").click(async function(){
     if($("#inscheckbox").prop("checked")){
 
       var formData = new FormData();
@@ -117,7 +129,7 @@ $(document).ready(async function () {
         for (let i = 0; i < qualityentry; i++) {
             formData.append("qualityfile", document.getElementById('qualityfile').files[i]);
         }
-        sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/qualityloader", (xhr, err) => {
+        await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/qualityloader", (xhr, err) => {
             if (!err) {
               $("#quality-load-modal").modal("hide");
               let news = JSON.parse(xhr.responseText)['new'];
@@ -156,21 +168,22 @@ $(document).ready(async function () {
   });
 
   
-  $(document).on("change","#insforqualityloader",function(){
+  $(document).on("change","#insforqualityloader",async function(){
     insuranceid = $(this).val();
     backuptable.ajax.reload();
     getHedisDataCount();
+    loadQualityProgram()
   })
 
-  $(document).on("click",".resultlink5",function(){
+  $(document).on("click",".resultlink5",async function(){
     
     $("body").append("<form id = 'retroform' action = '"+serviceUrl+"hedis/outputretro' method = 'POST'><input type='hidden' name='clinicid' value='"+localStorage.getItem('chosen_clinic')+"' /><input type='hidden' name='cyear' value='"+$("#hedisdate").val()+"' /><input type='hidden' name='insid' value='"+$("#insforqualityloader option:checked").val()+"' /><textarea name='retrodata'>"+JSON.stringify(retro)+"</textarea>'</form>");
     $("#retroform").submit();
     $("#retroform").remove();
   })
-  $("#qualitydeletebtn").click(function(){
+  $("#qualitydeletebtn").click(async function(){
     $("#delete-insurance-title").html($("#insforqualityloader option:checked").text());
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),insid:$("#insforqualityloader option:checked").val()}, "setting/getdatehedisloaded", (xhr, err) => {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),insid:$("#insforqualityloader option:checked").val()}, "setting/getdatehedisloaded", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         $("#datadate").empty();
@@ -186,7 +199,7 @@ $(document).ready(async function () {
     });
     $("#quality-delete-modal").modal("show");
   });
-  $("#deletedatabtn").click(function(){
+  $("#deletedatabtn").click(async function(){
     if($("#datadate").val() == 0){
       return toastr.info('Please select date to delete data');
       
@@ -203,9 +216,9 @@ $(document).ready(async function () {
           confirmButton: "btn btn-danger",
           cancelButton: "btn btn-primary"
         }
-      }).then(function (result) {
+      }).then(async function (result) {
         if (result.value) {
-          sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),cyear:$("#datadate").val(),insid:$("#insforqualityloader option:checked").val()}, "hedisloader/deletedata", (xhr, err) => {
+          await sendRequestWithToken('POST', localStorage.getItem('authToken'), {clinicid:localStorage.getItem('chosen_clinic'),cyear:$("#datadate").val(),insid:$("#insforqualityloader option:checked").val()}, "hedisloader/deletedata", (xhr, err) => {
             if (!err) {
               location.reload();
             } else {
@@ -217,7 +230,7 @@ $(document).ready(async function () {
       
     }
   });
-  $("#encloadbtn").click(function(){
+  $("#encloadbtn").click(async function(){
     var formData = new FormData();
     formData.append("clinicid", localStorage.getItem('chosen_clinic'));
     formData.append("userid", localStorage.getItem('userid'));
@@ -231,7 +244,7 @@ $(document).ready(async function () {
       for (let i = 0; i < qualityentry; i++) {
           formData.append("encfile", document.getElementById('encfile').files[i]);
       }
-      sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/encloader", (xhr, err) => {
+      await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/encloader", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
             $(".newentries").html(result);
@@ -246,7 +259,7 @@ $(document).ready(async function () {
       
     }
   });
-  $("#labloadbtn").click(function(){
+  $("#labloadbtn").click(async function(){
     var formData = new FormData();
     formData.append("clinicid", localStorage.getItem('chosen_clinic'));
     formData.append("userid", localStorage.getItem('userid'));
@@ -259,7 +272,7 @@ $(document).ready(async function () {
       for (let i = 0; i < qualityentry; i++) {
           formData.append("labfile", document.getElementById('labfile').files[i]);
       }
-      sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/labloader", (xhr, err) => {
+      await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/labloader", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
             $(".newentries").html(result);
@@ -273,7 +286,7 @@ $(document).ready(async function () {
       return toastr.info('Please load file');
     }
   });
-  $("#vaccineloadbtn").click(function(){
+  $("#vaccineloadbtn").click(async function(){
     var formData = new FormData();
     formData.append("clinicid", localStorage.getItem('chosen_clinic'));
     formData.append("userid", localStorage.getItem('userid'));
@@ -286,7 +299,7 @@ $(document).ready(async function () {
       for (let i = 0; i < qualityentry; i++) {
           formData.append("vaccinefile", document.getElementById('vaccinefile').files[i]);
       }
-      sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/vaccineloader", (xhr, err) => {
+      await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/vaccineloader", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
             $(".newentries").html(result);
@@ -300,7 +313,7 @@ $(document).ready(async function () {
       return toastr.info('Please load file');
     }
   });
-  $("#prevnextloadbtn").click(function(){
+  $("#prevnextloadbtn").click(async function(){
     var formData = new FormData();
     formData.append("clinicid", localStorage.getItem('chosen_clinic'));
     formData.append("userid", localStorage.getItem('userid'));
@@ -313,7 +326,7 @@ $(document).ready(async function () {
       for (let i = 0; i < qualityentry; i++) {
           formData.append("prevnextfile", document.getElementById('prevnextfile').files[i]);
       }
-      sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/prevnextloader", (xhr, err) => {
+      await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/prevnextloader", (xhr, err) => {
           if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];
             $(".newentries").html(result);
@@ -327,7 +340,7 @@ $(document).ready(async function () {
       return toastr.info('Please load file');
     }
   });
-  $(document).on("click",".backupdeletebtn",function(){
+  $(document).on("click",".backupdeletebtn",async function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
@@ -342,9 +355,9 @@ $(document).ready(async function () {
         confirmButton: "btn btn-danger",
         cancelButton: "btn btn-primary"
       }
-    }).then(function (result) {
+    }).then(async function (result) {
       if (result.value) {
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/deletebackup", (xhr, err) => {
+        await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/deletebackup", (xhr, err) => {
           if (!err) {
             setTimeout( function () {
               backuptable.ajax.reload();
@@ -358,7 +371,7 @@ $(document).ready(async function () {
     });
     
   });
-  $(document).on("click",".backupbtn",function(){
+  $(document).on("click",".backupbtn",async function(){
     let entry = {
       id: $(this).parent().attr("idkey"),
     }
@@ -373,11 +386,11 @@ $(document).ready(async function () {
         confirmButton: "btn btn-info",
         cancelButton: "btn btn-primary"
       }
-		}).then(function (result) {
+		}).then(async function (result) {
       if (result.value) {
           $(".cdate").html(new Date().toDateString()+" "+new Date().toLocaleTimeString())
           $(".hedis-loader").removeClass("d-none");
-          sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/backuphedis", (xhr, err) => {
+          await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/backuphedis", (xhr, err) => {
             if (!err) {
               $(".hedis-loader").addClass("d-none");
               let result = JSON.parse(xhr.responseText)['message'];
@@ -394,12 +407,12 @@ $(document).ready(async function () {
 
     
   });
-  $("#backupfilebtn").click(function(){
+  $("#backupfilebtn").click(async function(){
     let getinsentry = {
       clinicid:localStorage.getItem('chosen_clinic'),
       cyear:$("#hedisdate").val(),
     }
-    sendRequestWithToken('POST', localStorage.getItem('authToken'), getinsentry, "hedis/getinsheislist", (xhr, err) => {
+    await sendRequestWithToken('POST', localStorage.getItem('authToken'), getinsentry, "hedis/getinsheislist", (xhr, err) => {
       if (!err) {
         let result = JSON.parse(xhr.responseText)['data'];
         $("#backupinslist").empty();
@@ -414,7 +427,7 @@ $(document).ready(async function () {
       }
     });
   });
-  $("#backupnowbtn").click(function(){
+  $("#backupnowbtn").click(async function(){
     let entry = {
       clinicid:localStorage.getItem('chosen_clinic'),
       cyear:$("#hedisdate").val(),
@@ -431,11 +444,11 @@ $(document).ready(async function () {
         confirmButton: "btn btn-info",
         cancelButton: "btn btn-primary"
       }
-		}).then(function (result) {
+		}).then(async function (result) {
       if (result.value) {
         $(".cdate").html(new Date().toDateString()+" "+new Date().toLocaleTimeString())
         $(".hedis-loader").removeClass("d-none");
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/backupdatafromhedis", (xhr, err) => {
+				await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedisloader/backupdatafromhedis", (xhr, err) => {
           if (!err) {
             $(".hedis-loader").addClass("d-none");
             $("#backup-modal").modal("hide");
