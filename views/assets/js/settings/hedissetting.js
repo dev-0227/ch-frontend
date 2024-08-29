@@ -149,18 +149,21 @@ function changeformitems(linkurl){
 changeAlias = (id) => {
   var source = event.target || event.srcElement;
   if (source.constructor.name !== 'XMLHttpRequest') {
-      let value = document.getElementById('a' + id).value;
-      sendRequestWithToken('POST', localStorage.getItem('authToken'), { id: id, value: value }, "hedissetting/updatefilealiases", (xhr, err) => {
-          if (!err) {
-            return $.growl.notice({
-              message: "Action Successfully"
-            });
-          } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
-          }
-      });
+    let value = document.getElementById('a' + id).value;
+
+    let data = JSON.parse(value)
+    let datas = []
+    data.forEach(item => {
+      datas.push(item.value)
+    })
+
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), { id: id, value: datas.join(',') }, "hedissetting/updatefilealiases", (xhr, err) => {
+      if (!err) {
+        toastr.success('Action Successfully')
+      } else {
+        toastr.success('Action Failed')
+      }
+    });
   }
 }
 
@@ -3974,6 +3977,32 @@ $(document).ready(async function () {
               return toastr.error("Action Failed");
           }
       });
+    }
+  })
+
+  // Excel Field Aliases
+  var measure_field_aliases_table = $('#measure_field_aliases_table').DataTable({
+    "ajax": {
+      "url": serviceUrl + "hedissetting/getfilealiases",
+      "type": "GET",
+    },
+    "columns": [
+      { "data": "fields", "width": "20%" },
+      { "data": "variables",
+        "render": function (data, type, row) {
+          return `<input class="form-control" type="text" data-role="tagsinput" id="a${row.id}" onchange="changeAlias(${row.id})" value="${data}">`
+        }
+      },
+    ]
+  })
+
+  // Reinitialize tagsinput after each draw event
+  measure_field_aliases_table.on('draw.dt', function () {
+    var tagifies = $('input[data-role="tagsinput"]')
+    
+    for (var i = 0; i < tagifies.length; i ++) {
+      var _input = document.querySelector(`#${tagifies[i].id}`)
+      new Tagify(_input)
     }
   })
 })
