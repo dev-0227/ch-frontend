@@ -3990,7 +3990,7 @@ $(document).ready(async function () {
       { "data": "fields", "width": "20%" },
       { "data": "variables",
         "render": function (data, type, row) {
-          return `<input class="form-control" type="text" data-role="tagsinput" id="a${row.id}" onchange="changeAlias(${row.id})" value="${data}">`
+          return `<input class="form-control" type="text" data-role="tagsinput" id="a${row.id}" onchange="changeAlias(${row.id})" value="${data != null ? data : ''}">`
         }
       },
     ]
