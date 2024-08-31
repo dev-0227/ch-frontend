@@ -121,6 +121,7 @@ $(document).ready(async function () {
       formData.append("cyear", $("#hedisdate").val());
       formData.append("backupcheck", $("#backupcheck").prop("checked")?"1":"0");
       formData.append("retrospect", $("#activateretro").prop("checked")?"1":"0");
+      formData.append('qpid', $('#qualityprogramloader').val());
       var qualityentry = document.getElementById('qualityfile').files.length;
       if (qualityentry != 0) {
         $(".loadfilename").html($("#insforqualityloader option:checked").text()+" Hedis File");
@@ -133,6 +134,9 @@ $(document).ready(async function () {
             if (!err) {
               $("#quality-load-modal").modal("hide");
               let news = JSON.parse(xhr.responseText)['new'];
+              let measures = JSON.parse(xhr.responseText)['measures'];
+              let matched = JSON.parse(xhr.responseText)['matched'];
+              let notmatched = JSON.parse(xhr.responseText)['notmatched'];
               let nolonger = JSON.parse(xhr.responseText)['nolonger'];
               let generated = JSON.parse(xhr.responseText)['generated'];
               let reported = JSON.parse(xhr.responseText)['reported'];
@@ -141,14 +145,17 @@ $(document).ready(async function () {
                 $(".retrolink-area").addClass("d-none");
               }
               $(".newslink").html(news);
+              $('.measureslink').html(measures);
               $(".nolongerlink").html(nolonger);
+              $('.matchedlink').html(matched);
+              $('.notmatchedlink').html(notmatched);
               $(".generatedlink").html(generated);
               $(".reportedlink").html(reported);
               $(".retrolink").html(retro.length);
-              $(".resultlink1").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=1");
-              $(".resultlink2").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=2");
-              $(".resultlink3").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=3");
-              $(".resultlink4").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=4");
+              // $(".resultlink1").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=1");
+              // $(".resultlink2").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=2");
+              // $(".resultlink3").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=3");
+              // $(".resultlink4").prop("href","../pages/hedisreport?insid="+$("#insforqualityloader option:checked").val()+"&ls=4");
               $(".hedis-loader").addClass("d-none");
               $("#hedis-load-result-modal").modal("show");
               backuptable.ajax.reload();
