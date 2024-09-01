@@ -4005,4 +4005,146 @@ $(document).ready(async function () {
       new Tagify(_input)
     }
   })
+
+  // hedis load status begin //
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, 'hedissetting/loadstatus/measure', (xhr, err) => {
+    if (!err) {
+      var html = ``
+      var result = JSON.parse(xhr.responseText)['data']
+      result.forEach(item => {
+        html += `<option value=${item.id}>${item.title}</option>`
+      })
+      $('#hedis-load-status-measure').html(html)
+    }
+  })
+
+  var hedisLoadStatusTable = $('#hedis_load_status_table').DataTable({
+    'ajax': {
+      'url': serviceUrl + 'hedissetting/loadstatus/',
+      'type': 'GET'
+    },
+    serverSide: true,
+    'columns': [{
+      'data': 'measure'
+    }, {
+      'data': 'code'
+    }, {
+      'data': 'display'
+    }, {
+      'data': 'id',
+      'render': function(data, type, row) {
+        return `
+        <div class="btn-group align-top" idkey="`+row.id+`">
+          <button class="btn btn-sm btn-primary badge" id="hedis-load-status-edit" type="button">
+              <i class="fa fa-edit"></i> Edit
+          </button>
+          <button class="btn btn-sm btn-danger badge" id="hedis-load-status-delete" type="button">
+              <i class="fa fa-trash"></i> Delete
+          </button>
+        </div>`
+      }
+    }]
+  })
+
+  $('#hedis_load_status_btn').click(() => {
+    $('#hedis-load-status-type').val('1')
+
+    $('#hedis-load-status-code').val('')
+    $('#hedis-load-status-display').val('')
+
+    $('#hedis-load-status-modal').modal('show')
+  })
+
+  $(document).on('click', '#hedis-load-status-edit', function() {
+    $('#hedis-load-status-type').val('0')
+
+    let entry = {
+      id: $(this).parent().attr("idkey"),
+    }
+
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'hedissetting/loadstatus/chosen', (xhr, err) => {
+      if (!err) {
+        var result = JSON.parse(xhr.responseText)['data']
+        result.forEach(item => {
+          $('#chosen_hedis_load_status').val(item.id)
+          $('#hedis-load-status-measure').val(item.measureid).trigger('change')
+          $('#hedis-load-status-code').val(item.code)
+          $('#hedis-load-status-display').val(item.display)
+        })
+
+        $('#hedis-load-status-modal').modal('show')
+      } else {
+        toastr.error('Error!')
+      }
+    })
+  })
+
+  $(document).on('click', '#hedis-load-status-delete', function() {
+    let entry = {
+      id: $(this).parent().attr("idkey"),
+    }
+
+    Swal.fire({
+      text: "Are you sure you would like to delete?",
+      icon: "error",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, return",
+      customClass: {
+        confirmButton: "btn btn-danger",
+        cancelButton: "btn btn-primary"
+      }
+    }).then(function (result) {
+      if (result.value) {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/loadstatus/delete", (xhr, err) => {
+          if (!err) {
+            hedisLoadStatusTable.ajax.reload()
+            toastr.success('Action Succeed!')
+          } else {
+            toastr.error("Action Failed")
+          }
+        })
+      }
+    })
+  })
+
+  $('#hedis-load-status-save').click(() => {
+    var type = $('#hedis-load-status-type').val()
+
+    var entry = {
+      id: $('#chosen_hedis_load_status').val(),
+      measureid: $('#hedis-load-status-measure').val(),
+      code: $('#hedis-load-status-code').val(),
+      display: $('#hedis-load-status-display').val()
+    }
+
+    // validation
+    if (!entry.measureid) {
+      toastr.warning('Please Select a Measure!')
+      $('#edis-load-status-measure').focus()
+      return
+    }
+    if (entry.code ==  '') {
+      toastr.warning('Please Inuput Code!')
+      $('#edis-load-status-code').focus()
+      return
+    }
+    if (entry.display ==  '') {
+      toastr.warning('Please Inuput Display!')
+      $('#edis-load-status-display').focus()
+      return
+    }
+
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, type == '1' ? 'hedissetting/loadstatus/add' : 'hedissetting/loadstatus/update', (xhr, err) => {
+      if (!err) {
+        hedisLoadStatusTable.ajax.reload()
+        toastr.success('Action Succeed!')
+        $('#hedis-load-status-modal').modal('hide')
+      } else {
+        toastr.error("Action Failed")
+      }
+    })
+  })
+    // hedis load status end //
 })
