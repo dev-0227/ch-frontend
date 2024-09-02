@@ -4007,17 +4007,6 @@ $(document).ready(async function () {
   })
 
   // hedis load status begin //
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, 'hedissetting/loadstatus/measure', (xhr, err) => {
-    if (!err) {
-      var html = ``
-      var result = JSON.parse(xhr.responseText)['data']
-      result.forEach(item => {
-        html += `<option value=${item.id}>${item.title}</option>`
-      })
-      $('#hedis-load-status-measure').html(html)
-    }
-  })
-
   var hedisLoadStatusTable = $('#hedis_load_status_table').DataTable({
     'ajax': {
       'url': serviceUrl + 'hedissetting/loadstatus/',
@@ -4025,8 +4014,6 @@ $(document).ready(async function () {
     },
     serverSide: true,
     'columns': [{
-      'data': 'measure'
-    }, {
       'data': 'code'
     }, {
       'data': 'display'
@@ -4067,7 +4054,6 @@ $(document).ready(async function () {
         var result = JSON.parse(xhr.responseText)['data']
         result.forEach(item => {
           $('#chosen_hedis_load_status').val(item.id)
-          $('#hedis-load-status-measure').val(item.measureid).trigger('change')
           $('#hedis-load-status-code').val(item.code)
           $('#hedis-load-status-display').val(item.display)
         })
@@ -4114,17 +4100,11 @@ $(document).ready(async function () {
 
     var entry = {
       id: $('#chosen_hedis_load_status').val(),
-      measureid: $('#hedis-load-status-measure').val(),
       code: $('#hedis-load-status-code').val(),
       display: $('#hedis-load-status-display').val()
     }
 
     // validation
-    if (!entry.measureid) {
-      toastr.warning('Please Select a Measure!')
-      $('#edis-load-status-measure').focus()
-      return
-    }
     if (entry.code ==  '') {
       toastr.warning('Please Inuput Code!')
       $('#edis-load-status-code').focus()
