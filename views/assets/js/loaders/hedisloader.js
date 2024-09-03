@@ -183,10 +183,31 @@ $(document).ready(async function () {
   })
 
   $(document).on("click",".resultlink5",async function(){
-    
-    $("body").append("<form id = 'retroform' action = '"+serviceUrl+"hedis/outputretro' method = 'POST'><input type='hidden' name='clinicid' value='"+localStorage.getItem('chosen_clinic')+"' /><input type='hidden' name='cyear' value='"+$("#hedisdate").val()+"' /><input type='hidden' name='insid' value='"+$("#insforqualityloader option:checked").val()+"' /><textarea name='retrodata'>"+JSON.stringify(retro)+"</textarea>'</form>");
+    $("body").append(`
+      <form id = 'retroform' action = '${serviceUrl}hedis/outputretro' method = 'POST'>
+        <input type='hidden' name='clinicid' value='${localStorage.getItem('chosen_clinic')}' />
+        <input type='hidden' name='cyear' value='${$("#hedisdate").val()}' />
+        <input type='hidden' name='insid' value='${$("#insforqualityloader option:checked").val()}' />
+        <textarea name='retrodata'>${JSON.stringify(retro)}</textarea>
+      </form>`);
+
     $("#retroform").submit();
     $("#retroform").remove();
+  })
+  $(document).on('click', '.resultlink', async function(e) {
+    e.preventDefault()
+
+    $("body").append(`
+      <form id = 'result_form' action = '${serviceUrl}hedis/exportresult' method = 'POST'>
+        <input type='hidden' name='clinicid' value='${localStorage.getItem('chosen_clinic')}' />
+        <input type='hidden' name='cyear' value='${$("#hedisdate").val()}' />
+        <input type='hidden' name='insid' value='${$("#insforqualityloader option:checked").val()}' />
+        <input type='hidden' name='l_status' value='${this.attr('data')}' />
+        <input type='hidden' name='count' value='${e.target.firstChild}' />
+      </form>`)
+
+    $("#result_form").submit()
+    $("#result_form").remove()
   })
   $("#qualitydeletebtn").click(async function(){
     $("#delete-insurance-title").html($("#insforqualityloader option:checked").text());
