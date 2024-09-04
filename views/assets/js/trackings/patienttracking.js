@@ -104,20 +104,19 @@ $(document).ready(async function() {
         processing: true,
         serverSide: true,
         'pageLength': 10,
-        'order': [],
         'columns': [{
             data: 'insuranceid',
             render: (data, type, row) => {
                 return `
-                    <div><span class='text-primary'>${row.pinsname ? row.pinsname : (row.pinsnamel ? row.pinsnamel : '')}</span></div>
-                    <div><span>${!row.psub || row.psub != '0' ? row.psub : ''}</span></div>
+                    <div><span class='text-primary'>${row.pinsnamel ? row.pinsnamel : (row.pinsname ? row.pinsname : '')}</span></div>
+                    <div><span>${row.psub ? row.psub : ''}</span></div>
                 `
             }
         }, {
             data: 'lob',
             render: (data, type, row) => {
                 return `
-                    <div><span class='text-primary'>${row.plobname ? row.plobname : (row.plobnamel ? row.plobnamel : '')}</span></div>
+                    <div><span class='text-primary'>${row.plobnamel ? row.plobnamel : (row.plobname ? row.plobname : '')}</span></div>
                 `
             }
         }, {

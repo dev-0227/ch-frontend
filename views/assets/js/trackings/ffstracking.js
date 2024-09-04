@@ -114,8 +114,8 @@ $(document).ready(async function() {
             data: 'insuranceid',
             render: (data, type, row) => {
                 return `
-                    <div><span class='text-primary'>${row.pinsname ? row.pinsname : (row.pinsnamel ? row.pinsnamel : '')}</span></div>
-                    <div><span>${!row.psub || row.psub != '0' ? row.psub : ''}</span></div>
+                    <div><span class='text-primary'>${row.pinsnamel ? row.pinsnamel : (row.pinsname ? row.pinsname : '')}</span></div>
+                    <div><span>${row.psub ? row.psub : ''}</span></div>
                 `
             }
         }, {

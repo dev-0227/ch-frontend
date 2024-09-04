@@ -232,8 +232,16 @@ $(document).ready(async function() {
             { data: 'clinicName' },
             { data: 'insName'},
             { data: 'lobName'},
-            { data: 'ecw_insid' },
-            { data: 'ecw_loginsid'},
+            { data: 'ecw_insid',
+                render: function(data, type, row) {
+                    return row.ecw_insid > 0 ? row.ecw_insid : ''
+                }
+             },
+            { data: 'ecw_lobinsid',
+                render: function(data, type, row) {
+                    return row.ecw_lobinsid > 0 ? row.ecw_lobinsid : ''
+                }
+            },
             { data: 'id',
               render: function (data, type, row) {
                 return `
@@ -265,7 +273,7 @@ $(document).ready(async function() {
             insid: $('#insurance-lob-add-insurance').val(),
             lobid: $('#insurance-lob-add-lob').val(),
             ecw_insid: $('#insurance-lob-add-ecwid').val(),
-            ecw_loginsid: $('#insurance-lob-add-ecwlogid').val(),
+            ecw_lobinsid: $('#insurance-lob-add-ecwlogid').val(),
         }
         if (type == '1') {
             sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'insurance/inslobmap/add', (xhr, err) => {
@@ -305,7 +313,7 @@ $(document).ready(async function() {
                     $('#insurance-lob-add-insurance').val(result[0].insid).trigger('change')
                     $('#insurance-lob-add-lob').val(result[0].lobid).trigger('change')
                     $('#insurance-lob-add-ecwid').val(result[0].ecw_insid)
-                    $('#insurance-lob-add-ecwlogid').val(result[0].ecw_loginsid)
+                    $('#insurance-lob-add-ecwlogid').val(result[0].ecw_lobinsid)
                     _selectLob = result[0].lobid
 
                     $("#insurance-lob-add-modal").modal('show')
