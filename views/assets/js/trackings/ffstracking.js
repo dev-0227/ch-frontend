@@ -301,7 +301,7 @@ $(document).ready(async function() {
     // Calendar Table begin //
     var calendarTable = $('#tracking_calendar_table').DataTable({
         'ajax': {
-            'url': serviceUrl + 'patientlist/statistic',
+            'url': serviceUrl + 'patientlist/statisticforffs',
             'type': 'GET',
             'headers': {'Authorization': localStorage.getItem('authToken')},
             'data': (d) => {
