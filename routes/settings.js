@@ -148,7 +148,7 @@ router.get("/barriers_communicationneeds", (req, res, next) => {
 //
 
 /* 
-* settings for PK Risk and Barriers
+* settings for Medication Adherance
 */
 router.get("/medadherance_medications", (req, res, next) => {
     res.render("layout/mainblank", {
@@ -171,6 +171,7 @@ router.get("/medadherance_medicationsRequest", (req, res, next) => {
     });
 });
 //
+
 
 router.get("/communicationsetting", (req, res, next) => {
     res.render("layout/mainblank", {
