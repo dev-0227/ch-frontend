@@ -150,21 +150,21 @@ router.get("/barriers_communicationneeds", (req, res, next) => {
 /* 
 * settings for Medication Adherance
 */
-router.get("/medadherance_medications", (req, res, next) => {
+router.get("/medadherance", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Medications",
         pageKey: "../settings/medadherance/medications"
     });
 });
 
-router.get("/medadherance_medicationsDispense", (req, res, next) => {
+router.get("/medadheranceDispense", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Medications Dispense",
         pageKey: "../settings/medadherance/medicationsDispense"
     });
 });
 
-router.get("/medadherance_medicationsRequest", (req, res, next) => {
+router.get("/medadheranceRequest", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "Medications Request",
         pageKey: "../settings/medadherance/medicationsRequest"

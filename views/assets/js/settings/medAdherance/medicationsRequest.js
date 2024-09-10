@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(async function() {
     "use strict";
     
     // Medications Dispense Status Table

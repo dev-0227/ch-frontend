@@ -1,5 +1,6 @@
-$(document).ready(function() {
+$(document).ready(async function() {
     "use strict";
+    
     // Medications Status Table
     var medStatusTable = $('#medStatusTable').DataTable({
         "ajax": {
