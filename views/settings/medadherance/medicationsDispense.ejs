@@ -1,0 +1,382 @@
+<style>
+    .tab-content i {
+        color:#fff;
+    }
+    .table-responsive{
+        padding:10px;
+    }
+</style>
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Medications Dispense</h3>
+            </div>
+            <div class="card-body p-6">
+                <div class="panel panel-primary">
+                    <div class=" tab-menu-heading">
+                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                            <li class="nav-item"><a href="#med_dis_status" class="nav-link active" data-bs-toggle="tab">Status</a></li>
+                            <li class="nav-item"><a href="#med_dis_cat" class="nav-link" data-bs-toggle="tab">Category</a></li>
+                            <li class="nav-item"><a href="#med_dis_per" class="nav-link" data-bs-toggle="tab">Performer</a></li>
+                             <li class="nav-item"><a href="#med_dis_stop" class="nav-link" data-bs-toggle="tab">Stop Reason</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <!--Medications Dispense Status Table-->
+                            <div class="tab-pane active " id="med_dis_status">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6 px-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title">Medication Dispense Status</h3>                                                    
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button id="addMedDispStatusBtn" type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add Status</button>                                                    
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                          <span class="path1"></span>
+                                                          <span class="path2"></span>
+                                                        </i>
+                                                        <input id="medDispStatus_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search Status" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="medDispStatusTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Code</th>
+                                                            <th scope="col">System</th>
+                                                            <th scope="col">Display</th> 
+                                                            <th scope="col">Definition</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Medications Dispense Category Table-->
+                            <div class="tab-pane" id="med_dis_cat">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Medications Dispense Category</h3>
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button id="addMedStatusBtn" type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add Status</button>
+                                                    <input type="hidden" id="chosen_sq" />
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                          <span class="path1"></span>
+                                                          <span class="path2"></span>
+                                                        </i>
+                                                        <input id="table_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search Status" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="squestiontable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Code</th>
+                                                            <th scope="col">System</th>
+                                                            <th scope="col">Display</th> 
+                                                            <th scope="col">Definition</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Medications Dispense Performer Table-->
+                            <div class="tab-pane" id="med_dis_per">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Medications Dispense Performer</h3>
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button id="addMedDispPerformerBtn" type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add Performer</button>
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                          <span class="path1"></span>
+                                                          <span class="path2"></span>
+                                                        </i>
+                                                        <input id="medDispPerformer_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search Status" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="medDispPerformerTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Code</th>
+                                                            <th scope="col">System</th>
+                                                            <th scope="col">Display</th> 
+                                                            <th scope="col">Definition</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Medications Dispense Stop Table-->
+                            <div class="tab-pane" id="med_dis_stop">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header border-0 pt-6">
+                                                <div class="card-title">
+                                                    <h3 class="card-title ">Medications Dispense Stop Reason</h3>
+                                                </div>
+                                                <div class="card-toolbar">
+                                                    <button id="addMedStatusBtn" type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add Status</button>
+                                                    <input type="hidden" id="chosen_sq" />
+                                                    <div class="d-flex align-items-center position-relative my-1">
+                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                          <span class="path1"></span>
+                                                          <span class="path2"></span>
+                                                        </i>
+                                                        <input id="table_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search Status" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered text-nowrap w-100" id="squestiontable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Code</th>
+                                                            <th scope="col">System</th>
+                                                            <th scope="col">Display</th> 
+                                                            <th scope="col">Definition</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- COL-END -->
+</div>
+<!-- ROW-1 CLOSED -->
+
+<!-- Medications Dispense Status Modal -->
+<div class="modal fade" id="medDispStatusAddModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add Medications Dispense Status</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Code:</label>
+                            <input type="text" class="form-control" id="add_med_disp_status_code" name="add_med_disp_status_code">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">System:</label>
+                            <input type="text" class="form-control" id="add_med_disp_status_system" name="add_med_disp_status_system">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="add_med_disp_status_display" name="add_med_disp_status_display">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Definition:</label>
+                            <input type="text" class="form-control" id="add_med_disp_status_definition" name="add_med_disp_status_definition">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="saveMedDispStatusBtn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="medDispStatusEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit Medications Dispense Status</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" id="edit_med_disp_status_id" name="edit_med_disp_status_id">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Code:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_status_code" name="edit_med_disp_status_code">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">System:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_status_system" name="edit_med_disp_status_system">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Display:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_status_display" name="edit_med_disp_status_display">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Definition:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_status_definition" name="edit_med_disp_status_definition">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="updateMedDispStatusBtn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<!-- Medications Dispense Performer Modal -->
+<div class="modal fade" id="medDispPerformerAddModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add Medications Dispense Performer</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Code:</label>
+                            <input type="text" class="form-control" id="add_med_disp_performer_code" name="add_med_disp_status_code">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">System:</label>
+                            <input type="text" class="form-control" id="add_med_disp_performer_system" name="add_med_disp_performer_system">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="add_med_disp_performer_display" name="add_med_disp_performer_display">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="question" class="form-control-label">Definition:</label>
+                            <input type="text" class="form-control" id="add_med_disp_performer_definition" name="add_med_disp_performer_definition">
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="saveMedDispPerformerBtn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="medDispPerformerEditModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit Medications Dispense Performer</h5>
+				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" id="edit_med_disp_performer_id" name="edit_med_disp_performer_id">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Code:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_performer_code" name="edit_med_disp_performer_code">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">System:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_performer_system" name="edit_med_disp_performer_system">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Display:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_performer_display" name="edit_med_disp_performer_display">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="question" class="form-control-label">Definition:</label>
+                                <input type="text" class="form-control" id="edit_med_disp_performer_definition" name="edit_med_disp_performer_definition">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
+                <button type="button" class="btn btn-primary" id="updateMedDispPerformerBtn"><i class="fa fa-save">&nbsp;</i> Done</button>
+            </div>
+		</div>
+	</div>
+</div>

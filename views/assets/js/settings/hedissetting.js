@@ -696,7 +696,8 @@ $(document).ready(async function () {
     "bAutoWidth": false, 
     "aoColumns" : [
       { sWidth: '8%' },
-      { sWidth: '40%' },
+      { sWidth: '8%' },
+      { sWidth: '44%' },
       { sWidth: '8%' },
       { sWidth: '8%' },
       { sWidth: '8%' },
@@ -704,6 +705,7 @@ $(document).ready(async function () {
       { sWidth: '8%' }
     ],
     "columns": [
+        { data: 'id' },
         { data: "m_id" },
         { data: 'name' },
         { data: 'ICD',
@@ -1263,7 +1265,6 @@ $(document).ready(async function () {
         });
       }
     });
-    console.log(codes);
     let entry = {
       id: document.getElementById('m_observ_id').value,
       mid: document.getElementById('m_observ_mid').value,
@@ -2580,12 +2581,13 @@ $(document).ready(async function () {
         "url": serviceUrl + "hedissetting/getnmeasure",
         "type": "GET",
     },
+    serverSide: true,
     "columns": [
         { data: "measure" },
         { data: 'id',
           render: function (data, type, row) {
             return `
-              <div idkey="`+row.measure+`">
+              <div idkey="${row.id}" data='${row.measure}'>
               <button class="btn btn-sm btn-primary editnmeasurebtn"><i class="fa fa-edit"></i> Define</button>
               <button class="btn btn-sm btn-danger deletenmeasurebtn"><i class="fa fa-trash"></i> Delete</button>
               </div>
@@ -2622,40 +2624,42 @@ $(document).ready(async function () {
 		});
   });
 
-  $(document).on("click",".editnmeasurebtn",function(){
-    $("#chosen-define-measure").html($(this).parent().parent().parent().children().eq(0).html())
-    $("#measure-define-modal").modal("show");
-  });
-
-  $(document).on("click","#definemeasuretable tr",function(){
-    let entry = {
-      variable:$("#chosen-define-measure").html(),
-      id:$(this).children().eq(0).html()
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {current: true}, 'hedissetting/measurecurrent', (xhr, err) => {
+    if (!err) {
+      var option = ``
+      var result = JSON.parse(xhr.responseText)['data']
+      result.forEach(item => {
+        option += `<option value='${item.id}'>${item.title}</option>`
+      })
+      $('#define-measure').html(option)
     }
-    swal({
-			title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      confirmButtonText: "Yes, apply it!",
-		}, function(inputValue) {
-			if (inputValue) {
-				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/applymeasure", (xhr, err) => {
-          if (!err) {
-            setTimeout( function () {
-              nmeasuretable.ajax.reload();
-            }, 1000 );
-            $("#measure-define-modal").modal("hide");
-          } else {
-            return $.growl.error({
-              message: "Action Failed"
-            });
-          }
-        });
-			}
-		});
-  });
+  })
+
+  $(document).on("click",".editnmeasurebtn",function(){
+    $("#define-infinite-measure").html($(this).parent().attr("data"))
+    $('#chosen-define-measure').val($(this).parent().attr("idkey"))
+
+    $("#measure-define-modal").modal("show")
+  })
+
+  $('#define-confirm').click(() => {
+    let entry = {
+      id: $('#chosen-define-measure').val(),
+      measure: $('#define-infinite-measure').html(),
+      measure_id: $('#define-measure').val()
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'hedissetting/definemeasure', (xhr, err) => {
+      if (!err) {
+        toastr.success('Action Succeeded!')
+        $("#measure-define-modal").modal("hide")
+        nmeasuretable.ajax.reload()
+      } else {
+        toastr.error('Action Failed!')
+        $("#measure-define-modal").modal("hide")
+        nmeasuretable.ajax.reload()
+      }
+    })
+  })
 
   //Measure Time Frame
   var mtimetable = $('#mtimetable').DataTable({
