@@ -175,38 +175,6 @@ $(document).ready(async function () {
       return toastr.info('Please turn on the Insurance');
     }
   });
-
-  $('#hedissetting-match-measure').click(async () => {
-    var formData = new FormData()
-
-    formData.append("insid", $("#insforqualityloader option:checked").val())
-    formData.append("clinicid", localStorage.getItem('chosen_clinic'))
-    formData.append("cyear", $("#hedisdate").val())
-    formData.append('qpid', $('#qualityprogramloader').val())
-
-    var qualityentry = document.getElementById('qualityfile').files.length
-
-    if (qualityentry != 0) {
-      for (let i = 0; i < qualityentry; i++) {
-        formData.append("qualityfile", document.getElementById('qualityfile').files[i])
-      }
-
-      await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/checkmeasure", (xhr, err) => {
-        if (!err) {
-          var result = JSON.parse(xhr.responseText)['data']
-          if (!result.length) {
-            toastr.success('All measures are matched!')
-          } else {
-            $('#hedis-load-not-matched').modal('show')
-          }
-        } else {
-          toastr.error('Action Failed')
-        }
-      })
-    } else {
-      return toastr.info('Please load a file')
-    }
-  })
   
   $(document).on("change","#insforqualityloader",async function(){
     insuranceid = $(this).val();
@@ -578,17 +546,6 @@ $(document).ready(async function () {
 		});
   })
 
-  sendRequestWithToken('POST', localStorage.getItem('authToken'), {current: true}, 'hedissetting/measurecurrent', (xhr, err) => {
-    if (!err) {
-      var option = ``
-      var result = JSON.parse(xhr.responseText)['data']
-      result.forEach(item => {
-        option += `<option value='${item.id}'>${item.title}</option>`
-      })
-      $('#hedis-define-measure').html(option)
-    }
-  })
-
   $(document).on("click",".hedis-edit-measure",function(){
     $("#define-measure-name").html($(this).parent().attr("data"))
     $('#chosen-hedis-measure').val($(this).parent().attr("idkey"))
@@ -613,5 +570,55 @@ $(document).ready(async function () {
         notMatchedTable.ajax.reload()
       }
     })
+  })
+
+  $('#hedissetting-match-measure').click(async () => {
+    var formData = new FormData()
+
+    formData.append("insid", $("#insforqualityloader option:checked").val())
+    formData.append("clinicid", localStorage.getItem('chosen_clinic'))
+    formData.append("cyear", $("#hedisdate").val())
+    formData.append('qpid', $('#qualityprogramloader').val())
+
+    var qualityentry = document.getElementById('qualityfile').files.length
+
+    if (qualityentry != 0) {
+      for (let i = 0; i < qualityentry; i++) {
+        formData.append("qualityfile", document.getElementById('qualityfile').files[i])
+      }
+
+      let entry = {
+        current: true,
+        clinicid: localStorage.getItem('chosen_clinic'),
+        qpid: $('#qualityprogramloader').val(),
+        insid: $("#insforqualityloader option:checked").val()
+      }
+      await sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'hedissetting/measurecurrent', (xhr, err) => {
+        if (!err) {
+          var option = ``
+          var result = JSON.parse(xhr.responseText)['data']
+          result.forEach(item => {
+            option += `<option value='${item.id}'>${item.title}</option>`
+          })
+          $('#hedis-define-measure').html(option)
+        }
+      })
+
+      await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/checkmeasure", (xhr, err) => {
+        if (!err) {
+          var result = JSON.parse(xhr.responseText)['data']
+          if (!result.length) {
+            toastr.success('All measures are matched!')
+          } else {
+            $('#hedis-load-not-matched').modal('show')
+          }
+          notMatchedTable.ajax.reload()
+        } else {
+          toastr.error('Action Failed')
+        }
+      })
+    } else {
+      return toastr.info('Please load a file')
+    }
   })
 })

@@ -1,7 +1,7 @@
 function GetInsurance(callback) {
   const authToken = localStorage.getItem('authToken');
   const requestData = {};
-  const apiUrl = 'reportBuilder/insurances';
+  const apiUrl = 'reportBuilder/getInsuranceList';
 
   sendRequestWithToken('GET', authToken, requestData, apiUrl, (xhr, err) => {
     if (!err) {
@@ -67,7 +67,7 @@ $(document).ready(function() {
   
   let hedis_quality_program_table = $('#hedis_quality_program_table').DataTable({
     ajax: {
-        url: serviceUrl + "reportBuilder/hedisQualityProgram",
+        url: serviceUrl + "reportBuilder/qualityProgram",
         type: "GET",
     },
     processing: true,
@@ -179,7 +179,7 @@ $(document).ready(function() {
           description: description,
           program_date: program_date
         }    
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/hedisQualityProgram", (xhr, err) => {
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/qualityProgram", (xhr, err) => {
             if (!err) {
               hedis_quality_program_table.ajax.reload();              
 
@@ -214,7 +214,7 @@ $(document).ready(function() {
         }
     }).then(function (result) {
         if (result.value) {
-            sendRequestWithToken('DELETE', localStorage.getItem('authToken'), {}, `reportBuilder/hedisQualityProgram/${id}`, (xhr, err) => {
+            sendRequestWithToken('DELETE', localStorage.getItem('authToken'), {}, `reportBuilder/qualityProgram/${id}`, (xhr, err) => {
             if (!err) {
               hedis_quality_program_table.ajax.reload();                
               toastr.success("Action Success");
@@ -289,7 +289,7 @@ $(document).ready(function() {
           description: description,
           program_date: program_date
         }    
-        sendRequestWithToken('PUT', localStorage.getItem('authToken'), entry, `reportBuilder/hedisQualityProgram/${id}`, (xhr, err) => {
+        sendRequestWithToken('PUT', localStorage.getItem('authToken'), entry, `reportBuilder/qualityProgram/${id}`, (xhr, err) => {
             if (!err) {                
                 hedis_quality_program_table.ajax.reload();
                 $('#hedis_quality_program_id').val('');
