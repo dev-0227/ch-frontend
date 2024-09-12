@@ -1,302 +1,464 @@
-<!-- 
-    @Measure Report Definition 
-    - Measure Cut-point
-    - Overall Quality Score
-    - Quarterly Measures
-    - Specific Incentive Type
-    @Code By Paul
--->    
 <style>
-    .tab-content i {
+    /* .tab-content i {
         color:#fff;
-    }
+    } */
     .table-responsive{
-        padding:10px;
+        padding:6px;
     }
-    .select2{
-        width: 100%!important;
-    }    
     .card-title {
         width: 600px;
     }
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.child > table {
+        width: 45% !important;
+        font-size: 15px;
+        border: 1px solid #F1F1F4;
+    }
+    .even, .odd {
+        background-color: transparent !important;
+    }
+    #measure_program_cutpoint_table th, 
+    #measure_program_cutpoint_table td {        
+        white-space: normal;
+    }
+    #measure_program_cutpoint_table th:nth-child(23), 
+    #measure_program_cutpoint_table td:nth-child(23) { 
+        width: 10%; 
+    }
+    #measure_attr_table th:nth-child(3), 
+    #measure_attr_table td:nth-child(3) { 
+        width: 5%; 
+    }
+    /* #measure_program_cutpoint_table th:nth-child(2), #measure_program_cutpoint_table td:nth-child(2) { width: 15%; } */
+    #measure_program_cutpoint_table th:nth-child(3), 
+    #measure_program_cutpoint_table td:nth-child(3) { 
+        width: 20%; 
+    }
+    #measure_program_cutpoint_table th:nth-child(14), 
+    #measure_program_cutpoint_table td:nth-child(14) { 
+        width: 8%; 
+    }
+    #measure_program_cutpoint_table th:nth-child(15), 
+    #measure_program_cutpoint_table td:nth-child(15) { 
+        width: 10%; 
+    }
+    #measure_program_cutpoint_table th:nth-child(16), 
+    #measure_program_cutpoint_table td:nth-child(16) { 
+        width: 5%; 
+    }
+    table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, 
+    table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {                            
+        background: #00A3FF !important;
+        height: 20px;
+        width: 20px;                            
+    }
+    .form-control:disabled {
+        color: #181719;
+        background-color: #fbfbfc;
+        border-color: var(--bs-gray-300);
+        opacity: 1;
+    }   
+    option:disabled {
+        color: #99A1B7;
+    }  
+
+    #specific_measure_cutpoint_table th:nth-child(17), 
+    #specific_measure_cutpoint_table td:nth-child(17) { 
+        width: 5%; 
+    }
+    #specific_measure_cutpoint_table th:nth-child(16), 
+    #specific_measure_cutpoint_table td:nth-child(16) { 
+        width: 5%; 
+    }
+    #specific_measure_cutpoint_table th:nth-child(15), 
+    #specific_measure_cutpoint_table td:nth-child(15) { 
+        width: 5%; 
+    }
+    
+    
 </style>
-<!-- ROW-1 OPEN -->
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Measure Report Definition</h3>
-            </div>
-            <div class="card-body p-6">
-                <div class="panel panel-primary">
-                    <div class="tab-menu-heading">                        
-                        <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
-                            <li class="nav-item"><a href="#cut_point" class="nav-link active" data-bs-toggle="tab">Measure Cut-point</a></li>
-                            <li class="nav-item"><a href="#overall_quality_score" class="nav-link" data-bs-toggle="tab">Overall Quality Score</a></li>
-                            <li class="nav-item"><a href="#program_overall_quality_score" class="nav-link" data-bs-toggle="tab">Program Overall Quality Score</a></li>
-                            <li class="nav-item"><a href="#quarterly_measure" class="nav-link" data-bs-toggle="tab">Quarterly Measures</a></li>
-                            <li class="nav-item"><a href="#specific_incentive_type" class="nav-link" data-bs-toggle="tab">Specific Incentive Type</a></li>
-                            <li class="nav-item"><a href="#specific_cutpoint_measure" class="nav-link" data-bs-toggle="tab">Specific Cutpoint Measure</a></li>
-                        </ul>                        
-                    </div>
-                    <div class="panel-body tabs-menu-body">
-                        <div class="tab-content">
-                            <!--Cut Point Table-->
-                            <div class="tab-pane active" id="cut_point">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6 px-6">
-                                                <div class="card-title">
-                                                    <h3 class="card-title">Measure Cut-point</h3>                                                    
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="add_cut_point" type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add</button>
-                                                    <div class="d-flex align-items-center position-relative my-1">
-                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                                          <span class="path1"></span>
-                                                          <span class="path2"></span>
-                                                        </i>
-                                                        <input id="cut_point_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search" />
-                                                    </div>
-                                                </div>
+
+<div class="row">    
+    <div class="card">
+        <!-- <div class="card-header">
+            <h2 style="margin-top: 25px;">Measure Report Definition</h2>
+        </div> -->
+        <div class="card-body p-2 pt-4">
+            <div class="panel panel-primary">
+                <div class="tab-menu-heading">                        
+                    <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                        <li class="nav-item"><a href="#cut_point" class="nav-link active" data-bs-toggle="tab">Measure Cut-point</a></li>
+                        <li class="nav-item"><a href="#overall_quality_score" class="nav-link" data-bs-toggle="tab">Overall Quality Score</a></li>
+                        <li class="nav-item"><a href="#program_overall_quality_score" class="nav-link" data-bs-toggle="tab">Program Overall Quality Score</a></li>
+                        <li class="nav-item"><a href="#quarterly_measure" class="nav-link" data-bs-toggle="tab">Quarterly Measures</a></li>
+                        <li class="nav-item"><a href="#specific_incentive_type" class="nav-link" data-bs-toggle="tab">Specific Incentive Type</a></li>
+                        <li class="nav-item"><a href="#measure_attribution" class="nav-link" data-bs-toggle="tab">Measure Attribution</a></li>
+                        <li class="nav-item"><a href="#specific_measure_cutpoint" class="nav-link" data-bs-toggle="tab">Specific Measure Cutpoint</a></li>
+                        <li class="nav-item"><a href="#measure_program_cutpoint" class="nav-link" data-bs-toggle="tab">Measure Program Cutpoint</a></li>
+                    </ul>                        
+                </div>
+                <div class="panel-body tabs-menu-body">
+                    <div class="tab-content">
+                        <!--Cut Point Table-->
+                        <div class="tab-pane active" id="cut_point">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0 pt-6 px-6">
+                                            <div class="card-title">
+                                                <h3 class="card-title">Measure Cut-point</h3>                                                    
                                             </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="cut_point_table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Display</th>
-                                                            <th scope="col">Target Rate</th>
-                                                            <th scope="col">Active</th> 
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>                                                       
-                                                    </tbody>
-                                                </table>
+                                            <div class="card-toolbar">
+                                                <button id="add_cut_point" type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add</button>
+                                                <div class="d-flex align-items-center position-relative my-1">
+                                                    <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                    <label for="cut_point_search_input"></label>
+                                                    <input id="cut_point_search_input" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-350px ps-13" placeholder="Search" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Overall Quality Score Table-->
-                            <div class="tab-pane" id="overall_quality_score">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6 px-6">
-                                                <div class="card-title">
-                                                    <h3 class="card-title ">Overall Quality Score</h3>
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="add_overall_quality_score" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add</button>                                                    
-                                                    <div class="d-flex align-items-center position-relative my-1">
-                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                                          <span class="path1"></span>
-                                                          <span class="path2"></span>
-                                                        </i>
-                                                        <input id="overall_quality_score_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="overall_quality_score_table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Display</th>
-                                                            <th scope="col">Target Rate</th> 
-                                                            <th scope="col">Active</th> 
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                             <!--Program Overall Quality Score Table-->
-                             <div class="tab-pane" id="program_overall_quality_score">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6 px-6">
-                                                <div class="card-title">
-                                                    <div class="card-title">  
-                                                        <select id="select_ins" data-hide-search="false" aria-label="Select a Insurance" data-control="select2" data-hide-search="true" data-placeholder="Select Insurance" class="form-select mb-2">
-                                                        </select>     
-                                                        <select id="select_program" data-hide-search="false" aria-label="Select a Insurance" data-control="select2" data-hide-search="true" data-placeholder="Select Program" class="form-select mb-2">
-                                                        </select>                                                     
-                                                    </div>
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="add_program_OQS" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add</button>                                                    
-                                                    <div class="d-flex align-items-center position-relative my-1">
-                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                                          <span class="path1"></span>
-                                                          <span class="path2"></span>
-                                                        </i>
-                                                        <input id="program_OQS_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="program_OQS_table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Program Name</th>
-                                                            <th scope="col">Overall Quality Score</th> 
-                                                            <th scope="col">Target Rate</th> 
-                                                            <th scope="col">PMPM Amount</th> 
-                                                            <th scope="col">Date</th> 
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Quarterly Measure Table-->
-                            <div class="tab-pane" id="quarterly_measure">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6 px-4">
-                                                <div class="card-title">
-                                                    <h3 class="card-title ">Quarterly Measure</h3>
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="add_quarterly_measure" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;">
-                                                        <i class="fa fa-plus mr-2"></i>Add
-                                                    </button>
-                                                    <div class="d-flex align-items-center position-relative my-1">
-                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                                          <span class="path1"></span>
-                                                          <span class="path2"></span>
-                                                        </i>
-                                                        <input id="quarterly_measure_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="quarterly_measure_table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Display</th>
-                                                            <th scope="col">Description</th>
-                                                            <th scope="col">Target Rate</th> 
-                                                            <th scope="col">Active</th> 
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Specific Incentive Type Table-->
-                            <div class="tab-pane" id="specific_incentive_type">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6 px-4">
-                                                <div class="card-title">
-                                                    <h3 class="card-title ">Specific Incentive Type</h3>
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="add_specific_incentive_type" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;">
-                                                        <i class="fa fa-plus mr-2"></i>Add
-                                                    </button>
-                                                    <div class="d-flex align-items-center position-relative my-1">
-                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                                          <span class="path1"></span>
-                                                          <span class="path2"></span>
-                                                        </i>
-                                                        <input id="specific_incentive_type_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="specific_incentive_type_table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Code</th>
-                                                            <th scope="col">Display</th>
-                                                            <th scope="col">Description</th> 
-                                                            <th scope="col">Formula</th> 
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Specific CutPoint Measure-->
-                            <div class="tab-pane" id="specific_cutpoint_measure">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header border-0 pt-6 px-6">
-                                                <div class="card-title">
-                                                    <div class="card-title">                                                          
-                                                        <h3 class="card-title">Specific Cutpoint Measure</h3>
-                                                    </div>
-                                                </div>
-                                                <div class="card-toolbar">
-                                                    <button id="add_specific_cutpoint_measure" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add</button>                                                    
-                                                    <div class="d-flex align-items-center position-relative my-1">
-                                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
-                                                          <span class="path1"></span>
-                                                          <span class="path2"></span>
-                                                        </i>
-                                                        <input id="specific_cutpoint_measure_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive">
-                                                <table class="table table-striped table-bordered text-nowrap w-100" id="specific_cutpoint_measure_table">
-                                                    <thead>
-                                                        <tr>                                                            
-                                                            <th scope="col">Measure Name</th>
-                                                            <th scope="col">Measure Quality Id</th>
-                                                            <th scope="col">Clinic Name</th> 
-                                                            <th scope="col">Report Name</th> 
-                                                            <th scope="col">CutPoint Score</th> 
-                                                            <th scope="col">Range</th> 
-                                                            <th scope="col">Active</th> 
-                                                            <th scope="col">Date</th> 
-                                                            <th scope="col">Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered text-nowrap w-100" id="cut_point_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Display</th>    
+                                                        <th scope="col">Active</th> 
+                                                        <th scope="col">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>                                                       
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!--Overall Quality Score Table-->
+                        <div class="tab-pane" id="overall_quality_score">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0 pt-6 px-6">
+                                            <div class="card-title">
+                                                <h3 class="card-title ">Overall Quality Score</h3>
+                                            </div>
+                                            <div class="card-toolbar">
+                                                <button id="add_overall_quality_score" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add</button>                                                    
+                                                <div class="d-flex align-items-center position-relative my-1">
+                                                    <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                    <label for="overall_quality_score_search_input">
+                                                    </label><input id="overall_quality_score_search_input" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-350px ps-13" placeholder="Search" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered text-nowrap w-100" id="overall_quality_score_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Display</th>
+                                                        <th scope="col">Target Rate</th> 
+                                                        <th scope="col">Active</th> 
+                                                        <th scope="col">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Program Overall Quality Score Table-->
+                        <div class="tab-pane" id="program_overall_quality_score">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0 pt-6 px-6">
+                                            <div class="card-title">
+                                                <div class="card-title">  
+                                                    <select id="select_ins" data-hide-search="false" aria-label="Select a Insurance" data-control="select2" data-placeholder="Select Insurance" class="form-select mb-2">
+                                                    </select>     
+                                                    <select id="select_program" data-hide-search="false" aria-label="Select a Insurance" data-control="select2" data-placeholder="Select Program" class="form-select mb-2">
+                                                    </select>                                                     
+                                                </div>
+                                            </div>
+                                            <div class="card-toolbar">
+                                                <button id="add_program_OQS" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;"><i class="fa fa-plus mr-2"></i>Add</button>                                                    
+                                                <div class="d-flex align-items-center position-relative my-1">
+                                                    <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                    <label for="program_OQS_search_input"></label>
+                                                    <input id="program_OQS_search_input" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-350px ps-13" placeholder="Search" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered text-nowrap w-100" id="program_OQS_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Program Name</th>
+                                                        <th scope="col">Overall Quality Score</th> 
+                                                        <th scope="col">Target Rate</th> 
+                                                        <th scope="col">PMPM Amount</th> 
+                                                        <th scope="col">Date</th> 
+                                                        <th scope="col">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Quarterly Measure Table-->
+                        <div class="tab-pane" id="quarterly_measure">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0 pt-6 px-4">
+                                            <div class="card-title">
+                                                <h3 class="card-title ">Quarterly Measure</h3>
+                                            </div>
+                                            <div class="card-toolbar">
+                                                <button id="add_quarterly_measure" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;">
+                                                    <i class="fa fa-plus mr-2"></i>Add
+                                                </button>
+                                                <div class="d-flex align-items-center position-relative my-1">
+                                                    <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                    <label for="quarterly_measure_search_input"></label>
+                                                    <input id="quarterly_measure_search_input" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-350px ps-13" placeholder="Search" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered text-nowrap w-100" id="quarterly_measure_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Display</th>
+                                                        <th scope="col">Description</th>
+                                                        <th scope="col">Target Rate</th> 
+                                                        <th scope="col">Active</th> 
+                                                        <th scope="col">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Specific Incentive Type Table-->
+                        <div class="tab-pane" id="specific_incentive_type">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0 pt-6 px-4">
+                                            <div class="card-title">
+                                                <h3 class="card-title ">Specific Incentive Type</h3>
+                                            </div>
+                                            <div class="card-toolbar">
+                                                <button id="add_specific_incentive_type" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px;">
+                                                    <i class="fa fa-plus mr-2"></i>Add
+                                                </button>
+                                                <div class="d-flex align-items-center position-relative my-1">
+                                                    <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                    </i>
+                                                    <label for="specific_incentive_type_search_input"></label>
+                                                    <input id="specific_incentive_type_search_input" type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-350px ps-13" placeholder="Search" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered text-nowrap w-100" id="specific_incentive_type_table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Code</th>
+                                                        <th scope="col">Display</th>
+                                                        <th scope="col">Description</th> 
+                                                        <th scope="col">Formula</th> 
+                                                        <th scope="col">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Measure Attribution Table-->
+                        <div class="tab-pane" id="measure_attribution">
+                            <div class="card">
+                                <div class="card-header border-0 pt-6 px-4">
+                                    <div class="card-title">
+                                        <h2>Measure Attribution</h2>
+                                    </div>
+                                    <div class="card-toolbar">                                                    
+                                        <div class="d-flex align-items-center position-relative my-1">
+                                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </i>
+                                            <label for="measure_attr_search_input"></label>
+                                            <input id="measure_attr_search_input" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                                        </div>                                                     
+                                        <button id="new_measure_attr_btn" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-left: 10px; margin-right: 10px; width: 120px;">
+                                            <i class="fas fa-plus mr-2"></i>Create
+                                        </button>
+                                        <button id="reload_measure_attr_btn" type="button" class="btn btn-md btn-success " data-toggle="modal" data-target=".bd-example-modal-lg" style="width: 120px;">
+                                            <i class="fa fa-refresh mr-2"></i>Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered text-nowrap w-100" id="measure_attr_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Display</th>
+                                                <th>Description</th> 
+                                                <th style="width: 5%;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Specific Measure CutPoint-->                       
+                        <div class="tab-pane" id="specific_measure_cutpoint">                          
+                            <div class="card">
+                                <div class="card-header border-0 pt-6 px-4">
+                                    <div class="card-title">
+                                        <div class="card-title">                                                          
+                                            <h3 class="card-title">Specific Measure Cutpoint</h3>
+                                        </div>
+                                    </div>                                        
+                                    <div class="card-toolbar">                                                    
+                                        <div class="d-flex align-items-center position-relative my-1">
+                                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </i>
+                                            <label for="specific_measure_cutpoint_search"></label>
+                                            <input id="specific_measure_cutpoint_search" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                                        </div>                                                     
+                                        <button id="add_specific_measure_cutpoint" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-left: 10px; margin-right: 10px; width: 120px;">
+                                            <i class="fas fa-plus mr-2"></i>Create
+                                        </button>
+                                        <button id="reload_specific_measure_cutpoint" type="button" class="btn btn-md btn-success " data-toggle="modal" data-target=".bd-example-modal-lg" style="width: 120px;">
+                                            <i class="fa fa-refresh mr-2"></i>Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive" style="cursor: pointer;">
+                                    <table class="table table-striped table-bordered text-nowrap w-100" id="specific_measure_cutpoint_table">
+                                        <thead>
+                                            <tr>                                                                                                   
+                                                <th class="desktop">Measure Name</th>
+                                                <th class="desktop">Measure Quality ID</th>
+                                                <th class="desktop">Clinic Name</th>         
+                                                <th class="desktop">Quality Program Name</th>                                                     
+                                                <th class="none">CutPoint 1 Score</th>                                                 
+                                                <th class="none">CutPoint 2 Score</th> 
+                                                <th class="none">CutPoint 3 Score</th> 
+                                                <th class="none">CutPoint 4 Score</th> 
+                                                <th class="none">CutPoint 5 Score</th>                                                 
+                                                <th class="none">Payment 1 score</th>
+                                                <th class="none">Payment 2 score</th>
+                                                <th class="none">Payment 3 score</th>
+                                                <th class="none">Payment 4 score</th>
+                                                <th class="none">Payment 5 score</th>     
+                                                <th>Active</th> 
+                                                <th >Date</th> 
+                                                <th class="desktop">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>                          
+                        </div>
+                        <!--Measure Program CutPoint-->
+                        <div class="tab-pane" id="measure_program_cutpoint">                          
+                            <div class="card">
+                                <div class="card-header border-0 pt-6 px-4">
+                                    <div class="card-title">
+                                        <div class="card-title">                                                          
+                                            <h3 class="card-title">Measure Program Cutpoint</h3>
+                                        </div>
+                                    </div>                                        
+                                    <div class="card-toolbar">                                                    
+                                        <div class="d-flex align-items-center position-relative my-1">
+                                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </i>
+                                            <label for="measure_program_cutpoint_search_input"></label>
+                                            <input id="measure_program_cutpoint_search_input" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                                        </div>                                                     
+                                        <button id="add_measure_program_cutpoint" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-left: 10px; margin-right: 10px; width: 120px;">
+                                            <i class="fas fa-plus mr-2"></i>Create
+                                        </button>
+                                        <button id="reload_measure_program_cutpoint" type="button" class="btn btn-md btn-success " data-toggle="modal" data-target=".bd-example-modal-lg" style="width: 120px;">
+                                            <i class="fa fa-refresh mr-2"></i>Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive" style="cursor: pointer;">
+                                    <table class="table table-striped table-bordered text-nowrap w-100" id="measure_program_cutpoint_table">
+                                        <thead>
+                                            <tr>                                                            
+                                                <th class="desktop">Measure Name</th>
+                                                <th class="desktop">Measure Quality ID</th>
+                                                <th class="desktop">Quality Program Name</th>                                                     
+                                                <th class="none">CutPoint 1 Score</th>                                                 
+                                                <th class="none">CutPoint 2 Score</th> 
+                                                <th class="none">CutPoint 3 Score</th> 
+                                                <th class="none">CutPoint 4 Score</th> 
+                                                <th class="none">CutPoint 5 Score</th>                                                 
+                                                <th class="none">Payment 1 score</th>
+                                                <th class="none">Payment 2 score</th>
+                                                <th class="none">Payment 3 score</th>
+                                                <th class="none">Payment 4 score</th>
+                                                <th class="none">Payment 5 score</th>     
+                                                <th>Active</th> 
+                                                <th >Date</th> 
+                                                <th class="desktop">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>                          
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div><!-- COL-END -->
+    </div>    
 </div>
-<!-- ROW-1 CLOSED -->
 
 <!-- Cut Point Modal -->
 <div class="modal fade" id="add_cut_point_modal" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -312,19 +474,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Display:</label>
+                            <label for="add_cut_point_display" class="form-control-label">Display:</label>
                             <input type="text" class="form-control" id="add_cut_point_display" name="add_cut_point_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Target Rate:</label>
-                            <input type="number"  class="form-control" id="add_cut_point_target_rate" name="add_cut_point_target_rate" step="any">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">Active:</label>
+                            <label for="add_cut_point_active" class="form-control-label">Active:</label>
                             <select id="add_cut_point_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
                                 <option value="" disabled selected>Select</option>
                                 <option value="Enable">Enable</option>
@@ -356,18 +512,12 @@
                         <input type="hidden" id="edit_cut_point_id" name="edit_cut_point_id" />
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="question" class="form-control-label">Display:</label>
+                                <label for="edit_cut_point_display" class="form-control-label">Display:</label>
                                 <input type="text" class="form-control" id="edit_cut_point_display" name="edit_cut_point_display">
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="question" class="form-control-label">Target Rate:</label>
-                                <input type="number" class="form-control" id="edit_cut_point_target_rate" name="edit_cut_point_target_rate" step="any">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="question" class="form-control-label">Active:</label>
+                            <label for="edit_cut_point_active" class="form-control-label">Active:</label>
                             <select id="edit_cut_point_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
                                 <option value="Enable">Enable</option>
                                 <option value="Disable">Disable</option>
@@ -398,19 +548,19 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Display:</label>
+                            <label for="add_overall_quality_score_display" class="form-control-label">Display:</label>
                             <input type="text" class="form-control" id="add_overall_quality_score_display" name="add_overall_quality_score_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Target Rate:</label>
-                            <input type="number"  class="form-control" id="add_overall_quality_score_target_rate" name="add_overall_quality_score_target_rate" step="any">
+                            <label for="add_overall_quality_score_target_rate" class="form-control-label">Target Rate:</label>
+                            <input type="number" class="form-control" id="add_overall_quality_score_target_rate" name="add_overall_quality_score_target_rate" step="any">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Active:</label>
+                            <label for="add_overall_quality_score_active" class="form-control-label">Active:</label>
                             <select id="add_overall_quality_score_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
                                 <option value="" disabled selected>Select</option>
                                 <option value="Enable">Enable</option>
@@ -441,19 +591,19 @@
                     <input type="hidden" id="edit_overall_quality_score_id" name="edit_overall_quality_score_id" />
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Display:</label>
+                            <label for="edit_overall_quality_score_display" class="form-control-label">Display:</label>
                             <input type="text" class="form-control" id="edit_overall_quality_score_display" name="edit_overall_quality_score_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Target Rate:</label>
+                            <label for="edit_overall_quality_score_target_rate" class="form-control-label">Target Rate:</label>
                             <input type="number"  class="form-control" id="edit_overall_quality_score_target_rate" name="edit_overall_quality_score_target_rate" step="any">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Active:</label>
+                            <label for="edit_overall_quality_score_active" class="form-control-label">Active:</label>
                             <select id="edit_overall_quality_score_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
                                 <option value="" disabled selected>Select</option>
                                 <option value="Enable">Enable</option>
@@ -485,17 +635,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Insurance Name:</label>
-                            <!-- <input type="text" class="form-control" id="add_OQS_program_ins_name" name="add_OQS_program_ins_name" readonly> -->
-                           
+                            <label for="add_OQS_program_ins_name" class="form-control-label">Insurance Name:</label>
                             <select id="add_OQS_program_ins_name" data-hide-search="true" data-control="select2" data-placeholder="Select Insurance" class="form-select mb-2">
                             </select> 
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Program Name:</label>
-                            <!-- <input type="text" class="form-control" id="add_OQS_program_name" name="add_OQS_program_name" readonly> -->
+                            <label for="add_OQS_program_name" class="form-control-label">Program Name:</label>
                             <select id="add_OQS_program_name" data-hide-search="true" data-control="select2" data-placeholder="Select Insurance" class="form-select mb-2">
                                 <option value="0">Select Program</option>
                             </select> 
@@ -503,28 +650,27 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Overall Quality Score:</label>
-                            <!-- <input type="number"  class="form-control" id="add_OQS_overall_quality_score" name="add_OQS_overall_quality_score" step="any"> -->
+                            <label for="add_OQS_overall_quality_score" class="form-control-label">Overall Quality Score:</label>
                             <select class="form-control form-select-solid " data-control="select2" id="add_OQS_overall_quality_score">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Target Rate:</label>
+                            <label for="add_OQS_target_rate" class="form-control-label">Target Rate:</label>
                             <input type="number"  class="form-control" id="add_OQS_target_rate" name="add_OQS_target_rate" step="any" readonly>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">PMPM Amount:</label>
+                            <label for="add_OQS_amount" class="form-control-label">PMPM Amount:</label>
                             <input type="number"  class="form-control" id="add_OQS_amount" name="add_OQS_amount" step="any">
                             
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Date:</label>
+                            <label for="add_OQS_date" class="form-control-label">Date:</label>
                             <input type="date"  class="form-control" id="add_OQS_date" name="add_OQS_date">
                         </div>
                     </div>
@@ -551,40 +697,39 @@
                     <input type="hidden" class="form-control" id="edit_OQS_id" name="edit_OQS_id">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Insurance Name:</label>
+                            <label for="edit_OQS_program_ins_name" class="form-control-label">Insurance Name:</label>
                             <input type="text" class="form-control" id="edit_OQS_program_ins_name" name="edit_OQS_program_ins_name" readonly>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Program Name:</label>
+                            <label for="edit_OQS_program_name" class="form-control-label">Program Name:</label>
                             <input type="text" class="form-control" id="edit_OQS_program_name" name="edit_OQS_program_name">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Overall Quality Score:</label>
-                            <!-- <input type="number"  class="form-control" id="add_OQS_overall_quality_score" name="add_OQS_overall_quality_score" step="any"> -->
+                            <label for="edit_OQS_overall_quality_score" class="form-control-label">Overall Quality Score:</label>
                             <select class="form-control form-select-solid " data-control="select2" id="edit_OQS_overall_quality_score">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Target Rate:</label>
+                            <label for="edit_OQS_target_rate" class="form-control-label">Target Rate:</label>
                             <input type="number"  class="form-control" id="edit_OQS_target_rate" name="edit_OQS_target_rate" step="any" readonly>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">PMPM Amount:</label>
+                            <label for="edit_OQS_amount" class="form-control-label">PMPM Amount:</label>
                             <input type="number"  class="form-control" id="edit_OQS_amount" name="edit_OQS_amount" step="any">
                             
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Date:</label>
+                            <label for="edit_OQS_date" class="form-control-label">Date:</label>
                             <input type="date"  class="form-control" id="edit_OQS_date" name="edit_OQS_date">
                         </div>
                     </div>
@@ -612,25 +757,25 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Display:</label>
+                            <label for="add_quarterly_measure_display" class="form-control-label">Display:</label>
                             <input type="text" class="form-control" id="add_quarterly_measure_display" name="add_quarterly_measure_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Description:</label>
+                            <label for="add_quarterly_measure_description" class="form-control-label">Description:</label>
                             <input type="number"  class="form-control" id="add_quarterly_measure_description" name="add_quarterly_measure_description" step="any">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Target Rate:</label>
+                            <label for="add_quarterly_measure_target_rate" class="form-control-label">Target Rate:</label>
                             <input type="number"  class="form-control" id="add_quarterly_measure_target_rate" name="add_quarterly_measure_target_rate" step="any">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Active:</label>
+                            <label for="add_quarterly_measure_active" class="form-control-label">Active:</label>
                             <select id="add_quarterly_measure_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
                                 <option value="" disabled selected>Select</option>
                                 <option value="Enable">Enable</option>
@@ -661,25 +806,25 @@
                     <input type="hidden" id="edit_quarterly_measure_id" name="edit_quarterly_measure_id" />
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Display:</label>
+                            <label for="edit_quarterly_measure_display" class="form-control-label">Display:</label>
                             <input type="text" class="form-control" id="edit_quarterly_measure_display" name="edit_quarterly_measure_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Description:</label>
+                            <label for="edit_quarterly_measure_description" class="form-control-label">Description:</label>
                             <input type="number"  class="form-control" id="edit_quarterly_measure_description" name="edit_quarterly_measure_description" step="any">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Target Rate:</label>
+                            <label for="edit_quarterly_measure_target_rate" class="form-control-label">Target Rate:</label>
                             <input type="number"  class="form-control" id="edit_quarterly_measure_target_rate" name="edit_quarterly_measure_target_rate" step="any">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Active:</label>
+                            <label for="edit_quarterly_measure_active" class="form-control-label">Active:</label>
                             <select id="edit_quarterly_measure_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
                                 <option value="" disabled selected>Select</option>
                                 <option value="Enable">Enable</option>
@@ -711,25 +856,25 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Code:</label>
+                            <label for="add_specific_incentive_type_code" class="form-control-label">Code:</label>
                             <input type="text" class="form-control" id="add_specific_incentive_type_code" name="add_specific_incentive_type_code">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Display:</label>
+                            <label for="add_specific_incentive_type_display" class="form-control-label">Display:</label>
                             <input type="text" class="form-control" id="add_specific_incentive_type_display" name="add_specific_incentive_type_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Description:</label>
+                            <label for="add_specific_incentive_type_description" class="form-control-label">Description:</label>
                             <input type="text" class="form-control" id="add_specific_incentive_type_description" name="add_specific_incentive_type_description">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Formula:</label>
+                            <label for="add_specific_incentive_type_formula" class="form-control-label">Formula:</label>
                             <input type="text" class="form-control" id="add_specific_incentive_type_formula" name="add_specific_incentive_type_formula">
                         </div>
                     </div>                    
@@ -756,25 +901,25 @@
                     <input type="hidden" id="edit_specific_incentive_type_id" name="edit_specific_incentive_type_id" />
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Code:</label>
+                            <label for="edit_specific_incentive_type_code" class="form-control-label">Code:</label>
                             <input type="text" class="form-control" id="edit_specific_incentive_type_code" name="edit_specific_incentive_type_code">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Display:</label>
+                            <label for="edit_specific_incentive_type_display" class="form-control-label">Display:</label>
                             <input type="text" class="form-control" id="edit_specific_incentive_type_display" name="edit_specific_incentive_type_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Description:</label>
+                            <label for="edit_specific_incentive_type_description" class="form-control-label">Description:</label>
                             <input type="text" class="form-control" id="edit_specific_incentive_type_description" name="edit_specific_incentive_type_description">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Formula:</label>
+                            <label for="edit_specific_incentive_type_formula" class="form-control-label">Formula:</label>
                             <input type="text" class="form-control" id="edit_specific_incentive_type_formula" name="edit_specific_incentive_type_formula">
                         </div>
                     </div>                    
@@ -788,158 +933,854 @@
 	</div>
 </div>
 
-<!-- Specific CutPoint Measure Modal -->
-<div class="modal fade" id="add_specific_cutpoint_measure_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+
+<!-- Measure Attribution-->
+<div class="modal fade" id="new_measure_attr_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Add Specific CutPoint Measure</h5>
-				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-                </div>
+				<h5 class="modal-title" id="example-Modal3">Create New [Measure Attribution]</h5>
 			</div>
 			<div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Measure Name:</label>
-                            <select id="add_specific_cutpoint_measure_name" data-hide-search="false" aria-label="Select Measure Name" data-control="select2" data-placeholder="Select Measure Name" class="form-select mb-2">
-                            </select> 
+                            <label for="new_measure_attr_display" class="form-control-label">Display:</label>
+                            <input type="text" class="form-control" id="new_measure_attr_display" name="new_measure_attr_display">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Measure Quality Id:</label>
-                            <input type="text"  class="form-control" id="add_specific_cutpoint_measure_quality_id" name="add_specific_cutpoint_measure_quality_id">
+                            <label for="new_measure_attr_desc" class="form-control-label">Description:</label>
+                            <input type="text" class="form-control" id="new_measure_attr_desc" name="new_measure_attr_desc">
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">Clinic Name:</label>
-                            <select id="add_specific_cutpoint_measure_clinic" data-hide-search="false" aria-label="Select Clinic Name" data-control="select2" data-placeholder="Select Clinic Name" class="form-select mb-2">
-                            </select>                             
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">Report Name:</label>
-                            <select id="add_specific_cutpoint_measure_report" data-hide-search="false" aria-label="Select Report Name" data-control="select2" data-placeholder="Select Report Name" class="form-select mb-2">
-                            </select> 
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">CutPoint Name:</label>
-                            <select id="add_specific_cutpoint_measure_cutpoint" data-hide-search="false" aria-label="Select Cutpoint Name" data-control="select2" data-placeholder="Select Cutpoint Name" class="form-select mb-2">
-                            </select> 
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">Range:</label>
-                            <input type="number"  class="form-control" id="add_specific_cutpoint_measure_range" name="add_specific_cutpoint_measure_range" step="any">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">Active:</label>
-                            <select id="add_specific_cutpoint_measure_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
-                                <option value="" disabled selected>Select</option>
-                                <option value="Enable">Enable</option>
-                                <option value="Disable">Disable</option>
-                            </select>                              
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">Date:</label>
-                            <input type="date"  class="form-control" id="add_specific_cutpoint_measure_date" name="add_specific_cutpoint_measure_date">
-                        </div>
-                    </div>
+                    </div>                    
                 </div>
 			</div>
 			<div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="save_specific_cutpoint_measure"><i class="fa fa-save">&nbsp;</i> Done</button>
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close fs-1">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="new_measure_attr" style="width: 130px;"><i class="fa fa-save fs-1">&nbsp;</i> Save</button>
             </div>
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="edit_specific_cutpoint_measure_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="edit_measure_attr_modal" tabindex="-1" role="dialog"  aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="example-Modal3">Edit Specific CutPoint Measure</h5>
+				<h5 class="modal-title" id="example-Modal3">Edit Measure Attribution</h5>
 				<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
                     <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
                 </div>
 			</div>
 			<div class="modal-body">
                 <div class="row">
-                    <input type="hidden" id="edit_specific_cutpoint_measure_id" name="edit_specific_cutpoint_measure_id">
-                    <div class="col-md-12">
+                    <div class="row">
+                        <input type="hidden" id="edit_measure_attr_id" name="edit_measure_attr_id" />
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="edit_measure_attr_display" class="form-control-label">Display:</label>
+                                <input type="text" class="form-control" id="edit_measure_attr_display" name="edit_measure_attr_display">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="edit_measure_attr_desc" class="form-control-label">Description:</label>
+                                <input type="text" class="form-control" id="edit_measure_attr_desc" name="edit_measure_attr_desc">
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="update_measure_attr" style="width: 130px;"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<!-- Specific Measure Cutpoint Modal -->
+<div class="modal fade" id="add_specific_measure_cutpoint_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Create Specific Measure Cutpoint</h5>			
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">                            
+                            <label for="add_specific_measure_cutpoint_name" class="form-control-label">Measure:</label>
+                            <input type="hidden" class="form-control" id="add_specific_measure_cutpoint_name_id" name="add_specific_measure_cutpoint_name_id">
+                            <input type="text" class="form-control border-0" id="add_specific_measure_cutpoint_name" name="add_specific_measure_cutpoint_name" disabled>
+                        </div>
+                    </div>
+                    <div class="col-2">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Measure Name:</label>
-                            <select id="edit_specific_cutpoint_measure_name" data-hide-search="false" aria-label="Select Measure Name" data-control="select2" data-placeholder="Select Measure Name" class="form-select mb-2">
+                            <label for="add_specific_measure_cutpoint_quality_id" class="form-control-label">Measure Quality Id:</label>
+                            <input type="text" class="form-control border-0" id="add_specific_measure_cutpoint_quality_id" name="add_specific_measure_cutpoint_quality_id" disabled>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_select" class="form-control-label"></label>
+                            <button type="button" class="btn btn-primary" id="add_specific_measure_cutpoint_select" style="width: 100%;">Select Measure Name</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_clinic" class="form-control-label">Clinic Name:</label>
+                            <select id="add_specific_measure_cutpoint_clinic" data-placeholder="Select Clinic Name" class="form-select">
+                            </select>                             
+                        </div>
+                    </div>            
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_insurance_name" class="form-control-label">Insurance Name:</label>
+                            <select id="add_insurance_name" class="form-select mb-2" >
+                            </select> 
+                        </div>
+                    </div>        
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_report" class="form-control-label">Quality Program Name:</label>
+                            <select id="add_specific_measure_cutpoint_report" data-placeholder="Select Clinic Name" class="form-select">
+                            </select> 
+                        </div>
+                    </div>                                       
+                </div>
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_1" class="form-control-label">CutPoint 1 Name:</label>
+                            <select id="add_specific_measure_cutpoint_1" class="form-select mb-2">
                             </select> 
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-4">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Measure Quality Id:</label>
-                            <input type="text"  class="form-control" id="edit_specific_cutpoint_measure_quality_id" name="edit_specific_cutpoint_measure_quality_id">
+                            <label for="add_specific_measure_cutpoint_1_range" class="form-control-label">Cutpoint 1 Range:</label>
+                            <input type="number" class="form-control" id="add_specific_measure_cutpoint_1_range" name="add_specific_measure_cutpoint_1_range" step="any">
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-4">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Clinic Name:</label>
-                            <select id="edit_specific_cutpoint_measure_clinic" data-hide-search="false" aria-label="Select Clinic Name" data-control="select2" data-placeholder="Select Clinic Name" class="form-select mb-2">
-                            </select> 
-                            
+                            <label for="add_specific_measure_payment_1_score" class="form-control-label">Payment 1 Score:</label>
+                            <input type="number" class="form-control" id="add_specific_measure_payment_1_score" name="add_specific_measure_payment_1_score" step="any">
                         </div>
                     </div>
-                    <div class="col-md-12">
+                </div>
+                <div class="row">                    
+                    <div class="col-4">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Report Name:</label>
-                            <select id="edit_specific_cutpoint_measure_report" data-hide-search="false" aria-label="Select Report Name" data-control="select2" data-placeholder="Select Report Name" class="form-select mb-2">
-                            </select> 
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="question" class="form-control-label">CutPoint Name:</label>
-                            <select id="edit_specific_cutpoint_measure_cutpoint" data-hide-search="false" aria-label="Select Cutpoint Name" data-control="select2" data-placeholder="Select Cutpoint Name" class="form-select mb-2">
+                            <label for="add_specific_measure_cutpoint_2" class="form-control-label">CutPoint 2 Name:</label>
+                            <select id="add_specific_measure_cutpoint_2" class="form-select mb-2">
                             </select> 
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-4">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Range:</label>
-                            <input type="number"  class="form-control" id="edit_specific_cutpoint_measure_range" name="add_specific_cutpoint_measure_range" step="any">
+                            <label for="add_specific_measure_cutpoint_2_range" class="form-control-label">Cutpoint 2 Range:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_cutpoint_2_range" name="add_specific_measure_cutpoint_2_range" step="any">
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-4">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Active:</label>
-                            <select id="edit_specific_cutpoint_measure_active" data-control="select2" data-hide-search="true" data-placeholder="Select" class="form-select mb-2">
-                                <option value="" disabled selected>Select</option>
+                            <label for="add_specific_measure_payment_2_score" class="form-control-label">Payment 2 Score:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_payment_2_score" name="add_specific_measure_payment_2_score" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_3" class="form-control-label">CutPoint 3 Name:</label>
+                            <select id="add_specific_measure_cutpoint_3" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_3_range" class="form-control-label">Cutpoint 3 Range:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_cutpoint_3_range" name="add_specific_measure_cutpoint_3_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_payment_3_score" class="form-control-label">Payment 3 Score:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_payment_3_score" name="add_specific_measure_payment_3_score" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_4" class="form-control-label">CutPoint 4 Name:</label>
+                            <select id="add_specific_measure_cutpoint_4" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_4_range" class="form-control-label">Cutpoint 4 Range:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_cutpoint_4_range" name="add_specific_measure_cutpoint_4_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_payment_4_score" class="form-control-label">Payment 4 Score:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_payment_4_score" name="add_specific_measure_payment_4_score" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_5" class="form-control-label">CutPoint 5 Name:</label>
+                            <select id="add_specific_measure_cutpoint_5" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_5_range" class="form-control-label">Cutpoint 5 Range:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_cutpoint_5_range" name="add_specific_measure_cutpoint_5_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_payment_5_score" class="form-control-label">Payment 5 Score:</label>
+                            <input type="number"  class="form-control" id="add_specific_measure_payment_5_score" name="add_specific_measure_payment_5_score" step="any">
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">   
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_specific_measure_cutpoint_active" class="form-control-label">Active:</label>
+                            <select id="add_specific_measure_cutpoint_active" class="form-select mb-2">
+                                <option value="" disabled selected>Select Active</option>
                                 <option value="Enable">Enable</option>
                                 <option value="Disable">Disable</option>
                             </select>                              
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-4">
                         <div class="form-group">
-                            <label for="question" class="form-control-label">Date:</label>
-                            <input type="date"  class="form-control" id="edit_specific_cutpoint_measure_date" name="add_specific_cutpoint_measure_date">
+                            <label for="add_specific_measure_cutpoint_date" class="form-control-label">Date:</label>
+                            <input type="date"  class="form-control" id="add_specific_measure_cutpoint_date" name="add_specific_measure_cutpoint_date">
                         </div>
-                    </div>
-                </div>
+                    </div>               
+                </div>                
 			</div>
 			<div class="modal-footer">
-                <button type="button" class="btn btn-info" data-bs-dismiss="modal"><i class="fa fa-close">&nbsp;</i> Close</button>
-                <button type="button" class="btn btn-primary" id="update_specific_cutpoint_measure"><i class="fa fa-save">&nbsp;</i> Done</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px; margin-right: 10px;"><i class="fa fa-close fs-2">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="save_specific_measure_cutpoint" style="width: 130px;"><i class="fa fa-save fs-2">&nbsp;</i> Save</button>
             </div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="edit_specific_measure_cutpoint_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Update Specific Measure Cutpoint</h5>			
+			</div>
+			<div class="modal-body">
+                <input type="hidden" class="form-control" id="edit_specific_measure_cutpoint_id" name="edit_specific_measure_cutpoint_id">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group">                            
+                            <label for="edit_specific_measure_cutpoint_name" class="form-control-label">Measure:</label>
+                            <input type="hidden" class="form-control" id="edit_specific_measure_cutpoint_name_id" name="edit_specific_measure_cutpoint_name_id">
+                            <input type="text" class="form-control border-0" id="edit_specific_measure_cutpoint_name" name="edit_specific_measure_cutpoint_name" disabled>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_quality_id" class="form-control-label">Measure Quality Id:</label>
+                            <input type="text" class="form-control border-0" id="edit_specific_measure_cutpoint_quality_id" name="edit_specific_measure_cutpoint_quality_id" disabled>
+                        </div>
+                    </div>
+                    <!-- <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_select" class="form-control-label"></label>
+                            <button type="button" class="btn btn-primary" id="edit_specific_measure_cutpoint_select" style="width: 100%;">Select Measure Name</button>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_clinic" class="form-control-label">Clinic Name:</label>
+                            <select id="edit_specific_measure_cutpoint_clinic" data-placeholder="Select Clinic Name" class="form-select">
+                            </select>                             
+                        </div>
+                    </div>            
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_insurance_name" class="form-control-label">Insurance Name:</label>
+                            <select id="edit_insurance_name" class="form-select mb-2" data-placeholder="Select Insurance Name">
+                            </select> 
+                        </div>
+                    </div>        
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_report" class="form-control-label">Quality Program Name:</label>
+                            <select id="edit_specific_measure_cutpoint_report" data-placeholder="Select Clinic Name" class="form-select">
+                            </select> 
+                        </div>
+                    </div>                                       
+                </div>
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_1" class="form-control-label">CutPoint 1 Name:</label>
+                            <select id="edit_specific_measure_cutpoint_1" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_1_range" class="form-control-label">Cutpoint 1 Range:</label>
+                            <input type="number" class="form-control" id="edit_specific_measure_cutpoint_1_range" name="edit_specific_measure_cutpoint_1_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_payment_1_score" class="form-control-label">Payment 1 Score:</label>
+                            <input type="number" class="form-control" id="edit_specific_measure_payment_1_score" name="edit_specific_measure_payment_1_score" step="any">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_2" class="form-control-label">CutPoint 2 Name:</label>
+                            <select id="edit_specific_measure_cutpoint_2" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_2_range" class="form-control-label">Cutpoint 2 Range:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_cutpoint_2_range" name="edit_specific_measure_cutpoint_2_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_payment_2_score" class="form-control-label">Payment 2 Score:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_payment_2_score" name="edit_specific_measure_payment_2_score" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_3" class="form-control-label">CutPoint 3 Name:</label>
+                            <select id="edit_specific_measure_cutpoint_3" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_3_range" class="form-control-label">Cutpoint 3 Range:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_cutpoint_3_range" name="edit_specific_measure_cutpoint_3_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_payment_3_score" class="form-control-label">Payment 3 Score:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_payment_3_score" name="edit_specific_measure_payment_3_score" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_4" class="form-control-label">CutPoint 4 Name:</label>
+                            <select id="edit_specific_measure_cutpoint_4" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_4_range" class="form-control-label">Cutpoint 4 Range:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_cutpoint_4_range" name="edit_specific_measure_cutpoint_4_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_payment_4_score" class="form-control-label">Payment 4 Score:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_payment_4_score" name="edit_specific_measure_payment_4_score" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_5" class="form-control-label">CutPoint 5 Name:</label>
+                            <select id="edit_specific_measure_cutpoint_5" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_5_range" class="form-control-label">Cutpoint 5 Range:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_cutpoint_5_range" name="edit_specific_measure_cutpoint_5_range" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_payment_5_score" class="form-control-label">Payment 5 Score:</label>
+                            <input type="number"  class="form-control" id="edit_specific_measure_payment_5_score" name="edit_specific_measure_payment_5_score" step="any">
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">   
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_active" class="form-control-label">Active:</label>
+                            <select id="edit_specific_measure_cutpoint_active" class="form-select mb-2">
+                                <option value="" disabled selected>Select Active</option>
+                                <option value="Enable">Enable</option>
+                                <option value="Disable">Disable</option>
+                            </select>                              
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_specific_measure_cutpoint_date" class="form-control-label">Date:</label>
+                            <input type="date"  class="form-control" id="edit_specific_measure_cutpoint_date" name="edit_specific_measure_cutpoint_date">
+                        </div>
+                    </div>               
+                </div>                
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px; margin-right: 10px;"><i class="fa fa-close fs-2">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="update_specific_measure_cutpoint" style="width: 130px;"><i class="fa fa-save fs-2">&nbsp;</i> Save</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<!-- Measure Program Cutpoint Modal -->
+<div class="modal fade" id="add_measure_program_cutpoint_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Create Measure Program Cutpoint</h5>			
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">                            
+                            <label for="add_measure_program_cutpoint_name" class="form-control-label">Measure:</label>
+                            <input type="hidden" class="form-control" id="add_measure_program_cutpoint_name_id" name="add_measure_program_cutpoint_name_id">
+                            <input type="text" class="form-control border-0" id="add_measure_program_cutpoint_name" name="add_measure_program_cutpoint_name" disabled>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_quality_id" class="form-control-label">Measure Quality Id:</label>
+                            <input type="text" class="form-control border-0" id="add_measure_program_cutpoint_quality_id" name="add_measure_program_cutpoint_quality_id" disabled>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_select" class="form-control-label"></label>
+                            <button type="button" class="btn btn-primary" id="add_measure_program_cutpoint_select" style="width: 100%;">Select Measure Name</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">                  
+                    <div class="col-8">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_report" class="form-control-label">Quality Program Name:</label>
+                            <select id="add_measure_program_cutpoint_report" class="form-select mb-2" >
+                            </select> 
+                        </div>
+                    </div>                   
+                </div>
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_1" class="form-control-label">CutPoint 1 Name:</label>
+                            <select id="add_measure_program_cutpoint_1" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_range_1" class="form-control-label">Cutpoint 1 Range:</label>
+                            <input type="number" class="form-control" id="add_measure_program_cutpoint_range_1" name="add_measure_program_cutpoint_range_1" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_payment_1" class="form-control-label">Payment 1 Score:</label>
+                            <input type="number" class="form-control" id="add_measure_program_cutpoint_payment_1" name="add_measure_program_cutpoint_payment_1" step="any">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_2" class="form-control-label">CutPoint 2 Name:</label>
+                            <select id="add_measure_program_cutpoint_2" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_range_2" class="form-control-label">Cutpoint 2 Range:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_range_2" name="add_measure_program_cutpoint_range_2" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_payment_2" class="form-control-label">Payment 2 Score:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_payment_2" name="add_measure_program_cutpoint_payment_2" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_3" class="form-control-label">CutPoint 3 Name:</label>
+                            <select id="add_measure_program_cutpoint_3" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_range_3" class="form-control-label">Cutpoint 3 Range:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_range_3" name="add_measure_program_cutpoint_range_3" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_payment_3" class="form-control-label">Payment 3 Score:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_payment_3" name="add_measure_program_cutpoint_payment_3" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_4" class="form-control-label">CutPoint 4 Name:</label>
+                            <select id="add_measure_program_cutpoint_4" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_range_4" class="form-control-label">Cutpoint 4 Range:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_range_4" name="add_measure_program_cutpoint_range_4" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_payment_4" class="form-control-label">Payment 4 Score:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_payment_4" name="add_measure_program_cutpoint_payment_4" step="any">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                    
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_5" class="form-control-label">CutPoint 5 Name:</label>
+                            <select id="add_measure_program_cutpoint_5" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_range_5" class="form-control-label">Cutpoint 5 Range:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_range_5" name="add_measure_program_cutpoint_range_5" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_payment_4" class="form-control-label">Payment 5 Score:</label>
+                            <input type="number"  class="form-control" id="add_measure_program_cutpoint_payment_5" name="add_measure_program_cutpoint_payment_5" step="any">
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">   
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_active" class="form-control-label">Active:</label>
+                            <select id="add_measure_program_cutpoint_active" class="form-select mb-2">
+                                <option value="" disabled selected>Select Active</option>
+                                <option value="Enable">Enable</option>
+                                <option value="Disable">Disable</option>
+                            </select>                              
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="add_measure_program_cutpoint_date" class="form-control-label">Date:</label>
+                            <input type="date"  class="form-control" id="add_measure_program_cutpoint_date" name="add_measure_program_cutpoint_date">
+                        </div>
+                    </div>               
+                </div>                
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px; margin-right: 10px;"><i class="fa fa-close fs-2">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="save_measure_program_cutpoint" style="width: 130px;"><i class="fa fa-save fs-2">&nbsp;</i> Save</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="edit_measure_program_cutpoint_modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Edit Measure Program Cutpoint</h5>
+			</div>
+			<div class="modal-body">                
+                <input type="hidden" class="form-control" id="edit_measure_program_cutpoint_id" name="edit_measure_program_cutpoint_id">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">                            
+                            <label for="edit_measure_program_cutpoint_name" class="form-control-label">Measure:</label>
+                            <input type="hidden" class="form-control" id="edit_measure_program_cutpoint_name_id" name="edit_measure_program_cutpoint_name_id">
+                            <input type="text" class="form-control border-0" id="edit_measure_program_cutpoint_name" name="edit_measure_program_cutpoint_name" disabled>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_quality_id" class="form-control-label">Measure Quality Id:</label>
+                            <input type="text" class="form-control border-0" id="edit_measure_program_cutpoint_quality_id" name="edit_measure_program_cutpoint_quality_id" disabled>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_select" class="form-control-label"></label>
+                            <button type="button" class="btn btn-primary" id="edit_measure_program_cutpoint_select" style="width: 100%;">Select Measure Name</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_report" class="form-control-label">Quality Program Name:</label>
+                            <select id="edit_measure_program_cutpoint_report" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_1" class="form-control-label">CutPoint 1 Name:</label>
+                            <select id="edit_measure_program_cutpoint_1" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_range_1" class="form-control-label">CutPoint 1 Range:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_range_1" name="edit_measure_program_cutpoint_range_1" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_payment_1" class="form-control-label">Payment 1 Score:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_payment_1" name="edit_measure_program_cutpoint_payment_1" step="any">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_2" class="form-control-label">CutPoint 2 Name:</label>
+                            <select id="edit_measure_program_cutpoint_2" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_range_2" class="form-control-label">CutPoint 2 Range:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_range_2" name="edit_measure_program_cutpoint_range_1" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_payment_2" class="form-control-label">Payment 2 Score:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_payment_2" name="edit_measure_program_cutpoint_payment_2" step="any">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_3" class="form-control-label">CutPoint 3 Name:</label>
+                            <select id="edit_measure_program_cutpoint_3" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_range_3" class="form-control-label">CutPoint 3 Range:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_range_3" name="edit_measure_program_cutpoint_range_3" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_payment_3" class="form-control-label">Payment 3 Score:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_payment_3" name="edit_measure_program_cutpoint_payment_3" step="any">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_4" class="form-control-label">CutPoint 4 Name:</label>
+                            <select id="edit_measure_program_cutpoint_4" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_range_4" class="form-control-label">CutPoint 4 Range:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_range_4" name="edit_measure_program_cutpoint_range_4" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_payment_4" class="form-control-label">Payment 4 Score:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_payment_4" name="edit_measure_program_cutpoint_payment_4" step="any">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_5" class="form-control-label">CutPoint 5 Name:</label>
+                            <select id="edit_measure_program_cutpoint_5" class="form-select mb-2">
+                            </select> 
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_range_5" class="form-control-label">CutPoint 5 Range:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_range_5" name="edit_measure_program_cutpoint_range_5" step="any">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_payment_5" class="form-control-label">Payment 5 Score:</label>
+                            <input type="number" class="form-control" id="edit_measure_program_cutpoint_payment_5" name="edit_measure_program_cutpoint_payment_5" step="any">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">                                                           
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_active" class="form-control-label">Active:</label>
+                            <select id="edit_measure_program_cutpoint_active" class="form-select mb-2">
+                                <option value="" disabled selected>Select Active</option>
+                                <option value="Enable">Enable</option>
+                                <option value="Disable">Disable</option>
+                            </select>                              
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="edit_measure_program_cutpoint_date" class="form-control-label">Date:</label>
+                            <input type="date" class="form-control" id="edit_measure_program_cutpoint_date" name="edit_measure_program_cutpoint_date">
+                        </div>
+                    </div>
+                </div> 
+			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px; margin-right: 10px;"><i class="fa fa-close fs-2">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="update_measure_program_cutpoint" style="width: 130px;"><i class="fa fa-save fs-2">&nbsp;</i> Save</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<!-- Select Measure Name-->
+<div class="modal fade" id="select_measure_name_modal" tabindex="-2" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-xl" role="document">
+	  <div class="modal-content">
+		<div class="modal-body pt-6">
+            <div class="card" style="box-shadow: none;">
+                <div class="card-header border-0 px-4">
+                    <div class="card-title">
+                        <div class="card-title">                                                          
+                            <h3 class="card-title">Measure List</h3>
+                        </div>
+                    </div>
+                    <div class="card-toolbar">
+                        <div class="d-flex align-items-center position-relative my-1">
+                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                            <input id="measure_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control w-350px ps-13"  placeholder="Search" />
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered text-nowrap w-100" id="measure_table">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Quality ID</th>
+                                <th scope="col">Measure Name</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>              
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px; margin-right: 10px;"><i class="fa fa-close fs-2">&nbsp;</i> Discard</button>
+            <button type="button" class="btn btn-primary" id="measure_select_btn" style="width: 130px;"><i class="fa fa-save fs-2">&nbsp;</i> Select</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Loading Modal-->
+<div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered .modal-sm" role="document" style="width: 170px;">
+        <div class="modal-content" style="background: white; border: none; box-shadow: none;">
+            <div class="modal-body text-center">                
+                  <div class="spinner-grow text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-danger" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow text-success" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                <div>Just a moment...</div>
+            </div>
+        </div>
+    </div>
 </div>

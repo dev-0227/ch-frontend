@@ -1,0 +1,278 @@
+<style>
+    .select2{
+        width: 100%!important;
+    }    
+    .card-title {
+        width: 600px;
+    }
+    .dtr-title {
+        margin-right: 10px;
+    }    
+    .even, .odd {
+        background-color: transparent !important; /* or any other style you prefer */
+    }
+    #quality_program_measure_table th, #quality_program_measure_table td {        
+        white-space: normal; /* Allow text to wrap to the next line */        
+    }
+    #quality_program_measure_table th:nth-child(2), #quality_program_measure_table td:nth-child(2) { width: 5%; }
+    #quality_program_measure_table th:nth-child(3), #quality_program_measure_table td:nth-child(3) { width: 5%; }
+    #quality_program_measure_table th:nth-child(4), #quality_program_measure_table td:nth-child(4) { width: 5%; }
+    #quality_program_measure_table th:nth-child(5), #quality_program_measure_table td:nth-child(5) { width: 5%; }
+    #quality_program_measure_table th:nth-child(6), #quality_program_measure_table td:nth-child(6) { width: 5%; }
+    #quality_program_measure_table th:nth-child(7), #quality_program_measure_table td:nth-child(7) { width: 5%; }    
+    #quality_program_measure_table th:nth-child(8), #quality_program_measure_table td:nth-child(8) { width: 5%; }
+    #quality_program_measure_table th:nth-child(9), #quality_program_measure_table td:nth-child(9) { width: 5%; }
+    #quality_program_measure_table th:nth-child(10), #quality_program_measure_table td:nth-child(10) { width: 5%; }
+    #quality_program_measure_table th:nth-child(11), #quality_program_measure_table td:nth-child(11) { width: 5%; }
+    #quality_program_measure_table th:nth-child(12), #quality_program_measure_table td:nth-child(12) { width: 5%; }
+    #quality_program_measure_table th:nth-child(13), #quality_program_measure_table td:nth-child(13) { width: 5%; }
+    
+    .form-control:disabled {
+        color: #181719;
+        background-color: #fbfbfc;
+        border-color: var(--bs-gray-300);
+        opacity: 1;
+    }
+
+</style>
+
+<div class="row">    
+    <div class="col-xl-12 d-block" id="quality_program_list">            
+        <div class="card pt-6 px-4">
+            <div class="card-header border-0 px-0">
+                <div class="card-title">
+                    <h1>HEDIS Quality Tracker</h1>
+                </div>
+                <div class="card-toolbar">                         
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i>
+                        <input id="quality_program_search" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                    </div>                                                
+                    <button id="reolad_quality_program" type="button" class="btn btn-md btn-success" data-toggle="modal" data-target=".bd-example-modal-lg" style="width: 110px; margin-left: 10px;">
+                        <i class="fa fa-repeat mr-2"></i>Reload
+                    </button>
+                </div>
+            </div>                    
+            <div class="table-responsive" style="cursor: pointer;">
+                <table class="table table-striped table-bordered text-nowrap w-100" id="quality_program_table">
+                    <thead>
+                        <tr>                                    
+                            <th>Insurance Name</th>
+                            <th>Quality Program Name</th>
+                            <th>Actions</th>                                    
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-12 d-none" id="quality_program_measure_list" >
+        <div class="card pt-6 px-4">
+            <div class="card-header border-0 px-0">
+                <div class="card-title">
+                    <h2 id="quality_program_name"></h2>         
+                    <input type="hidden" id="quality_program_id" name="quality_program_id" />           
+                    <input type="hidden" id="report_id" name="report_id" />    
+                </div>
+                <div class="card-toolbar">                         
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i>
+                        <input id="quality_program_measure_search" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                    </div>                                                
+                    <button id="reolad_quality_program_measure" type="button" class="btn btn-md btn-success" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin:0 10px; width: 110px;">
+                        <i class="fa fa-refresh mr-2"></i>Reload
+                    </button>
+                    <button id="back_quality_program" type="button" class="btn btn-md btn-danger" data-toggle="modal" data-target=".bd-example-modal-lg" style="width: 110px;">
+                        <i class="fa fa-sign-out mr-2"></i>Back
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive" style="cursor: pointer;">
+                <table class="table table-striped table-bordered text-nowrap w-100" id="quality_program_measure_table">
+                    <thead>
+                        <tr>
+                            <th>Measures</th>
+                            <th>Rate</th>
+                            <th>Score</th>
+                            <th>Trend</th>
+                            <th>Num</th>
+                            <th>Den</th>
+                            <th>Missing</th>
+                            <th>HF Avg</th>                            
+                            <th>Tier 1</th>
+                            <th>Tier 2</th>
+                            <th>Q1 Target</th>
+                            <th>Q2 Target</th>
+                            <th>Actions</th>                                    
+                        </tr>
+                    </thead>
+                    <tbody>                              
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>      
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="quality_program_measure_modal" tabindex="-1" role="dialog"  aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Quality Program Measures</h5>
+            </div>
+            <div class="modal-body pt-4">
+                <input type="hidden" id="hedis_quality_tracker_id" name="hedis_quality_tracker_id">      
+                <div class="row">
+                    <div>
+                        <label for="clinic_name" class="form-control-label">Clinic Name:</label>
+                        <input type="text"  class="form-control border-0" id="clinic_name" name="clinic_name" disabled>                        
+                    </div> 
+                    <div>
+                        <label for="measures_name" class="form-control-label">Measure Name:</label>
+                        <input type="text"  class="form-control border-0" id="measures_name" name="measures_name" disabled>
+                        <input type="hidden" id="measures_id" name="measures_id">                                                
+                    </div> 
+                    <div class="col-6">                        
+                        <div>
+                            <label for="current_rate" class="form-control-label">Current Rate:</label>
+                            <input type="number" class="form-control" id="current_rate" name="current_rate">
+                        </div>  
+                        <div>
+                            <label for="current_score" class="form-control-label">Current Score:</label>
+                            <input type="number" class="form-control" id="current_score" name="current_score">
+                        </div>     
+                        <div>
+                            <label for="trend" class="form-control-label">Rating Trend:</label>
+                            <select id="trend" class="form-select">
+                                <option value="" disabled selected>Select an Trend</option>
+                                <option value="1">↑</option>
+                                <option value="0">=</option>
+                                <option value="-1">↓</option>
+                            </select>      
+                        </div>                                            
+                        <div>
+                            <label for="num" class="form-control-label">Num:</label>
+                            <input type="number" class="form-control" id="num" name="num">
+                        </div>                        
+                        <div>
+                            <label for="den" class="form-control-label">Den:</label>
+                            <input type="number" class="form-control" id="den" name="den">
+                        </div>  
+                        <div>
+                            <label for="den" class="form-control-label">Missing:</label>
+                            <input type="number" class="form-control border-0" id="missing" name="missing" style="background: yellow" disabled>
+                        </div>  
+                    </div>
+                    <div class="col-6">                                
+                        <div>
+                            <label for="hf_avg" class="form-control-label">HF_Avg:</label>
+                            <input type="number" class="form-control" id="hf_avg" name="hf_avg">
+                        </div>                                         
+                        <div class="row">   
+                            <div class="col-4">
+                                <label for="tier1" class="form-control-label">Tier 1:</label>
+                                <input type="text" class="form-control border-0" id="tier_1_value" name="tier_1_value" disabled>
+                            </div>   
+                            <div class="col-4">
+                                <label for="tier_2" class="form-control-label">Tier 2:</label>
+                                <input type="text" class="form-control border-0" id="tier_2_value" name="tier_2_value" disabled>
+                            </div>                            
+                            <div class="col-4">
+                                <label for="tier_3" class="form-control-label">Tier 3:</label>
+                                <input type="text" class="form-control border-0" id="tier_3_value" name="tier_3_value" disabled>
+                            </div>                            
+                        </div>                 
+                        <div>
+                            <label for="Q1_target" class="form-control-label">Q1 Target:</label>
+                            <input type="number" class="form-control" id="Q1_target" name="Q1_target">
+                        </div>                 
+                        <div>
+                            <label for="Q2_target" class="form-control-label">Q2 Target:</label>
+                            <input type="number" class="form-control" id="Q2_target" name="Q2_target">
+                        </div>       
+                        <div>
+                            <label for="status" class="form-control-label">Status:</label>
+                            <select id="status" class="form-select">
+                                <option value="" disabled selected style="color: #99a1b7;">Select an Status</option>
+                                <option value="0">Active</option>
+                                <option value="1">Inactive</option>                                
+                            </select>      
+                        </div>          
+                    </div>                        
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="update_quality_program_measure" style="width: 130px;"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="quality_program_measure_view_modal" tabindex="-1" role="dialog"  aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document" style="--bs-modal-width: 88%;">
+        <div class="modal-content">
+            <div class="modal-body pt-6">              
+                <div class="card px-4">
+                    <div class="card-header border-0 px-0">
+                        <div class="card-title">
+                            <h2 id="quality_program_view_name" style="color: #00A3FF;"></h2>         
+                            <input type="hidden" id="quality_program_view_id" name="quality_program_view_id" />           
+                        </div>
+                        <div class="card-toolbar">                         
+                            <!-- <div class="d-flex align-items-center position-relative my-1">
+                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                                <input id="quality_program_measure_view_search" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                            </div>                                                
+                            <button id="reolad_quality_program_measure_view" type="button" class="btn btn-md btn-success" data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-left: 10px; width: 110px;">
+                                <i class="fa fa-refresh mr-2"></i>Reload
+                            </button> -->
+                            <div>
+                                <h5 id="show_clinic_info">ROSWELL GORIS: 1</h5>
+                                <h5 id="show_report_id">Quality Program: 1</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive" style="cursor: pointer;">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="quality_program_measure_view_table">
+                            <thead>
+                                <tr>
+                                    <th>Measures</th>
+                                    <th>Rate</th>
+                                    <th>Score</th>
+                                    <th>Trend</th>
+                                    <th>Num</th>
+                                    <th>Den</th>
+                                    <th>Missing</th>
+                                    <th>HF Avg</th>                            
+                                    <th>Tier 1</th>
+                                    <th>Tier 2</th>
+                                    <th>Q1 Target</th>
+                                    <th>Q2 Target</th>                                 
+                                </tr>
+                            </thead>
+                            <tbody>                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close">&nbsp;</i> Discard</button>               
+            </div>
+        </div>
+    </div>
+</div>

@@ -122,6 +122,36 @@ router.get("/paymentsetting", (req, res, next) => {
     });
 });
 
+
+
+router.get("/report-measureReportDefinition", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Measure Report Definition",
+        pageKey: "../settings/report/measureReportDefinition"
+    });
+});
+
+router.get("/report-hedis-quality-program", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "HEDIS Quality Program",
+        pageKey: "../settings/report/hedisQualityProgram"
+    });
+});
+
+router.get("/report-hedis-report-builder", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "Measure Report Definition",
+        pageKey: "../settings/report/hedisReportBuilder"
+    });
+});
+
+router.get("/report-hedis-quality-tracker", (req, res, next) => {
+    res.render("layout/mainblank", {
+        pageTitle: "HEDIS Quality Tracker",
+        pageKey: "../settings/report/hedisQualityTracker"
+    });
+});
+
 /* 
 * settings for PK Risk and Barriers
 */
@@ -219,13 +249,6 @@ router.get("/qrcode", (req, res, next) => {
     res.render("layout/mainblank", {
         pageTitle: "QR Code",
         pageKey: "../settings/qrcode"
-    });
-});
-
-router.get("/measureReportDefinition", (req, res, next) => {
-    res.render("layout/mainblank", {
-        pageTitle: "Measure Report Definition",
-        pageKey: "../settings/report/measureReportDefinition"
     });
 });
 

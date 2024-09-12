@@ -47,6 +47,7 @@ $(document).ready(async function () {
   }
 
   //setting/getchoseninsurances
+  // Hedis Setting begin //
   await sendRequestWithToken('GET', localStorage.getItem('authToken'), [], "insurance/getHedisList", (xhr, err) => {
     if (!err) {
       let result = JSON.parse(xhr.responseText)['data'];
@@ -112,6 +113,7 @@ $(document).ready(async function () {
     $("#insurance-validation-text").html($("#insforqualityloader option:checked").text());
     $("#quality-load-modal").modal("show");
   });
+
   $("#qualitysubmitbtn").click(async function(){
     if($("#inscheckbox").prop("checked")){
 
@@ -174,6 +176,37 @@ $(document).ready(async function () {
     }
   });
 
+  $('#hedissetting-match-measure').click(async () => {
+    var formData = new FormData()
+
+    formData.append("insid", $("#insforqualityloader option:checked").val())
+    formData.append("clinicid", localStorage.getItem('chosen_clinic'))
+    formData.append("cyear", $("#hedisdate").val())
+    formData.append('qpid', $('#qualityprogramloader').val())
+
+    var qualityentry = document.getElementById('qualityfile').files.length
+
+    if (qualityentry != 0) {
+      for (let i = 0; i < qualityentry; i++) {
+        formData.append("qualityfile", document.getElementById('qualityfile').files[i])
+      }
+
+      await sendFormWithToken('POST', localStorage.getItem('authToken'), formData, "hedisloader/checkmeasure", (xhr, err) => {
+        if (!err) {
+          var result = JSON.parse(xhr.responseText)['data']
+          if (!result.length) {
+            toastr.success('All measures are matched!')
+          } else {
+            $('#hedis-load-not-matched').modal('show')
+          }
+        } else {
+          toastr.error('Action Failed')
+        }
+      })
+    } else {
+      return toastr.info('Please load a file')
+    }
+  })
   
   $(document).on("change","#insforqualityloader",async function(){
     insuranceid = $(this).val();
@@ -227,6 +260,8 @@ $(document).ready(async function () {
     });
     $("#quality-delete-modal").modal("show");
   });
+  // Hedis Setting end //
+
   $("#deletedatabtn").click(async function(){
     if($("#datadate").val() == 0){
       return toastr.info('Please select date to delete data');
@@ -493,4 +528,90 @@ $(document).ready(async function () {
     
     
   });
-});
+
+  // Measure Not Matched
+  var notMatchedTable = $('#hedis-not-matched-table').DataTable({
+    "ajax": {
+        "url": serviceUrl + "hedissetting/getnmeasure",
+        "type": "GET",
+    },
+    serverSide: true,
+    "columns": [
+        { data: "measure" },
+        { data: 'id',
+          render: function (data, type, row) {
+            return `
+              <div idkey="${row.id}" data='${row.measure}'>
+              <button class="btn btn-sm btn-primary hedis-edit-measure"><i class="fa fa-edit"></i> Define</button>
+              <button class="btn btn-sm btn-danger hedis-delete-nmeasure"><i class="fa fa-trash"></i> Delete</button>
+              </div>
+            `
+          } 
+        }
+    ],
+  })
+
+  $(document).on("click",".hedis-delete-nmeasure",function(){
+    let entry = {
+      measure: $(this).parent().attr("idkey"),
+    }
+    var tmp = $(this).parent().parent().parent();
+    swal({
+			title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+		}, function(inputValue) {
+			if (inputValue) {
+				sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "hedissetting/deletenmeasure", (xhr, err) => {
+          if (!err) {
+            tmp.remove();
+          } else {
+            return $.growl.error({
+              message: "Action Failed"
+            });
+          }
+        });
+			}
+		});
+  })
+
+  sendRequestWithToken('POST', localStorage.getItem('authToken'), {current: true}, 'hedissetting/measurecurrent', (xhr, err) => {
+    if (!err) {
+      var option = ``
+      var result = JSON.parse(xhr.responseText)['data']
+      result.forEach(item => {
+        option += `<option value='${item.id}'>${item.title}</option>`
+      })
+      $('#hedis-define-measure').html(option)
+    }
+  })
+
+  $(document).on("click",".hedis-edit-measure",function(){
+    $("#define-measure-name").html($(this).parent().attr("data"))
+    $('#chosen-hedis-measure').val($(this).parent().attr("idkey"))
+
+    $("#hedis-measure-define").modal("show")
+  })
+
+  $('#hedis-define').click(() => {
+    let entry = {
+      id: $('#chosen-hedis-measure').val(),
+      measure: $('#define-measure-name').html(),
+      measure_id: $('#hedis-define-measure').val()
+    }
+    sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, 'hedissetting/definemeasure', (xhr, err) => {
+      if (!err) {
+        toastr.success('Action Succeeded!')
+        $("#hedis-measure-define").modal("hide")
+        notMatchedTable.ajax.reload()
+      } else {
+        toastr.error('Action Failed!')
+        $("#hedis-measure-define").modal("hide")
+        notMatchedTable.ajax.reload()
+      }
+    })
+  })
+})

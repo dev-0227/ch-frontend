@@ -1,0 +1,857 @@
+<style>
+    .select2{
+        width: 100%!important;
+    }    
+    .select2-container {
+        z-index: 1051; /* Ensure the dropdown appears above the modal */
+    }
+    .card-title {
+        width: 600px;
+    }
+    .dtr-title {
+        margin-right: 10px;
+    }
+  
+    #report_table {
+        width: 100%; /* Make the table take full width of its container */
+        table-layout: fixed; /* Use fixed layout for better control over column widths */
+        border-collapse: collapse; /* Collapse borders for a cleaner look */
+    }
+    #report_table th, #report_table td {
+        overflow: visible; /* Allow content to overflow (change to hidden or scroll as needed) */
+        white-space: normal; /* Allow text to wrap to the next line */
+        padding: 8px; /* Add padding for better readability */
+        border: 1px solid #ddd; /* Optional: Add border for better separation */
+    }
+    .even, .odd {
+        background-color: transparent !important; /* or any other style you prefer */
+    }
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.child > table {
+        width: 45% !important;
+        font-size: 15px;
+        border: 1px solid #F1F1F4;
+    }
+    table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, 
+    table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before {                            
+        background: #00A3FF !important;
+        height: 20px;
+        width: 20px;                            
+    }
+    option:disabled {
+        color: #99A1B7;
+    } 
+    #quality_program_measure_table th:nth-child(3), #quality_program_measure_table td:nth-child(3) { text-align: center; }
+    #quality_program_measure_table th:nth-child(4), #quality_program_measure_table td:nth-child(4) { text-align: center; }
+    #quality_program_measure_table th:nth-child(5), #quality_program_measure_table td:nth-child(5) { text-align: center; }
+    #quality_program_measure_table th:nth-child(6), #quality_program_measure_table td:nth-child(6) { text-align: center; } 
+    #quality_program_measure_table th:nth-child(29), #quality_program_measure_table td:nth-child(24) { width: 5%; }
+
+    /* Define specific widths for each column */
+    #report_table th:nth-child(1), #report_table td:nth-child(1) { width: 15%; }
+    #report_table th:nth-child(2), #report_table td:nth-child(2) { width: 10%; }
+    #report_table th:nth-child(3), #report_table td:nth-child(3) { width: 10%; }
+    #report_table th:nth-child(4), #report_table td:nth-child(4) { width: 10%; }
+    #report_table th:nth-child(5), #report_table td:nth-child(5) { width: 10%; }
+    #report_table th:nth-child(6), #report_table td:nth-child(6) { width: 10%; }
+    #report_table th:nth-child(7), #report_table td:nth-child(7) { width: 10%; }
+    #report_table th:nth-child(8), #report_table td:nth-child(8) { width: 10%; }
+    #report_table th:nth-child(9), #report_table td:nth-child(9) { width: 10%; }
+    #report_table th:nth-child(10), #report_table td:nth-child(10) { width: 10%; }
+    #report_table th:nth-child(11), #report_table td:nth-child(11) { width: 10%; }
+    #report_table th:nth-child(12), #report_table td:nth-child(12) { width: 10%; }
+
+    .form-control:disabled {
+        color: #181719;        
+        border-color: var(--bs-gray-300);
+        opacity: 1;
+    } 
+</style>
+
+<div class="row">    
+    <div class="col-xl-12" id="report_part" style="display: block;">
+        <div class="row">
+            <div class="col-12">
+                <div class="card pt-6 px-4">
+                    <div class="card-header border-0 px-0">
+                        <div class="card-title">
+                            <h1>Hedis Report Builder</h1>
+                        </div>
+                        <div class="card-toolbar">                         
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                  <span class="path1"></span>
+                                  <span class="path2"></span>
+                                </i>
+                                <label for="hedis_quality_program_search"></label>
+                                <input id="hedis_quality_program_search" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                            </div>                            
+                            <button id="add_quality_program" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-left: 10px; margin-right: 10px; width: 110px;">
+                                <i class="fa fa-plus mr-2"></i>Create
+                            </button>
+                            <button id="reload_quality_program" type="button" class="btn btn-md btn-success " data-toggle="modal" data-target=".bd-example-modal-lg" style="width: 110px;">
+                                <i class="fa fa-repeat mr-2"></i>Reload
+                            </button>
+                        </div>
+                    </div>                    
+                    <div class="table-responsive" style="cursor: pointer;">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="quality_program_table">
+                            <thead>
+                                <tr>                        
+                                    <th>Insurance Name</th>            
+                                    <th>Quality Program Name</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Report OQS</th>
+                                    <th>OQS USED</th>
+                                    <th>Actions</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-12" id="measure_part" style="display: none;">
+        <div class="row">
+            <div class="col-12">                
+                <div class="card pt-6 px-4">
+                    <div class="card-header border-0 px-0">
+                        <div class="card-title">
+                            <h2 id="report_name"></h2>                            
+                            <input type="hidden" id="hedis_report_builder_report_id" name="hedis_report_builder_report_id" />
+                            <input type="hidden" id="quality_program_id" name="quality_program_id" />
+                        </div>
+                        <div class="card-toolbar">                         
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                  <span class="path1"></span>
+                                  <span class="path2"></span>
+                                </i>
+                                <label for="hedis_measure_search_input"></label>
+                                <input id="hedis_measure_search_input" type="text" data-kt-user-table-filter="search" class="form-control w-250px ps-13" placeholder="Search" />
+                            </div>                            
+                            <button id="add_measure" type="button" class="btn btn-md btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-left: 10px; margin-right: 10px; width: 110px;">
+                                <i class="fa fa-plus mr-2"></i>Create
+                            </button>
+                            <button id="reload_measure" type="button" class="btn btn-md btn-success " data-toggle="modal" data-target=".bd-example-modal-lg" style="margin-right: 10px; width: 110px;">
+                                <i class="fa fa-refresh mr-2"></i>Reload
+                            </button>
+                            <button id="back_measure" type="button" class="btn btn-md btn-danger " data-toggle="modal" data-target=".bd-example-modal-lg" style="width: 110px;">
+                                <i class="fa fa-sign-out mr-2"></i>Back
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive" style="cursor: pointer;">
+                        <table class="table table-striped table-bordered text-nowrap w-100" id="quality_program_measure_table">
+                            <thead>
+                                <tr>
+                                    <th>Measure</th>
+                                    <th>Quality ID</th>
+                                    <th>Minimum Denominator </th>
+                                    <th>Dual Improvement </th>
+                                    <th>Patient Incentive </th>                                    
+                                    <th>Incentive Type</th>
+                                    <th class="none">CutPoint 1 </th>
+                                    <th class="none">CutPoint 2 </th>
+                                    <th class="none">CutPoint 3 </th>
+                                    <th class="none">CutPoint 4 </th>
+                                    <th class="none">CutPoint 5 </th>
+                                    <th class="none">Payment Score 1</th>
+                                    <th class="none">Payment Score 2</th>
+                                    <th class="none">Payment Score 3</th>
+                                    <th class="none">Payment Score 4</th>
+                                    <th class="none">Payment Score 5</th>
+                                    <th class="none">Pay Per Numberator </th>
+                                    <th class="none">Specific Improvement </th>
+                                    <th class="none">CutPoint Score</th>
+                                    <th class="none">OQS</th>
+                                    <th class="none">OQS Weight</th>
+                                    <th class="none">Measure Categories</th>
+                                    <th class="none">Measure Attribution</th>
+                                    <th>Actions</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody>                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+
+<!-- Report Builder Modal -->
+<div class="modal fade" id="New_report_modal" tabindex="-1" role="dialog"  aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Report Builder</h5>
+            </div>
+            <div class="modal-body pt-4">
+                <div class="row">
+                    <div>
+                        <label for="select_report_name" class="form-control-label">Select Report Name:</label>
+                        <!-- <select id="select_report_name" class="form-select mb-2">
+                        </select>  -->
+                        <select class="form-control" data-placeholder="Select Quality Program" id="select_report_name">
+                        </select>   
+                    </div>                    
+                    <div>
+                        <label for="new_start_date" class="form-control-label">Start Date:</label>
+                        <input type="date" class="form-control" id="new_start_date" name="new_start_date">
+                    </div>
+                    <div>                            
+                        <label for="new_end_date" class="form-control-label">End Date:</label>
+                        <input type="date" class="form-control" id="new_end_date" name="new_end_date">            
+                    </div>
+                    <div class="form-group mt-6">                           
+                        <input class="form-check-input" type="checkbox" id="report_calculates_oqs" style="margin-right: 10px;">                          
+                        <label  class="form-control-label" for="report_calculates_oqs">
+                            Report Calculates OQS
+                        </label>                           
+                    </div> 
+                    <div class="form-group mt-6">                           
+                        <input class="form-check-input" type="checkbox" id="report_oqs_used" style="margin-right: 10px;">                          
+                        <label  class="form-control-label" for="report_oqs_used">
+                            OQS Used
+                        </label>                           
+                    </div>                     
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close fs-2">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="save_hedis_report" style="width: 130px;"><i class="fa fa-save fs-2">&nbsp;</i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit_report_modal" tabindex="-1" role="dialog"  aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Your Report Builder</h5>
+            </div>
+            <div class="modal-body pt-4">
+                <input type="hidden" class="form-control" id="edit_hedis_report_id" name="edit_hedis_report_id">
+                <div class="row">
+                    <div>
+                        <label for="edit_select_report_name" class="form-control-label">Select Report Name:</label>
+                        <!-- <select id="edit_select_report_name" class="form-select mb-2">
+                        </select>  -->
+                        <select class="form-control form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Quality Program" id="edit_select_report_name">
+                        </select> 
+                    </div>                    
+                    <div>
+                        <label for="edit_start_date" class="form-control-label">Start Date:</label>
+                        <input type="date"  class="form-control" id="edit_start_date" name="edit_start_date">
+                    </div>
+                    <div>                            
+                        <label for="edit_end_date" class="form-control-label">End Date:</label>
+                        <input type="date"  class="form-control" id="edit_end_date" name="edit_end_date">            
+                    </div>
+                    <div class="form-group mt-6">                           
+                        <input class="form-check-input" type="checkbox" id="edit_report_calculates_oqs" style="margin-right: 10px;">                          
+                        <label  class="form-control-label" for="edit_report_calculates_oqs">
+                            Report Calculates OQS
+                        </label>                           
+                    </div> 
+                    <div class="form-group mt-6">                           
+                        <input class="form-check-input" type="checkbox" id="edit_report_oqs_used" style="margin-right: 10px;">                          
+                        <label  class="form-control-label" for="edit_report_oqs_used">
+                            OQS Used
+                        </label>                           
+                    </div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close fs-2">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="update_hedis_report" style="width: 130px;"><i class="fa fa-save fs-2">&nbsp;</i> Save</button>                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Measure Modal-->
+<div id="new_measure_modal" class="modal fade" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Measure For Your Report</h5>
+            </div>
+            <div class="modal-body pt-4">
+                <div class="row">
+                    <input type="hidden" class="form-control" id="report_id" name="report_id">
+                    <div class="mb-4">
+                        <div class="row">
+                            <input type="hidden"  class="form-control" id="select_measure_id" name="select_measure_id">
+                            <div class="col-6">
+                                <label for="select_measure_name" class="form-control-label">Measure Name:</label>                     
+                                <input type="text" class="form-control border-0" id="select_measure_name" name="select_measure_name" disabled>
+                            </div>
+                            <div class="col-3">
+                                <label for="select_measure_quality_id" class="form-control-label">Measure Quality ID:</label>
+                                <input type="text" class="form-control border-0" id="select_measure_quality_id" name="select_measure_quality_id" disabled>
+                            </div>
+                            <div class="col-3">
+                                <label for="select_measure_name_btn" class="form-control-label"></label>
+                                <button type="button" class="btn btn-primary" id="select_measure_name_btn" style="width: 100%;">Select Measure</button>
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="col-12">
+                        <label for="question" class="form-control-label">Measure Characteristics:</label>  
+                        <hr class="solid" />                                              
+                        <div class="row">                            
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="minimum_denominator_active" type="checkbox" value="">                
+                                    <label for="minimum_denominator_value" class="form-control-label ms-1">Minimum Denominator</label>                                    
+                                    <input type="number" class="form-control mt-2" id="minimum_denominator_value" name="minimum_denominator_value" step="any" disabled>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="patient_incentive_active" type="checkbox" value="">
+                                    <label for="patient_incentive_value" class="form-control-label ms-1">Patient Incentive</label>
+                                    <input type="number"  class="form-control mt-2" id="patient_incentive_value" name="patient_incentive_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>                            
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="specific_improvement_active" type="checkbox" value="">
+                                    <label for="specific_improvement_value" class="form-control-label ms-1">Specific Improvement</label>
+                                    <input type="text"  class="form-control border-0 mt-2" id="specific_improvement_value" name="specific_improvement_value" disabled>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="cutpoint_score_active" type="checkbox" value="">
+                                    <label for="cutpoint_score_value" class="form-control-label ms-1">Measure CutPoint</label>
+                                    <input type="text" class="form-control border-0 mt-2" id="cutpoint_score_value" name="cutpoint_score_value" disabled>
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-3">
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="dual_improvement_active" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                    <label for="dual_improvement_active" class="form-control-label ms-1">Dual Improvement</label>                                    
+                                </div>
+                            </div>           
+                            <div class="col-3">
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="OQS_active" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                    <label for="OQS_active" class="form-control-label ms-1">OQS Measure</label>                                    
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="OQS_weight" class="form-control-label">OQS Weight</label>
+                                    <input type="number" class="form-control" id="OQS_weight" name="OQS_weight" step="any">
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-4">                                                             
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="pay_per_num_active" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                    <label for="pay_per_num_active" class="form-control-label ms-1">Pay Per Numberator</label>                                    
+                                </div>
+                            </div>
+                            <div class="col-4">                                                       
+                                <div class="form-group">
+                                    <label for="pay_per_num_1_value" class="form-control-label">Pay Per Numberator 1</label>
+                                    <input type="number" class="form-control" id="pay_per_num_1_value" name="pay_per_num_1_value" step="any">
+                                </div>
+                            </div>                               
+                            <div class="col-4">                                      
+                                <div class="form-group">
+                                    <label for="pay_per_num_2_value" class="form-control-label">Pay Per Numberator 2</label>
+                                    <input type="number" class="form-control" id="pay_per_num_2_value" name="pay_per_num_2_value" step="any">
+                                </div>
+                            </div>   
+                        </div>                                  
+                        <div class="row mt-2">
+                            <div class="col-4">                                
+                                <div class="form-group">
+                                    <label for="incentive_type" class="form-control-label">Incentive Type</label>                                    
+                                    <select id="incentive_type" data-placeholder="Select Incentive Type" class="form-select">                                         
+                                    </select>                                         
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="measure_categories" class="form-control-label">Measure Categories</label>                                    
+                                    <select id="measure_categories" data-placeholder="Select Measure Categories" class="form-select">                                         
+                                    </select>                                         
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="measure_attr" class="form-control-label">Measure Attribution</label>                                    
+                                    <select id="measure_attr" data-placeholder="Select Measure Attribution" class="form-select">                                         
+                                    </select>                                         
+                                </div>
+                            </div>                                                        
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">                                
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="check_cutpoint_active" type="checkbox" value="">
+                                    <label for="check_cutpoint_active" class="form-control-label ms-1">Check Cutpoint</label>                                    
+                                </div>
+                                <hr class="solid d-none cpt" />
+                            </div>                                                           
+                            <div class="col-6">                                
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="check_payment_active" type="checkbox" value="">
+                                    <label for="check_payment_active" class="form-control-label ms-1">Check Payment Score</label>                                    
+                                </div>
+                                <hr class="solid d-none pay" />
+                            </div>                            
+                        </div>                                                 
+                        <div class="row mt-2">
+                            <div class="col-6">                                
+                                <div class="form-group d-none cpt">
+                                    <input class="form-check-input" id="cutpoint_1_active" type="checkbox" value="">
+                                    <label for="cutpoint_1_value" class="form-control-label ms-1 me-3">Cutpoint 1</label>
+                                    <input class="form-check-input" id="tier_1_active" type="checkbox" value="">
+                                    <label for="tier_1_active" class="form-control-label ms-1">Tier 1</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="cutpoint_1_value" name="cutpoint_1_value" step="any" disabled>
+                                </div>   
+                            </div>                            
+                            <div class="col-6">                                
+                                <div class="form-group d-none pay">
+                                    <input class="form-check-input" id="pay_score_1_active" type="checkbox" value="">
+                                    <label for="pay_score_1_value" class="form-control-label ms-1">Payment Score 1</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="pay_score_1_value" name="pay_score_1_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>                              
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none cpt">
+                                    <input class="form-check-input" id="cutpoint_2_active" type="checkbox" value="">
+                                    <label for="cutpoint_2_value" class="form-control-label ms-1 me-3">Cutpoint 2</label>
+                                    <input class="form-check-input" id="tier_2_active" type="checkbox" value="">
+                                    <label for="tier_2_active" class="form-control-label ms-1">Tier 2</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="cutpoint_2_value" name="cutpoint_2_value" step="any" disabled>
+                                </div>  
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none pay">
+                                    <input class="form-check-input" id="pay_score_2_active" type="checkbox" value="">
+                                    <label for="pay_score_2_value" class="form-control-label ms-1">Payment Score 2</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="pay_score_2_value" name="pay_score_2_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none cpt">
+                                    <input class="form-check-input" id="cutpoint_3_active" type="checkbox" value="">
+                                    <label for="cutpoint_3_value" class="form-control-label ms-1 me-3">Cutpoint 3</label>
+                                    <input class="form-check-input" id="tier_3_active" type="checkbox" value="">
+                                    <label for="tier_3_active" class="form-control-label ms-1">Tier 3</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="cutpoint_3_value" name="cutpoint_3_value" step="any" disabled>
+                                </div>     
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none pay">
+                                    <input class="form-check-input" id="pay_score_3_active" type="checkbox" value="">
+                                    <label for="pay_score_3_value" class="form-control-label ms-1">Payment Score 3</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="pay_score_3_value" name="pay_score_3_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none cpt">
+                                    <input class="form-check-input" id="cutpoint_4_active" type="checkbox" value="">
+                                    <label for="cutpoint_4_value" class="form-control-label ms-1 me-3">Cutpoint 4</label>
+                                    <input class="form-check-input" id="tier_4_active" type="checkbox" value="">
+                                    <label for="tier_4_active" class="form-control-label ms-1">Tier 4</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="cutpoint_4_value" name="cutpoint_4_value" step="any" disabled>
+                                </div>     
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none pay">
+                                    <input class="form-check-input" id="pay_score_4_active" type="checkbox" value="">
+                                    <label for="pay_score_4_value" class="form-control-label ms-1">Payment Score 4</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="pay_score_4_value" name="pay_score_4_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>      
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none cpt">
+                                    <input class="form-check-input" id="cutpoint_5_active" type="checkbox" value="">
+                                    <label for="cutpoint_5_value" class="form-control-label ms-1 me-3">Cutpoint 5</label>
+                                    <input class="form-check-input" id="tier_5_active" type="checkbox" value="">
+                                    <label for="tier_5_active" class="form-control-label ms-1">Tier 5</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="cutpoint_5_value" name="cutpoint_5_value" step="any" disabled>
+                                </div>    
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none pay">
+                                    <input class="form-check-input" id="pay_score_5_active" type="checkbox" value="">
+                                    <label for="pay_score_5_value" class="form-control-label ms-1">Payment Score 5</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="pay_score_5_value" name="pay_score_5_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>                                      
+                    </div>
+                </div>
+                    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="save_measure_name" style="width: 130px;"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit_measure_modal" class="modal fade" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Measure For Your Report</h5>
+            </div>
+            <div class="modal-body pt-4">
+                <div class="row">
+                    <input type="hidden" id="report_builder_measure_id" name="report_builder_measure_id">
+                    <div class="mb-4">
+                        <div class="row">
+                            <input type="hidden"  class="form-control" id="edit_select_measure_id" name="edit_select_measure_id">
+                            <div class="col-9">
+                                <label for="select_measure_name" class="form-control-label">Measure Name:</label>                     
+                                <input type="text" class="form-control border-0" id="edit_select_measure_name" name="edit_select_measure_name" disabled>
+                            </div>
+                            <div class="col-3">
+                                <label for="select_measure_quality_id" class="form-control-label">Measure Quality ID:</label>
+                                <input type="text" class="form-control border-0" id="edit_select_measure_quality_id" name="edit_select_measure_quality_id" disabled>
+                            </div>
+                            <!-- <div class="col-3">
+                                <label for="select_measure_name_btn" class="form-control-label"></label>
+                                <button type="button" class="btn btn-primary" id="edit_select_measure_name_btn" style="width: 100%;">Select Measure</button>
+                            </div> -->
+                        </div>
+                    </div>                
+                    <div class="col-12">
+                        <label for="question" class="form-control-label">Measure Characteristics:</label>  
+                        <hr class="solid" />                                              
+                        <div class="row">                            
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="edit_minimum_denominator_active" type="checkbox" value="">                
+                                    <label for="edit_minimum_denominator_active" class="form-control-label ms-1">Minimum Denominator</label>                                    
+                                    <input type="number" class="form-control mt-2" id="edit_minimum_denominator_value" name="edit_minimum_denominator_value" step="any" disabled>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="edit_patient_incentive_active" type="checkbox" value="">
+                                    <label for="edit_patient_incentive_active" class="form-control-label ms-1">Patient Incentive</label>
+                                    <input type="number"  class="form-control mt-2" id="edit_patient_incentive_value" name="edit_patient_incentive_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>                            
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="edit_specific_improvement_active" type="checkbox" value="">
+                                    <label for="edit_specific_improvement_active" class="form-control-label ms-1">Specific Improvement</label>
+                                    <input type="text"  class="form-control border-0 mt-2" id="edit_specific_improvement_value" name="edit_specific_improvement_value" disabled>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <input class="form-check-input" id="edit_cutpoint_score_active" type="checkbox" value="">
+                                    <label for="edit_cutpoint_score_active" class="form-control-label ms-1">Measure CutPoint</label>
+                                    <input type="text" class="form-control border-0 mt-2" id="edit_cutpoint_score_value" name="edit_cutpoint_score_value" disabled>
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-3">
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="edit_dual_improvement_active" type="checkbox" value="">
+                                    <label for="edit_dual_improvement_active" class="form-control-label ms-1">Dual Improvement</label>                                    
+                                </div>
+                            </div>           
+                            <div class="col-3">
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="edit_OQS_active" type="checkbox" value="">
+                                    <label for="edit_OQS_active" class="form-control-label ms-1">OQS Measure</label>                                    
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="edit_OQS_weight" class="form-control-label">OQS Weight</label>
+                                    <input type="number" class="form-control" id="edit_OQS_weight" name="edit_OQS_weight" step="any">
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-4">                                                             
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="edit_pay_per_num_active" type="checkbox" value="">
+                                    <label for="edit_pay_per_num_active" class="form-control-label ms-1">Pay Per Numberator</label>                                    
+                                </div>
+                            </div>
+                            <div class="col-4">                                                       
+                                <div class="form-group">
+                                    <label for="edit_pay_per_num_1_value" class="form-control-label">Pay Per Numberator 1</label>
+                                    <input type="number" class="form-control" id="edit_pay_per_num_1_value" name="edit_pay_per_num_1_value" step="any">
+                                </div>
+                            </div>                               
+                            <div class="col-4">                                      
+                                <div class="form-group">
+                                    <label for="edit_pay_per_num_2_value" class="form-control-label">Pay Per Numberator 2</label>
+                                    <input type="number" class="form-control" id="edit_pay_per_num_2_value" name="edit_pay_per_num_2_value" step="any">
+                                </div>
+                            </div>   
+                        </div>                                  
+                        <div class="row mt-2">
+                            <div class="col-4">                                
+                                <div class="form-group">
+                                    <label for="edit_incentive_type" class="form-control-label">Incentive Type</label>                                    
+                                    <select id="edit_incentive_type" data-placeholder="Select Incentive Type" class="form-select">                                         
+                                    </select>                                         
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="edit_measure_categories" class="form-control-label">Measure Categories</label>                                    
+                                    <select id="edit_measure_categories" data-placeholder="Select Measure Categories" class="form-select">                                         
+                                    </select>                                         
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="edit_measure_attr" class="form-control-label">Measure Attribution</label>                                    
+                                    <select id="edit_measure_attr" data-placeholder="Select Measure Attribution" class="form-select">                                         
+                                    </select>                                         
+                                </div>
+                            </div>                                                        
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">                                
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="edit_check_cutpoint_active" type="checkbox" value="">
+                                    <label for="edit_check_cutpoint_active" class="form-control-label ms-1">Check Cutpoint</label>                                    
+                                </div>
+                                <hr class="solid d-none edit_cpt" />
+                            </div>                                                           
+                            <div class="col-6">                                
+                                <div class="form-group mt-8">
+                                    <input class="form-check-input" id="edit_check_payment_active" type="checkbox" value="">
+                                    <label for="edit_check_payment_active" class="form-control-label ms-1">Check Payment Score</label>                                    
+                                </div>
+                                <hr class="solid d-none edit_pay" />
+                            </div>                            
+                        </div>                                                 
+                        <div class="row mt-2">
+                            <div class="col-6">                                
+                                <div class="form-group d-none edit_cpt">
+                                    <input class="form-check-input" id="edit_cutpoint_1_active" type="checkbox" value="">
+                                    <label for="edit_cutpoint_1_active" class="form-control-label ms-1 me-3">Cutpoint 1</label>
+                                    <input class="form-check-input" id="edit_tier_1_active" type="checkbox" value="">
+                                    <label for="edit_tier_1_active" class="form-control-label ms-1">Tier 1</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="edit_cutpoint_1_value" name="edit_cutpoint_1_value" step="any" disabled>
+                                </div>   
+                            </div>                            
+                            <div class="col-6">                                
+                                <div class="form-group d-none edit_pay">
+                                    <input class="form-check-input" id="edit_pay_score_1_active" type="checkbox" value="">
+                                    <label for="edit_pay_score_1_active" class="form-control-label ms-1">Payment Score 1</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="edit_pay_score_1_value" name="edit_pay_score_1_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>                              
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none edit_cpt">
+                                    <input class="form-check-input" id="edit_cutpoint_2_active" type="checkbox" value="">
+                                    <label for="edit_cutpoint_2_active" class="form-control-label ms-1 me-3">Cutpoint 2</label>
+                                    <input class="form-check-input" id="edit_tier_2_active" type="checkbox" value="">
+                                    <label for="edit_tier_2_active" class="form-control-label ms-1">Tier 2</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="edit_cutpoint_2_value" name="edit_cutpoint_2_value" step="any" disabled>
+                                </div>  
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none edit_pay">
+                                    <input class="form-check-input" id="edit_pay_score_2_active" type="checkbox" value="">
+                                    <label for="edit_pay_score_2_active" class="form-control-label ms-1">Payment Score 2</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="edit_pay_score_2_value" name="edit_pay_score_2_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none edit_cpt">
+                                    <input class="form-check-input" id="edit_cutpoint_3_active" type="checkbox" value="">
+                                    <label for="edit_cutpoint_3_active" class="form-control-label ms-1 me-3">Cutpoint 3</label>
+                                    <input class="form-check-input" id="edit_tier_3_active" type="checkbox" value="">
+                                    <label for="edit_tier_3_active" class="form-control-label ms-1">Tier 3</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="edit_cutpoint_3_value" name="edit_cutpoint_3_value" step="any" disabled>
+                                </div>     
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none edit_pay">
+                                    <input class="form-check-input" id="edit_pay_score_3_active" type="checkbox" value="">
+                                    <label for="edit_pay_score_3_active" class="form-control-label ms-1">Payment Score 3</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="edit_pay_score_3_value" name="edit_pay_score_3_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none edit_cpt">
+                                    <input class="form-check-input" id="edit_cutpoint_4_active" type="checkbox" value="">
+                                    <label for="edit_cutpoint_4_active" class="form-control-label ms-1 me-3">Cutpoint 4</label>
+                                    <input class="form-check-input" id="edit_tier_4_active" type="checkbox" value="">
+                                    <label for="edit_tier_4_active" class="form-control-label ms-1">Tier 4</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="edit_cutpoint_4_value" name="edit_cutpoint_4_value" step="any" disabled>
+                                </div>     
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none edit_pay">
+                                    <input class="form-check-input" id="edit_pay_score_4_active" type="checkbox" value="">
+                                    <label for="edit_pay_score_4_active" class="form-control-label ms-1">Payment Score 4</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="edit_pay_score_4_value" name="edit_pay_score_4_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>      
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group d-none edit_cpt">
+                                    <input class="form-check-input" id="edit_cutpoint_5_active" type="checkbox" value="">
+                                    <label for="edit_cutpoint_5_active" class="form-control-label ms-1 me-3">Cutpoint 5</label>
+                                    <input class="form-check-input" id="edit_tier_5_active" type="checkbox" value="">
+                                    <label for="edit_tier_5_active" class="form-control-label ms-1">Tier 5</label> 
+                                    <input type="number"  class="form-control border-0 mt-2" id="edit_cutpoint_5_value" name="edit_cutpoint_5_value" step="any" disabled>
+                                </div>    
+                            </div>                            
+                            <div class="col-6">
+                                <div class="form-group d-none edit_pay">
+                                    <input class="form-check-input" id="edit_pay_score_5_active" type="checkbox" value="">
+                                    <label for="edit_pay_score_5_active" class="form-control-label ms-1">Payment Score 5</label>
+                                    <input type="number" class="form-control border-0 mt-2" id="edit_pay_score_5_value" name="edit_pay_score_5_value" step="any" disabled>
+                                </div>
+                            </div>
+                        </div>                                      
+                    </div>
+                </div>
+                    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="update_measure" style="width: 130px;"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="select_measure_name_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="example-Modal3">Select Measure Name</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+            </div>
+            <div class="modal-body pt-4">
+                <div class="row">
+                    <div class="col-12">
+                    <div class="card">
+                        <div class="card-header border-0 pt-6 px-6">
+                            <div class="card-title">
+                                <div class="card-title">                                                          
+                                    <h3 class="card-title">Measure List</h3>
+                                </div>
+                            </div>
+                            <div class="card-toolbar">
+                                <div class="d-flex align-items-center position-relative my-1">
+                                    <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-5">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
+                                    <input id="measure_search_input"  type="text" data-kt-user-table-filter="search"  class="form-control form-control-solid w-350px ps-13"  placeholder="Search" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered text-nowrap w-100" id="measure_table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Quality ID</th>
+                                        <th scope="col">Measure Name</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>              
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close">&nbsp;</i> Discard</button>
+                <button type="button" class="btn btn-primary" id="measure_select_btn" style="width: 130px;"><i class="fa fa-save">&nbsp;</i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Show Report Builder Modal-->
+<div class="modal fade" id="show_report_modal" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document" style="--bs-modal-width: 88%;">
+        <div class="modal-content">
+            <div class="modal-header">                
+                <h2 class="modal-title" id="show_report_title" style="color: #00A3FF;"></h2>                
+                <h5 class="modal-title" id="show_report_id"></h5>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" style="cursor: pointer;" id="report_table">
+                    <!-- <table class="table table-striped table-bordered text-nowrap w-100" id="report_table">
+                        <thead style="text-align: center;">
+                            <tr>
+                                <th>Measure</th>
+                                <th>Attribution</th>
+                                <th>2-Score <br /> Cutpoint</th>
+                                <th>3-Score <br /> Cutpoint</th>
+                                <th>4-Score <br /> Cutpoint</th>
+                                <th>5-Score <br /> Cutpoint</th>
+                                <th>Minimum <br /> Denominator</th>
+                                <th>OQS Measure</th>
+                                <th>OQS Weight</th>
+                                <th>Measure-<br /> Specific <br /> Incentive Type</th>
+                                <th>4-Score <br /> Payment</th>
+                                <th>4-Score <br /> Payment</th>                                 
+                            </tr>
+                        </thead>
+                        <tbody> 
+                                                         
+                        </tbody>
+                    </table> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="width: 130px;"><i class="fa fa-close">&nbsp;</i> Discard</button>
+            </div>
+        </div>
+    </div>
+</div>

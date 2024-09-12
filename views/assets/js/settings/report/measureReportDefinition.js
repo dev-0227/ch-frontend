@@ -1,5 +1,84 @@
+function singleCheck(checkbox) {
+    let checkboxes = document.querySelectorAll('#measure_table .form-check-input');
+    checkboxes.forEach(function(item) {
+        if (item !== checkbox) {
+            item.checked = false; // Uncheck other checkboxes
+        }
+    });
+}
+
+function GetInsurance(callback) {
+    const authToken = localStorage.getItem('authToken');
+    const requestData = {};
+    const apiUrl = 'reportBuilder/insurances';
+  
+    sendRequestWithToken('GET', authToken, requestData, apiUrl, (xhr, err) => {
+      if (!err) {
+        let result = JSON.parse(xhr.responseText)['data'];  
+        let resArr = [{id: '', text: 'Select Insurance'}];                      
+        result.forEach(r => {                                                                              
+            resArr.push({ id: r.id, text: r.insName });
+        });    
+          callback(resArr);        
+      } else {  
+          toastr.error("Get Insurances Failed");
+          callback(null);
+      }
+    });
+  }
+
+function GetClinics(callback) {
+    const authToken = localStorage.getItem('authToken');
+    const requestData = {};
+    const apiUrl = 'reportBuilder/clinics';
+
+    sendRequestWithToken('GET', authToken, requestData, apiUrl, (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];  
+            let resArr = [{id: '', text: 'Select Clinic'}];                             
+            result.forEach(r => {                                                         
+                resArr.push({ id: r.id, text: r.name });
+            });               
+              callback(resArr);        
+        } else {  
+              toastr.error("Get Clinic Name Failed");
+              callback(null);
+        }       
+    });  
+}
+
+function GetReports(id, callback) {
+    const authToken = localStorage.getItem('authToken');
+    const requestData = {ins_id: id};
+    const apiUrl = 'reportBuilder/reports';
+
+    sendRequestWithToken('POST', authToken, requestData, apiUrl, (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];  
+            let resArr = [{id: '', text: 'Select Quality Programs'}];                             
+            result.forEach(r => {                                                         
+                resArr.push({ id: r.id, text: r.name });
+            });               
+              callback(resArr);        
+        } else {  
+              toastr.error("Get Quality Programs Failed");
+              callback(null);
+        }       
+    });  
+}
+
 $(document).ready(function() {
     "use strict";
+   
+    $('#add_measure_program_cutpoint_report').select2({
+        dropdownParent: $('#add_measure_program_cutpoint_modal')
+    });
+    // $('#loadingModal').modal('show');
+
+    // window.onload = function() {
+    //     $('#loadingModal').modal('hide');
+    // };
+
     // Cut Point Table
     var cut_point_table = $('#cut_point_table').DataTable({
         "ajax": {
@@ -9,7 +88,6 @@ $(document).ready(function() {
         "order": [[0, 'asc']],
         "columns": [
             { data: 'display'},
-            { data: 'target_rate'},
             { data: 'active'},
             { data: 'id',
               render: function (data, type, row) {
@@ -33,6 +111,7 @@ $(document).ready(function() {
     });
     
     $(document).on('click', '#add_cut_point', function() {
+        
         $('#add_cut_point_modal').modal('show');
     });
 
@@ -250,12 +329,8 @@ $(document).ready(function() {
         });
     });  
 
-
-
-    // Program Overall Quality Score
-    
-
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/getInsuranceList", (xhr, err) => {
+    // Program Overall Quality Score    
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/insurances", (xhr, err) => {
         if (!err) {
             let result = JSON.parse(xhr.responseText)['data'];    
             let content = "";
@@ -272,7 +347,6 @@ $(document).ready(function() {
     });
 
     $('#select_ins').change(function() {        
-        // program_OQS_table.ajax.reload(null, false); 
         let params = {
             ins_id:  $('#select_ins').val()
         }
@@ -339,7 +413,7 @@ $(document).ready(function() {
         // $('#add_OQS_program_name').val($('#select_program option:selected').text());
         // $('#add_OQS_program_ins_name').val($('#select_ins option:selected').text());
 
-        sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/getInsuranceList", (xhr, err) => {
+        sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/insurances", (xhr, err) => {
             if (!err) {
                 let result = JSON.parse(xhr.responseText)['data'];    
                 let content = "";
@@ -408,8 +482,6 @@ $(document).ready(function() {
                 return toastr.error("Action Failed");
             }
         });
-
-
     });
 
     $(document).on('click', '#save_program_OQS', function() {
@@ -484,8 +556,6 @@ $(document).ready(function() {
                     content += '<option value="'+ r.id +'">' + r.display + '</option>';                                        
                 }); 
                 $('#edit_OQS_overall_quality_score').html(content);
-    
-                
             } else {  
                 return toastr.error("Action Failed");
             }
@@ -507,9 +577,7 @@ $(document).ready(function() {
         $('#edit_OQS_date').val(row.date); 
         
         $('#edit_program_OQS_modal').modal('show');
-
     });
-
     
     $('#edit_OQS_overall_quality_score').change(function() { 
         // console.log($('#add_OQS_overall_quality_score option:selected').val());
@@ -524,8 +592,6 @@ $(document).ready(function() {
                 return toastr.error("Action Failed");
             }
         });
-
-
     })
 
     // $(document).on('click', '#update_overall_quality_score', function() {      
@@ -546,14 +612,7 @@ $(document).ready(function() {
     // });
 
 
-
-
-
-
-
-
-
-    //
+    // Quarterly Measure Table
     var quarterly_measure_table = $('#quarterly_measure_table').DataTable({
         "ajax": {
             "url": serviceUrl + "reportBuilder/GetQuarterlyMeasureList",
@@ -682,8 +741,8 @@ $(document).ready(function() {
             }
         });
     }); 
-    // specific_incentive_type_table
-    
+
+    // Specific Incentive Type Table    
     var specific_incentive_type_table = $('#specific_incentive_type_table').DataTable({
         "ajax": {
             "url": serviceUrl + "reportBuilder/GetSpecificIncentiveTypeList",
@@ -812,38 +871,281 @@ $(document).ready(function() {
             }
         });
     }); 
-    //specific cutpoint measure
 
-    var specific_cutpoint_measure_table = $('#specific_cutpoint_measure_table').DataTable({
+    // Get Report Name List 
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/reportName", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";            
+            content += '<option value="" disabled selected>Select Quality Program</option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#add_specific_cutpoint_measure_report').html(content);   
+            $('#edit_specific_cutpoint_measure_report').html(content);    
+            $('#add_measure_program_cutpoint_report').html(content);      
+            $('#edit_measure_program_cutpoint_report').html(content);  
+
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    });  
+
+    // Get Cutpoint Name List
+    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetCutpointNameList", (xhr, err) => {
+        if (!err) {
+            let result = JSON.parse(xhr.responseText)['data'];    
+            let content = "";            
+            content += '<option value="" disabled selected>Select CutPoint</option>';
+            result.forEach(r => {                               
+                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
+            }); 
+            $('#add_specific_measure_cutpoint_1').html(content);
+            $('#add_specific_measure_cutpoint_2').html(content);
+            $('#add_specific_measure_cutpoint_3').html(content);
+            $('#add_specific_measure_cutpoint_4').html(content); 
+            $('#add_specific_measure_cutpoint_5').html(content);
+
+            $('#edit_specific_measure_cutpoint_1').html(content);
+            $('#edit_specific_measure_cutpoint_2').html(content);
+            $('#edit_specific_measure_cutpoint_3').html(content);
+            $('#edit_specific_measure_cutpoint_4').html(content);
+            $('#edit_specific_measure_cutpoint_5').html(content);
+
+            $('#add_measure_program_cutpoint_1').html(content);   
+            $('#add_measure_program_cutpoint_2').html(content);   
+            $('#add_measure_program_cutpoint_3').html(content);   
+            $('#add_measure_program_cutpoint_4').html(content);   
+            $('#add_measure_program_cutpoint_5').html(content);   
+
+            $('#edit_measure_program_cutpoint_1').html(content);   
+            $('#edit_measure_program_cutpoint_2').html(content);   
+            $('#edit_measure_program_cutpoint_3').html(content);   
+            $('#edit_measure_program_cutpoint_4').html(content);   
+            $('#edit_measure_program_cutpoint_5').html(content);   
+
+        } else {  
+            return toastr.error("Action Failed");
+        }
+    }); 
+
+    // Measure Select
+    var measure_table = $('#measure_table').DataTable({
         "ajax": {
-            "url": serviceUrl + "reportBuilder/GetSpecificCutpointMeasureList",
+            "url": serviceUrl + "reportBuilder/GetMeasureNameList",
             "type": "GET"
         },
         "order": [[0, 'asc']],
         "columns": [
             { 
-                data: 'measure',
+                data: 'id',
                 render: function (data, type, row) {
-                    var measure = row.measure;
-                    var measure = measure.match(/.{1,40}/g).join('<br />');
-                    return `<span>` + measure + `</span>`;
+                    return `
+                        <div class="btn-group align-top" idkey="${row.id}">
+                            <input class="form-check-input" type="checkbox" value="${row.id}" id="checkbox_${row.id}" onclick="singleCheck(this)">
+                        </div>
+                    `;
+                }
+            },
+            { data: 'quality_id' },
+            { data: 'name' }
+        ]
+    });
+
+    $('#measure_search_input').on('keyup', function () {
+        measure_table.search(this.value).draw();
+    });
+
+    let edit_flag = false;
+    let specific_flag = true;
+
+    $(document).on('click', '#add_specific_cutpoint_measure_select', function() {
+        $('#select_measure_name_modal').modal('show');
+        $("#add_specific_cutpoint_measure_modal").modal('hide');
+        edit_flag = false;
+        specific_flag = true;
+    });
+
+    $(document).on('click', '#edit_specific_cutpoint_measure_select', function() {
+        $('#select_measure_name_modal').modal('show');
+        $("#edit_specific_cutpoint_measure_modal").modal('hide');
+        edit_flag = true;
+        specific_flag = true;
+    });
+
+    $(document).on('click', '#add_measure_program_cutpoint_select', function() {     
+        $('#select_measure_name_modal').modal('show');
+        $("#add_measure_program_cutpoint_modal").modal('hide');
+        edit_flag = false;
+        specific_flag = false;
+    });
+
+    $(document).on('click', '#edit_measure_program_cutpoint_select', function() {
+        $('#select_measure_name_modal').modal('show');
+        $("#edit_measure_program_cutpoint_modal").modal('hide');
+        edit_flag = true;
+        specific_flag = false;
+    });    
+    
+    $(document).on("click", "#measure_select_btn", function() {    
+        var checkedRowData = null;
+        $('#measure_table .form-check-input:checked').each(function() {
+            var row = measure_table.row($(this).closest('tr')).data();
+            checkedRowData = row;
+        });
+        if (checkedRowData) {      
+            if (specific_flag) {
+                if (edit_flag) {
+                    $('#edit_specific_cutpoint_measure_name_id').val(checkedRowData.id);
+                    $('#edit_specific_cutpoint_measure_name').val(checkedRowData.name);
+                    $('#edit_specific_cutpoint_measure_quality_id').val(checkedRowData.quality_id);
+                    $('#select_measure_name_modal').modal('hide');
+                    $("#edit_specific_cutpoint_measure_modal").modal('show');
+                } else {
+                    $('#add_specific_measure_cutpoint_name_id').val(checkedRowData.id);
+                    $('#add_specific_measure_cutpoint_name').val(checkedRowData.name);
+                    $('#add_specific_measure_cutpoint_quality_id').val(checkedRowData.quality_id);
+                    $('#select_measure_name_modal').modal('hide');
+                    $("#add_specific_measure_cutpoint_modal").modal('show');
+                }
+            } else {
+                if (edit_flag) {
+                    $('#edit_measure_program_cutpoint_name_id').val(checkedRowData.id);
+                    $('#edit_measure_program_cutpoint_name').val(checkedRowData.name);
+                    $('#edit_measure_program_cutpoint_quality_id').val(checkedRowData.quality_id);
+                    $('#select_measure_name_modal').modal('hide');
+                    $("#edit_measure_program_cutpoint_modal").modal('show');
+                   
+                } else {
+                    $('#add_measure_program_cutpoint_name_id').val(checkedRowData.id);
+                    $('#add_measure_program_cutpoint_name').val(checkedRowData.name);
+                    $('#add_measure_program_cutpoint_quality_id').val(checkedRowData.quality_id);
+                    $('#select_measure_name_modal').modal('hide');
+                    $("#add_measure_program_cutpoint_modal").modal('show');
+                }
+            }
+
+            let checkboxes = document.querySelectorAll('#measure_table .form-check-input');
+            checkboxes.forEach(function(item) {
+                item.checked = false; 
+            });
+
+        } else {
+            toastr.error("No Measure selected");
+        }           
+    });
+    
+    $(document).on('click', '#add_specific_measure_cutpoint_select', function() {     
+        $('#select_measure_name_modal').modal('show');
+        $("#add_specific_measure_cutpoint_modal").modal('hide');
+        edit_flag = false;
+        specific_flag = true;
+    });
+
+
+    // Specific Cutpoint Measure
+    let specific_measure_cutpoint_table = $('#specific_measure_cutpoint_table').DataTable({
+        ajax: {
+            url: serviceUrl + "reportBuilder/specificMeasureCutpoint",
+            type: "GET"
+        },
+        stripeClasses: [],
+        paging: false,        
+        // responsive: true,       
+        // columnDefs: [
+        //     { responsivePriority: 1, targets: 0 },
+        //     { responsivePriority: 2, targets: -1 }
+        // ],
+        processing: true,
+        responsive: {
+            details: {
+                renderer: function (api, rowIdx, columns) {
+                    var data = $.map(columns, function (col, i) {
+                        return col.hidden ?
+                            '<tr data-dt-row="'+ col.rowIndex +'" data-dt-column="'+ col.columnIndex +'">'+
+                                '<td style="width:25%; padding: 10px;"><strong>'+ col.title +'</strong></td>'+
+                                '<td style="border-left: 1px solid #F1F1F4; text-align:center">'+ col.data +'</td>'+
+                            '</tr>' : '';
+                    }).join(''); 
+
+                    return data ? $('<table/>').append(data) : false;
+                }
+            }
+        },             
+        "columns": [            
+            { data: 'measure' },
+            { data: 'quality_id' },
+            { data: 'clinic' },
+            { data: 'report' },            
+            { data: 'cutpoint_1',
+                render: function (data, type, row) {
+                    if (row.cutpoint_1_range == null || row.cutpoint_1_range == '' || row.cutpoint_1_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_1}</span> | ${row.cutpoint_1_range}%`;
+                    }                    
                 } 
             },
-            { data: 'quality_id'},
-            { data: 'clinic'},
-            { data: 'report'},
-            { data: 'cutpoint'},
-            { data: 'measure_range'},
-            { data: 'active'},
-            { data: 'created_date'},
+            { data: 'cutpoint_2',
+                render: function (data, type, row) {
+                    if (row.cutpoint_2_range == null || row.cutpoint_2_range == '' || row.cutpoint_2_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_2}</span> | ${row.cutpoint_2_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'cutpoint_3',
+                render: function (data, type, row) {
+                    if (row.cutpoint_3_range == null || row.cutpoint_3_range == '' || row.cutpoint_3_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_3}</span> | ${row.cutpoint_3_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'cutpoint_4',
+                render: function (data, type, row) {
+                    if (row.cutpoint_4_range == null || row.cutpoint_4_range == '' || row.cutpoint_4_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_4}</span> | ${row.cutpoint_4_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'cutpoint_5',
+                render: function (data, type, row) {
+                    if (row.cutpoint_5_range == null || row.cutpoint_5_range == '' || row.cutpoint_5_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_5}</span> | ${row.cutpoint_5_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'payment_1_score'},
+            { data: 'payment_2_score'},
+            { data: 'payment_3_score'},
+            { data: 'payment_4_score'},
+            { data: 'payment_5_score'},          
+            { data: 'active', 
+                render: function (data, type, row) {
+                    let active = row.active;                    
+                    if (active == 'Enable') {
+                        return `<span class="badge badge-success"> Active </span>`;
+                    } else if (active == 'Disable'){
+                        return `<span class="badge badge-danger"> Inactive </span>`;
+                    }                    
+                } 
+            },
+            { data: 'date'},
             { data: 'id',
               render: function (data, type, row) {
                 return `
-                  <div class="btn-group align-top" idkey="`+row.id+`">
-                    <button class="btn btn-sm btn-primary badge update_specific_cutpoint_measure" type="button">
-                        <i class="fa fa-edit"></i>
+                  <div class="btn-group align-top" idkey="${row.id}">
+                    <button class="btn btn-sm btn-primary badge update_specific_measure_cutpoint" type="button">
+                        <i class="fa fa-pencil"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger badge del_specific_cutpoint_measure" type="button">
+                    <button class="btn btn-sm btn-danger badge delete_specific_measure_cutpoint" type="button">
                         <i class="fa fa-trash"></i>
                     </button>
                   </div>
@@ -852,129 +1154,166 @@ $(document).ready(function() {
             }
         ]
     });
-
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetMeasureNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#add_specific_cutpoint_measure_name').html(content);
-
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
-    }); 
-
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetClinicNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#add_specific_cutpoint_measure_clinic').html(content);
-
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
-    });       
     
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetReportNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#add_specific_cutpoint_measure_report').html(content);
+    $('#specific_measure_cutpoint_search').on('keyup', function () {
+        specific_measure_cutpoint_table.search(this.value).draw();
+    });
 
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
+    $(document).on("click", "#reload_specific_measure_cutpoint", function() {        
+        specific_measure_cutpoint_table.ajax.reload();       
     });  
-
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetCutpointNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#add_specific_cutpoint_measure_cutpoint').html(content);
-
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
-    });  
-
-    //
-    $('#add_specific_cutpoint_measure_name').change(function() {         
-        let params = {
-            id: $('#add_specific_cutpoint_measure_name option:selected').val()
-        }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/GetMeasureQualityId", (xhr, err) => {
-            if (!err) {
-                let result = JSON.parse(xhr.responseText)['data'];                 
-                $('#add_specific_cutpoint_measure_quality_id').val(result[0].measureId);
-            } else {  
-                return toastr.error("Action Failed");
+    
+    $(document).on("change", "#add_insurance_name", function() {    
+        $('#add_specific_measure_cutpoint_report').val(null).trigger('change'); 
+        // let id = $(this).val();
+        GetReports($(this).val(), (options) => {
+          if (options) {        
+            //   $('#add_quality_program_ins_lob').html(options);          
+              $('#add_specific_measure_cutpoint_report').select2({
+                
+                data: options,
+                dropdownParent: $('#add_specific_measure_cutpoint_modal .modal-body')
+              }); 
+          }
+        });      
+      });
+    
+    $(document).on('click', '#add_specific_measure_cutpoint', function() {        
+        GetClinics((options) => {
+            if (options) {        
+                $('#add_specific_measure_cutpoint_clinic').select2({
+                  data: options,
+                  dropdownParent: $('#add_specific_measure_cutpoint_modal .modal-body')
+                });         
             }
         });
+        GetReports((options) => {
+            if (options) {        
+                $('#add_specific_measure_cutpoint_report').select2({
+                  data: options,
+                  dropdownParent: $('#add_specific_measure_cutpoint_modal .modal-body')
+                });         
+            }
+        });
+
+        GetInsurance((options) => {
+            if (options) {        
+                $('#add_insurance_name').select2({
+                  data: options,
+                  dropdownParent: $('#add_specific_measure_cutpoint_modal .modal-body')
+                });         
+            }
+        });        
+        
+
+        $('#add_specific_measure_cutpoint_modal').modal('show');
     });
 
-    
-    $(document).on('click', '#add_specific_cutpoint_measure', function() {        
-        $('#add_specific_cutpoint_measure_modal').modal('show');
-    });
+    $(document).on('click', '#save_specific_measure_cutpoint', function() {
 
-    $(document).on('click', '#save_specific_cutpoint_measure', function() {
-
-        var measure = $('#add_specific_cutpoint_measure_name').val();
-        var clinic = $('#add_specific_cutpoint_measure_clinic').val();
-        var report = $('#add_specific_cutpoint_measure_report').val();
-        var cutpoint = $('#add_specific_cutpoint_measure_cutpoint').val();
-        var range = $('#add_specific_cutpoint_measure_range').val();
-        var active = $('#add_specific_cutpoint_measure_active').val();
-        var created_date = $('#add_specific_cutpoint_measure_date').val();
+        let clinic = $('#add_specific_measure_cutpoint_clinic').val();
+        let measure = $('#add_specific_measure_cutpoint_name_id').val();
+        let report = $('#add_specific_measure_cutpoint_report').val();
+        let insurance = $('#add_insurance_name').val();
         
+        let cutpoint1 = $('#add_specific_measure_cutpoint_1').val();
+        let cutpoint1_range = $('#add_specific_measure_cutpoint_1_range').val();        
         
+        let cutpoint2 = $('#add_specific_measure_cutpoint_2').val();
+        let cutpoint2_range = $('#add_specific_measure_cutpoint_2_range').val();        
+        
+        let cutpoint3 = $('#add_specific_measure_cutpoint_3').val();
+        let cutpoint3_range = $('#add_specific_measure_cutpoint_3_range').val();        
+        
+        let cutpoint4 = $('#add_specific_measure_cutpoint_4').val();
+        let cutpoint4_range = $('#add_specific_measure_cutpoint_4_range').val();        
+        
+        let cutpoint5 = $('#add_specific_measure_cutpoint_5').val();
+        let cutpoint5_range = $('#add_specific_measure_cutpoint_5_range').val();
 
-        if ( measure == '' || clinic == '' || report == '' || cutpoint == '' || range == null || active == '' || created_date == '') {
-            toastr.error("Please enter complete information");
-        } else {
+        let payment1 = $('#add_specific_measure_payment_1_score').val();
+        let payment2 = $('#add_specific_measure_payment_2_score').val();        
+        let payment3 = $('#add_specific_measure_payment_3_score').val();
+        let payment4 = $('#add_specific_measure_payment_4_score').val();
+        let payment5 = $('#add_specific_measure_payment_5_score').val();
+        
+        let active = $('#add_specific_measure_cutpoint_active').val();
+        let date = $('#add_specific_measure_cutpoint_date').val();
+        
+        if (measure == '') toastr.error('Please select Measure');        
+        else if (clinic == null) toastr.error('Please select Clinic');        
+        else if(report == null) toastr.error('Please select Report Name');
+        else if(cutpoint1 == null) toastr.error('Please select Cutpoint 1');
+        else if(cutpoint1_range == '') toastr.error('Please Input Range 1');
+        else if(payment1 == '') toastr.error('Please Input Payment 1');
+        else if(cutpoint2 == null) toastr.error('Please select Cutpoint 2');
+        else if(cutpoint2_range == '') toastr.error('Please Input Range 2');
+        else if(payment2 == '') toastr.error('Please Input Payment 2');
+        else if(cutpoint3 == null) toastr.error('Please select Cutpoint 3');
+        else if(cutpoint3_range == '') toastr.error('Please Input Range 3');
+        else if(payment3 == '') toastr.error('Please Input Payment 3');
+        else if(cutpoint4 == null) toastr.error('Please select Cutpoint 4');
+        else if(cutpoint4_range == '') toastr.error('Please Input Range 4');
+        else if(payment4 == '') toastr.error('Please Input Payment 4');
+        else if(cutpoint5 == null) toastr.error('Please select Cutpoint 5');
+        else if(cutpoint5_range == '') toastr.error('Please Input Range 5');
+        else if(payment5 == '') toastr.error('Please Input Payment 5');
+        else if(active == null) toastr.error('Please select Active');
+        else if(date == '') toastr.error('Please select Date');               
+        else {
             let entry = {
+                clinic: clinic,
                 measure: measure, 
-                clinic: clinic, 
                 report: report,
-                cutpoint: cutpoint,
-                range: range,
+                insurance: insurance,
+                cutpoint1: cutpoint1,
+                cutpoint1_range: cutpoint1_range,
+                payment1: payment1,
+                cutpoint2: cutpoint2,
+                cutpoint2_range: cutpoint2_range,
+                payment2: payment2,
+                cutpoint3: cutpoint3,
+                cutpoint3_range: cutpoint3_range,
+                payment3: payment3,
+                cutpoint4: cutpoint4,
+                cutpoint4_range: cutpoint4_range,
+                payment4: payment4,
+                cutpoint5: cutpoint5,
+                cutpoint5_range: cutpoint5_range,
+                payment5: payment5,
                 active: active,
-                created_date: created_date
+                date: date
             }    
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/AddSpecificCutpointMeasureItem", (xhr, err) => {
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/specificMeasureCutpoint", (xhr, err) => {
                 if (!err) {
-                    // setTimeout( function () {
-                    //     specific_cutpoint_measure_table.ajax.reload();
-                    // }, 1000 );
-                    specific_cutpoint_measure_table.ajax.reload();
-                    $('#add_specific_cutpoint_measure_name').val(null);
-                    $('#add_specific_cutpoint_measure_clinic').val(null);
-                    $('#add_specific_cutpoint_measure_report').val(null);
-                    $('#add_specific_cutpoint_measure_cutpoint').val(null);
-                    $('#add_specific_cutpoint_measure_range').val('');
-                    $('#add_specific_cutpoint_measure_active').val(null);
-                    $('#add_specific_cutpoint_measure_date').val('')
-                    $('#add_specific_cutpoint_measure_modal').modal('hide');
+                    specific_measure_cutpoint_table.ajax.reload();
+
+                    $('#add_measure_program_cutpoint_name_id').val('');
+                    $('#add_measure_program_cutpoint_name').val('');
+                    $('#add_measure_program_cutpoint_quality_id').val('');                    
+                    $('#add_measure_program_cutpoint_report').val(null).trigger('change');
+
+                    $('#add_measure_program_cutpoint_1').val(null).trigger('change');
+                    $('#add_measure_program_cutpoint_range_1').val('');
+                    $('#add_measure_program_cutpoint_payment_1').val('');
+                    $('#add_measure_program_cutpoint_2').val(null).trigger('change');
+                    $('#add_measure_program_cutpoint_range_2').val('');
+                    $('#add_measure_program_cutpoint_payment_2').val('');
+                    $('#add_measure_program_cutpoint_3').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_range_3').val('');
+                    $('#add_measure_program_cutpoint_payment_3').val('');
+                    $('#add_measure_program_cutpoint_4').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_range_4').val('');
+                    $('#add_measure_program_cutpoint_payment_4').val('');
+                    $('#add_measure_program_cutpoint_5').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_range_5').val('');
+                    $('#add_measure_program_cutpoint_payment_5').val('');                  
+                    $('#add_measure_program_cutpoint_active').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_date').val('');
+
+                    $('#add_specific_measure_cutpoint_modal').modal('hide');
+
+                    toastr.success('Action Success');
                 } else {
                     return toastr.error("Action Failed");
                 }
@@ -982,7 +1321,7 @@ $(document).ready(function() {
         }        
     });
 
-    $(document).on("click", ".del_specific_cutpoint_measure", function() {
+    $(document).on("click", ".delete_specific_measure_cutpoint", function() {
         let entry = {
             id: $(this).parent().attr("idkey"),
         }
@@ -999,11 +1338,10 @@ $(document).ready(function() {
             }
         }).then(function (result) {
             if (result.value) {
-                sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/DelSpecificCutpointMeasureItem", (xhr, err) => {
-                if (!err) {
-                    setTimeout( function () {
-                        specific_cutpoint_measure_table.ajax.reload();
-                    }, 1000 );
+                sendRequestWithToken('DELETE', localStorage.getItem('authToken'), entry, "reportBuilder/specificMeasureCutpoint", (xhr, err) => {
+                if (!err) {                    
+                    specific_measure_cutpoint_table.ajax.reload();
+                    toastr.success('Action Success');
                 } else {
                     return toastr.error("Action Failed");
                 }
@@ -1012,154 +1350,800 @@ $(document).ready(function() {
         });
     });
 
+    $('#edit_insurance_name').on('change', function(){
+        
+        $('#edit_specific_measure_cutpoint_report').select2({                          
+            data: [],
+            dropdownParent: $('#edit_specific_measure_cutpoint_modal .modal-body')
+          }); 
 
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetMeasureNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#edit_specific_cutpoint_measure_name').html(content);
-
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
-    }); 
-
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetClinicNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#edit_specific_cutpoint_measure_clinic').html(content);
-
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
-    });       
-    
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetReportNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#edit_specific_cutpoint_measure_report').html(content);
-
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
-    });  
-
-    sendRequestWithToken('GET', localStorage.getItem('authToken'), {}, "reportBuilder/GetCutpointNameList", (xhr, err) => {
-        if (!err) {
-            let result = JSON.parse(xhr.responseText)['data'];    
-            let content = "";
-            content += '<option></option>';
-            result.forEach(r => {                               
-                content += '<option value="'+ r.id +'">' + r.name + '</option>';                                        
-            }); 
-            $('#edit_specific_cutpoint_measure_cutpoint').html(content);
-
-            
-        } else {  
-            return toastr.error("Action Failed");
-        }
-    });  
-
-    $('#edit_specific_cutpoint_measure_name').change(function() {     
-        let params = {
-            id: $('#edit_specific_cutpoint_measure_name option:selected').val()
-        }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/GetMeasureQualityId", (xhr, err) => {
-            if (!err) {
-                let result = JSON.parse(xhr.responseText)['data'];                 
-                $('#edit_specific_cutpoint_measure_quality_id').val(result[0].measureId);
-            } else {  
-                return toastr.error("Action Failed");
+        GetReports($(this).val(), (options) => {
+            if (options) {        
+              //   $('#add_quality_program_ins_lob').html(options);          
+                $('#edit_specific_measure_cutpoint_report').select2({                          
+                  data: options,
+                  dropdownParent: $('#edit_specific_measure_cutpoint_modal .modal-body')
+                }); 
             }
         });
     });
 
-    $(document).on('click', '.update_specific_cutpoint_measure', function() {        
+    $(document).on('click', '.update_specific_measure_cutpoint', function() {
 
-        var row = specific_cutpoint_measure_table.row($(this).parents('tr')).data();
+        let row = specific_measure_cutpoint_table.row($(this).parents('tr')).data();        
         
         $('#edit_specific_cutpoint_measure_id').val(row.id);
         $('#edit_specific_cutpoint_measure_quality_id').val(row.quality_id);        
 
-        let params = {
-            id: row.id
-        }
-        sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/GetSpecificCutpointMeasureById", (xhr, err) => {
+        // let params = { id: row.id }
+
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, `reportBuilder/specificMeasureCutpoint/${row.id}`, (xhr, err) => {
             if (!err) {
                 let result = JSON.parse(xhr.responseText)['data'];    
-                $('#edit_specific_cutpoint_measure_name').val(result[0]['measure_id']).trigger('change');
-                $('#edit_specific_cutpoint_measure_clinic').val(result[0]['clinic_id']).trigger('change');
-                $('#edit_specific_cutpoint_measure_report').val(result[0]['report_id']).trigger('change');
-                $('#edit_specific_cutpoint_measure_cutpoint').val(result[0]['cutpoint_id']).trigger('change');
-                $('#edit_specific_cutpoint_measure_range').val(result[0]['measure_range']);
-                $('#edit_specific_cutpoint_measure_active').val(result[0]['active']).trigger('change');                
-                $('#edit_specific_cutpoint_measure_date').val(result[0]['create_date']);       
-                $('#edit_specific_cutpoint_measure_modal').modal('show');
+
+                $('#edit_specific_measure_cutpoint_id').val(result[0]['id']);       
+                $('#edit_specific_measure_cutpoint_name_id').val(result[0]['measure_id']);  
+                $('#edit_specific_measure_cutpoint_name').val(result[0]['title']);
+                $('#edit_specific_measure_cutpoint_quality_id').val(result[0]['measureId']);
                 
+                GetClinics((options) => {
+                    if (options) {        
+                        $('#edit_specific_measure_cutpoint_clinic').select2({
+                          data: options,
+                          dropdownParent: $('#edit_specific_measure_cutpoint_modal .modal-body')
+                        });         
+                    }        
+                      
+                    $('#edit_specific_measure_cutpoint_clinic').val(result[0]['clinic_id']).trigger('change');      
+                });
+
+                GetInsurance((options) => {
+                    if (options) {        
+                        $('#edit_insurance_name').select2({
+                          data: options,
+                          dropdownParent: $('#edit_specific_measure_cutpoint_modal .modal-body')
+                        });         
+                    }        
+                      
+                    $('#edit_insurance_name').val(result[0]['insurance_id']).trigger('change');      
+                });
+                
+                GetReports(result[0]['insurance_id'], (options) => {
+                    if (options) {        
+                      //   $('#add_quality_program_ins_lob').html(options);          
+                        $('#edit_specific_measure_cutpoint_report').select2({                          
+                          data: options,
+                          dropdownParent: $('#edit_specific_measure_cutpoint_modal .modal-body')
+                        }); 
+                    }
+                    $('#edit_specific_measure_cutpoint_report').val(result[0]['report_id']).trigger('change');  
+                }); 
+
+                
+                $('#edit_specific_measure_cutpoint_1').val(result[0]['cutpoint_1_id']).trigger('change');
+                $('#edit_specific_measure_cutpoint_1_range').val(result[0]['cutpoint_1_range']);
+                $('#edit_specific_measure_cutpoint_2').val(result[0]['cutpoint_2_id']).trigger('change');
+                $('#edit_specific_measure_cutpoint_2_range').val(result[0]['cutpoint_2_range']);
+                $('#edit_specific_measure_cutpoint_3').val(result[0]['cutpoint_3_id']).trigger('change');
+                $('#edit_specific_measure_cutpoint_3_range').val(result[0]['cutpoint_3_range']);
+                $('#edit_specific_measure_cutpoint_4').val(result[0]['cutpoint_4_id']).trigger('change');
+                $('#edit_specific_measure_cutpoint_4_range').val(result[0]['cutpoint_4_range']);
+                $('#edit_specific_measure_cutpoint_5').val(result[0]['cutpoint_5_id']).trigger('change');
+                $('#edit_specific_measure_cutpoint_5_range').val(result[0]['cutpoint_5_range']);
+
+                $('#edit_specific_measure_payment_1_score').val(result[0]['payment_1_score']);
+                $('#edit_specific_measure_payment_2_score').val(result[0]['payment_2_score']);
+                $('#edit_specific_measure_payment_3_score').val(result[0]['payment_3_score']);
+                $('#edit_specific_measure_payment_4_score').val(result[0]['payment_4_score']);
+                $('#edit_specific_measure_payment_5_score').val(result[0]['payment_5_score']);
+                
+
+                $('#edit_specific_measure_cutpoint_active').val(result[0]['active']).trigger('change');                
+                $('#edit_specific_measure_cutpoint_date').val(result[0]['date']);       
+
+                $('#edit_specific_measure_cutpoint_modal').modal('show');                
             } else {  
                 return toastr.error("Action Failed");
             }
         });         
     });
 
-    $(document).on('click', '#update_specific_cutpoint_measure', function() {
-
-        var id = $('#edit_specific_cutpoint_measure_id').val();
-        var measure = $('#edit_specific_cutpoint_measure_name').val();
-        var clinic = $('#edit_specific_cutpoint_measure_clinic').val();
-        var report = $('#edit_specific_cutpoint_measure_report').val();
-        var cutpoint = $('#edit_specific_cutpoint_measure_cutpoint').val();
-        var range = $('#edit_specific_cutpoint_measure_range').val();
-        var active = $('#edit_specific_cutpoint_measure_active').val();
-        var created_date = $('#edit_specific_cutpoint_measure_date').val();
+    $(document).on('click', '#update_specific_measure_cutpoint', function() {
         
-        if ( measure == '' || clinic == '' || report == '' || cutpoint == '' || range == '' || active == '' || created_date == '') {
-            toastr.error("Please enter complete information");
-        } else {
+        let id = $('#edit_specific_measure_cutpoint_id').val();
+        let clinic = $('#edit_specific_measure_cutpoint_clinic').val();        
+        let report = $('#edit_specific_measure_cutpoint_report').val();
+        let insurance = $('#edit_insurance_name').val();
+        
+        let cutpoint1 = $('#edit_specific_measure_cutpoint_1').val();
+        let cutpoint1_range = $('#edit_specific_measure_cutpoint_1_range').val();        
+        
+        let cutpoint2 = $('#edit_specific_measure_cutpoint_2').val();
+        let cutpoint2_range = $('#edit_specific_measure_cutpoint_2_range').val();        
+        
+        let cutpoint3 = $('#edit_specific_measure_cutpoint_3').val();
+        let cutpoint3_range = $('#edit_specific_measure_cutpoint_3_range').val();        
+        
+        let cutpoint4 = $('#edit_specific_measure_cutpoint_4').val();
+        let cutpoint4_range = $('#edit_specific_measure_cutpoint_4_range').val();        
+        
+        let cutpoint5 = $('#edit_specific_measure_cutpoint_5').val();
+        let cutpoint5_range = $('#edit_specific_measure_cutpoint_5_range').val();
+
+        let payment1 = $('#edit_specific_measure_payment_1_score').val();
+        let payment2 = $('#edit_specific_measure_payment_2_score').val();        
+        let payment3 = $('#edit_specific_measure_payment_3_score').val();
+        let payment4 = $('#edit_specific_measure_payment_4_score').val();
+        let payment5 = $('#edit_specific_measure_payment_5_score').val();
+        
+        let active = $('#edit_specific_measure_cutpoint_active').val();
+        let date = $('#edit_specific_measure_cutpoint_date').val();
+
+        
+        
+        if (clinic == null) toastr.error('Please select Clinic');        
+        else if(report == null) toastr.error('Please select Report Name');
+        else if(insurance == null) toastr.error('Please select insurance Name');
+        else if(cutpoint1 == null) toastr.error('Please select Cutpoint 1');
+        else if(cutpoint1_range == '') toastr.error('Please Input Range 1');
+        else if(payment1 == '') toastr.error('Please Input Payment 1');
+        else if(cutpoint2 == null) toastr.error('Please select Cutpoint 2');
+        else if(cutpoint2_range == '') toastr.error('Please Input Range 2');
+        else if(payment2 == '') toastr.error('Please Input Payment 2');
+        else if(cutpoint3 == null) toastr.error('Please select Cutpoint 3');
+        else if(cutpoint3_range == '') toastr.error('Please Input Range 3');
+        else if(payment3 == '') toastr.error('Please Input Payment 3');
+        else if(cutpoint4 == null) toastr.error('Please select Cutpoint 4');
+        else if(cutpoint4_range == '') toastr.error('Please Input Range 4');
+        else if(payment4 == '') toastr.error('Please Input Payment 4');
+        else if(cutpoint5 == null) toastr.error('Please select Cutpoint 5');
+        else if(cutpoint5_range == '') toastr.error('Please Input Range 5');
+        else if(payment5 == '') toastr.error('Please Input Payment 5');
+        else if(active == null) toastr.error('Please select Active');
+        else if(date == '') toastr.error('Please select Date');               
+        else {
             let entry = {
-                id: id,
-                measure: measure,                 
-                clinic: clinic, 
+                clinic: clinic,                
                 report: report,
-                cutpoint: cutpoint,
-                range: range,
+                insurance: insurance,
+                cutpoint1: cutpoint1,
+                cutpoint1_range: cutpoint1_range,
+                payment1: payment1,
+                cutpoint2: cutpoint2,
+                cutpoint2_range: cutpoint2_range,
+                payment2: payment2,
+                cutpoint3: cutpoint3,
+                cutpoint3_range: cutpoint3_range,
+                payment3: payment3,
+                cutpoint4: cutpoint4,
+                cutpoint4_range: cutpoint4_range,
+                payment4: payment4,
+                cutpoint5: cutpoint5,
+                cutpoint5_range: cutpoint5_range,
+                payment5: payment5,
                 active: active,
-                created_date: created_date
+                date: date
             }    
-            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/UpdateSpecificCutpointMeasureItem", (xhr, err) => {
+            sendRequestWithToken('PUT', localStorage.getItem('authToken'), entry, `reportBuilder/specificMeasureCutpoint/${id}`, (xhr, err) => {
                 if (!err) {
-                    specific_cutpoint_measure_table.ajax.reload();
+                    specific_measure_cutpoint_table.ajax.reload();
                     
-                    $('#edit_specific_cutpoint_measure_id').val('');
-                    $('#edit_specific_cutpoint_measure_name').val(null);
-                    $('#edit_specific_cutpoint_measure_clinic').val(null);
-                    $('#edit_specific_cutpoint_measure_report').val(null);
-                    $('#edit_specific_cutpoint_measure_cutpoint').val(null);
-                    $('#edit_specific_cutpoint_measure_range').val('');
-                    $('#edit_specific_cutpoint_measure_active').val(null);
-                    $('#edit_specific_cutpoint_measure_date').val('')
-                    $('#edit_specific_cutpoint_measure_modal').modal('hide');
+                    $("#edit_specific_measure_cutpoint_id").val('');
+                    $("#edit_specific_measure_cutpoint_name_id").val('');                    
+                    
+                    $("#edit_specific_measure_cutpoint_name").val('');
+                    $("#edit_specific_measure_cutpoint_quality_id").val('');
+
+                    $("#edit_specific_measure_cutpoint_clinic").val(null).trigger('change');
+                    $("#edit_insurance_name").val(null).trigger('change');
+                    $("#edit_specific_measure_cutpoint_report").val(null).trigger('change');      
+
+                    $("#edit_specific_measure_cutpoint_1").val(null).trigger('change');
+                    $("#edit_specific_measure_cutpoint_2").val(null).trigger('change');
+                    $("#edit_specific_measure_cutpoint_3").val(null).trigger('change');
+                    $("#edit_specific_measure_cutpoint_4").val(null).trigger('change');
+                    $("#edit_specific_measure_cutpoint_5").val(null).trigger('change');
+
+                    $("#edit_specific_measure_cutpoint_1_range").val('');
+                    $("#edit_specific_measure_cutpoint_2_range").val('');
+                    $("#edit_specific_measure_cutpoint_3_range").val('');
+                    $("#edit_specific_measure_cutpoint_4_range").val('');
+                    $("#edit_specific_measure_cutpoint_5_range").val('');
+
+                    $("#edit_specific_measure_payment_1_score").val('');
+                    $("#edit_specific_measure_payment_2_score").val('');
+                    $("#edit_specific_measure_payment_3_score").val('');
+                    $("#edit_specific_measure_payment_4_score").val('');
+                    $("#edit_specific_measure_payment_5_score").val('');
+
+                    $("#edit_specific_measure_cutpoint_active").val(null).trigger('change');
+                    $("#edit_specific_measure_cutpoint_date").val('');
+
+                    $("#edit_specific_measure_cutpoint_modal").modal('hide');
+                    toastr.success('Action Success');
                 } else {
                     return toastr.error("Action Failed");
                 }
             });
         }        
     });
+
+    
+      
+    // Measure Program Cutpoint
+    let measure_program_cutpoint_table = $('#measure_program_cutpoint_table').DataTable({
+        ajax: {
+            url: serviceUrl + "reportBuilder/measureProgramCutpoint",
+            type: "GET"
+        },
+        stripeClasses: [],
+        paging: false,        
+        // responsive: true,       
+        // columnDefs: [
+        //     { responsivePriority: 1, targets: 0 },
+        //     { responsivePriority: 2, targets: -1 }
+        // ],
+        processing: true,
+        responsive: {
+            details: {
+                renderer: function (api, rowIdx, columns) {
+                    var data = $.map(columns, function (col, i) {
+                        return col.hidden ?
+                            '<tr data-dt-row="'+ col.rowIndex +'" data-dt-column="'+ col.columnIndex +'">'+
+                                '<td style="width:25%; padding: 10px;"><strong>'+ col.title +'</strong></td>'+
+                                '<td style="border-left: 1px solid #F1F1F4; text-align:center">'+ col.data +'</td>'+
+                            '</tr>' : '';
+                    }).join(''); 
+
+                    return data ? $('<table/>').append(data) : false;
+                }
+            }
+        },             
+        "columns": [
+            { data: 'measure' },
+            { data: 'quality_id' },
+            { data: 'report' },            
+            { data: 'cutpoint_1',
+                render: function (data, type, row) {
+                    if (row.cutpoint_1_range == null || row.cutpoint_1_range == '' || row.cutpoint_1_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_1}</span> | ${row.cutpoint_1_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'cutpoint_2',
+                render: function (data, type, row) {
+                    if (row.cutpoint_2_range == null || row.cutpoint_2_range == '' || row.cutpoint_2_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_2}</span> | ${row.cutpoint_2_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'cutpoint_3',
+                render: function (data, type, row) {
+                    if (row.cutpoint_3_range == null || row.cutpoint_3_range == '' || row.cutpoint_3_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_3}</span> | ${row.cutpoint_3_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'cutpoint_4',
+                render: function (data, type, row) {
+                    if (row.cutpoint_4_range == null || row.cutpoint_4_range == '' || row.cutpoint_4_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_4}</span> | ${row.cutpoint_4_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'cutpoint_5',
+                render: function (data, type, row) {
+                    if (row.cutpoint_5_range == null || row.cutpoint_5_range == '' || row.cutpoint_5_range == 0) {
+                        return '';
+                    } else {
+                        return `<span class="badge badge-light" style="font-size: 13px;">${row.cutpoint_5}</span> | ${row.cutpoint_5_range}%`;
+                    }                    
+                } 
+            },
+            { data: 'payment_1_score'},
+            { data: 'payment_2_score'},
+            { data: 'payment_3_score'},
+            { data: 'payment_4_score'},
+            { data: 'payment_5_score'},          
+            { data: 'active', 
+                render: function (data, type, row) {
+                    let active = row.active;                    
+                    if (active == 'Enable') {
+                        return `<span class="badge badge-success"> Active </span>`;
+                    } else if (active == 'Disable'){
+                        return `<span class="badge badge-danger"> Inactive </span>`;
+                    }                    
+                } 
+            },
+            { data: 'date'},
+            { data: 'id',
+              render: function (data, type, row) {
+                return `
+                  <div class="btn-group align-top" idkey="${row.id}">
+                    <button class="btn btn-sm btn-primary badge update_measure_program_cutpoint" type="button">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger badge del_measure_program_cutpoint" type="button">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                `
+              } 
+            }
+        ]
+    });
+
+    $('#measure_program_cutpoint_search_input').on('keyup', function () {
+        measure_program_cutpoint_table.search(this.value).draw();
+    });
+
+    $(document).on('click', '#add_measure_program_cutpoint', function() {
+        
+        $('#add_measure_program_cutpoint_report').select2({
+            dropdownParent: $('#add_measure_program_cutpoint_modal')
+        });   
+
+        $("#add_measure_program_cutpoint_modal").modal('show');
+    });
+
+    // $(document).on("change", "#add_measure_program_cutpoint_OQS", function() {
+    //     var inputDiv = document.getElementById('add_OQS_weight_tag');
+        
+    //     if (this.checked) {
+    //         inputDiv.style.display = 'block';            
+    //     } else {
+    //         inputDiv.style.display = 'none';
+    //         $('#add_measure_program_cutpoint_OQS_weight').val('');            
+    //     }
+    // });
+
+    $(document).on("change", "#edit_measure_program_cutpoint_OQS", function() {
+        var inputDiv = document.getElementById('edit_OQS_weight_tag');
+        
+        if (this.checked) {
+            inputDiv.style.display = 'block';            
+        } else {
+            inputDiv.style.display = 'none';            
+            $('#edit_measure_program_cutpoint_OQS_weight').val('');            
+        }
+    });
+
+    
+    $(document).on('click', '#save_measure_program_cutpoint', function() {
+
+        let measure = $('#add_measure_program_cutpoint_name_id').val();
+        let report = $('#add_measure_program_cutpoint_report').val();
+        
+        let cutpoint1 = $('#add_measure_program_cutpoint_1').val();
+        let cutpoint1_range = $('#add_measure_program_cutpoint_range_1').val();        
+        
+        let cutpoint2 = $('#add_measure_program_cutpoint_2').val();
+        let cutpoint2_range = $('#add_measure_program_cutpoint_range_2').val();        
+        
+        let cutpoint3 = $('#add_measure_program_cutpoint_3').val();
+        let cutpoint3_range = $('#add_measure_program_cutpoint_range_3').val();        
+        
+        let cutpoint4 = $('#add_measure_program_cutpoint_4').val();
+        let cutpoint4_range = $('#add_measure_program_cutpoint_range_4').val();        
+        
+        let cutpoint5 = $('#add_measure_program_cutpoint_5').val();
+        let cutpoint5_range = $('#add_measure_program_cutpoint_range_5').val();
+
+        let payment1 = $('#add_measure_program_cutpoint_payment_1').val();
+        let payment2 = $('#add_measure_program_cutpoint_payment_2').val();        
+        let payment3 = $('#add_measure_program_cutpoint_payment_3').val();
+        let payment4 = $('#add_measure_program_cutpoint_payment_4').val();
+        let payment5 = $('#add_measure_program_cutpoint_payment_5').val();
+        
+        let active = $('#add_measure_program_cutpoint_active').val();
+        let date = $('#add_measure_program_cutpoint_date').val();
+        
+        if (measure == '') toastr.error('Please select Measure');        
+        else if(report == null) toastr.error('Please select Report Name');
+        else if(cutpoint1 == null) toastr.error('Please select Cutpoint 1');
+        else if(cutpoint1_range == '') toastr.error('Please Input Range 1');
+        else if(payment1 == '') toastr.error('Please Input Payment 1');
+        else if(cutpoint2 == null) toastr.error('Please select Cutpoint 2');
+        else if(cutpoint2_range == '') toastr.error('Please Input Range 2');
+        else if(payment2 == '') toastr.error('Please Input Payment 2');
+        else if(cutpoint3 == null) toastr.error('Please select Cutpoint 3');
+        else if(cutpoint3_range == '') toastr.error('Please Input Range 3');
+        else if(payment3 == '') toastr.error('Please Input Payment 3');
+        else if(cutpoint4 == null) toastr.error('Please select Cutpoint 4');
+        else if(cutpoint4_range == '') toastr.error('Please Input Range 4');
+        else if(payment4 == '') toastr.error('Please Input Payment 4');
+        else if(cutpoint5 == null) toastr.error('Please select Cutpoint 5');
+        else if(cutpoint5_range == '') toastr.error('Please Input Range 5');
+        else if(payment5 == '') toastr.error('Please Input Payment 5');
+        else if(active == null) toastr.error('Please select Active');
+        else if(date == '') toastr.error('Please select Date');               
+        else {
+            let entry = {
+                measure: measure, 
+                report: report,
+                cutpoint1: cutpoint1,
+                cutpoint1_range: cutpoint1_range,
+                payment1: payment1,
+                cutpoint2: cutpoint2,
+                cutpoint2_range: cutpoint2_range,
+                payment2: payment2,
+                cutpoint3: cutpoint3,
+                cutpoint3_range: cutpoint3_range,
+                payment3: payment3,
+                cutpoint4: cutpoint4,
+                cutpoint4_range: cutpoint4_range,
+                payment4: payment4,
+                cutpoint5: cutpoint5,
+                cutpoint5_range: cutpoint5_range,
+                payment5: payment5,
+                active: active,
+                date: date
+            }    
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/measureProgramCutpoint", (xhr, err) => {
+                if (!err) {
+                    measure_program_cutpoint_table.ajax.reload();
+
+                    $('#add_measure_program_cutpoint_name_id').val('');
+                    $('#add_measure_program_cutpoint_name').val('');
+                    $('#add_measure_program_cutpoint_quality_id').val('');                    
+                    $('#add_measure_program_cutpoint_report').val(null).trigger('change');
+
+                    $('#add_measure_program_cutpoint_1').val(null).trigger('change');
+                    $('#add_measure_program_cutpoint_range_1').val('');
+                    $('#add_measure_program_cutpoint_payment_1').val('');
+                    $('#add_measure_program_cutpoint_2').val(null).trigger('change');
+                    $('#add_measure_program_cutpoint_range_2').val('');
+                    $('#add_measure_program_cutpoint_payment_2').val('');
+                    $('#add_measure_program_cutpoint_3').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_range_3').val('');
+                    $('#add_measure_program_cutpoint_payment_3').val('');
+                    $('#add_measure_program_cutpoint_4').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_range_4').val('');
+                    $('#add_measure_program_cutpoint_payment_4').val('');
+                    $('#add_measure_program_cutpoint_5').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_range_5').val('');
+                    $('#add_measure_program_cutpoint_payment_5').val('');                  
+                    $('#add_measure_program_cutpoint_active').val(null).trigger('change');;
+                    $('#add_measure_program_cutpoint_date').val('');
+
+                    $('#add_measure_program_cutpoint_modal').modal('hide');
+
+                    toastr.success('Action Success');
+                } else {
+                    return toastr.error("Action Failed");
+                }
+            });
+        }        
+    });
+    
+    $(document).on('click', '.update_measure_program_cutpoint', function() {
+        let row = measure_program_cutpoint_table.row($(this).parents('tr')).data();        
+        
+        $('#edit_measure_program_cutpoint_id').val(row.id);
+        $('#edit_measure_program_cutpoint_quality_id').val(row.quality_id);        
+
+        
+
+        sendRequestWithToken('POST', localStorage.getItem('authToken'), {}, `reportBuilder/measureProgramCutpoint/${row.id}`, (xhr, err) => {
+            if (!err) {
+                let result = JSON.parse(xhr.responseText)['data'];  
+                
+                $('#edit_measure_program_cutpoint_id').val(result[0]['id']);
+                $('#edit_measure_program_cutpoint_name_id').val(result[0]['measure_id']).trigger('change');
+                $('#edit_measure_program_cutpoint_name').val(result[0]['title']);
+                $('#edit_measure_program_cutpoint_quality_id').val(result[0]['measureId']);                
+                $('#edit_measure_program_cutpoint_report').val(result[0]['report_id']).trigger('change');
+                $('#edit_measure_program_cutpoint_1').val(result[0]['cutpoint_1_id']).trigger('change');
+                $('#edit_measure_program_cutpoint_range_1').val(result[0]['cutpoint_1_range']);
+                $('#edit_measure_program_cutpoint_payment_1').val(result[0]['payment_1_score']);
+                $('#edit_measure_program_cutpoint_2').val(result[0]['cutpoint_2_id']).trigger('change');
+                $('#edit_measure_program_cutpoint_range_2').val(result[0]['cutpoint_2_range']);
+                $('#edit_measure_program_cutpoint_payment_2').val(result[0]['payment_2_score']);
+                $('#edit_measure_program_cutpoint_3').val(result[0]['cutpoint_3_id']).trigger('change');
+                $('#edit_measure_program_cutpoint_range_3').val(result[0]['cutpoint_3_range']);
+                $('#edit_measure_program_cutpoint_payment_3').val(result[0]['payment_3_score']);
+                $('#edit_measure_program_cutpoint_4').val(result[0]['cutpoint_4_id']).trigger('change');
+                $('#edit_measure_program_cutpoint_range_4').val(result[0]['cutpoint_4_range']);
+                $('#edit_measure_program_cutpoint_payment_4').val(result[0]['payment_4_score']);
+                $('#edit_measure_program_cutpoint_5').val(result[0]['cutpoint_5_id']).trigger('change');
+                $('#edit_measure_program_cutpoint_range_5').val(result[0]['cutpoint_5_range']);
+                $('#edit_measure_program_cutpoint_payment_5').val(result[0]['payment_5_score']);             
+                $('#edit_measure_program_cutpoint_active').val(result[0]['active']).trigger('change');                
+                $('#edit_measure_program_cutpoint_date').val(result[0]['date']);       
+
+                $('#edit_measure_program_cutpoint_modal').modal('show');                
+            } else {  
+                return toastr.error("Action Failed");
+            }
+        });         
+    });
+    
+    $(document).on('click', '#update_measure_program_cutpoint', function() {
+        let id = $('#edit_measure_program_cutpoint_id').val();
+        let measure = $('#edit_measure_program_cutpoint_name_id').val();
+        let report = $('#edit_measure_program_cutpoint_report').val();
+        let cutpoint1 = $('#edit_measure_program_cutpoint_1').val();
+        let range1 = $('#edit_measure_program_cutpoint_range_1').val();
+        let payment1 = $('#edit_measure_program_cutpoint_payment_1').val();
+        let cutpoint2 = $('#edit_measure_program_cutpoint_2').val();
+        let range2 = $('#edit_measure_program_cutpoint_range_2').val();
+        let payment2 = $('#edit_measure_program_cutpoint_payment_3').val();
+        let cutpoint3 = $('#edit_measure_program_cutpoint_3').val();
+        let range3 = $('#edit_measure_program_cutpoint_range_3').val();
+        let payment3 = $('#edit_measure_program_cutpoint_payment_3').val();
+        let cutpoint4 = $('#edit_measure_program_cutpoint_4').val();
+        let range4 = $('#edit_measure_program_cutpoint_range_4').val();
+        let payment4 = $('#edit_measure_program_cutpoint_payment_4').val();
+        let cutpoint5 = $('#edit_measure_program_cutpoint_5').val();
+        let range5 = $('#edit_measure_program_cutpoint_range_5').val();
+        let payment5 = $('#edit_measure_program_cutpoint_payment_5').val();
+        
+        let active = $('#edit_measure_program_cutpoint_active').val();
+        let date = $('#edit_measure_program_cutpoint_date').val();
+        
+        if ( measure == '') toastr.error('Please select Measure');        
+        else if(report == null) toastr.error('Please select Report Name');
+        else if(cutpoint1 == null) toastr.error('Please select Cutpoint 1');
+        else if(range1 == '') toastr.error('Please Input Range 1');
+        else if(payment1 == '') toastr.error('Please Input Payment 1');
+        else if(cutpoint2 == null) toastr.error('Please select Cutpoint 2');
+        else if(range2 == '') toastr.error('Please Input Range 2');
+        else if(payment2 == '') toastr.error('Please Input Payment 2');
+        else if(cutpoint3 == null) toastr.error('Please select Cutpoint 3');
+        else if(range3 == '') toastr.error('Please Input Range 3');
+        else if(payment3 == '') toastr.error('Please Input Payment 3');
+        else if(cutpoint4 == null) toastr.error('Please select Cutpoint 4');
+        else if(range4 == '') toastr.error('Please Input Range 4');
+        else if(payment4 == '') toastr.error('Please Input Payment 4');
+        else if(cutpoint5 == null) toastr.error('Please select Cutpoint 5');
+        else if(range5 == '') toastr.error('Please Input Range 5');
+        else if(payment5 == '') toastr.error('Please Input Payment 5');
+        else if(active == null) toastr.error('Please select Active');
+        else if(date == '') toastr.error('Please select Date');              
+        else {
+            let params = {
+                measure: measure, 
+                report: report,
+                cutpoint1: cutpoint1,
+                range1: range1,
+                payment1: payment1,
+                cutpoint2: cutpoint2,
+                range2: range2,
+                payment2: payment2,
+                cutpoint3: cutpoint3,
+                range3: range3,
+                payment3: payment3,
+                cutpoint4: cutpoint4,
+                range4: range4,
+                payment4: payment4,
+                cutpoint5: cutpoint5,
+                range5: range5,
+                payment5: payment5,
+                active: active,
+                date: date
+            }    
+            sendRequestWithToken('PUT', localStorage.getItem('authToken'), params, `reportBuilder/measureProgramCutpoint/${id}`, (xhr, err) => {
+                if (!err) {
+                    measure_program_cutpoint_table.ajax.reload();
+                    
+                    $("#edit_specific_cutpoint_measure_id").val('');
+                    $("#edit_measure_program_cutpoint_name_id").val('');
+                    $("#edit_measure_program_cutpoint_name").val('');
+                    $("#edit_measure_program_cutpoint_report").val(null).trigger('change');;                    
+                    $("#edit_measure_program_cutpoint_1").val(null).trigger('change');
+                    $("#edit_measure_program_cutpoint_range_1").val('');
+                    $("#edit_measure_program_cutpoint_payment_1").val('');
+                    $("#edit_measure_program_cutpoint_2").val(null).trigger('change');
+                    $("#edit_measure_program_cutpoint_range_2").val('');
+                    $("#edit_measure_program_cutpoint_payment_2").val('');
+                    $("#edit_measure_program_cutpoint_3").val(null).trigger('change');
+                    $("#edit_measure_program_cutpoint_range_3").val('');
+                    $("#edit_measure_program_cutpoint_payment_3").val('');
+                    $("#edit_measure_program_cutpoint_4").val(null).trigger('change');
+                    $("#edit_measure_program_cutpoint_range_4").val('');
+                    $("#edit_measure_program_cutpoint_payment_4").val('');
+                    $("#edit_measure_program_cutpoint_5").val(null).trigger('change');
+                    $("#edit_measure_program_cutpoint_range_5").val('');
+                    $("#edit_measure_program_cutpoint_payment_5").val('');
+                    $("#edit_measure_program_cutpoint_active").val(null).trigger('change');
+                    $("#edit_measure_program_cutpoint_date").val('');
+
+                    $("#edit_measure_program_cutpoint_modal").modal('hide');
+
+                    toastr.success('Action Success');
+                } else {
+                    return toastr.error("Action Failed");
+                }
+            });
+        }        
+    });
+
+    $(document).on("click", ".del_measure_program_cutpoint", function() {
+        // let entry = {
+        //     id: $(this).parent().attr("idkey"),
+        // }
+        let id = $(this).parent().attr("idkey");
+
+        Swal.fire({
+            text: "Are you sure you would like to delete?",
+            icon: "error",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                sendRequestWithToken('DELETE', localStorage.getItem('authToken'), {}, `reportBuilder/measureProgramCutpoint/${id}`, (xhr, err) => {
+                if (!err) {                    
+                    measure_program_cutpoint_table.ajax.reload();
+                    toastr.success("Action Success");
+                } else {
+                    return toastr.error("Action Failed");
+                }
+                });
+            }
+        });
+    });
+
+    
+    $(document).on("click", "#reload_measure_program_cutpoint", function() {        
+        measure_program_cutpoint_table.ajax.reload();       
+    });   
+
+    // Measure Attribution
+    let measure_attr_table = $('#measure_attr_table').DataTable({
+        ajax: {
+            url: serviceUrl + "reportBuilder/GetMeasureAttrList",
+            type: "GET"
+        },
+        stripeClasses: [],
+        paging: false,
+        ordering: false,
+        info: false,
+        layout: {
+            topStart: {
+                buttons: ['searchBuilder']
+            }
+        },
+        order: [[2, 'desc']],
+        columns: [
+            { data: 'display'},
+            { data: 'description'},
+            { data: 'id',                
+              render: function (data, type, row) {
+                return `
+                  <div class="btn-group align-top" idkey="`+ row.id +`">
+                    <button class="btn btn-sm btn-primary badge update_measure_attr" type="button">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger badge delete_measure_attr" type="button">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                `
+              } 
+            }
+        ]
+    });
+
+    $('#measure_attr_search_input').on('keyup', function () {
+        measure_attr_table.search(this.value).draw();
+    });
+
+    $(document).on("click", "#reload_measure_attr_btn", function() {
+        measure_attr_table.ajax.reload();
+    });
+
+    $(document).on('click', '#new_measure_attr_btn', function() {
+        $("#new_measure_attr_modal").modal('show');
+    });
+    
+    $(document).on('click', '#new_measure_attr', function() {
+        let display = $('#new_measure_attr_display').val();
+        let description = $('#new_measure_attr_desc').val();
+        
+        if ( display == '' || description == '') {
+            toastr.error("Please enter complete information");
+        } else {
+            let entry = {
+                display: display, 
+                description: description
+            }    
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/NewMeasureAttrItem", (xhr, err) => {
+                if (!err) {
+                    measure_attr_table.ajax.reload();
+                    $('#new_measure_attr_display').val('');
+                    $('#new_measure_attr_desc').val('');
+                    $('#new_measure_attr_modal').modal('hide');
+                    toastr.success("Action Success");
+                } else {
+                    return toastr.error("Action Failed");
+                }
+            });
+        }        
+    });
+    
+
+    $(document).on('click', '.update_measure_attr', function() {
+        let row = measure_attr_table.row($(this).parents('tr')).data();
+        
+        $('#edit_measure_attr_id').val(row.id);
+        $('#edit_measure_attr_display').val(row.display);
+        $('#edit_measure_attr_desc').val(row.description);
+
+        $("#edit_measure_attr_modal").modal('show');
+    });
+
+    $(document).on('click', '#update_measure_attr', function() {
+        let id = $('#edit_measure_attr_id').val();
+        let display = $('#edit_measure_attr_display').val();
+        let description = $('#edit_measure_attr_desc').val();
+        
+        if ( display == '' || description == '') {
+            toastr.error("Please enter complete information");
+        } else {
+            let entry = {
+                id: id,
+                display: display, 
+                description: description
+            }    
+            sendRequestWithToken('POST', localStorage.getItem('authToken'), entry, "reportBuilder/UpdateMeasureAttrItem", (xhr, err) => {
+                if (!err) {
+                    measure_attr_table.ajax.reload();                    
+                    $('#edit_measure_attr_id').val('');
+                    $('#edit_measure_attr_display').val('');
+                    $('#edit_measure_attr_desc').val('');                    
+                    $('#edit_measure_attr_modal').modal('hide');
+                    toastr.success("Action Success");
+                } else {
+                    return toastr.error("Action Failed");
+                }
+            });
+        }        
+    });
+
+    $(document).on('click', '.delete_measure_attr', function() {
+        let params = {
+            id: $(this).parent().attr("idkey"),
+        }
+        Swal.fire({
+            text: "Are you sure you would like to delete?",
+            icon: "error",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-primary"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                sendRequestWithToken('POST', localStorage.getItem('authToken'), params, "reportBuilder/DeleteMeasureAttrItem", (xhr, err) => {
+                if (!err) {                    
+                    measure_attr_table.ajax.reload();
+                    toastr.success("Action Success");
+                } else {
+                    return toastr.error("Action Failed");
+                }
+                });
+            }
+        });
+    });
+
+   
+    
+    
 });
