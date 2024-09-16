@@ -136,7 +136,7 @@ $(document).ready(async function() {
         }, {
             data: 'pdob',
             render: (data, type, row) => {
-                var date =  new Date(row.pdob)
+                var date = row.pdob ? new Date(row.pdob) : ''
                 return `
                     <div class='text-center'>${date.toLocaleDateString('en-US')}</div>
                 `
